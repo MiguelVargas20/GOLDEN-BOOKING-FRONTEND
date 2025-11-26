@@ -1,0 +1,116 @@
+body {
+    width: 100%;
+    display: grid;
+    color: #1d2222;
+}
+
+/* CONTENEDOR PRINCIPAL */  
+
+.container {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-radius: 8px;
+    overflow: hidden;
+    background: white;
+    padding-bottom: 30px;
+}
+
+/* PANEL IZQUIERDO */
+.left-panel{
+    padding-left: 1rem;
+    display: grid;
+    grid-template-rows: 1fr auto auto 2fr;
+    width: 95%; 
+    margin: 0 2rem;
+    text-align: left;
+}
+.logo{
+    padding: 0px
+}
+.logo img {
+    width: 25%;
+    height: auto;
+    margin-top: 25px;
+}
+
+/* TEXTOS */
+h1 {
+    font-size: 47px;
+    font-weight: 850;
+    margin-bottom: 1.5rem;
+}
+
+.subtitle {
+    color: #888;
+}
+
+/* FORMULARIO con GRID */
+.form {
+    display: grid;
+    row-gap: 15px;
+    padding: 1rem 1rem ;
+}
+
+.form input {
+    width: 95%;
+    padding: 0 20px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    outline: none;
+    font-size: 16px;
+    background: #f3f3f3;     /* ← ESTE ES EL QUE TE FALTA */
+    color: #000;         
+}
+
+/* OPCIONES (Recordarme + Link) */
+.options {
+    display: grid;
+    align-items: center;
+    grid-template-columns: 1fr 1fr;
+}
+
+.check {
+    display: grid;
+    grid-auto-flow: column;
+    align-items: center;
+    margin-right:50px;
+    
+}
+
+.check input {
+    width: 1.5rem;
+    padding: 0;
+    margin-left: 40%;
+}
+
+
+/* BOTÓN */
+.btn {
+    width: 150px;
+    height: 50px;
+    padding: 15px;
+    background: linear-gradient(to bottom, #f5e200, #e1892c);
+    color: black;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: #ffbe1a;
+}
+/* PANEL DERECHO - GRID CENTRADO */
+.right-panel {
+    background: linear-gradient(to bottom, #f5e200, #e1892c);
+    display: grid;
+    place-items: center;
+    padding: 30px;
+    border-radius: 2%;  
+    margin: 1em 1em 1em ;
+}
+
+.calendar-img {
+    width: 90%;
+    height: 90%;
+}

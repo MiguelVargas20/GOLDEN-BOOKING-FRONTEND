@@ -1,0 +1,124 @@
+  .logo_click {
+  height: 97vh;
+  margin: 10px;
+  border-radius: 20px;
+  object-fit: cover;    
+  object-position: center;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1); 
+  background: linear-gradient(180deg, #FFD147, #E3A600); 
+}
+
+  .logo {
+    height: 6em;
+    padding: 1.5em;
+    will-change: filter;
+    transition: filter 300ms;
+  }
+
+  
+  .site-header {
+    width: 100%;
+    height: 75px;          
+    position: relative;
+    overflow: hidden;
+  }
+
+  .site-logo {
+    position: absolute;
+    left: 2rem;
+    top: 1rem;
+    height: 80%;           
+    width: auto;
+    object-fit: cover;
+    z-index: 1;
+  }
+
+  .site-title {
+    position: relative;
+    z-index: 2;
+    margin-left: 1rem;
+    color: #fff;
+  }
+
+  
+  .page-heading {
+    text-align: left;
+    margin-bottom: 0.5rem;
+  }
+  .page-heading h1 {
+    margin: 0;
+    font-size: 1.4rem;
+    color: #222;
+  }
+
+  site-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 25px;
+    background: white;
+    border-bottom: 1px solid #e5e5e5;
+    box-shadow: 0px 2px 4px rgba(0,0,0,0.05);
+  }
+
+  .form-container {
+    padding: 5rem 0 5rem 0;
+    height: 70vh;
+  }
+
+  .form-container h2 {
+    font-weight: 1000;
+  }
+
+  .inp {
+    padding: 15px 20px;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 1rem;
+  }
+
+.btn-gold {
+  background: linear-gradient(180deg, #FFD147, #E3A600); 
+  color: #000; 
+  font-weight: bold;
+  padding: 8px 20px;        
+  border-radius: 7px;      
+  border: auto;
+  width: auto;              
+  display: inline-block;
+  text-align: center;
+  font-size: 16px;
+  margin-right: 70%;
+}
+
+.btn-gold:hover {
+  background: linear-gradient(180deg, #FFE27A, #FFC233); 
+  cursor: pointer;
+}
+
+
+.password-container {
+  position: relative;
+}
+
+.password-container .inp {
+  padding-right: 45px; /* espacio del ojito dentro del input */
+}
+
+.password-toggle {
+  position: absolute;
+  right: 15px;              /* distancia desde el borde derecho */
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  font-size: 20px;
+  color: #555;
+  user-select: none;
+}
+
+.password-toggle:hover {
+  color: #000;
+}

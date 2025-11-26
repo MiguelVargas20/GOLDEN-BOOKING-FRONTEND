@@ -1,0 +1,91 @@
+/* HEADER */
+.forgot-header {
+  width: 100%;
+  height: 75px;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+}
+
+.forgot-logo {
+  height: 60px;
+}
+
+
+
+
+/* CONTENEDOR GENERAL */
+.forgot-content {
+  padding-top: 20px;
+  padding-left: 100px
+}
+
+
+
+/* IMAGEN DERECHA */
+.forgot-image {
+  max-height: 100vh;
+  height: auto;
+  margin: 10px auto;
+  border-radius: 20px;
+  cursor: pointer;
+  object-position: top;
+  display: flex;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  background: linear-gradient(180deg, #FFD147, #E3A600); 
+}
+
+/* TEXTOS */
+.forgot-title h2 {
+  margin-top: 150px;
+  font-weight: 900;
+  color: #222;
+}
+
+.forgot-text {
+  margin-left: 20px;
+}
+
+
+/* INPUT */
+.forgot-input {
+  width: 64%;
+  padding: 20px;
+  border-radius: 15px;
+  margin-top: 30px;
+  font-size: 15px;
+}
+
+
+/* BOTÓN VOLVER */
+.forgot-back-btn {
+  width: 23%;
+  background: none;
+  border: none;
+  margin: 20px 0;
+  font-size: 16px;
+  color: #444;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.forgot-back-btn:hover {
+  opacity: 0.7;
+}
+
+
+/* BOTÓN ENVIAR */
+.forgot-btn-send {
+  margin-top: 15%;
+  width: 30%;
+  height: 60px;
+  border-radius: 10px;
+  margin-left: 15px;
+  background: linear-gradient(180deg, #FFD147, #E3A600); 
+  color: #000;
+  margin-top: 40px;
+}
+
