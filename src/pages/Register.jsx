@@ -28,7 +28,7 @@ function Register() {
               <p>Registrate para acceder a tu reserva</p>
             </div>
 
-            <Container className="pl-3">
+            <registro-content className="pl-3">
 
               <Form.Group className="mb-2" controlId="formBasicName">
                 <Form.Control className="inp" type="text" placeholder="Nombre Completo" />
@@ -59,7 +59,7 @@ function Register() {
                   onChange={() => setVer(!ver)}
                 />
               </Form.Group>
-            </Container>
+            </registro-content>
             <Button className="btn-gold" type="submit">
           REGISTRARME
         </Button>
@@ -68,7 +68,7 @@ function Register() {
         </Form>
       </Col>
 
-      <Col>
+      <Col className="side-right">
         <img src={click} alt="click" className="logo_click" />
       </Col>
     </Row>

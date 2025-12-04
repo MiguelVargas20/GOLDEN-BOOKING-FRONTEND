@@ -1,18 +1,21 @@
-body {
-    width: 100%;
-    display: grid;
-    color: #1d2222;
+/* CONTENEDOR PRINCIPAL */  
+
+.right-panel {
+  display: flex;
+  justify-content: flex-end; /* Imagen a la derecha */
+  align-items: center;
 }
 
-/* CONTENEDOR PRINCIPAL */  
+.calendar-img {
+  width: 80%;
+  max-width: 500px;
+}
 
 .container {
     width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
     border-radius: 8px;
-    overflow: hidden;
-    background: white;
     padding-bottom: 30px;
 }
 
@@ -29,8 +32,8 @@ body {
     padding: 0px
 }
 .logo img {
-    width: 25%;
-    height: auto;
+    height: 60px;
+    width: 30%;
     margin-top: 25px;
 }
 
@@ -105,9 +108,11 @@ h1 {
     background: linear-gradient(to bottom, #f5e200, #e1892c);
     display: grid;
     place-items: center;
-    padding: 30px;
+    padding: 20px;
     border-radius: 2%;  
-    margin: 1em 1em 1em ;
+    height: 96vh;
+    width: 100%;
+    margin: 1em 1em 1em 1em;
 }
 
 .calendar-img {

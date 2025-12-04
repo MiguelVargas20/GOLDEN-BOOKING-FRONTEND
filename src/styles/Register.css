@@ -1,14 +1,25 @@
-  .logo_click {
-  height: 97vh;
-  margin: 10px;
-  border-radius: 20px;
-  object-fit: cover;    
-  object-position: center;
+.pl3 {
+    padding-left: 1rem;
+}
+.logo_click {
+  width: 80%;        /* tamaño más grande */
+  height: 100%;
+  display: block;
+  margin: 0px auto 0 auto; /* sube la imagen y la centra */
+  object-fit: contain;
   cursor: pointer;
-  box-shadow: 0 0 15px rgba(0,0,0,0.1); 
-  background: linear-gradient(180deg, #FFD147, #E3A600); 
 }
 
+.side-right{
+  display: flex;
+  height: 97vh;
+  width: 97%;
+  margin: 10px 25px 10px 0px;
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1); 
+  background: linear-gradient(180deg, #FFF02D 0%, #FFD22A 50%, #E18035 100%);
+}
   .logo {
     height: 6em;
     padding: 1.5em;
@@ -33,7 +44,6 @@
     object-fit: cover;
     z-index: 1;
   }
-
   .site-title {
     position: relative;
     z-index: 2;
@@ -52,19 +62,10 @@
     color: #222;
   }
 
-  site-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 15px 25px;
-    background: white;
-    border-bottom: 1px solid #e5e5e5;
-    box-shadow: 0px 2px 4px rgba(0,0,0,0.05);
-  }
-
   .form-container {
     padding: 5rem 0 5rem 0;
     height: 70vh;
+    
   }
 
   .form-container h2 {
@@ -81,7 +82,7 @@
   }
 
 .btn-gold {
-  background: linear-gradient(180deg, #FFD147, #E3A600); 
+ background: linear-gradient(180deg, #ffc21a, #F9D42A);
   color: #000; 
   font-weight: bold;
   padding: 8px 20px;        
@@ -95,7 +96,7 @@
 }
 
 .btn-gold:hover {
-  background: linear-gradient(180deg, #FFE27A, #FFC233); 
+  background: linear-gradient(180deg, #ffc21a, #F9D42A);
   cursor: pointer;
 }
 

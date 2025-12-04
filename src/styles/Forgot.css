@@ -1,7 +1,24 @@
-/* HEADER */
-.forgot-header {
+/* ---------------------------------------------------
+   HEADER
+--------------------------------------------------- */
+
+html, body {
   width: 100%;
-  height: 75px;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: #ffffff;
+  overflow-x: hidden;
+}
+
+
+.forgot-row {
+  display: flex;
+  align-items: flex-start !important; /* <--- CLAVE */
+}
+
+
+.forgot-header {
   display: flex;
   align-items: center;
   padding-left: 10px;
@@ -9,45 +26,57 @@
 
 .forgot-logo {
   height: 60px;
+  margin-left: 85px;
 }
 
 
+/* ---------------------------------------------------
+   CONTENEDOR GENERAL
+--------------------------------------------------- */
+.forgot-left {
+  padding-left: 90px;
+  margin-top: 70px
+}
 
 
-/* CONTENEDOR GENERAL */
 .forgot-content {
-  padding-top: 20px;
-  padding-left: 100px
+  padding-top: 17px;
+  padding-right: 30px;
 }
 
-
-
-/* IMAGEN DERECHA */
+/* ---------------------------------------------------
+   IMAGEN DERECHA
+--------------------------------------------------- */
 .forgot-image {
-  max-height: 100vh;
-  height: auto;
-  margin: 10px auto;
+  height: 100vh;
+  width: 65%;    
   border-radius: 20px;
-  cursor: pointer;
-  object-position: top;
-  display: flex;
-  box-shadow: 0 0 15px rgba(0,0,0,0.1);
-  background: linear-gradient(180deg, #FFD147, #E3A600); 
+  object-position: center;
+  display: block;
+  margin: 0 auto 0 auto; /* sube la imagen y la centra */   
+  margin-top: -20px;
 }
 
-/* TEXTOS */
+/* ---------------------------------------------------
+   TEXTOS
+--------------------------------------------------- */
 .forgot-title h2 {
-  margin-top: 150px;
+  margin-top: 80px;
+  font-size: 40px;
   font-weight: 900;
   color: #222;
 }
+
+
 
 .forgot-text {
   margin-left: 20px;
 }
 
 
-/* INPUT */
+/* ---------------------------------------------------
+   INPUT
+--------------------------------------------------- */
 .forgot-input {
   width: 64%;
   padding: 20px;
@@ -57,7 +86,9 @@
 }
 
 
-/* BOTÓN VOLVER */
+/* ---------------------------------------------------
+   BOTÓN VOLVER
+--------------------------------------------------- */
 .forgot-back-btn {
   width: 23%;
   background: none;
@@ -77,15 +108,25 @@
 }
 
 
-/* BOTÓN ENVIAR */
+/* ---------------------------------------------------
+   BOTÓN ENVIAR
+--------------------------------------------------- */
 .forgot-btn-send {
-  margin-top: 15%;
   width: 30%;
   height: 60px;
   border-radius: 10px;
-  margin-left: 15px;
-  background: linear-gradient(180deg, #FFD147, #E3A600); 
+  background: linear-gradient(180deg, #ffc21a, #F9D42A);
   color: #000;
   margin-top: 40px;
+  margin-left: 30px;
 }
-
+.side-right-forgot {
+  height: 97vh;
+  width: 100%;    
+  border-radius: 20px;
+  object-position: center;
+  margin-top: -65px;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1); 
+  background: linear-gradient(180deg, #FFF02D 0%, #FFD22A 50%, #E18035 100%);
+}
