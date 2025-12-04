@@ -1,21 +1,12 @@
+
 /* CONTENEDOR PRINCIPAL */  
-
-.right-panel {
-  display: flex;
-  justify-content: flex-end; /* Imagen a la derecha */
-  align-items: center;
-}
-
-.calendar-img {
-  width: 80%;
-  max-width: 500px;
-}
 
 .container {
     width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
     border-radius: 8px;
+    background: white;
     padding-bottom: 30px;
 }
 
@@ -111,7 +102,7 @@ h1 {
     padding: 20px;
     border-radius: 2%;  
     height: 96vh;
-    width: 100%;
+    width: 112%;
     margin: 1em 1em 1em 1em;
 }
 
