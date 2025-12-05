@@ -22,11 +22,11 @@ function Forgot() {
         </Col>
       </Row>
 
-      {/* CONTENIDO PRINCIPAL 50/50 */}
+      {/* CONTENIDO PRINCIPAL */}
       <Row className="forgot-row">
-        
+
         {/* IZQUIERDA */}
-        <Col md={6}>
+        <Col>
           <div className="forgot-left">
 
             <Form>
@@ -37,7 +37,7 @@ function Forgot() {
 
                 <p className="forgot-text">A todos nos pasa, aqui te ayudamos</p>
 
-                <Form.Control 
+                <Form.Control
                   type="email"
                   className="forgot-input"
                   placeholder="usuario.nombre@gmail.com"
@@ -45,7 +45,7 @@ function Forgot() {
               </Form.Group>
             </Form>
 
-            <button 
+            <button
               className="forgot-back-btn"
               onClick={() => window.location.href = "/login"}
             >
@@ -60,15 +60,15 @@ function Forgot() {
         </Col>
 
         {/* DERECHA - IMAGEN */}
-        <Col md={6} className="p-0">
+        <Col className="side-right-forgot">
           <img src={forgot} alt="Forgot" className="forgot-image" />
         </Col>
 
       </Row>
-
     </Container>
   );
 }
 
 export default Forgot;
+
 

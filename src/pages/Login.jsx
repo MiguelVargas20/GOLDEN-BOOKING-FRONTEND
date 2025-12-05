@@ -23,7 +23,7 @@ export default function Login() {
                     <input type="checkbox"/> 
                     <span className="check">Recordarme</span>
                 </label>
-                <a href="#" className="forgot">¿Olvidaste tu contraseña?</a>
+                <a href="Forgot" className="forgot">¿Olvidaste tu contraseña?</a>
             </div>
                 <button type="submit" className="btn">INGRESAR</button>
             </form>
