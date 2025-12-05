@@ -8,6 +8,7 @@ import App from './App.jsx'
 import Login from './pages/Login.jsx'
 import Forgot from './pages/Forgot.jsx'
 import Register from './pages/Register.jsx'
+import Booking from './pages/Booking.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -20,6 +21,7 @@ createRoot(document.getElementById('root')).render(
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
       <Route path="/forgot" element={<Forgot />} />
+      <Route path="/booking" element={<Booking />} />
     </Routes>
     </BrowserRouter>
     

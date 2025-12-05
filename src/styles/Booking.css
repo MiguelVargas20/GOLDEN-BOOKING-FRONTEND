@@ -1,0 +1,41 @@
+.navbar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 40px;
+    border-bottom: 2px solid #e0e0e0;
+}
+
+.Header{
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+    margin-right: 60px;
+}
+
+.booking-title {
+    text-align: center;
+    margin: 40px 0;
+    font-size: 2.5rem;
+    color: #333;
+}
+
+.tenis-img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+   
+}
+
+.admin{
+    justify-content:space-between;
+}
+
+.logo {
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 50%;
+    width: 18%;
+}
