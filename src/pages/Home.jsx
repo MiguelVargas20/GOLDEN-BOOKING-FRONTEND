@@ -6,8 +6,6 @@ import '../styles/Home.css';
 export default function Home() {
   return (
     <>
-    <Navbar />
-
     <Container className="principal">
       <Row>
         <Col>
@@ -21,9 +19,6 @@ nuestras instalaciones, y lo más importante para toda la familia. </p>
         </Col>
       </Row>
     </Container>
-
-
-    <Footer />
     </>
   );
 }
