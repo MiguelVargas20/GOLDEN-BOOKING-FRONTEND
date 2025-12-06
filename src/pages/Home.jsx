@@ -1,7 +1,7 @@
+import { Col, Container, Row } from "react-bootstrap";
 import Footer from '../components/footer';
 import Navbar from '../components/navbar';
-import '../styles/Home.css'
-import { Container, Row, Col } from "react-bootstrap";
+import '../styles/Home.css';
 
 export default function Home() {
   return (
