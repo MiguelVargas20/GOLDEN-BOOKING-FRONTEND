@@ -1,13 +1,11 @@
+import { Col, Container, Row } from "react-bootstrap";
 import Footer from '../components/footer';
 import Navbar from '../components/navbar';
-import '../styles/Home.css'
-import { Container, Row, Col } from "react-bootstrap";
+import '../styles/Home.css';
 
 export default function Home() {
   return (
     <>
-    <Navbar />
-
     <Container className="principal">
       <Row>
         <Col>
@@ -21,9 +19,6 @@ nuestras instalaciones, y lo más importante para toda la familia. </p>
         </Col>
       </Row>
     </Container>
-
-
-    <Footer />
     </>
   );
 }

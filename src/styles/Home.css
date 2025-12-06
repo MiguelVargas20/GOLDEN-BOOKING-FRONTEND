@@ -8,7 +8,7 @@ body {
     justify-content: center;
     align-items: center;
     padding: 15px 40px;
-    border-bottom: 2px solid #e0e0e0;
+    border-top: 2px solid #e0e0e0;
 }
 .Header{
     display: flex;
@@ -65,5 +65,6 @@ body {
     background: linear-gradient(to right, #ffd700, #f28500);
     height: 50px;
     margin-top: 20px;
+    
 }
 
