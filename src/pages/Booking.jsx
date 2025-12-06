@@ -1,19 +1,18 @@
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Form from 'react-bootstrap/Form';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import logo from '../assets/logo.png'
+import logo from '../assets/LOGO.png'
 import '../styles/Booking.css'
-
 import Tenis from '../assets/Tenis.png'
 
 
 function Navbar() {
     return (
-
         <>
             <div className='Header'>
-                <img src={logo} alt="logo" className='logo' />
+                <img src={logo} alt="logo" className='booking-img' />
                 <div className='admin'>
                     <h3>Admin</h3>
                     <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor" class="bi bi-person" viewBox="0 0 16 16">
@@ -38,15 +37,37 @@ function Navbar() {
             </nav>
             <h1 className='booking-title'>RESERVA TENNIS</h1>
             <Row>
-        <Col className='image-tenis'>
-            <img src={Tenis} alt="Tenis" className='tenis-img' />
-        
-        
-        </Col>
-        
-        
-        <Col>1 of 3</Col>
-      </Row>
+                <Col className='image-tenis'>
+                    <img src={Tenis} alt="Tenis" className='tenis-img' />
+                </Col>
+                <Col>
+                    <Form.Select aria-label="Default select example">
+                        <option>Open this select menu</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </Form.Select>
+                    <div class="date-picker">
+                        <input
+                            type="date"
+                            id="start"
+                            name="trip-start"
+                            value="2026-07-22"
+                            min="2026-01-01"
+                            max="2026-12-31"
+                            placeholder="Seleccionar fecha"
+                        />
+                    </div>
+
+
+                    <Form.Select aria-label="Default select example">
+                        <option>Open this select menu</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </Form.Select>
+                </Col>
+            </Row>
 
             <footer className="text-center text-dark fw-bold py-3"
                 style={{
