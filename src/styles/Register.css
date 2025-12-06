@@ -21,10 +21,11 @@
   background: linear-gradient(180deg, #FFF02D 0%, #FFD22A 50%, #E18035 100%);
 }
   .logo {
-    height: 6rem;
-    width: 16rem;
+    height: 4.5rem;
+    width: 11rem;
     padding: 0.5rem;
     margin-top: 1%;
+    margin-left: 2.5%;
     will-change: filter;
     transition: filter 300ms;
   }
