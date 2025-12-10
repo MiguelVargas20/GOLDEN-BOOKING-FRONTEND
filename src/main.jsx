@@ -12,6 +12,8 @@ import Login from './pages/Login.jsx';
 import Prueba from './pages/Prueba.jsx';
 import Register from './pages/Register.jsx';
 import ReservasD from './pages/ReservasD.jsx';
+import Contactos from './pages/Contactos.jsx';
+
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -24,11 +26,12 @@ createRoot(document.getElementById('root')).render(
       <Route element={<Layout/>}>
         <Route path="/prueba" element={<Prueba />} />
         <Route path="/home" element={<Home />} />
+        <Route path='/contactos' element={<Contactos />} />
       </Route>
+
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
       <Route path="/forgot" element={<Forgot />} />
-
       <Route path='/reservas-deportivas' element={<ReservasD />} />
       
     </Routes>

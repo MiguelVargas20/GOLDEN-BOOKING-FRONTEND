@@ -1,0 +1,59 @@
+.title-contactos{
+    text-align: center;
+    font-size: 25px;
+}
+/* CONTENEDOR PRINCIPAL */
+.contact-box {
+  padding: 25px;
+  max-width: 1200px;
+  background: white;
+  border: 2px solid #ddd;
+  border-radius: 12px;
+}
+
+/* COLUMNA IZQUIERDA DEL FORMULARIO */
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* INPUTS */
+.input-field {
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+}
+
+/* TEXTAREA */
+.textarea-field {
+  padding: 14px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  resize: none;
+  font-size: 15px;
+}
+
+/* COLUMNA DERECHA */
+.map-section {
+  position: relative;
+}
+
+/* MAPA */
+.map-iframe {
+  width: 100%;
+  height: 100%;
+  min-height: 260px;
+  border: 0;
+  border-radius: 10px;
+}
+
+/* MARCADOR (PIN) */
+.map-marker {
+  position: absolute;
+  right: -55px;
+  bottom: -20px;
+  width: 120px;
+  pointer-events: none;
+}

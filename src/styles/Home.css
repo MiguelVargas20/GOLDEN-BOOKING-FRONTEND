@@ -16,8 +16,9 @@ body {
     align-items: center;
     margin-right: 60px;
 }
-.admin{
+.admin .h4{
     justify-content:space-between;
+    font-weight: bold;
 }
 
 .logo {
