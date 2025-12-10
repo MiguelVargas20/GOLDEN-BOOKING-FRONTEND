@@ -1,6 +1,7 @@
 import { Container, Row, Col, Form } from "react-bootstrap";
 import '../styles/Contactos.css'
 import mapa from '../assets/mapa.png'
+import mapaimg from '../assets/mapa-img.png'
 
 export default function Contactos(){
     return(
@@ -25,7 +26,7 @@ export default function Contactos(){
 
           <Form.Control
             as="textarea"
-            rows={5}
+            rows={17}
             placeholder="Escribe tu mensaje"
             className="textarea-field"
           />
@@ -33,11 +34,7 @@ export default function Contactos(){
 
         {/* MAPA */}
         <Col md={6} className="map-section">
-          <iframe
-            title="Mapa"
-            className="map-iframe"
-            src="">
-          </iframe>
+          <img src={mapaimg} alt="Mapa" className="map-iframe" />
           <img src={mapa} alt="mapa"className="map-marker"/>
         </Col>
       </Row>

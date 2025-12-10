@@ -20,12 +20,15 @@ export default function App() {
           <Route path="/prueba" element={<Prueba />} />
           <Route path="/home" element={<Home />} />
           <Route path='/contactos' element={<Contactos />} />
+          <Route path='/usuarios' element={<Contactos />} />
+          <Route path='/reservas-deportivas' element={<ReservasD />} />
+          <Route path='/reservas-hospedaje' element={<ReservasD />} />
+          <Route path='/reservas-restaurante' element={<ReservasD />} />
         </Route>
 
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/forgot" element={<Forgot />} />
-        <Route path='/reservas-deportivas' element={<ReservasD />} />
         
       </Routes>
     </BrowserRouter>
