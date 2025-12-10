@@ -1,4 +1,5 @@
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import { IoCalendarOutline } from "react-icons/io5";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
@@ -26,6 +27,7 @@ function Navbar() {
                     <li className="nav-item"><a className="nav-link text-dark" href="#">INICIO</a></li>
                     <NavDropdown
                         title="SERVICIOS"
+                        className='nav-dark'
                         menuVariant="dark">
                         <NavDropdown.Item href="#action/3.1">ESPACIOS DEPORTIVOS</NavDropdown.Item>
                         <NavDropdown.Item href="#action/3.2">HOSPEDAJE</NavDropdown.Item>
@@ -40,36 +42,48 @@ function Navbar() {
                 <Col className='image-tenis'>
                     <img src={Tenis} alt="Tenis" className='tenis-img' />
                 </Col>
-                <Col>
+                <Col className='booking-form'>
                     <Form.Select aria-label="Default select example">
-                        <option>Open this select menu</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                        <option>No.Personas</option>
+                        <option value="1">1 persona</option>
+                        <option value="2">2 persona</option>
+                        <option value="3">3 persona</option>
+                        <option value="4">3 persona</option>
                     </Form.Select>
                     <div class="date-picker">
                         <input
                             type="date"
                             id="start"
-                            name="trip-start"
-                            value="2026-07-22"
-                            min="2026-01-01"
-                            max="2026-12-31"
+                            min="2025-01-01"
+                            max="2025-12-31"
                             placeholder="Seleccionar fecha"
-                        />
+                            />
+                            <IoCalendarOutline className="calendar-icon"  />
                     </div>
-
+                    <Form.Select aria-label="Selecciona un horario">
+                        <option value="">Selecciona un horario</option>
+                        <option value="8-9">08:00 - 09:00</option>
+                        <option value="9-10">09:00 - 10:00</option>
+                        <option value="10-11">10:00 - 11:00</option>
+                        <option value="15-16">15:00 - 16:00</option>
+                        <option value="16-17">16:00 - 17:00</option>
+                    </Form.Select>
 
                     <Form.Select aria-label="Default select example">
-                        <option>Open this select menu</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
+                        <option>Seleccionar Categoria</option>
+                        <option value="1">Individual</option>
+                        <option value="2">Dobles</option>
                     </Form.Select>
+
+                    <Col className='buttons-booking'>
+                        <button className='button-buscar'>BUSCAR</button>
+                        <button className='button-buscar'>CANCELAR</button>
+                    </Col>
+
                 </Col>
             </Row>
 
-            <footer className="text-center text-dark fw-bold py-3"
+            <footer className="text-center"
                 style={{
                     background: "linear-gradient(to right, #ffd700, #f28500)"
                 }}>

@@ -1,73 +1,152 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+
+
 .navbar {
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 15px 40px;
-    border-bottom: 2px solid #e0e0e0;
+    border-top: 2px solid #ccc !important;
+    gap: 370px;
 }
 
-.Header{
+.nav {
+    list-style: none;
     display: flex;
-    justify-content:space-between;
+    gap: 269px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: #000 !important;
+}
+
+.navbar .dropdown-toggle {
+    color: black !important;
+}
+
+.Header {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
     margin-right: 60px;
 }
 
 .booking-title {
     text-align: center;
-    margin: 40px 0;
-    font-size: 2.5rem;
+    margin: 20px 0;
+    font-size: 1.5rem;
     color: #333;
 }
 
 .tenis-img {
-    width: 100%;
-    height: auto;
+    width: 97%;
+    height: 330px;
+    margin-left: 40px;
+
+}
+
+.tenis-img {
+
     border-radius: 10px;
-   
+
 }
 
-.admin{
-    justify-content:space-between;
-    
-}
-
-.booking-img {
-    font-weight: bold;
+.admin {
     display: flex;
     align-items: center;
-    gap: 10px;
-    height: 50%;
-    width: 18%;
+    gap: 8px;
+}
+
+.admin h3 {
+    margin: 0;
+    font-size: 22px;
 }
 
 
+.booking-img {
+    width: 10%;
+    gap: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 50px;
+}
 
-/* Estilo general */
+.button-buscar {
+    width: 30%;
+    height: 60px;
+    border-radius: 10px;
+    background: linear-gradient(180deg, #ffc21a, #F9D42A);
+    color: #000;
+    margin-top: 10px;
+    margin-left: 85px;
+}
+
+.booking-form select,
+.booking-form input {
+    margin-bottom: 25px;
+    width: 99%;
+    height: 50px;
+
+}
+
+.text-center {
+    margin-top: 50px;
+    font-size: 25px;
+    color: #333;
+}
+
+
+/* Estilos para el selector de fecha y iconos */
+.date-picker {
+    position: relative; 
+    width: 99%;
+    height: 50px;
+    margin-bottom: 25px;
+}
+
 input[type="date"] {
     width: 100%;
-    padding: 12px 40px 12px 15px; /* espacio para el icono */
+    height: 100%;
+    padding: 0 40px 0 15px; 
     font-size: 16px;
-
-    border-radius: 12px;
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
     outline: none;
-   
-    transition: 0.3s ease;
+    background-color: white;
+    color: #333;
+    box-sizing: border-box;
+    cursor: pointer;
 }
 
-/* Hover */
-input[type="date"]:hover {
-    border-color: #7d7d7d;
-}
 
-/* Ícono del calendario */
 input[type="date"]::-webkit-calendar-picker-indicator {
     position: absolute;
-    right: 25px;
-    color: #555;
+    right: 10px; 
+    color: #555; 
     cursor: pointer;
     opacity: 0.7;
     transition: 0.2s ease;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px; 
+    height: 30px;
+}
+
+/* Estilo para el placeholder "Seleccionar fecha" */
+input[type="date"]::placeholder {
+    color: #888;
+}
+
+.calendar-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #000; 
+    pointer-events: none;
 }
 
 
