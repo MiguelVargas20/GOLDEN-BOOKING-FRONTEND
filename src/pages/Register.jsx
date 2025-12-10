@@ -1,20 +1,21 @@
 import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import '../styles/Register.css';
 import click from '../assets/click.png';
 import logo from '../assets/LOGO.png'
-
+import { useNavigate } from "react-router-dom";
 
 function Register() {
-  const [ver, setVer] = useState(false);
+  const [verPass, setVerPass] = useState(false);
+  const [verConfirm, setVerConfirm] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <Row className="login-content">
-      <Col> 
+      <Col>
         <Form className="login-form px-3">
           <Row>
             <header className="site-header">
@@ -37,32 +38,42 @@ function Register() {
               <Form.Group className="mb-2" controlId="formBasicEmail">
                 <Form.Control className="inp" type="email" placeholder="usuario.nombre@gmail.com" />
               </Form.Group>
-              <Form.Group className="mb-2" controlId="formBasicPassword">
+              {/* CONTRASEÑA */}
+              <div className="input-wrapper">
                 <Form.Control
                   className="inp"
-                  type={ver ? "text" : "password"}
+                  type={verPass ? "text" : "password"}
                   placeholder="Contraseña"
                 />
-              </Form.Group>
-              <Form.Group className="mb-2" controlId="formBasicConfirmPassword">
+                <button
+                  type="button"
+                  className="btn-eye"
+                  onClick={() => setVerPass(!verPass)}
+                >
+                  {verPass ? "🙈" : "👁️"}
+                </button>
+              </div>
+
+              {/* CONFIRMAR CONTRASEÑA */}
+              <div className="input-wrapper">
                 <Form.Control
                   className="inp"
-                  type={ver ? "text" : "password"}
+                  type={verConfirm ? "text" : "password"}
                   placeholder="Confirmar Contraseña"
                 />
-              </Form.Group>
-              <Form.Group className="mb-2" controlId="formBasicCheckbox">
-                <Form.Check
-                  type="checkbox"
-                  label="Mostrar Contraseñas"
-                  checked={ver}
-                  onChange={() => setVer(!ver)}
-                />
-              </Form.Group>
+                <button
+                  type="button"
+                  className="btn-eye"
+                  onClick={() => setVerConfirm(!verConfirm)}
+                >
+                  {verConfirm ? "🙈" : "👁️"}
+                </button>
+              </div>
+
             </registro-content>
-            <Button className="btn-gold" type="submit">
-          REGISTRARME
-        </Button>
+            <Button className="btn-gold" onClick={() => navigate("/login")}>
+              REGISTRARME
+            </Button>
 
           </Row>
         </Form>
