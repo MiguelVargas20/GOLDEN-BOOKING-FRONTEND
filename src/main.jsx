@@ -13,20 +13,23 @@ import Prueba from './pages/Prueba.jsx';
 import Register from './pages/Register.jsx';
 import ReservasD from './pages/ReservasD.jsx';
 import Contactos from './pages/Contactos.jsx';
-
+import UsuariosH from './pages/UsuariosH.jsx';
+import UsuariosC from './pages/UsuariosC.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
     <Routes>
-      {/*RUTA PRINCIPAL*/}
-      <Route path="/" element={<App> </App>} />
+      {/RUTA PRINCIPAL/}
+      <Route path="/" element={<App></App>} />
 
-      {/*RUTAS SECUNDARIAS*/}
+      {/RUTAS SECUNDARIAS/}
       <Route element={<Layout/>}>
         <Route path="/prueba" element={<Prueba />} />
         <Route path="/home" element={<Home />} />
         <Route path='/contactos' element={<Contactos />} />
+        <Route path="/usuarios" element={<UsuariosH />} />
+        <Route path="/usuariosc" element={<UsuariosC />} />
       </Route>
 
       <Route path="/register" element={<Register />} />
@@ -36,6 +39,5 @@ createRoot(document.getElementById('root')).render(
       
     </Routes>
     </BrowserRouter>
-    
   </StrictMode>
 )
