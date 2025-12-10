@@ -25,7 +25,7 @@ export default function Login() {
                 </label>
                 <a href="Forgot" className="forgot">¿Olvidaste tu contraseña?</a>
             </div>
-                <button type="submit" className="btn">INGRESAR</button>
+                <button type="submit" className="btn-login">INGRESAR</button>
             </form>
             </div>
             {/*PANEL DERECHO*/}

@@ -13,7 +13,7 @@ import Prueba from './pages/Prueba.jsx';
 import Register from './pages/Register.jsx';
 import ReservasD from './pages/ReservasD.jsx';
 import Contactos from './pages/Contactos.jsx';
-import UsuariosH from './pages/UsuariosH.jsx';
+
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -27,7 +27,6 @@ createRoot(document.getElementById('root')).render(
         <Route path="/prueba" element={<Prueba />} />
         <Route path="/home" element={<Home />} />
         <Route path='/contactos' element={<Contactos />} />
-        <Route path="/usuarios" element={<UsuariosH />} />
       </Route>
 
       <Route path="/register" element={<Register />} />
