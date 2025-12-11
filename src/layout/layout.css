@@ -1,0 +1,32 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.contenedor {
+    display: grid;
+    height: 100vh;
+    grid-template-rows: auto 2fr auto;
+}
+
+.header {
+    position: sticky;
+}
+.Header{
+    height: 15vh;
+}
+
+.footer {
+    position: sticky;
+    background: linear-gradient(to right, #ffd700, #f28500);
+}
+
+.admin {
+    display: flex;
+    align-items: center;
+}
+
+.admin h3 {
+    margin: 0;
+}
