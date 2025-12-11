@@ -42,16 +42,12 @@ body {
 }
 
 .tenis-img {
-    width: 97%;
-    height: 330px;
+    width: 90%;
+    height: 100%; 
+    object-fit: cover; 
+    max-height: 370px; 
     margin-left: 40px;
-
-}
-
-.tenis-img {
-
-    border-radius: 10px;
-
+    border-radius: 30px;
 }
 
 .admin {
@@ -63,6 +59,7 @@ body {
 .admin h3 {
     margin: 0;
     font-size: 22px;
+
 }
 
 
@@ -81,7 +78,7 @@ body {
     background: linear-gradient(180deg, #ffc21a, #F9D42A);
     color: #000;
     margin-top: 10px;
-    margin-left: 85px;
+    margin-left: 65px;
 }
 
 .booking-form select,
@@ -89,6 +86,9 @@ body {
     margin-bottom: 25px;
     width: 99%;
     height: 50px;
+    position: relative;
+    left: -40px; 
+
 
 }
 
@@ -142,7 +142,7 @@ input[type="date"]::placeholder {
 
 .calendar-icon {
     position: absolute;
-    right: 15px;
+    right:52px;
     top: 50%;
     transform: translateY(-50%);
     color: #000; 
