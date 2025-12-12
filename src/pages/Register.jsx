@@ -4,6 +4,7 @@ import Form from "react-bootstrap/Form";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import '../styles/Register.css';
+import '../styles/Login.css'
 import click from '../assets/click.png';
 import logo from '../assets/LOGO.png'
 import { useNavigate } from "react-router-dom";
@@ -25,11 +26,11 @@ function Register() {
 
           <Row className="justify-content-center align-items-center form-container mx-3">
             <div className="page-heading">
-              <h2>Crea tu cuenta</h2>
+              <h1>Crea tu cuenta</h1>
               <p>Registrate para acceder a tu reserva</p>
             </div>
 
-            <registro-content className="pl-3">
+            <registro-content className="form-register">
 
               <Form.Group className="mb-2" controlId="formBasicName">
                 <Form.Control className="inp" type="text" placeholder="Nombre Completo" />

@@ -7,30 +7,27 @@ export default function Contactos() {
   return (
     <>
       <h1 className="title-contactos">CONTÁCTANOS</h1>
-      <Container fluid className="contact-box">
+      <Container className="contact-box">
         <Row>
 
-          {/* FORMULARIO */}
-          <Col md={6} className="form-section">
-            <Form.Control
-              type="text"
-              placeholder="Cuéntanos tu nombre"
-              className="input-field"
-            />
+          <Form.Control
+            type="text"
+            placeholder="Cuéntanos tu nombre"
+            className="input-field nombre"
+          />
 
-            <Form.Control
-              type="email"
-              placeholder="Correo electrónico"
-              className="input-field"
-            />
+          <Form.Control
+            type="email"
+            placeholder="Correo electrónico"
+            className="input-field correo"
+          />
 
-            <Form.Control
-              as="textarea"
-              rows={5}
-              placeholder="Escribe tu mensaje"
-              className="textarea-field"
-            />
-          </Col>
+          <Form.Control
+            as="textarea"
+            rows={3}
+            placeholder="Escribe tu mensaje"
+            className="textarea-field mensaje"
+          />
 
           {/* MAPA */}
           <Col md={6} className="map-section">

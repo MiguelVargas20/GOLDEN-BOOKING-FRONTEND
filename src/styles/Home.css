@@ -35,7 +35,7 @@ body {
 }
 
 .principal {
-    margin-top: 3rem;
+    margin: 3rem 3rem 2rem;
 }
 
 .menu {
@@ -110,6 +110,11 @@ body {
 .logoValle {
     width: 50%;
     height: auto;
+}
+
+.principal-content {
+    display: flex;
+    padding: 0 1rem;
 }
 
 /* 🎞 Animación de desplazamiento infinito */

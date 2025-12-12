@@ -24,7 +24,7 @@ export default function Home() {
       </div>
 
       <Container className="principal">
-        <Row>
+        <Row className="principal-content">
           <Col>
             <h3 className="text-title">Club Valle Dorado</h3>
             <p>

@@ -14,7 +14,7 @@ function ReservasDCatalogo() {
             <div className="titleRD">
                 <div></div>
                 <h2>Reservas Espacios Deportivos</h2>
-                <button className="btn" onClick={() => navigate('/reservas-deportivas/mis-reservas')}>Mis Reservas</button>
+                <button className="btn btn-add" onClick={() => navigate('/reservas-deportivas/mis-reservas')}>Mis Reservas</button>
             </div>
             <div className="reservasD-cards">
                 <CardReservaD

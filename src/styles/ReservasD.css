@@ -21,7 +21,13 @@
 }
 
 .btn-add {
+    background-color: #efbe2a;
+}
 
+.btn-add:hover {
+    transition: all .12s ease-in;
+    transform: scale(1.03);
+    background-color: #edb304;
 }
 
 .reservasD-cards {
@@ -55,7 +61,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    line-height: 0.5rem;
+    line-height: 1.5rem;
 }
 
 .descripcion p {

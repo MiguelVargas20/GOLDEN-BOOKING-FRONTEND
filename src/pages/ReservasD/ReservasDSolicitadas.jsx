@@ -10,7 +10,7 @@ function ReservasDSolicitadas() {
             <div className="titleRD">
                 <div></div>
                 <h2>Mis Reservas Deportivas</h2>
-                <button className="btn add">Add</button>
+                <button className="btn btn-add">Add</button>
             </div>
             <div className="reservasD-cards">
 

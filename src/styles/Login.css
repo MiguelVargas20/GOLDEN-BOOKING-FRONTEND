@@ -10,6 +10,7 @@
     grid-template-columns: 1fr 1fr;
     border-radius: 8px;
     background: white;
+    color: #000;
     padding-bottom: 30px;
     box-sizing: border-box !important;
 }
