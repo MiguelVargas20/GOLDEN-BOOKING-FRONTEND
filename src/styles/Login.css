@@ -1,31 +1,39 @@
 
 /* CONTENEDOR PRINCIPAL */  
-
-.container {
+.container-login {
+    position: fixed;
     width: 100%;
+    max-width: 100% !important;
+    margin: 0;
+    padding: 0;
     display: grid;
     grid-template-columns: 1fr 1fr;
     border-radius: 8px;
     background: white;
     padding-bottom: 30px;
+    box-sizing: border-box !important;
 }
 
 /* PANEL IZQUIERDO */
 .left-panel{
-    padding-left: 1rem;
     display: grid;
-    grid-template-rows: 1fr auto auto 2fr;
-    width: 95%; 
-    margin: 0 2rem;
-    text-align: left;
+    grid-template-rows: auto auto auto 2fr;
+    width: 100%;
+    padding: 0 1rem
 }
-.logo{
-    padding: 0px
+
+.logo-login {
+    height: 5rem;
+    width: auto;
+    font-weight: bold;
+    color: #c89d00;
+    margin-bottom: 4rem;
 }
-.logo img {
-    height: 60px;
+
+.logo-login img {
+    height: 50px;
     width: 30%;
-    margin-top: 25px;
+    margin-top: 1rem;
 }
 
 /* TEXTOS */
@@ -42,12 +50,13 @@ h1 {
 /* FORMULARIO con GRID */
 .form {
     display: grid;
+    grid-template-rows: auto auto auto 1fr;
     row-gap: 15px;
-    padding: 1rem 1rem ;
 }
 
 .form input {
     width: 95%;
+    height: 3.5rem;
     padding: 0 20px;
     border: 2px solid #ccc;
     border-radius: 10px;
@@ -59,7 +68,10 @@ h1 {
 
 /* OPCIONES (Recordarme + Link) */
 .options {
-    display: grid;
+    display: flex;
+    width: 100%;
+    padding: 0 5%;
+    justify-content: space-between;
     align-items: center;
     grid-template-columns: 1fr 1fr;
 }
@@ -68,16 +80,36 @@ h1 {
     display: grid;
     grid-auto-flow: column;
     align-items: center;
-    margin-right:50px;
-    
 }
 
 .check input {
-    width: 1.5rem;
+    width: 1rem;
     padding: 0;
-    margin-left: 40%;
+    background: #b80808;
 }
 
+.check span {
+    margin-left: 8px;
+}
+
+.forgot-link {
+    justify-self: center;
+    text-decoration: none;
+    color: black;
+}
+
+.forgot-link:hover {
+    text-decoration: underline;
+}
+
+.redirect {
+    display: flex;
+    width: 100%;
+    padding: 0 5%;
+    justify-content: space-between;
+    align-items: center;
+    grid-template-columns: 1fr 1fr;
+}
 
 /* BOTÓN */
 .btn-login {
@@ -96,17 +128,21 @@ h1 {
 }
 /* PANEL DERECHO - GRID CENTRADO */
 .right-panel {
-    background: linear-gradient(to bottom, #f5e200, #e1892c);
     display: grid;
     place-items: center;
-    padding: 20px;
-    border-radius: 2%;  
-    height: 96vh;
-    width: 112%;
-    margin: 1em 1em 1em 1em;
+    height: 100vh;
+    width: 100%;
+}
+
+.container-img {
+    padding: 0.5rem;
+    width: 100%;
+    height: 100%;
 }
 
 .calendar-img {
-    width: 90%;
-    height: 90%;
+    background: linear-gradient(to bottom, #f5e200, #e1892c);
+    border-radius: 2%;  
+    width: 100%;
+    height: 98%;
 }

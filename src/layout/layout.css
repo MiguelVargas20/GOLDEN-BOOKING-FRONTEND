@@ -6,8 +6,21 @@
 
 .contenedor {
     display: grid;
-    height: 100vh;
     grid-template-rows: auto 2fr auto;
+}
+
+.content {
+    min-height: 65vh;
+    max-width: 100vw;
+}
+
+.header {
+    position: relative;
+    z-index: 5; /* por encima del contenido */
+}
+
+.nav li, .nav div {
+    cursor: pointer;
 }
 
 .header {

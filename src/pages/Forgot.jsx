@@ -1,74 +1,52 @@
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import Container from 'react-bootstrap/Container';
+import logo from "../assets/LOGO.png";
+import forgot from "../assets/forgot.png";
+import "../styles/Forgot.css";
 import { FaReply } from "react-icons/fa";
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import '../styles/Forgot.css'
+import { useNavigate } from "react-router-dom";
 
-import forgot from '../assets/forgot.png'
-import logo from '../assets/LOGO.png'
+export default function Forgot() {
+    const navigate = useNavigate();
 
-function Forgot() {
-  return (
-    <Container fluid className="forgot-content">
+    return (
+        <div className="container-forgot">
+            {/* PANEL IZQUIERDO */}
+            <div className="left-panel-forgot">
+                {/* LOGO */}
+                <div className="logo-forgot">
+                    <img src={logo} alt="Logo" />
+                </div>
 
-      {/* HEADER ARRIBA */}
-      <Row>
-        <Col>
-          <header className="forgot-header">
-            <img src={logo} alt="logo" className="forgot-logo" />
-          </header>
-        </Col>
-      </Row>
+                <h1>¿Olvidaste tu contraseña?</h1>
+                <p className="subtitle-forgot">A todos nos para, aquí te ayudamos</p>
 
-      {/* CONTENIDO PRINCIPAL */}
-      <Row className="forgot-row">
+                {/* FORMULARIO */}
+                <form className="form-forgot">
+                    <input
+                        type="email"
+                        placeholder="usuario.nombre@gmail.com"
+                        required
+                    />
 
-        {/* IZQUIERDA */}
-        <Col>
-          <div className="forgot-left">
+                    <button
+                        type="button"
+                        className="back-login-btn"
+                        onClick={() => (window.location.href = "/login")}
+                    >
+                        Volver al login <FaReply />
+                    </button>
 
-            <Form>
-              <Form.Group className="mb-3" controlId="formBasicEmail">
-                <Form.Label className="forgot-title">
-                  <h2>¿Olvidaste tu Contraseña?</h2>
-                </Form.Label>
+                    <button className="btn-send-forgot" type="button" onClick={() => navigate("/login")}>
+                        ENVIAR
+                    </button>
+                </form>
+            </div>
 
-                <p className="forgot-text">A todos nos pasa, aqui te ayudamos</p>
-
-                <Form.Control
-                  type="email"
-                  className="forgot-input"
-                  placeholder="usuario.nombre@gmail.com"
-                />
-              </Form.Group>
-            </Form>
-
-            <button
-              className="forgot-back-btn"
-              onClick={() => window.location.href = "/login"}
-            >
-              Volver a Login <FaReply />
-            </button>
-
-            <Button className="forgot-btn-send" type="submit">
-              ENVIAR
-            </Button>
-
-          </div>
-        </Col>
-
-        {/* DERECHA - IMAGEN */}
-        <Col className="side-right-forgot">
-          <img src={forgot} alt="Forgot" className="forgot-image" />
-        </Col>
-
-      </Row>
-    </Container>
-  );
+            {/* PANEL DERECHO */}
+            <div className="right-panel-forgot">
+                <div className="container-img-forgot">
+                    <img src={forgot} alt="Forgot" className="forgot-img" />
+                </div>
+            </div>
+        </div>
+    );
 }
-
-export default Forgot;
-
-

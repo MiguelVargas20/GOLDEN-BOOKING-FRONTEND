@@ -1,132 +1,113 @@
-/* ---------------------------------------------------
-   HEADER
---------------------------------------------------- */
-
-html, body {
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  background: #ffffff;
-  overflow-x: hidden;
+/* CONTENEDOR PRINCIPAL */
+.container-forgot {
+    position: fixed;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: white;
+    padding-bottom: 30px;
+    height: 100vh;
 }
 
-
-.forgot-row {
-  display: flex;
-  align-items: flex-start !important; /* <--- CLAVE */
+/* PANEL IZQUIERDO */
+.left-panel-forgot {
+    display: grid;
+    grid-template-rows: auto auto auto 1fr;
+    padding: 0 2rem;
 }
 
-
-.forgot-header {
-  display: flex;
-  align-items: center;
-  padding-left: 10px;
+/* LOGO */
+.logo-forgot {
+    height: 5rem;
+    margin-bottom: 6rem;
 }
 
-.forgot-logo {
-  height: 60px;
-  margin-left: 85px;
+.logo-forgot img {
+    height: 50px;
+    width: 30%;
+    margin-top: 1rem;
 }
 
-
-/* ---------------------------------------------------
-  CONTENEDOR GENERAL
---------------------------------------------------- */
-.forgot-left {
-  padding-left: 90px;
-  margin-top: 70px
+/* TITULOS */
+.left-panel-forgot h1 {
+    font-size: 38px;
+    font-weight: 950;
+    margin-bottom: 1rem;
 }
 
-
-.forgot-content {
-  padding-top: 17px;
-  padding-right: 30px;
+.subtitle-forgot {
+    color: #888;
+    margin-bottom: 2rem;
 }
 
-/* ---------------------------------------------------
-   IMAGEN DERECHA
---------------------------------------------------- */
-.forgot-image {
-  height: 100vh;
-  width: 65%;    
-  border-radius: 20px;
-  object-position: center;
-  display: block;
-  margin: 0 auto 0 auto; /* sube la imagen y la centra */   
-  margin-top: -20px;
+/* FORMULARIO */
+.form-forgot {
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    row-gap: 20px;
 }
 
-/* ---------------------------------------------------
-   TEXTOS
---------------------------------------------------- */
-.forgot-title h2 {
-  margin-top: 80px;
-  font-size: 40px;
-  font-weight: 900;
-  color: #222;
+.form-forgot input {
+    width: 95%;
+    height: 3.5rem;
+    padding: 0 20px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    background: #f3f3f3;
+    outline: none;
+    font-size: 16px;
 }
 
-
-
-.forgot-text {
-  margin-left: 20px;
+/* BOTÓN VOLVER */
+.back-login-btn {
+    width: 60%;
+    height: 45px;
+    border: none;
+    background: none;
+    color: #444;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
-
-/* ---------------------------------------------------
-   INPUT
---------------------------------------------------- */
-.forgot-input {
-  width: 64%;
-  padding: 20px;
-  border-radius: 15px;
-  margin-top: 30px;
-  font-size: 15px;
+.back-login-btn:hover {
+    opacity: 0.7;
 }
 
-
-/* ---------------------------------------------------
-   BOTÓN VOLVER
---------------------------------------------------- */
-.forgot-back-btn {
-  width: 23%;
-  background: none;
-  border: none;
-  margin: 20px 0;
-  font-size: 16px;
-  color: #444;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  cursor: pointer;
+/* BOTÓN ENVIAR */
+.btn-send-forgot {
+    width: 180px;
+    height: 50px;
+    padding: 15px;
+    background: linear-gradient(to bottom, #f5e200, #e1892c);
+    color: black;
+    font-weight: bold;
+    border-radius: 10px;
+    cursor: pointer;
 }
 
-.forgot-back-btn:hover {
-  opacity: 0.7;
+.btn-send-forgot:hover {
+    background: #ffbe1a;
 }
 
+/* PANEL DERECHO */
+.right-panel-forgot {
+    display: grid;
+    place-items: center;
+    height: 100vh;
+    width: 100%;
+}
 
-/* ---------------------------------------------------
-   BOTÓN ENVIAR
---------------------------------------------------- */
-.forgot-btn-send {
-  width: 30%;
-  height: 60px;
-  border-radius: 10px;
-  background: linear-gradient(180deg, #ffc21a, #F9D42A);
-  color: #000;
-  margin-top: 40px;
-  margin-left: 30px;
+.container-img-forgot {
+    width: 97%;
+    height: 97%;
+    padding: 0.5rem;
+    border-radius: 2%;
+    background: linear-gradient(to bottom, #f5e200, #e1892c);
+    display: flex;             /* <-- permite centrar la imagen */
+    justify-content: center;   /* <-- centra horizontal */
+    align-items: center;   
 }
-.side-right-forgot {
-  height: 97vh;
-  width: 100%;    
-  border-radius: 20px;
-  object-position: center;
-  margin-top: -65px;
-  cursor: pointer;
-  box-shadow: 0 0 15px rgba(0,0,0,0.1); 
-  background: linear-gradient(180deg, #FFF02D 0%, #FFD22A 50%, #E18035 100%);
-}
+

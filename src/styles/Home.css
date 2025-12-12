@@ -1,7 +1,8 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
-    background: #ffffff;    }
+    background: #ffffff;
+}
 
 .navbar {
     display: flex;
@@ -10,14 +11,16 @@ body {
     padding: 15px 40px;
     border-top: 2px solid #e0e0e0;
 }
-.Header{
+
+.Header {
     display: flex;
-    justify-content:space-between;
+    justify-content: space-between;
     align-items: center;
     margin-right: 60px;
 }
-.admin .h4{
-    justify-content:space-between;
+
+.admin .h4 {
+    justify-content: space-between;
     font-weight: bold;
 }
 
@@ -29,6 +32,10 @@ body {
     gap: 10px;
     height: 50%;
     width: 18%;
+}
+
+.principal {
+    margin-top: 3rem;
 }
 
 .menu {
@@ -66,6 +73,52 @@ body {
     background: linear-gradient(to right, #ffd700, #f28500);
     height: 50px;
     margin-top: 20px;
-    
+
 }
 
+/* 🎞 Contenedor general */
+.carousel-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    height: 250px;
+    /* Ajusta la altura del carrusel */
+}
+
+/* 🎞 Pista que se mueve de derecha a izquierda */
+.carousel-track {
+    display: flex;
+    width: max-content;
+    animation: scroll-left 25s linear infinite;
+}
+
+/* 🎞 Imágenes del carrusel */
+.carousel-track img {
+    width: 350px;
+    /* Ajusta el tamaño que necesites */
+    height: 250px;
+    object-fit: cover;
+    margin-right: 20px;
+    border-radius: 15px;
+}
+
+.right-side-icon {
+    display: grid;
+    place-items: center;
+}
+
+.logoValle {
+    width: 50%;
+    height: auto;
+}
+
+/* 🎞 Animación de desplazamiento infinito */
+@keyframes scroll-left {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
