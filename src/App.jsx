@@ -22,7 +22,9 @@ export default function App() {
         {/*RUTAS SECUNDARIAS*/}
         <Route element={<Layout/>}>
           <Route path="/prueba" element={<Prueba />} />
-          <Route path="/home" element={<Home />} />
+          <Route path="/home" element={<Home />} >
+            <Route index element={<Contactos/>}></Route>
+          </Route>
           <Route path='/contactos' element={<Contactos />} />
           <Route path='/usuarios' element={<Contactos />} />
           <Route path='/reservas-deportivas' element={<ReservasD />}>

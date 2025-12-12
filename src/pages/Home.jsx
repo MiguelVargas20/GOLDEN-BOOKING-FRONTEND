@@ -1,5 +1,6 @@
 import { Col, Container, Row } from "react-bootstrap";
 import '../styles/Home.css';
+import { Outlet } from "react-router-dom";
 
 // Importar imágenes
 import casa from "../assets/casa.png";
@@ -39,6 +40,8 @@ export default function Home() {
           </Col>
         </Row>
       </Container>
+
+      <Outlet/>
     </>
   );
 }
