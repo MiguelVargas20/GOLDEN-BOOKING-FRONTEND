@@ -8,8 +8,10 @@ function CardReservaD(props) {
                 backgroundImage: `url(${props.img})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
-                backgroundRepeat: "no-repeat"
+                backgroundRepeat: "no-repeat",
+                cursor: "pointer",
             }}
+            onClick={props.add}
         >
             <h3>{props.titulo}</h3>
         </div>

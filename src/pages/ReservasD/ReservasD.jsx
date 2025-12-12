@@ -1,5 +1,4 @@
-import "../../styles/ReservasD.css"
-import CardReservaD from "../../components/CardReservasD"
+import "../../styles/ReservasD/ReservasD.css"
 import { Outlet } from "react-router-dom"
 
 export default function ReservasD(){

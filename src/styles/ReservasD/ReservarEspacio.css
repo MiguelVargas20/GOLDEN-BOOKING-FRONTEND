@@ -1,0 +1,44 @@
+
+.reservar-espacio-form {
+    display: grid;
+    grid-template-columns: 40% 1fr;
+    grid-template-areas: "img nPersonas"
+    "img fecha"
+    "img horario"
+    "img categoria"
+    "img buttons"
+    ;
+    gap: 1rem;
+    margin: 1rem 0;
+    padding: 1rem;
+}
+
+.img {
+    grid-area: img;
+    width: 100%;
+    padding-left: 1rem;
+    border-radius: 2rem;
+    height: 95%;
+}
+
+.nPersonas {
+    grid-area: nPersonas;
+}
+
+.fecha {
+    grid-area: fecha;
+}
+
+.categoria {
+    grid-area: categoria;
+}
+
+.buttons {
+    grid-area: buttons;
+}
+
+.buttons .reservar {
+    font-size: 1.2rem;
+    padding: 0.5rem 2rem;
+    margin: 0 3rem;
+}

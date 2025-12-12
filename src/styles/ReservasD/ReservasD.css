@@ -102,3 +102,8 @@
     background-color: #d90f01;
     color: #efefef;
 }
+
+.reserva-espacio-container {
+    width: 100%;
+    text-align: center;
+}

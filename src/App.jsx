@@ -11,6 +11,7 @@ import Contactos from './pages/Contactos.jsx';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import ReservaD from './components/ReservaD.jsx';
 import ReservasDSolicitadas from './pages/ReservasD/ReservasDSolicitadas.jsx';
+import ReservarEspacio from './pages/ReservasD/ReservarEspacio.jsx'
 
 export default function App() {
   return (
@@ -28,8 +29,9 @@ export default function App() {
           <Route path='/contactos' element={<Contactos />} />
           <Route path='/usuarios' element={<Contactos />} />
           <Route path='/reservas-deportivas' element={<ReservasD />}>
-            <Route index element={<ReservasDCatalogo/>}></Route>
-            <Route path='mis-reservas' element={<ReservasDSolicitadas />}></Route>
+            <Route index element={<ReservasDCatalogo/>}/>
+            <Route path='mis-reservas' element={<ReservasDSolicitadas />}/>
+            <Route path='reservar-espacio' element={<ReservarEspacio/>} />
           </Route>
           <Route path='/reservas-hospedaje' element={<ReservasD />} />
           <Route path='/reservas-restaurante' element={<ReservasD />} />
