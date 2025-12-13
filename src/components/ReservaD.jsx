@@ -1,6 +1,9 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 function ReservaD(props) {
+    const navigate = useNavigate();
+
   return (
     <div className='comp-reservaD'>
         <div 
@@ -21,7 +24,7 @@ function ReservaD(props) {
             <p>{props.categoria}</p>
         </div>
         <div className="buttons">
-            <button className="btn edit">Edit</button>
+            <button className="btn edit" onClick={() => navigate("/reservas-deportivas/editar")}>Edit</button>
             <button className="btn delete">Delete</button>
         </div>
     </div>
