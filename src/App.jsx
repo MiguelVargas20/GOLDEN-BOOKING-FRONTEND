@@ -6,6 +6,9 @@ import Prueba from './pages/Prueba.jsx';
 import Register from './pages/Register.jsx';
 import ReservasD from './pages/ReservasD.jsx';
 import Contactos from './pages/Contactos.jsx';
+import Booking from './pages/Booking.jsx';
+import ReservasH from './pages/reservasH.jsx';
+
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 export default function App() {
@@ -21,8 +24,11 @@ export default function App() {
           <Route path="/home" element={<Home />} />
           <Route path='/contactos' element={<Contactos />} />
         </Route>
-
+        
+        
         <Route path="/register" element={<Register />} />
+        <Route path='/ReservasH' element={<ReservasH />} />
+        <Route path="/Booking" element={<Booking />} />
         <Route path="/login" element={<Login />} />
         <Route path="/forgot" element={<Forgot />} />
         <Route path='/reservas-deportivas' element={<ReservasD />} />
