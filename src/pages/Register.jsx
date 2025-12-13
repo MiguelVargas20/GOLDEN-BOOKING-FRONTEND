@@ -72,7 +72,7 @@ function Register() {
               </div>
 
             </registro-content>
-            <Button className="btn-gold" onClick={() => navigate("/login")}>
+            <Button className="btn-login" onClick={() => navigate("/login")}>
               REGISTRARME
             </Button>
 

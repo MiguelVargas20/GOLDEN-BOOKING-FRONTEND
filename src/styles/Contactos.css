@@ -4,7 +4,7 @@
 }
 /* CONTENEDOR PRINCIPAL */
 .contact-box {
-    padding: 2rem;
+    padding: 2rem !important;
     margin: 1rem auto 2rem;
     width: 95%;
     background: white;
@@ -45,7 +45,7 @@
 .input-field {
   padding: 14px;
   border-radius: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #ccc !important;
   background-color: #fff;
   font-size: 15px;
 }
@@ -54,7 +54,7 @@
 .textarea-field {
   padding: 14px;
   border-radius: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #ccc !important;
   background-color: #fff;
   resize: none;
   font-size: 15px;

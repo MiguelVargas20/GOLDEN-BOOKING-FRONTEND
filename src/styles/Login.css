@@ -124,6 +124,10 @@ h1 {
     cursor: pointer;
 }
 
+.btn-login:hover {
+    background: linear-gradient(to bottom, #f5e200, #e1892c)  !important;
+}
+
 .btn:hover {
     background: #ffbe1a;
 }

@@ -12,6 +12,8 @@ import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import GestionarReservas from './pages/ReservasD/GestionarReservas.jsx';
 import ReservasDSolicitadas from './pages/ReservasD/ReservasDSolicitadas.jsx';
 import ReservarEspacio from './pages/ReservasD/ReservarEspacio.jsx'
+import Booking from './pages/Booking.jsx';
+import ReservasH from './pages/reservasH.jsx';
 
 export default function App() {
   return (
@@ -39,12 +41,15 @@ export default function App() {
             <Route path='editar' element={<Editar/>} />
           </Route>
 
-          <Route path='/reservas-hospedaje' element={<ReservasD />} />
+          <Route path='/reservas-hospedaje' element={<ReservasH />} />
           <Route path='/reservas-restaurante' element={<ReservasD />} />
 
         </Route>
-
+        
+        
         <Route path="/register" element={<Register />} />
+        <Route path='/ReservasH' element={<ReservasH />} />
+        <Route path="/Booking" element={<Booking />} />
         <Route path="/login" element={<Login />} />
         <Route path="/forgot" element={<Forgot />} />
         
