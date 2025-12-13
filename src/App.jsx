@@ -2,14 +2,14 @@ import Layout from './layout/layout.jsx';
 import Forgot from './pages/Forgot.jsx';
 import Home from './pages/Home.jsx';
 import Login from './pages/Login.jsx';
-import Prueba from './pages/Prueba.jsx';
 import Register from './pages/Register.jsx';
 import ReservasD from './pages/ReservasD/ReservasD.jsx';
 import ReservasDCatalogo from './pages/ReservasD/ReservasDCatalogo.jsx';
-
+import Crear from './components/Crear.jsx';
+import Editar from './components/Editar.jsx'
 import Contactos from './pages/Contactos.jsx';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
-import ReservaD from './components/ReservaD.jsx';
+import GestionarReservas from './pages/ReservasD/GestionarReservas.jsx';
 import ReservasDSolicitadas from './pages/ReservasD/ReservasDSolicitadas.jsx';
 import ReservarEspacio from './pages/ReservasD/ReservarEspacio.jsx'
 
@@ -22,19 +22,26 @@ export default function App() {
 
         {/*RUTAS SECUNDARIAS*/}
         <Route element={<Layout/>}>
-          <Route path="/prueba" element={<Prueba />} />
+
           <Route path="/home" element={<Home />} >
             <Route index element={<Contactos/>}></Route>
           </Route>
+
           <Route path='/contactos' element={<Contactos />} />
           <Route path='/usuarios' element={<Contactos />} />
+
           <Route path='/reservas-deportivas' element={<ReservasD />}>
             <Route index element={<ReservasDCatalogo/>}/>
             <Route path='mis-reservas' element={<ReservasDSolicitadas />}/>
             <Route path='reservar-espacio' element={<ReservarEspacio/>} />
+            <Route path='gestionar' element={<GestionarReservas/>} />
+            <Route path='crear' element={<Crear/>} />
+            <Route path='editar' element={<Editar/>} />
           </Route>
+
           <Route path='/reservas-hospedaje' element={<ReservasD />} />
           <Route path='/reservas-restaurante' element={<ReservasD />} />
+
         </Route>
 
         <Route path="/register" element={<Register />} />

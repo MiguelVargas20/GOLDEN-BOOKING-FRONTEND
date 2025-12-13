@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import CardReservaD from '../../components/CardReservasD'
+import CardReservaD from '../../components/CardReservas'
 import golf from "../../assets/EspaciosDeportivos/golf.png"
 import tenis from "../../assets/EspaciosDeportivos/tennis.png"
 import futbol from "../../assets/EspaciosDeportivos/futbol.png"
@@ -28,7 +28,7 @@ function ReservasDCatalogo() {
     return (
         <>
             <div className="titleRD">
-                <div></div>
+                <button className="btn btn-add" onClick={() => navigate('/reservas-deportivas/gestionar')} > Gestionar Reservas </button>
                 <h2>Reservas Espacios Deportivos</h2>
                 <button className="btn btn-add" onClick={() => navigate('/reservas-deportivas/mis-reservas')}>Mis Reservas</button>
             </div>
@@ -37,29 +37,44 @@ function ReservasDCatalogo() {
                     img={futbol}
                     titulo="Cancha de Fútbol"
                     add={() => add({ img: futbol, text: "Futbol" })}
+                    reservaCard
                 />
                 <CardReservaD
                     img={basquet}
                     titulo="Cancha de Baloncesto"
                     add={() => add({ img: basquet, text: "Baloncesto" })}
+                    reservaCard
                 />
 
                 <CardReservaD
                     img={piscina}
                     titulo="Piscina"
                     add={() => add({ img: piscina, text: "Piscina" })}
+                    reservaCard
                 />
 
                 <CardReservaD
                     img={tenis}
                     titulo="Cancha de Tenis"
                     add={() => add({ img: tenis, text: "Tenis" })}
+                    reservaCard
                 />
 
                 <CardReservaD
                     img={golf}
                     titulo="Campo de Golf"
                     add={() => add({ img: golf, text: "Golf" })}
+                    reservaCard
+                />
+
+                <CardReservaD
+                    background="rgba()"
+                    titulo="Añadir"
+                    add={() => navigate('/reservas-deportivas/crear', {
+                        state: {
+                            espacio: "d"
+                        }
+                    })}
                 />
 
             </div>
