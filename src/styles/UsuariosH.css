@@ -1,0 +1,48 @@
+.users-wrapper {
+  padding: 30px;
+  background: #fff;
+}
+
+.align-items-center {
+    margin-top: -30px;
+}
+.title-users {
+    text-align: left;
+    font-size: 25px;
+    margin-left: -210px;
+}
+.search-input {
+  border-radius: 20px;
+  margin-top: -25px;
+}
+
+.add-btn-users{
+  margin-top: -40px;
+}
+
+.edit-btn-users {
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+.delete-btn-users{
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+
+.users-table thead th {
+  background: #fafafa;
+  font-weight: 600;
+  text-align: center;
+}
+
+
+.users-table tbody td {
+  padding-top: 18px;
+  padding-bottom: 18px;
+  vertical-align: middle;
+}
+
+.users-table button {
+  border-radius: 10px;
+}

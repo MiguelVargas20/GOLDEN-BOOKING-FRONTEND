@@ -14,6 +14,8 @@ import ReservasDSolicitadas from './pages/ReservasD/ReservasDSolicitadas.jsx';
 import ReservarEspacio from './pages/ReservasD/ReservarEspacio.jsx'
 import Booking from './pages/Booking.jsx';
 import ReservasH from './pages/reservasH.jsx';
+import UsuariosH from './pages/UsuariosH.jsx';
+import UsuariosC from './pages/UsuariosC.jsx';
 
 export default function App() {
   return (
@@ -30,7 +32,8 @@ export default function App() {
           </Route>
 
           <Route path='/contactos' element={<Contactos />} />
-          <Route path='/usuarios' element={<Contactos />} />
+          <Route path="/usuarios" element={<UsuariosH />} />
+          <Route path="/usuariosc" element={<UsuariosC />} />
 
           <Route path='/reservas-deportivas' element={<ReservasD />}>
             <Route index element={<ReservasDCatalogo/>}/>
@@ -48,8 +51,6 @@ export default function App() {
         
         
         <Route path="/register" element={<Register />} />
-        <Route path='/ReservasH' element={<ReservasH />} />
-        <Route path="/Booking" element={<Booking />} />
         <Route path="/login" element={<Login />} />
         <Route path="/forgot" element={<Forgot />} />
         
