@@ -2,12 +2,118 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    color: #222;
 }
 
 .contenedor {
     display: grid;
-    height: 100vh;
     grid-template-rows: auto 2fr auto;
+}
+
+.content {
+    min-height: 70vh;
+    max-width: 100vw;
+}
+
+.header {
+    position: relative;
+    z-index: 5; /* por encima del contenido */
+}
+
+.navbar {
+    width: 100%;
+    display: flex;
+    justify-content: center;  /* centra el menú */
+    border-top: 1px solid #e5e5e5;
+    padding: 12px 0;
+    background: white;
+}
+
+.nav {
+    display: flex;
+    list-style: none;
+    gap: 40px;
+    margin: 0 auto;
+}
+
+.nav-link,
+.nav-dark button {
+    font-size: 20px;
+    font-weight: 500;
+    color: #222 !important;
+}
+
+.nav-link:hover,
+.nav-dark button:hover {
+    color: #ecb71f !important; 
+    transition: all .12s ease-in;
+}
+
+/* Fondo gris oscuro */
+.dropdown-menu {
+    background-color: #2f343a !important;
+    border-radius: 8px !important;
+    padding: 10px 0 !important;
+    min-width: 260px;
+    display: flex;
+    flex-direction: column;
+}
+
+.dropdown-toggle-custom {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+.dropdown-menu-custom {
+    position: absolute;
+    background-color: #2f3338;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 0;
+    border-radius: 8px;
+    top: 85%;
+    margin-top: 10px;
+    min-width: 220px;
+    z-index: 10;
+}
+
+.dropdown-item-custom {
+    padding: 0.5rem 1rem;
+    color: white;
+    cursor: pointer;
+}
+
+.dropdown-item-custom:hover {
+    background-color: #3c4045;
+}
+
+
+/* Cada ítem */
+.dropdown-item {
+    color: #fff !important;
+    font-size: 20px !important;
+    padding:  0.5rem 1rem !important;
+}
+
+/* Hover */
+.dropdown-item:hover {
+    background-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+/* Quitar el borde azul del botón active */
+.dropdown-toggle.show,
+.dropdown-toggle:active,
+.dropdown-toggle:focus {
+    border: none !important;
+    box-shadow: none !important;
+}
+
+
+.nav li, .nav div {
+    cursor: pointer;
+    display: flex;
 }
 
 .header {
