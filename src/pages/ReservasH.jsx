@@ -1,11 +1,9 @@
 import { useState } from "react";
-import NavDropdown from 'react-bootstrap/NavDropdown';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { IoCalendarOutline } from "react-icons/io5";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Dropdown from "react-bootstrap/Dropdown";
-import LOGO from '../assets/LOGO.png';
 import Hotel from '../assets/Hotel.png';
 import '../styles/reservasH.css';
 
@@ -16,13 +14,11 @@ function Navbar() {
 
     return (
         <>
-
-
             <h1 className='booking-title'>RESERVA HOSPEDAJE</h1>
 
             <Row>
                 <Col className='image-tenis'>
-                    <img src={Hotel} alt="Hotel" className='tenis-img' />
+                    <img src={Hotel} alt="Hotel" className='hotel-img' />
                 </Col>
 
                 <Col className='booking-form'>
@@ -42,6 +38,7 @@ function Navbar() {
                             <Counter label="Habitaciones" value={rooms} setValue={setRooms} min={1} />
                         </Dropdown.Menu>
                     </Dropdown>
+
                     <div className="date-group">
                         <label>Entrada</label>
                         <div className="date-picker mb-3">
@@ -70,8 +67,16 @@ function Navbar() {
                     </div>
 
                     <Col className='buttons-booking'>
-                        <button className='button-buscar'>BUSCAR</button>
-                        <button className='button-buscar'>CANCELAR</button>
+                            <button
+                                className="btn-aceptar-booking"
+                                onClick={() => navigate("/")}>
+                                BUSCAR
+                            </button>
+                            <button
+                                className="btn-cancelar-booking"
+                                onClick={() => navigate("/")}>
+                                CANCELAR
+                            </button>
                     </Col>
                 </Col>
             </Row>

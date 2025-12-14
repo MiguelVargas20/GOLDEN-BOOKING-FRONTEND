@@ -11,6 +11,7 @@ body {
 }
 
 .booking-title {
+    font-weight: bold;
     text-align: center;
     margin: 20px 0;
     font-size: 1.5rem;

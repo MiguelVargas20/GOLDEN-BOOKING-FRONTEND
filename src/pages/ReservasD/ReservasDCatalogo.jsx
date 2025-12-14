@@ -28,41 +28,41 @@ function ReservasDCatalogo() {
     return (
         <>
             <div className="titleRD">
-                <button className="btn btn-add" onClick={() => navigate('/reservas-deportivas/gestionar')} > Gestionar Reservas </button>
-                <h2>Reservas Espacios Deportivos</h2>
-                <button className="btn btn-add" onClick={() => navigate('/reservas-deportivas/mis-reservas')}>Mis Reservas</button>
+                <button className="btn-add-catalogo" onClick={() => navigate('/reservas-deportivas/gestionar')}>GESTIONAR RESERVAS</button>
+                <h1>RESERVAS ESPACIOS DEPORTIVOS</h1>
+                <button className="btn-add-catalogo" onClick={() => navigate('/reservas-deportivas/mis-reservas')}>MIS RESERVAS</button>
             </div>
             <div className="reservasD-cards">
                 <CardReservaD
                     img={futbol}
-                    titulo="Cancha de Fútbol"
+                    titulo="CANCHA DE FÚTBOL"
                     add={() => add({ img: futbol, text: "Futbol" })}
                     reservaCard
                 />
                 <CardReservaD
                     img={basquet}
-                    titulo="Cancha de Baloncesto"
+                    titulo="CANCHA DE BALONCESTO"
                     add={() => add({ img: basquet, text: "Baloncesto" })}
                     reservaCard
                 />
 
                 <CardReservaD
                     img={piscina}
-                    titulo="Piscina"
+                    titulo="PISCINA"
                     add={() => add({ img: piscina, text: "Piscina" })}
                     reservaCard
                 />
 
                 <CardReservaD
                     img={tenis}
-                    titulo="Cancha de Tenis"
+                    titulo="CANCHA DE TENIS"
                     add={() => add({ img: tenis, text: "Tenis" })}
                     reservaCard
                 />
 
                 <CardReservaD
                     img={golf}
-                    titulo="Campo de Golf"
+                    titulo="CAMPO DE GOLF"
                     add={() => add({ img: golf, text: "Golf" })}
                     reservaCard
                 />

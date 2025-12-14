@@ -6,7 +6,10 @@
 }
 
 .reservasD-container h2 {
-    font-weight: 800;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 25px;
+    font-weight: bold;
 }
 
 .titleRD {
@@ -16,8 +19,25 @@
     padding: 0 2rem;
 }
 
-.titleRD h2, .titleRD button {
+.titleRD h1{ 
     margin: 0 auto;
+    text-align: center;
+    font-size: 25px;
+    font-weight: bold;
+}
+.btn-add-catalogo{
+    display: flex;
+    box-shadow: none;
+    margin: 0 auto;
+    font-weight: 300;
+    background-color: #90EE90;
+    height: 6vh;
+    width: 15vw;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    color: #000 ;
+    font-weight: 400;
 }
 
 .btn-add {
@@ -36,6 +56,7 @@
     gap: 2rem;
     width: 80%;
     margin: 20px 0;
+    
 }
 
 .card-reservaD {
@@ -46,15 +67,19 @@
     text-align: center;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     transition: all 0.25s ease;
+    
 }
 
 .card-reservaD:hover {
     transform: translateY(-4px);
+    filter: blur(4px);
 }
 
 .card-reservaD h3 {
     font-weight: 700;
     color: #000;
+    font-weight: bold;
+    text-align: center;
     background: rgba(255, 255, 255, 0.5);
     border: 1px solid #ccc;
     border-radius: 0.5rem;
@@ -235,6 +260,7 @@
 .reservas-header h2 {
     text-align: center;
     font-weight: bold;
+    font-size: 25px;
 }
 
 /* Buscador */

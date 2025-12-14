@@ -9,14 +9,14 @@ function ReservasDSolicitadas() {
         <>
             <div className="titleRD">
                 <div></div>
-                <h2>Mis Reservas Deportivas</h2>
+                <h2>MIS RESERVAS DEPORTIVAS</h2>
                 <div></div>
             </div>
             <div className="reservasD-cards">
 
                 <ReservaD
                     img={futbol}
-                    titulo="Cancha de Fútbol"
+                    titulo="CANCHA DE FUTBOL"
                     nPersonas="10 personas"
                     fecha="12/12/2025"
                     horaInicio="08:00 AM"
@@ -27,7 +27,7 @@ function ReservasDSolicitadas() {
 
                 <ReservaD
                     img={basquet}
-                    titulo="Cancha de Baloncesto"
+                    titulo="CANCHA BALONCESTO"
                     nPersonas="6 personas"
                     fecha="15/12/2025"
                     horaInicio="03:00 PM"
@@ -38,7 +38,7 @@ function ReservasDSolicitadas() {
 
                 <ReservaD
                     img={piscina}
-                    titulo="Piscina"
+                    titulo="PISCINA OLÍMPICA"
                     nPersonas="4 personas"
                     fecha="20/12/2025"
                     horaInicio="11:00 AM"

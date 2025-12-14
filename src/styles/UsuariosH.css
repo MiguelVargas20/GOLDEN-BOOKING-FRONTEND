@@ -10,6 +10,9 @@
     text-align: left;
     font-size: 25px;
     margin-left: -210px;
+    font-weight: bold;
+    margin-bottom: 30px;
+    margin-top: 10px;
 }
 .search-input {
   border-radius: 20px;
@@ -17,17 +20,19 @@
 }
 
 .add-btn-users{
-  margin-top: -40px;
+    background: #3dbb3d !important;
+    color: white;
+    border: none;
+    padding: 6px 18px !important;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
 }
-
-.edit-btn-users {
-  border-radius: 10px;
-  box-sizing: border-box;
-}
-
-.delete-btn-users{
-  border-radius: 10px;
-  box-sizing: border-box;
+.opciones-usuarios{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
 .users-table thead th {

@@ -24,8 +24,8 @@ function ReservaD(props) {
             <p>{props.categoria}</p>
         </div>
         <div className="buttons">
-            <button className="btn edit" onClick={() => navigate("/reservas-deportivas/editar")}>Edit</button>
-            <button className="btn delete">Delete</button>
+                <button className="btn-edit" onClick={() => navigate("/reservas-deportivas/editar")} >EDIT</button>
+                <button className="btn-delete">DELETE</button>
         </div>
     </div>
   )

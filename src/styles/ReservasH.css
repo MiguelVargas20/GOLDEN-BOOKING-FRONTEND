@@ -17,7 +17,7 @@ body {
     color: #333;
 }
 
-.tenis-img {
+.hotel-img {
     width: 90%;
     height: 95%; 
     object-fit: cover; 
@@ -25,19 +25,6 @@ body {
     margin-left: 40px;
     border-radius: 30px;
 }
-
-.admin {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.admin h3 {
-    margin: 0;
-    font-size: 22px;
-
-}
-
 
 .Hospedaje {
     width: 10%;
@@ -47,14 +34,25 @@ body {
     margin-left: 50px;
 }
 
-.button-buscar {
-    width: 30%;
-    height: 60px;
-    border-radius: 10px;
-    background: linear-gradient(180deg, #ffc21a, #F9D42A);
-    color: #000;
-    margin-top: 10px;
-    margin-left: 65px;
+.buttons-booking{
+    display: flex;
+    gap: 200px;
+    margin-top: 30px;
+    margin-left: 40px;
+}
+.btn-aceptar-booking{ 
+  background-color: #4CAF50;
+  border: none;
+  padding: 10px 25px;
+  font-weight: bold;
+  border-radius: 8px;
+}
+.btn-cancelar-booking{
+  background-color: #e54b4b;
+  border: none;
+  padding: 10px 25px;
+  font-weight: bold;
+  border-radius: 8px;
 }
 
 .booking-form select,

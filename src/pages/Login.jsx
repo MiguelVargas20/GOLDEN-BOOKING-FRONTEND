@@ -15,7 +15,7 @@ export default function Login() {
                     <div className="logo-login">
                         <img src={logo} alt="Logo" />
                     </div>
-                    <h1>Bienvenido !</h1>
+                    <h1 className="title-login">Bienvenido !</h1>
                     <p className="subtitle">¿Estas listo para reservar?</p>
                     {/*FORMULARIO*/}
                     <form className="form">
@@ -45,7 +45,7 @@ export default function Login() {
                                 INGRESAR
                             </button>
                             <button type="button" className="btn-login" onClick={() => navigate('/register')}>
-                                Registrarse
+                                REGISTRARSE
                             </button>
                         </div>
                     </form>
