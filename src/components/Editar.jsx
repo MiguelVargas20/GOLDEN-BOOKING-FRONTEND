@@ -6,7 +6,7 @@ function Editar() {
     const navigate = useNavigate();
 
     return (
-        <div className="editar-container">
+        <div className="editar-containerRD">
             <h2 className="titulo">EDITAR ESPACIO DEPORTIVO</h2>
 
             <div className="card-editar">

@@ -13,7 +13,7 @@
     width: 100%;
     display: grid;
     grid-template-columns: 15% 1fr 15%;
-    padding: 0 1rem;
+    padding: 0 2rem;
 }
 
 .titleRD h2, .titleRD button {
@@ -21,13 +21,13 @@
 }
 
 .btn-add {
-    background-color: #efbe2a;
+    background-color: #efbe2a !important;
 }
 
 .btn-add:hover {
     transition: all .12s ease-in;
     transform: scale(1.03);
-    background-color: #edb304;
+    background-color: #edb304 !important;
 }
 
 .reservasD-cards {
@@ -86,26 +86,26 @@
 }
 
 .edit {
-    font-weight: 850;
-    color: #000;
-    background-color: #f4f4f3;
-    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5)
+    font-weight: 850 !important;
+    color: #000 !important;
+    background-color: #f4f4f3 !important;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5) !important
 }
 
 .edit:hover {
-    background-color: #d2d2d1;
+    background-color: #d2d2d1 !important;
 }
 
 .delete {
-    font-weight: 850;
-    color: #fff;
-    background-color: #e14337;
-    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5)
+    font-weight: 850 !important;
+    color: #fff !important;
+    background-color: #e14337 !important;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5) !important
 }
 
 .delete:hover {
-    background-color: #d90f01;
-    color: #efefef;
+    background-color: #d90f01 !important;
+    color: #efefef !important;
 }
 
 .reserva-espacio-container {
@@ -207,11 +207,11 @@
 }
 
 .crear {
-    background: linear-gradient(to bottom, #ffdd00, #f4c400);
+    background: linear-gradient(to bottom, #ffdd00, #f4c400) !important;
 }
 
 .cancelar {
-    background: linear-gradient(to bottom, #ffdd00, #f4c400);
+    background: linear-gradient(to bottom, #ffdd00, #f4c400) !important;
 }
 
 
@@ -264,10 +264,10 @@
 }
 
 .btn-add-gestion {
-    background: #3dbb3d;
+    background: #3dbb3d !important;
     color: white;
     border: none;
-    padding: 6px 18px;
+    padding: 6px 18px !important;
     border-radius: 6px;
     font-weight: bold;
     cursor: pointer;
@@ -327,14 +327,14 @@ td:nth-child(3) {
 .btn-edit {
     background: #eee;
     border: none;
-    padding: 5px 10px;
+    padding: 5px 10px !important;
     border-radius: 6px;
     cursor: pointer;
     font-weight: bold;
 }
 
 .btn-delete {
-    background: #e74c3c;
+    background: #e74c3c !important;
     color: white;
     border: none;
     padding: 5px 10px;
@@ -345,7 +345,7 @@ td:nth-child(3) {
 
 
 /* Estilos de editar espacio deportivo */
-.editar-container {
+.editar-containerRD {
     padding: 30px;
     width: 100%;
 }
@@ -365,7 +365,7 @@ td:nth-child(3) {
 
 /* Header card */
 .card-header {
-    padding: 12px 20px;
+    padding: 12px 20px !important;
     border-bottom: 1px solid #000;
     font-weight: bold;
 }
@@ -375,7 +375,7 @@ td:nth-child(3) {
     display: grid;
     grid-template-columns: 1.2fr 1fr;
     gap: 40px;
-    padding: 30px;
+    padding: 30px !important;
     align-items: center;
 }
 
@@ -418,7 +418,7 @@ td:nth-child(3) {
 }
 
 .btn-editar {
-    padding: 12px 30px;
+    padding: 12px 30px !important;
     border-radius: 10px;
     font-weight: bold;
     border: none;

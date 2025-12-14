@@ -30,7 +30,7 @@ export default function Contactos() {
           />
 
           {/* MAPA */}
-          <Col md={6} className="map-section">
+          <Col className="map-section">
             <div className="map-iframe">
               <img src={mapaimg} alt="Mapa" />
             </div>
