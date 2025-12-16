@@ -25,7 +25,11 @@ function GestionarReservas() {
         <h2>INICIO - RESERVAS DEPORTIVAS</h2>
 
         <div className="acciones-header">
-          <button className="btn-add-gestion">ADD</button>
+          <button className="btn-add-gestion" onClick={() => navigate('/reservas-deportivas/crear', {
+                        state: {
+                            espacio: "d"
+                        }
+                    })}>ADD</button>
           <FaPlus className="icon-plus" />
         </div>
       </div>

@@ -67,11 +67,6 @@ export default function Layout() {
                                         onClick={() => { setOpen(false); navigate("/reservas-hospedaje"); }}>
                                         HOSPEDAJE
                                     </div>
-
-                                    <div className="dropdown-item-custom"
-                                        onClick={() => { setOpen(false); navigate("/reservas-restaurante"); }}>
-                                        RESTAURANTE
-                                    </div>
                                 </div>
                             )}
                         </li>

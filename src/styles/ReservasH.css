@@ -181,5 +181,10 @@ input[type="date"]::placeholder {
     background: #f0f0f0 !important;
 }
 
+.dropdown-menu {
+    background-color: #ccc !important;
+    padding: 1rem 1rem 0.5rem !important;
+}
+
 
 
