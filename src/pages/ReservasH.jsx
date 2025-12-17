@@ -33,9 +33,9 @@ function Navbar() {
                         </Dropdown.Toggle>
 
                         <Dropdown.Menu className="dropdown-menu-guests">
-                            <Counter label="Adultos" value={adults} setValue={setAdults} min={1} />
+                            <Counter label="Adultos" value={adults} setValue={setAdults} min={0} />
                             <Counter label="Niños" value={children} setValue={setChildren} min={0} />
-                            <Counter label="Habitaciones" value={rooms} setValue={setRooms} min={1} />
+                            <Counter label="Habitaciones" value={rooms} setValue={setRooms} min={0} />
                         </Dropdown.Menu>
                     </Dropdown>
 

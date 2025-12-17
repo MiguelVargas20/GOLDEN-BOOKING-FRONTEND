@@ -67,7 +67,6 @@ export default function Layout() {
                                         onClick={() => { setOpen(false); navigate("/reservas-hospedaje"); }}>
                                         HOSPEDAJE
                                     </div>
-
                                 </div>
                             )}
                         </li>
