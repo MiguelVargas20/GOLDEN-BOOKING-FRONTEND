@@ -10,7 +10,7 @@ export default function Login() {
         <>
             <div className="container-login">
                 {/*PANEL IZQUIERDO*/}
-                <div className="left-panel">
+                <div className="left-panel-login">
                     {/*LOGO*/}
                     <div className="logo-login">
                         <img src={logo} alt="Logo" />
@@ -52,7 +52,7 @@ export default function Login() {
                 </div>
 
                 {/*PANEL DERECHO*/}
-                <div className="right-panel">
+                <div className="right-panel-login">
                     <div className="container-img">
                         <img src={calendario} alt="Calendario" className="calendar-img" />
                     </div>

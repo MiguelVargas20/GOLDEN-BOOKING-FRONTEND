@@ -11,38 +11,38 @@ function ReservarEspacio(props) {
 
     return (
         <div className='reserva-espacio-container'>
-            <h2>Reserva: {text}</h2>
+            <h2>RESERVA {text}</h2>
             <div className="reservar-espacio-form">
                 <div className="img">
                     <img src={ruta} alt={text} className="img"/>
                 </div>
                 <Form.Control
                     type="number"
-                    placeholder="# de personas"
+                    placeholder="Numero de personas"
                     className="input-field nPersonas"
                 />
 
                 <Form.Control
                     type="datetime"
-                    placeholder="fecha"
+                    placeholder="Fecha"
                     className="input-field fecha"
                 />
 
                 <Form.Control
                     type="datetime"
-                    placeholder="hora"
+                    placeholder="Horario"
                     className="input-field horario"
                 />
 
                 <Form.Control
                     type="text"
-                    placeholder="categoria"
+                    placeholder="Categoria"
                     className="input-field categoria"
                 />
 
                 <div className="buttons">
-                    <button className="btn btn-add reservar" onClick={() => navigate("/reservas-deportivas")}>Buscar</button>
-                    <button className="btn btn-add reservar" onClick={() => navigate("/reservas-deportivas")}>cancelar</button>
+                    <button className="btn-reservar-espacio" onClick={() => navigate("/reservas-deportivas")}>RESERVAR</button>
+                    <button className="btn-cancelar-espacio" onClick={() => navigate("/reservas-deportivas")}>CANCELAR</button>
                 </div>
 
             </div>

@@ -36,34 +36,34 @@ function ReservasDCatalogo() {
                 <CardReservaD
                     img={futbol}
                     titulo="CANCHA DE FÚTBOL"
-                    add={() => add({ img: futbol, text: "Futbol" })}
+                    add={() => add({ img: futbol, text: "FUTBOL" })}
                     reservaCard
                 />
                 <CardReservaD
                     img={basquet}
                     titulo="CANCHA DE BALONCESTO"
-                    add={() => add({ img: basquet, text: "Baloncesto" })}
+                    add={() => add({ img: basquet, text: "BALONCESTO" })}
                     reservaCard
                 />
 
                 <CardReservaD
                     img={piscina}
                     titulo="PISCINA"
-                    add={() => add({ img: piscina, text: "Piscina" })}
+                    add={() => add({ img: piscina, text: "PISCINA" })}
                     reservaCard
                 />
 
                 <CardReservaD
                     img={tenis}
                     titulo="CANCHA DE TENIS"
-                    add={() => add({ img: tenis, text: "Tenis" })}
+                    add={() => add({ img: tenis, text: "TENIS" })}
                     reservaCard
                 />
 
                 <CardReservaD
                     img={golf}
                     titulo="CAMPO DE GOLF"
-                    add={() => add({ img: golf, text: "Golf" })}
+                    add={() => add({ img: golf, text: "GOLF" })}
                     reservaCard
                 />
 

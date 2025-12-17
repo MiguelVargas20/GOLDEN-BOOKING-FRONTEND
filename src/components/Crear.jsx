@@ -31,7 +31,7 @@ function Crear() {
                     />
 
                     <select className="input">
-                        <option>No. Personas</option>
+                        <option>Numero de Personas</option>
                         {Array.from({ length: 15 }, (_, i) => (
                             <option key={i + 1} value={i + 1}>
                                 {i + 1}
@@ -46,6 +46,9 @@ function Crear() {
                         <option>Fútbol</option>
                         <option>Baloncesto</option>
                         <option>Tenis</option>
+                        <option>Golf</option>
+                        <option>Piscina</option>
+                        <option>Otra</option>
                     </select>
                         :
                         <textarea className="input" placeholder="Descripción" rows="4"></textarea>
