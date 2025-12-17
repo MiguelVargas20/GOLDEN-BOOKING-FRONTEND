@@ -46,7 +46,7 @@ function Navbar() {
                                 type="date"
                                 id="start"
                                 min="2025-01-01"
-                                max="2025-12-31"
+                                max="2030-12-31"
                                 placeholder="Seleccionar fecha"
                             />
                             <IoCalendarOutline className="calendar-icon" />

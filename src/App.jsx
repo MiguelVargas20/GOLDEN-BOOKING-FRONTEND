@@ -1,3 +1,4 @@
+import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import Layout from './layout/layout.jsx';
 import Forgot from './pages/Forgot.jsx';
 import Home from './pages/Home.jsx';
@@ -8,13 +9,12 @@ import ReservasDCatalogo from './pages/ReservasD/ReservasDCatalogo.jsx';
 import Crear from './components/Crear.jsx';
 import Editar from './components/Editar.jsx'
 import Contactos from './pages/Contactos.jsx';
-import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 import GestionarReservas from './pages/ReservasD/GestionarReservas.jsx';
 import ReservasDSolicitadas from './pages/ReservasD/ReservasDSolicitadas.jsx';
 import ReservarEspacio from './pages/ReservasD/ReservarEspacio.jsx'
-import Booking from './pages/Booking.jsx';
 import ReservasH from './pages/reservasH.jsx';
 import UsuariosH from './pages/UsuariosH.jsx';
+import UsuariosE from './pages/UsuariosE.jsx';
 import UsuariosC from './pages/UsuariosC.jsx';
 
 export default function App() {
@@ -33,7 +33,8 @@ export default function App() {
 
           <Route path='/contactos' element={<Contactos />} />
           <Route path="/usuarios" element={<UsuariosH />} />
-          <Route path="/usuariosc" element={<UsuariosC />} />
+          <Route path="/usuarios-edit" element={<UsuariosE />} />
+          <Route path='/usuarios-crear' element={<UsuariosC/>} />
 
           <Route path='/reservas-deportivas' element={<ReservasD />}>
             <Route index element={<ReservasDCatalogo/>}/>
@@ -48,8 +49,6 @@ export default function App() {
           <Route path='/reservas-restaurante' element={<ReservasD />} />
 
         </Route>
-        
-        
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/forgot" element={<Forgot />} />

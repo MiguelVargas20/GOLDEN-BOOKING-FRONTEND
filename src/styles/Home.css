@@ -30,8 +30,11 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
-    height: 50%;
-    width: 18%;
+    height: 70%;
+    width: 15%;
+    margin-left: 21px;
+    color: #c89d00;
+
 }
 
 .principal {

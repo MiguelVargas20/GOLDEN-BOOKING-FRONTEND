@@ -16,7 +16,7 @@
 }
 
 /* PANEL IZQUIERDO */
-.left-panel{
+.left-panel-login{
     display: grid;
     grid-template-rows: auto auto auto 2fr;
     width: 100%;
@@ -63,7 +63,7 @@
     border-radius: 10px;
     outline: none;
     font-size: 16px;
-    background: #f3f3f3;     /* ← ESTE ES EL QUE TE FALTA */
+    background: #f3f3f3;    
     color: #000;         
 }
 
@@ -128,14 +128,13 @@
 }
 
 .btn-login:hover {
-    background: linear-gradient(to bottom, #f5e200, #e1892c)  !important;
+       background: #ffbe1a;
 }
-
-.btn:hover {
+.btn-send-forgot:hover {
     background: #ffbe1a;
 }
 /* PANEL DERECHO - GRID CENTRADO */
-.right-panel {
+.right-panel-login {
     display: grid;
     place-items: center;
     height: 100vh;

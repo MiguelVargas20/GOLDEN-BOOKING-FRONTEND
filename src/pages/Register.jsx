@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -17,6 +16,7 @@ function Register() {
   return (
     <Row className="register-content">
       <Col>
+      <div className="left-panel-register"> 
         <Form className="login-form px-3">
           <Row>
             <header className="site-header">
@@ -27,7 +27,7 @@ function Register() {
           <Row className="justify-content-center align-items-center form-container mx-3">
             <div className="page-heading">
               <h1 className="title-register">Crea tu cuenta</h1>
-              <p>Registrate para acceder a tu reserva</p>
+              <p className="subtitle-register"> Registrate para acceder a tu reserva</p>
             </div>
 
             <registro-content className="form-register">
@@ -72,16 +72,18 @@ function Register() {
               </div>
 
             </registro-content>
-            <Button className="btn-register" onClick={() => navigate("/login")}>
+            <button type="button" className="btn-register" onClick={() => navigate("/login")}>
               REGISTRARME
-            </Button>
+            </button>
 
           </Row>
         </Form>
+      </div>
       </Col>
-
-      <Col className="side-right">
-        <img src={click} alt="click" className="logo_click" />
+      <Col className="right-panel-register">
+      <div className="logo-container-register ">
+        <img src={click} alt="click" className="click-img" />
+      </div>
       </Col>
     </Row>
   );

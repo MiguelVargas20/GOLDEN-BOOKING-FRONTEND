@@ -119,16 +119,19 @@ input[type="date"]::placeholder {
 /* ---------- CONTADOR (ADULTOS / NIÑOS / HABITACIONES) ---------- */
 
 .dropdown-menu-guests {
-    width: 260px;
-    padding: 15px;
+    width: 300px;
     border-radius: 10px;
-    background: #ffffff;
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+    background-color: #ffffff !important;
+    opacity: 1 !important;
 }
+
 
 /* Fila del contador */
 .counter-row {
     display: flex;
+    padding-left: 20px;
+    padding-right: 40px;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 12px;

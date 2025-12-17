@@ -23,8 +23,8 @@
 }
 
 .logo-forgot img {
-    height: 50px;
-    width: 30%;
+    height: 60px;
+    width: 28%;
     margin-top: 1rem;
 }
 
@@ -86,6 +86,9 @@
     font-weight: bold;
     border-radius: 10px;
     cursor: pointer;
+    display: flex;
+    align-items: center;     
+    justify-content: center;
 }
 
 .btn-send-forgot:hover {

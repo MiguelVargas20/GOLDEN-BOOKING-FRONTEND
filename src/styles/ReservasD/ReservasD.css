@@ -230,19 +230,18 @@
     padding: 0.5rem 2rem;
     font-size: 1.05rem;
     font-weight: 600;
+    width: 100px;
 }
 
 .crear {
-    background: linear-gradient(to bottom, #ffdd00, #f4c400) !important;
+    background: linear-gradient(to bottom, #7ed957, #4caf50);
+    box-shadow: 0 4px 0 #3e8e41; 
 }
 
 .cancelar {
-    background: linear-gradient(to bottom, #ffdd00, #f4c400) !important;
+    background: linear-gradient(to bottom, #dd8856, #e70606);
+    box-shadow: 0 4px 0 #a02304; 
 }
-
-
-
-
 
 /* Estilos de gestión de reservas */
 .reservas-container {
@@ -457,6 +456,7 @@ td:nth-child(3) {
     background: linear-gradient(to bottom, #7ed957, #4caf50);
     box-shadow: 0 4px 0 #3e8e41;
 }
+
 
 .cancelar-editar {
     background: linear-gradient(to bottom, #ff6b6b, #e74c3c);

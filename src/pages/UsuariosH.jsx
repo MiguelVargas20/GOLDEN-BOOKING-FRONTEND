@@ -20,7 +20,7 @@ export default function UsuariosH() {
           </Col>
 
           <Col md="auto">
-            <Button variant="success" className="add-btn-users" onClick={() => navigate("/usuariosC")} >
+            <Button variant="success" className="add-btn-users" onClick={() => navigate("/usuarios-crear")} >
               ADD
             </Button>
 
@@ -47,7 +47,7 @@ export default function UsuariosH() {
               <td>Administrador</td>
               <td>juan.perez@example.com</td>
               <td className="opciones-usuarios">
-                <button className="btn-edit" onClick={() => navigate("/")} >EDIT</button>
+                <button className="btn-edit" onClick={() => navigate("/usuarios-edit")} >EDIT</button>
                 <button className="btn-delete">DELETE</button>
                </td>
             </tr>
@@ -58,7 +58,7 @@ export default function UsuariosH() {
               <td>Editor</td>
               <td>maria.gomez@example.com</td>
               <td className="opciones-usuarios">
-                <button className="btn-edit" onClick={() => navigate("/")} >EDIT</button>
+                <button className="btn-edit" onClick={() => navigate("/usuarios-edit")} >EDIT</button>
                 <button className="btn-delete">DELETE</button>
                </td>
             </tr>
@@ -69,7 +69,7 @@ export default function UsuariosH() {
               <td>Usuario</td>
               <td>carlos.lopez@example.com</td>
               <td className="opciones-usuarios">
-                <button className="btn-edit" onClick={() => navigate("/")} >EDIT</button>
+                <button className="btn-edit" onClick={() => navigate("/usuarios-edit")} >EDIT</button>
                 <button className="btn-delete">DELETE</button>
                </td>
             </tr>
@@ -80,7 +80,7 @@ export default function UsuariosH() {
               <td>Administrador</td>
               <td>laura.sanchez@example.com</td>
               <td className="opciones-usuarios">
-                <button className="btn-edit" onClick={() => navigate("/")} >EDIT</button>
+                <button className="btn-edit" onClick={() => navigate("/usuarios-edit")} >EDIT</button>
                 <button className="btn-delete">DELETE</button>
                </td>
             </tr>
@@ -91,7 +91,7 @@ export default function UsuariosH() {
               <td>Usuario</td>
               <td>pedro.martinez@example.com</td>
               <td className="opciones-usuarios">
-                <button className="btn-edit" onClick={() => navigate("/")} >EDIT</button>
+                <button className="btn-edit" onClick={() => navigate("/usuarios-edit")} >EDIT</button>
                 <button className="btn-delete">DELETE</button>
                </td>
             </tr>
@@ -102,7 +102,7 @@ export default function UsuariosH() {
               <td>Editor</td>
               <td>sofia.herrera@example.com</td>
               <td className="opciones-usuarios">
-                <button className="btn-edit" onClick={() => navigate("/")} >EDIT</button>
+                <button className="btn-edit" onClick={() => navigate("/usuarios-edit")} >EDIT</button>
                 <button className="btn-delete">DELETE</button>
                </td>
             </tr>
@@ -113,7 +113,7 @@ export default function UsuariosH() {
               <td>Usuario</td>
               <td>diego.torres@example.com</td>
               <td className="opciones-usuarios">
-                <button className="btn-edit" onClick={() => navigate("/")} >EDIT</button>
+                <button className="btn-edit" onClick={() => navigate("/usuarios-edit")} >EDIT</button>
                 <button className="btn-delete">DELETE</button>
                </td>
             </tr>
@@ -124,7 +124,7 @@ export default function UsuariosH() {
               <td>Editor</td>
               <td>ana.ruiz@example.com</td>
               <td className="opciones-usuarios">
-                <button className="btn-edit" onClick={() => navigate("/")} >EDIT</button>
+                <button className="btn-edit" onClick={() => navigate("/usuarios-edit")} >EDIT</button>
                 <button className="btn-delete">DELETE</button>
                </td>
             </tr>
