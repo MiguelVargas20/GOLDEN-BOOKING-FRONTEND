@@ -67,12 +67,11 @@ export default function Layout() {
                                         onClick={() => { setOpen(false); navigate("/reservas-hospedaje"); }}>
                                         HOSPEDAJE
                                     </div>
-
                                 </div>
                             )}
                         </li>
 
-                        <li className="nav-item">
+                        <li className="nav-item">9
                             <a className="nav-link text-dark" onClick={() => navigate("/contactos")}>CONTACTANOS</a>
                         </li>
 
