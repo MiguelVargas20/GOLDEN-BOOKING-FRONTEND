@@ -20,25 +20,24 @@
     padding: 0 2rem;
 }
 
-.titleRD h1{ 
+.titleRD h1 {
     margin: 0 auto;
     text-align: center;
     font-size: 25px;
     font-weight: bold;
 }
-.btn-add-catalogo{
+
+.btn-add-catalogo {
     display: flex;
-    box-shadow: none;
     margin: 0 auto;
-    font-weight: 300;
-    background-color: #90EE90;
+    font-weight: 700;
+    background: linear-gradient(to bottom, #f5e200, #e1892c);;
     height: 6vh;
     width: 15vw;
     justify-content: center;
     align-items: center;
-    border-radius: 20px;
-    color: #000 ;
-    font-weight: 400;
+    border-radius: 40px;
+    color: #000;
 }
 
 .btn-add {
@@ -57,18 +56,18 @@
     gap: 2rem;
     width: 80%;
     margin: 20px 0;
-    
+
 }
 
 .card-reservaD {
-    min-height: 12rem;
+    min-height: 18rem;
     border: 1px solid #ccc;
     border-radius: 8px;
     padding: 15px;
     text-align: center;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
     transition: all 0.25s ease;
-    
+
 }
 
 .card-reservaD:hover {
@@ -235,12 +234,12 @@
 
 .crear {
     background: linear-gradient(to bottom, #7ed957, #4caf50);
-    box-shadow: 0 4px 0 #3e8e41; 
+    box-shadow: 0 4px 0 #3e8e41;
 }
 
 .cancelar {
     background: linear-gradient(to bottom, #dd8856, #e70606);
-    box-shadow: 0 4px 0 #a02304; 
+    box-shadow: 0 4px 0 #a02304;
 }
 
 /* Estilos de gestión de reservas */
@@ -320,7 +319,8 @@ thead {
     background: #f5f5f5;
 }
 
-th, td {
+th,
+td {
     padding: 12px;
     text-align: center;
 }
@@ -462,4 +462,76 @@ td:nth-child(3) {
     background: linear-gradient(to bottom, #ff6b6b, #e74c3c);
     box-shadow: 0 4px 0 #c0392b;
 }
+/* MEDIA QUERY CELULAR */
 
+@media (max-width: 768px) {
+
+    /* Títulos */
+    .titleRD {
+        grid-template-columns: 1fr 1fr ;
+        gap: 1rem;
+        padding: 0 1rem;
+    }
+
+    .btn-add-catalogo {
+        width: 60vw;
+        height: auto;
+        padding: 0.6rem;
+    }
+
+    /* Cards */
+    .reservasD-cards {
+        grid-template-columns: 1fr;
+        width: 95%;
+        gap: 1.5rem;
+    }
+
+    /* Crear / Editar */
+    .contenido,
+    .card-body {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+
+    .upload-box {
+        height: 220px;
+    }
+
+    /* Botones */
+    .botones {
+        flex-direction: column;
+        gap: 15px;
+        margin: 1rem 0;
+    }
+
+    .btn-crear,
+    .btn-editar {
+        width: 100%;
+    }
+
+    /* Header reservas */
+    .reservas-header {
+        grid-template-columns: 1fr;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .acciones-header {
+        justify-content: center;
+    }
+
+    .buscador {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Tabla */
+    table {
+        font-size: 13px;
+    }
+
+    th,
+    td {
+        padding: 8px;
+    }
+}
