@@ -34,15 +34,14 @@ function Register() {
               <registro-content className="form-register">
 
                 <Form.Group className="mb-2" controlId="formBasicName">
-                  <Form.Control className="inp" type="text" placeholder="Nombre Completo" />
+                  <Form.Control className="inp" type="text" placeholder="Nombre " />
                 </Form.Group>
 
                 <Form.Group className="mb-2" controlId="formBasicName">
-                  <Form.Control className="inp" type="text" placeholder="Apellido completo" />
+                  <Form.Control className="inp" type="text" placeholder="Apellido " />
                 </Form.Group>
 
-                <Form.Select className="inp" controlId="formBasicDocumentType">
-                  <option value="">Tipo de documento</option>
+                <Form.Select className="inp"  controlId="formBasicDocumentType" placeholder="Tipo de documento">
                   <option value="CC">Cédula de ciudadanía (CC)</option>
                   <option value="TI">Tarjeta de identidad (TI)</option>
                   <option value="CE">Cédula de extranjería (CE)</option>
