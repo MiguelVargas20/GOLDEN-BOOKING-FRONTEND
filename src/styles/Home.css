@@ -12,6 +12,13 @@ body {
     border-top: 2px solid #e0e0e0;
 }
 
+.bungee-regular {
+  font-family: "Bungee", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
 .Header {
     display: flex;
     justify-content: space-between;
@@ -78,55 +85,123 @@ body {
     margin-top: 20px;
 
 }
-
-/* 🎞 Contenedor general */
-.carousel-container {
-    width: 100%;
-    overflow: hidden;
+/* Contenedor con bordes redondeados como la imagen */
+.hero-carousel-wrapper {
+    margin: 20px auto;
+    width: 95%;
+    border-radius: 20px;
+    overflow: hidden; /* Corta la imagen para que siga el radio del borde */
     position: relative;
-    height: 250px;
-    /* Ajusta la altura del carrusel */
 }
 
-/* 🎞 Pista que se mueve de derecha a izquierda */
-.carousel-track {
-    display: flex;
-    width: max-content;
-    animation: scroll-left 25s linear infinite;
-}
-
-/* 🎞 Imágenes del carrusel */
-.carousel-track img {
-    width: 350px;
-    /* Ajusta el tamaño que necesites */
-    height: 250px;
+.hero-img {
+    height: 500px;
     object-fit: cover;
-    margin-right: 20px;
-    border-radius: 15px;
+    filter: brightness(0.7); /* Oscurece un poco la imagen para que se lea el texto */
 }
 
-.right-side-icon {
-    display: grid;
-    place-items: center;
+/* Posicionamiento del texto */
+.hero-caption-custom {
+    text-align: left !important;
+    left: 8% !important;
+    right: auto !important;
+    bottom: 20% !important;
 }
 
-.logoValle {
-    width: 50%;
-    height: auto;
+.premium-tag {
+    background-color: #f38d1e;
+    color: white;
+    padding: 5px 12px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 15px;
 }
 
-.principal-content {
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    max-width: 600px;
+}
+
+.orange-text {
+    color: #f38d1e;
+}
+
+.hero-subtitle {
+    font-size: 1.1rem;
+    max-width: 500px;
+    margin: 20px 0;
+    opacity: 0.9;
+    color: white;
+}
+
+/* Botones */
+.hero-buttons {
     display: flex;
-    padding: 0 1rem;
+    gap: 15px;
 }
 
-/* 🎞 Animación de desplazamiento infinito */
-@keyframes scroll-left {
-    from {
-        transform: translateX(0);
-    }
+.btn-orange {
+    background-color: #f38d1e !important;
+    border: none !important;
+    padding: 12px 30px !important;
+    font-weight: 600 !important;
+}
 
-    to {
-        transform: translateX(-50%);
-    }
+.btn-outline-glass {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.5) !important;
+    color: white !important;
+    padding: 12px 30px !important;
+    backdrop-filter: blur(5px);
+    font-weight: 600 !important;
+}
+
+/* Estilo para los indicadores (bolitas del carrusel) */
+.carousel-indicators [data-bs-target] {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+}
+
+/* Color naranja de la marca */
+.text-orange {
+    color: #f38d1e !important;
+}
+
+.section-title {
+    color: #00233a; /* Azul oscuro del diseño */
+    font-size: 1.8rem;
+}
+
+/* Estilo de la Card */
+.facility-card {
+    border-radius: 16px !important; /* Bordes muy redondeados */
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.facility-card:hover {
+    transform: translateY(-8px); /* Efecto al pasar el mouse */
+}
+
+/* Contenedor de imagen para forzar proporción */
+.img-container {
+    width: 100%;
+    height: 220px; /* Ajusta la altura según prefieras */
+    overflow: hidden;
+}
+
+.facility-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Esto evita que la imagen se estire */
+    border-radius: 16px 16px 0 0; /* Redondea solo arriba */
+}
+
+.facility-card .card-title {
+    color: #00233a;
 }
