@@ -4,15 +4,25 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import '../styles/Register.css';
 import '../styles/Login.css'
-import click from '../assets/click.png';
+import imagen_register from '../assets/imagen_register.png';
 import logo from '../assets/LOGO.png'
 import { useNavigate } from "react-router-dom";
+import { IoEyeSharp } from "react-icons/io5";
+import { FaEyeSlash } from "react-icons/fa";
 
 
 function Register() {
   const [verPass, setVerPass] = useState(false);
   const [verConfirm, setVerConfirm] = useState(false);
   const navigate = useNavigate();
+
+  const togglePasswordVisibility = () => {
+    setVerPass((prev) => !prev);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setVerConfirm((prev) => !prev);
+  };
 
   return (
     <Row className="register-content">
@@ -27,8 +37,8 @@ function Register() {
 
             <Row className="justify-content-center align-items-center form-container mx-3">
               <div className="page-heading">
-                <h1 className="title-register">Crea tu cuenta</h1>
-                <p className="subtitle-register"> Registrate para acceder a tu reserva</p>
+                <h1 className="bungee-regular">Crea tu cuenta</h1>
+                <p className="bungee-regular"> Registrate para acceder a tu reserva</p>
               </div>
 
               <registro-content className="form-register">
@@ -52,39 +62,31 @@ function Register() {
                   <Form.Control className="inp" type="email" placeholder="usuario.nombre@gmail.com" />
                 </Form.Group>
                 {/* CONTRASEÑA */}
-                <div className="input-wrapper">
+                <div className="input-wrapper password-input-wrapper">
                   <Form.Control
                     className="inp"
                     type={verPass ? "text" : "password"}
                     placeholder="Contraseña"
                   />
-                  <button
-                    type="button"
-                    className="btn-eye"
-                    onClick={() => setVerPass(!verPass)}
-                  >
-                    {verPass ? "🙈" : "👁️"}
-                  </button>
+                  <span className="password-toggle-icon-registro" onClick={togglePasswordVisibility}>
+                    {verPass ? <FaEyeSlash /> : <IoEyeSharp />}
+                  </span>
                 </div>
 
                 {/* CONFIRMAR CONTRASEÑA */}
-                <div className="input-wrapper">
+                <div className="input-wrapper password-input-wrapper">
                   <Form.Control
                     className="inp"
                     type={verConfirm ? "text" : "password"}
                     placeholder="Confirmar Contraseña"
                   />
-                  <button
-                    type="button"
-                    className="btn-eye"
-                    onClick={() => setVerConfirm(!verConfirm)}
-                  >
-                    {verConfirm ? "🙈" : "👁️"}
-                  </button>
+                  <span className="password-toggle-icon-registro" onClick={toggleConfirmPasswordVisibility}>
+                    {verConfirm ? <FaEyeSlash /> : <IoEyeSharp />}
+                  </span>
                 </div>
 
               </registro-content>
-              <button type="button" className="btn-register" onClick={() => navigate("/login")}>
+              <button type="button" className="btn-register bungee-regular" onClick={() => navigate("/login")}>
                 REGISTRARME
               </button>
 
@@ -94,7 +96,7 @@ function Register() {
       </Col>
       <Col className="right-panel-register">
         <div className="logo-container-register ">
-          <img src={click} alt="click" className="click-img" />
+          <img src={imagen_register} alt="imagen_register" className="click-img" />
         </div>
       </Col>
     </Row>

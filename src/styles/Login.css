@@ -16,10 +16,25 @@
     box-sizing: border-box !important; 
 }
 
-.bungee-regular { 
-    font-family: "Bungee", sans-serif;
-    font-weight: 800;
-    font-style:normal;
+.password-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-toggle-icon {
+    position: absolute;
+    top: 52%;
+    right: 4rem;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.password-toggle-icon:hover {
+    color: #000;
 }
 
 

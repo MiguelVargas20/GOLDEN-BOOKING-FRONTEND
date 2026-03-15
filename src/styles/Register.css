@@ -29,6 +29,20 @@
     padding: 0 1rem
 }
 
+.password-toggle-icon-registro{
+   position: absolute;
+    top: 52%;
+    right: 1rem;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+
+
 
 .site-header {
   width: 100%;
