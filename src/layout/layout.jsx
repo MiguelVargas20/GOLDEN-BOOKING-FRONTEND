@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
+import Footer from '../components/Footer'; 
 import logo from "../assets/LOGO.PNG";
 import "./layout.css";
 
@@ -88,9 +89,7 @@ export default function Layout() {
             </div>
 
             <div className="footer">
-                <footer className="text-center text-dark fw-bold py-3">
-                    © 2025 Golden Booking · Todos los derechos reservados
-                </footer>
+                <Footer />
             </div>
 
         </div>

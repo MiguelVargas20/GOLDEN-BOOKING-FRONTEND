@@ -12,13 +12,6 @@ body {
     border-top: 2px solid #e0e0e0;
 }
 
-.bungee-regular {
-  font-family: "Bungee", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-}
-
-
 .Header {
     display: flex;
     justify-content: space-between;
@@ -43,69 +36,39 @@ body {
     color: #c89d00;
 
 }
-
-.principal {
-    margin: 3rem 3rem 2rem;
+/* --- Estilos Globales y Tipografía --- */
+.bungee-regular {
+    font-family: "Bungee", sans-serif;
+    font-weight: 400;
 }
 
-.menu {
-    display: flex;
-    gap: 40px;
-    font-size: 18px;
+.text-orange {
+    color: #f38d1e !important;
 }
 
-.menu a {
-    text-decoration: none;
-    color: #000;
-}
-
-.hero-container {
-    display: flex;
-    width: 100%;
-    margin-top: 20px;
-}
-
-.hero-container img {
-    width: 33.33%;
-    height: 320px;
-    object-fit: cover;
-}
-
-.section-info {
-    padding: 40px 80px;
-}
-
-.section-info h2 {
-    font-size: 26px;
-}
-
-.footer-banner {
-    background: linear-gradient(to right, #ffd700, #f28500);
-    height: 50px;
-    margin-top: 20px;
-
-}
-/* Contenedor con bordes redondeados como la imagen */
+/* --- Hero / Carrusel --- */
 .hero-carousel-wrapper {
     margin: 20px auto;
     width: 95%;
     border-radius: 20px;
-    overflow: hidden; /* Corta la imagen para que siga el radio del borde */
+    overflow: hidden;
     position: relative;
 }
 
 .hero-img {
     height: 500px;
     object-fit: cover;
-    filter: brightness(0.7); /* Oscurece un poco la imagen para que se lea el texto */
+    filter: brightness(0.7);
 }
 
-/* Posicionamiento del texto */
 .hero-caption-custom {
     text-align: left !important;
     left: 8% !important;
     right: auto !important;
-    bottom: 20% !important;
+    top: 50% !important;
+    bottom: auto !important;
+    transform: translateY(-50%);
+    padding-bottom: 0 !important;
 }
 
 .premium-tag {
@@ -134,16 +97,16 @@ body {
     font-size: 1.1rem;
     max-width: 500px;
     margin: 20px 0;
-    opacity: 0.9;
     color: white;
+    opacity: 0.9;
 }
 
-/* Botones */
 .hero-buttons {
     display: flex;
     gap: 15px;
 }
 
+/* --- Botones --- */
 .btn-orange {
     background-color: #f38d1e !important;
     border: none !important;
@@ -160,48 +123,61 @@ body {
     font-weight: 600 !important;
 }
 
-/* Estilo para los indicadores (bolitas del carrusel) */
-.carousel-indicators [data-bs-target] {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-}
-
-/* Color naranja de la marca */
-.text-orange {
-    color: #f38d1e !important;
-}
-
-.section-title {
-    color: #00233a; /* Azul oscuro del diseño */
-    font-size: 1.8rem;
-}
-
-/* Estilo de la Card */
+/* --- Secciones e Instalaciones --- */
 .facility-card {
-    border-radius: 16px !important; /* Bordes muy redondeados */
+    border-radius: 20px !important;
     overflow: hidden;
     transition: transform 0.3s ease;
 }
 
 .facility-card:hover {
-    transform: translateY(-8px); /* Efecto al pasar el mouse */
+    transform: translateY(-5px);
 }
 
-/* Contenedor de imagen para forzar proporción */
 .img-container {
     width: 100%;
-    height: 220px; /* Ajusta la altura según prefieras */
+    height: 180px;
     overflow: hidden;
 }
 
 .facility-img {
     width: 100%;
     height: 100%;
-    object-fit: cover; /* Esto evita que la imagen se estire */
-    border-radius: 16px 16px 0 0; /* Redondea solo arriba */
+    object-fit: cover;
 }
 
-.facility-card .card-title {
-    color: #00233a;
+/* --- Sección "Por qué elegirnos" --- */
+.why-choose-section {
+    background-color: #fdfaf7;
+    border-radius: 30px; /* Añadido para suavizar la sección */
+}
+
+.feature-item {
+    background-color: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+    transition: transform 0.3s ease;
+    margin-bottom: 50px; /* Ajustado de 50px a 25px para mejor balance */
+}
+
+.feature-item:hover {
+    transform: translateX(10px);
+}
+
+.icon-box {
+    width: 60px;
+    height: 60px;
+    min-width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 1.5rem;
+}
+
+.rounded-custom {
+    border-radius: 25px !important;
+    border: 12px solid white;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
 }

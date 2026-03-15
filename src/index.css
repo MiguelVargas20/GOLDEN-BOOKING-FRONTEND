@@ -1,5 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Bungee&family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  --font-titulos:"Bungee", sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -13,6 +16,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+h1,h2,h3,h5 {
+  font-family: var(--font-titulos);
+  font-weight: 700;
+}
 
 body {
   margin: 0;
