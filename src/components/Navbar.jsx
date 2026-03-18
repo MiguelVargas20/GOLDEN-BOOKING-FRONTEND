@@ -15,7 +15,6 @@ export default function ComponentNavbar() {
                         alt="Golden Booking Logo"
                         className={styles.navbarLogo}
                     />
-                    <span className={styles.brandText}>Golden Booking</span>
                 </Navbar.Brand>
 
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -23,16 +22,16 @@ export default function ComponentNavbar() {
                 <Navbar.Collapse id="basic-navbar-nav">
                     {/* Menú Centrado */}
                     <Nav className="mx-auto">
-                        <Nav.Link href="#inicio" className={styles.navLink}>Inicio</Nav.Link>
-                        <Nav.Link href="#servicios" className={styles.navLink}>Servicios</Nav.Link>
-                        <Nav.Link href="#contactanos" className={styles.navLink}>Contactanos</Nav.Link>
-                        <Nav.Link href="#usuarios" className={styles.navLink}>Usuarios</Nav.Link>
+                        <Nav.Link href="/home" className={styles.navLink}>Inicio</Nav.Link>
+                        <Nav.Link href="/servicios" className={styles.navLink}>Servicios</Nav.Link>
+                        <Nav.Link href="/contactos" className={styles.navLink}>Contactanos</Nav.Link>
+                        <Nav.Link href="/usuarios" className={styles.navLink}>Usuarios</Nav.Link>
                     </Nav>
 
                     {/* Botón y Perfil a la derecha */}
                     <div className="d-flex align-items-center mt-3 mt-lg-0">
                         <Button className={styles.adminLoginBtn}>
-                            Admin Login
+                            Administrador
                         </Button>
                         <div className={styles.userIconContainer}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16">
