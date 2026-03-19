@@ -1,95 +1,102 @@
-import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import CardReservaD from '../../components/CardReservas'
-import golf from "../../assets/EspaciosDeportivos/golf.png"
-import tenis from "../../assets/EspaciosDeportivos/tennis.png"
-import futbol from "../../assets/EspaciosDeportivos/futbol.png"
-import basquet from "../../assets/EspaciosDeportivos/basquet.png"
-import piscina from "../../assets/EspaciosDeportivos/piscina.png"
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import CardReservaD from "../../components/CardReservas";
+
+import golf from "../../assets/EspaciosDeportivos/golf.png";
+import tenis from "../../assets/EspaciosDeportivos/tennis.png";
+import futbol from "../../assets/EspaciosDeportivos/futbol.png";
+import basquet from "../../assets/EspaciosDeportivos/basquet.png";
+import piscina from "../../assets/EspaciosDeportivos/piscina.png";
+
+import { BsCalendar4 } from "react-icons/bs";
+import { BsArrowCounterclockwise } from "react-icons/bs";
 
 function ReservasDCatalogo() {
-    const [ ruta, setRuta ] = useState("");
-    const [ text, setText ] = useState("");
-    const [ reservar, setReservar ] = useState(false);
-    const navigate = useNavigate();
+  const [ruta, setRuta] = useState("");
+  const [text, setText] = useState("");
+  const navigate = useNavigate();
 
-    const add = ({ img, text }) => {
-        setRuta(img);
-        setText(text)
-        setReservar(true);
-    };
+  const add = ({ img, text }) => {
+    navigate("/reservas-deportivas/reservar-espacio", {
+      state: {
+        ruta: img,
+        text: text,
+      },
+    });
+  };
 
-    const calcel = () => {
-        setRuta("");
-        setText("");
-        setReservar(false);
-    }
+  return (
+    <div className="reservas-container">
 
-    return (
-        <>
-            <div className="titleRD">
-                <button className="btn-add-catalogo" onClick={() => navigate('/reservas-deportivas/gestionar')}>GESTIONAR RESERVAS</button>
-                <h1>RESERVAS ESPACIOS DEPORTIVOS</h1>
-                <button className="btn-add-catalogo" onClick={() => navigate('/reservas-deportivas/mis-reservas')}>MIS RESERVAS</button>
-            </div>
-            <div className="reservasD-cards">
-                <CardReservaD
-                    img={futbol}
-                    titulo="CANCHA DE FÚTBOL"
-                    add={() => add({ img: futbol, text: "FUTBOL" })}
-                    reservaCard
-                />
-                <CardReservaD
-                    img={basquet}
-                    titulo="CANCHA DE BALONCESTO"
-                    add={() => add({ img: basquet, text: "BALONCESTO" })}
-                    reservaCard
-                />
+      {/* TITULO */}
+        <h1 className="titulo-reservas">
+        Reservas de <span>Espacios</span>
+      </h1>
 
-                <CardReservaD
-                    img={piscina}
-                    titulo="PISCINA"
-                    add={() => add({ img: piscina, text: "PISCINA" })}
-                    reservaCard
-                />
+      {/* BOTONES */}
+      <div className="botones-reservas">
+        <button
+          className="btn-reserva gestionar"
+          onClick={() => navigate("/reservas-deportivas/gestionar")}>
+            <BsCalendar4 />
+          Gestionar Reservas
+        </button>
 
-                <CardReservaD
-                    img={tenis}
-                    titulo="CANCHA DE TENIS"
-                    add={() => add({ img: tenis, text: "TENIS" })}
-                    reservaCard
-                />
+        <button
+          className="btn-reserva mis"
+          onClick={() => navigate("/reservas-deportivas/mis-reservas")}
+        > <BsArrowCounterclockwise />
+          Mis Reservas
+        </button>
+      </div>
 
-                <CardReservaD
-                    img={golf}
-                    titulo="CAMPO DE GOLF"
-                    add={() => add({ img: golf, text: "GOLF" })}
-                    reservaCard
-                />
+      {/* CATEGORIAS */}
+      <div className="categorias-header">
+        <h2>Categorías Deportivas</h2>
+        <span
+          className="ver-todo"
+          onClick={() => navigate("/reservas-deportivas/categorias")}
+        >
+          Ver Todo →
+        </span>
+      </div>
 
-                <CardReservaD
-                    background="rgba()"
-                    titulo="Añadir"
-                    add={() => navigate('/reservas-deportivas/crear', {
-                        state: {
-                            espacio: "d"
-                        }
-                    })}
-                />
+      {/* CARDS */}
+      <div className="cards-deportes">
 
-            </div>
-            {
-                (reservar) ?
-                    navigate("/reservas-deportivas/reservar-espacio", {
-                        state: {
-                            ruta,
-                            text
-                        }
-                    })
-                    : ""
-            }
-        </>
-    )
+        <CardReservaD
+          img={futbol}
+          titulo="Soccer"
+          add={() => add({ img: futbol, text: "FUTBOL" })}
+        />
+
+        <CardReservaD
+          img={basquet}
+          titulo="Basketball"
+          add={() => add({ img: basquet, text: "BALONCESTO" })}
+        />
+
+        <CardReservaD
+          img={tenis}
+          titulo="Tennis"
+          add={() => add({ img: tenis, text: "TENIS" })}
+        />
+
+        <CardReservaD
+          img={piscina}
+          titulo="Swimming"
+          add={() => add({ img: piscina, text: "PISCINA" })}
+        />
+
+        <CardReservaD
+          img={golf}
+          titulo="Golf"
+          add={() => add({ img: golf, text: "GOLF" })}
+        />
+
+      </div>
+    </div>
+  );
 }
 
-export default ReservasDCatalogo
+export default ReservasDCatalogo;
