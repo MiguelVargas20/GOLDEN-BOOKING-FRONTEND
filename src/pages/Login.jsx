@@ -1,10 +1,19 @@
 //Imagenes Logo y Calendario
 import logo from "../assets/LOGO.png";
 import calendario from "../assets/CALENDARIO.png";
+import { IoEyeSharp } from "react-icons/io5";
 
-//Estilos y Navegacion
 import "../styles/Login.css";
+import Row from 'react-bootstrap/Row';
+import Container from 'react-bootstrap/Container';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import '../styles/Login.css'
 import { useNavigate } from "react-router-dom";
+import { Col } from "react-bootstrap";
+import { useState } from "react";
+import { FaEyeSlash } from "react-icons/fa";
+
 
 //useForm/zodResolver/loginSchema
 import { useState } from "react";
@@ -13,6 +22,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginSchema } from "../schemas/loginschema";
 
 export default function Login() {
+
+const navigate = useNavigate();
+    const [showPassword, setShowPassword] = useState(false);
+
+    const togglePasswordVisibility = () => {
+        setShowPassword((prev) => !prev);
+    };
   const navigate = useNavigate();
 
   //Estado para manejar errores del servidor (API)
@@ -77,6 +93,8 @@ export default function Login() {
                 {...register("password")} // Conexión con Zod
               />
               {errors.password && <span className="error-text">{errors.password.message}</span>}
+                <span className="password-toggle-icon" onClick={togglePasswordVisibility} style={{ cursor: 'pointer' }}>
+                {showPassword ? <FaEyeSlash /> : <IoEyeSharp />}
             </div>
 
             <div className="options">

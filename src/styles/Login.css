@@ -1,19 +1,42 @@
 
 /* CONTENEDOR PRINCIPAL */  
 .container-login {
+
     position: fixed;
     width: 100%;
     max-width: 100% !important;
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr ;
     border-radius: 8px;
     background: white;
     color: #000;
     padding-bottom: 30px;
-    box-sizing: border-box !important;
+    box-sizing: border-box !important; 
 }
+
+.password-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.password-toggle-icon {
+    position: absolute;
+    top: 52%;
+    right: 4rem;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.password-toggle-icon:hover {
+    color: #000;
+}
+
 
 /* PANEL IZQUIERDO */
 .left-panel-login{
@@ -21,6 +44,7 @@
     grid-template-rows: auto auto auto 2fr;
     width: 100%;
     padding: 0 1rem
+    
 }
 
 .logo-login {
@@ -80,15 +104,29 @@
 .check {
     display: grid;
     grid-auto-flow: column;
+    height: 20%;
+    width: 30%;
     align-items: center;
 }
 
 .check input {
     width: 1rem;
-    padding: 0;
-    background: #b80808;
+    height: 1rem;
+    padding: 7px;
+    accent-color: #e1892c; /* use modern accent color for checkbox */
+    cursor: pointer;
 }
 
+/* make label text align nicely */
+.check {
+    display: flex;
+    align-items: center;
+}
+.check span {
+    margin-left: 0.5rem;
+    font-size: 0.9rem;
+    color: #333;
+}
 .check span {
     margin-left: 8px;
 }
@@ -106,7 +144,7 @@
 .redirect {
     display: flex;
     width: 100%;
-    padding: 0 5%;
+    padding: 0 10%;
     justify-content: space-between;
     align-items: center;
     grid-template-columns: 1fr 1fr;
@@ -114,7 +152,7 @@
 
 /* BOTÓN */
 .btn-login {
-    width: 150px;
+    width: 40%;
     height: 50px;
     padding: 15px;
     background: linear-gradient(to bottom, #f5e200, #e1892c);
@@ -153,3 +191,4 @@
     width: 100%;
     height: 98%;
 }
+

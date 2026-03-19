@@ -6,19 +6,42 @@
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr ;
     border-radius: 8px;
     background: white;
     color: #000;
     padding-bottom: 30px;
     box-sizing: border-box !important;
 }
+
+.bungee-regular {
+  font-family: "Bungee", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+
+
 .left-panel-register{
     display: grid;
     grid-template-rows: auto auto auto 2fr;
     width: 100%;
     padding: 0 1rem
 }
+
+.password-toggle-icon-registro{
+   position: absolute;
+    top: 52%;
+    right: 1rem;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+
 
 
 .site-header {
@@ -44,7 +67,8 @@
 }
 .subtitle-register{
   margin-top: 1.5rem;
-  color: #888;
+  color: #888; 
+
 }
 
 .page-heading {
@@ -106,6 +130,15 @@
   width: 100%;
   height: 3.2rem;
   padding-right: 40px;
+}
+/* para que el valor seleccionado en el select sea gris */
+.inp {
+  color: #888;
+}
+
+/* y también las opciones del desplegable */
+.inp option {
+  color: #888;
 }
 
 .btn-eye {
