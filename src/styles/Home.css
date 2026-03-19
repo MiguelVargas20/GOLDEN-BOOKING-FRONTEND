@@ -36,97 +36,148 @@ body {
     color: #c89d00;
 
 }
-
-.principal {
-    margin: 3rem 3rem 2rem;
+/* --- Estilos Globales y Tipografía --- */
+.bungee-regular {
+    font-family: "Bungee", sans-serif;
+    font-weight: 400;
 }
 
-.menu {
-    display: flex;
-    gap: 40px;
-    font-size: 18px;
+.text-orange {
+    color: #f38d1e !important;
 }
 
-.menu a {
-    text-decoration: none;
-    color: #000;
-}
-
-.hero-container {
-    display: flex;
-    width: 100%;
-    margin-top: 20px;
-}
-
-.hero-container img {
-    width: 33.33%;
-    height: 320px;
-    object-fit: cover;
-}
-
-.section-info {
-    padding: 40px 80px;
-}
-
-.section-info h2 {
-    font-size: 26px;
-}
-
-.footer-banner {
-    background: linear-gradient(to right, #ffd700, #f28500);
-    height: 50px;
-    margin-top: 20px;
-
-}
-
-/* 🎞 Contenedor general */
-.carousel-container {
-    width: 100%;
+/* --- Hero / Carrusel --- */
+.hero-carousel-wrapper {
+    margin: 20px auto;
+    width: 95%;
+    border-radius: 20px;
     overflow: hidden;
     position: relative;
-    height: 250px;
-    /* Ajusta la altura del carrusel */
 }
 
-/* 🎞 Pista que se mueve de derecha a izquierda */
-.carousel-track {
-    display: flex;
-    width: max-content;
-    animation: scroll-left 25s linear infinite;
-}
-
-/* 🎞 Imágenes del carrusel */
-.carousel-track img {
-    width: 350px;
-    /* Ajusta el tamaño que necesites */
-    height: 250px;
+.hero-img {
+    height: 500px;
     object-fit: cover;
-    margin-right: 20px;
-    border-radius: 15px;
+    filter: brightness(0.7);
 }
 
-.right-side-icon {
-    display: grid;
-    place-items: center;
+.hero-caption-custom {
+    text-align: left !important;
+    left: 8% !important;
+    right: auto !important;
+    top: 50% !important;
+    bottom: auto !important;
+    transform: translateY(-50%);
+    padding-bottom: 0 !important;
 }
 
-.logoValle {
-    width: 50%;
-    height: auto;
+.premium-tag {
+    background-color: #f38d1e;
+    color: white;
+    padding: 5px 12px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 15px;
 }
 
-.principal-content {
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    max-width: 600px;
+}
+
+.orange-text {
+    color: #f38d1e;
+}
+
+.hero-subtitle {
+    font-size: 1.1rem;
+    max-width: 500px;
+    margin: 20px 0;
+    color: white;
+    opacity: 0.9;
+}
+
+.hero-buttons {
     display: flex;
-    padding: 0 1rem;
+    gap: 15px;
 }
 
-/* 🎞 Animación de desplazamiento infinito */
-@keyframes scroll-left {
-    from {
-        transform: translateX(0);
-    }
+/* --- Botones --- */
+.btn-orange {
+    background-color: #f38d1e !important;
+    border: none !important;
+    padding: 12px 30px !important;
+    font-weight: 600 !important;
+}
 
-    to {
-        transform: translateX(-50%);
-    }
+.btn-outline-glass {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.5) !important;
+    color: white !important;
+    padding: 12px 30px !important;
+    backdrop-filter: blur(5px);
+    font-weight: 600 !important;
+}
+
+/* --- Secciones e Instalaciones --- */
+.facility-card {
+    border-radius: 20px !important;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.facility-card:hover {
+    transform: translateY(-5px);
+}
+
+.img-container {
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+}
+
+.facility-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* --- Sección "Por qué elegirnos" --- */
+.why-choose-section {
+    background-color: #fdfaf7;
+    border-radius: 30px; /* Añadido para suavizar la sección */
+}
+
+.feature-item {
+    background-color: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+    transition: transform 0.3s ease;
+    margin-bottom: 50px; /* Ajustado de 50px a 25px para mejor balance */
+}
+
+.feature-item:hover {
+    transform: translateX(10px);
+}
+
+.icon-box {
+    width: 60px;
+    height: 60px;
+    min-width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 1.5rem;
+}
+
+.rounded-custom {
+    border-radius: 25px !important;
+    border: 12px solid white;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
 }

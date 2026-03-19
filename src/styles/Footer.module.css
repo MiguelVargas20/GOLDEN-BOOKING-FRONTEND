@@ -1,0 +1,110 @@
+/* Contenedor principal con el color dorado/mostaza */
+.footer-premium {
+    background-color: #e7a924;  
+    padding-top: 0px;
+    padding-bottom: 0px; /* Reducido para que sea más corto */
+    color: #ffffff;
+    overflow: hidden;
+}
+
+/* Marca / Logo */
+.footer-brand {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+
+.brand-text {
+    font-family: 'Bungee', sans-serif; /* Unificado con los otros títulos */
+    font-weight: 400;
+    font-size: 1.8rem;
+    color: #ffffff !important; /* Golden Booking en Blanco */
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Descripción debajo del logo */
+.footer-info {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-top: 15px;
+    max-width: 350px;
+}
+
+/* Títulos de las columnas (Enlaces y Contacto) */
+.column-title {
+    font-family: 'Bungee', sans-serif;
+    font-weight: 800;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+
+    /* ESTO EVITA EL SALTO DE LÍNEA */
+    white-space: nowrap; 
+    display: block;
+}
+
+/* Enlaces rápidos */
+.custom-links li {
+    margin-bottom: 0px;
+    padding-bottom: 10px;
+}
+
+.custom-links a {
+    color: #ffffff;
+    text-decoration: none;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.custom-links a:hover {
+    opacity: 1;
+    padding-left: 5px; /* Efecto sutil de movimiento */
+}
+
+/* Información de contacto */
+.contact-info li {
+    margin-bottom: 10px;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    font-size: 1rem;
+}
+
+/* Iconos de contacto (el marcador, sobre, etc.) */
+.icon-orange {
+    color: #ffffff; /* Los dejamos blancos para un look más limpio sobre el dorado */
+    font-size: 1.1rem;
+}
+
+/* Contenedor de iconos sociales */
+.social-container {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+/* Círculos de redes sociales */
+.icon-circle {
+    width: 40px;
+    height: 40px;
+    background-color: rgb(255, 255, 255); /* Blanco semi-transparente */
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.icon-circle:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-3px);
+}

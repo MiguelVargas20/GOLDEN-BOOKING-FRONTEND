@@ -123,10 +123,6 @@
     height: 15vh;
 }
 
-.footer {
-    position: sticky;
-    background: linear-gradient(to right, #ffd700, #f28500);
-}
 
 .admin {
     display: flex;
