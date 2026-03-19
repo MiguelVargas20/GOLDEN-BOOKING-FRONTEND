@@ -3,9 +3,10 @@
 }
 
 .navbarLogo {
-    height: 35px;
+    height: 60px;
     width: auto;
     margin-right: 12px;
+    margin-top: 1.5rem;
 }
 
 .brandText {
