@@ -8,7 +8,7 @@
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: 1fr ;
+    grid-template-columns: 1fr 1fr;
     border-radius: 8px;
     background: white;
     color: #000;
@@ -166,7 +166,7 @@
 }
 
 .btn-login:hover {
-       background: #ffbe1a;
+    background: #ffbe1a;
 }
 .btn-send-forgot:hover {
     background: #ffbe1a;

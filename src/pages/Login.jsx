@@ -1,24 +1,16 @@
 //Imagenes Logo y Calendario
-import logo from "../assets/LOGO.png";
-import calendario from "../assets/CALENDARIO.png";
 import { IoEyeSharp } from "react-icons/io5";
+import calendario from "../assets/CALENDARIO.png";
+import logo from "../assets/LOGO.png";
 
 import "../styles/Login.css";
-import Row from 'react-bootstrap/Row';
-import Container from 'react-bootstrap/Container';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
-import '../styles/Login.css'
-import { useNavigate } from "react-router-dom";
-import { Col } from "react-bootstrap";
-import { useState } from "react";
-import { FaEyeSlash } from "react-icons/fa";
-
 
 //useForm/zodResolver/loginSchema
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { FaEyeSlash } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 import { loginSchema } from "../schemas/loginschema";
 
 export default function Login() {
@@ -29,7 +21,6 @@ const navigate = useNavigate();
     const togglePasswordVisibility = () => {
         setShowPassword((prev) => !prev);
     };
-  const navigate = useNavigate();
 
   //Estado para manejar errores del servidor (API)
   const [serverError, setServerError] = useState("");
@@ -58,7 +49,7 @@ const navigate = useNavigate();
     }
   };
 
-  return (
+  return ( 
     <>
       <div className="container-login">
         {/*PANEL IZQUIERDO*/}
@@ -93,8 +84,13 @@ const navigate = useNavigate();
                 {...register("password")} // Conexión con Zod
               />
               {errors.password && <span className="error-text">{errors.password.message}</span>}
-                <span className="password-toggle-icon" onClick={togglePasswordVisibility} style={{ cursor: 'pointer' }}>
+              <span
+                className="password-toggle-icon"
+                onClick={togglePasswordVisibility}
+                style={{ cursor: "pointer" }}
+              >
                 {showPassword ? <FaEyeSlash /> : <IoEyeSharp />}
+              </span>
             </div>
 
             <div className="options">
@@ -108,7 +104,6 @@ const navigate = useNavigate();
             </div>
 
             <div className="redirect">
-              {/* Quitamos el onClick del botón y dejamos que el form maneje el submit */}
               <button type="submit" className="btn-login" disabled={isSubmitting}>
                 {isSubmitting ? "CARGANDO..." : "INGRESAR"}
               </button>
