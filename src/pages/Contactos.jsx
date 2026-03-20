@@ -6,7 +6,9 @@ import mapaimg from '../assets/mapa-img.png'
 export default function Contactos() {
   return (
     <>
-      <h1 className="bungee-regular">CONTÁCTANOS</h1>
+          <Col md="auto">
+            <h1 className="title-contacts">CONTACTANOS</h1>
+          </Col>
       <Container className="contact-box">
         <Row>
 

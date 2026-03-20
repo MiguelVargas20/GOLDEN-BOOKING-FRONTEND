@@ -1,9 +1,4 @@
-.bungee-regular {
-  font-family: "Bungee", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-  text-align: center;
-}
+
 /* CONTENEDOR PRINCIPAL */
 .contact-box {
     padding: 2rem !important;
@@ -23,7 +18,9 @@
   ;
   gap: 1rem;
 }
-
+h1{
+  text-align: center;
+}
 .nombre {
   grid-area: nombre;
 }

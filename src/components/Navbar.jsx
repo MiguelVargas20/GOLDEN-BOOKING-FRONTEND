@@ -1,11 +1,22 @@
 import React from 'react';
-import { Navbar, Nav, Container, Button } from 'react-bootstrap';
+import { Navbar, Nav, Container, Button } from 'react-bootstrap'; // Importación única
 import logo from '../assets/LOGO.PNG';
 import styles from '../styles/Navbar.module.css';
+import { useTheme } from '../context/Themecontext.jsx';
+import { BsSun, BsMoonStarsFill } from 'react-icons/bs';
 
 export default function ComponentNavbar() {
+    // La lógica del tema debe ir dentro del componente que se renderiza
+    const { isDarkMode, toggleTheme } = useTheme();
+
     return (
-        <Navbar bg="white" expand="lg" className={`${styles.customNavbar} shadow-sm py-3`}>
+        /* Cambié bg="white" por una condición para que el fondo también cambie en modo oscuro */
+        <Navbar 
+            bg={isDarkMode ? 'dark' : 'white'} 
+            variant={isDarkMode ? 'dark' : 'light'}
+            expand="lg" 
+            className={`${styles.customNavbar} shadow-sm py-3`}
+        >
             <Container fluid className="px-md-5">
 
                 {/* Logo a la izquierda */}
@@ -27,6 +38,17 @@ export default function ComponentNavbar() {
                         <Nav.Link href="/contactos" className={styles.navLink}>Contactanos</Nav.Link>
                         <Nav.Link href="/usuarios" className={styles.navLink}>Usuarios</Nav.Link>
                     </Nav>
+                    
+                    {/* BOTÓN DE MODO OSCURO (React-Bootstrap) */}
+                    <Button
+                        variant="outline-warning"
+                        className="ms-3"
+                        onClick={toggleTheme}
+                        style={{ borderRadius: '50px' }}
+                    >
+                        {isDarkMode ? <BsSun /> : <BsMoonStarsFill />}
+                    </Button>
+
 
                     {/* Botón y Perfil a la derecha */}
                     <div className="d-flex align-items-center mt-3 mt-lg-0">

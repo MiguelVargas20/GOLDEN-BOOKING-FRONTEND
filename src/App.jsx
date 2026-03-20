@@ -16,10 +16,12 @@ import ReservasH from './pages/reservasH.jsx';
 import UsuariosH from './pages/UsuariosH.jsx';
 import UsuariosE from './pages/UsuariosE.jsx';
 import UsuariosC from './pages/UsuariosC.jsx';
+import { ThemeProvider } from './context/Themecontext';
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <ThemeProvider>
+      <BrowserRouter>
       <Routes>
         {/*RUTA PRINCIPAL*/}
         <Route path="/" element={<Navigate to="/login" />} />
@@ -55,6 +57,7 @@ export default function App() {
         
       </Routes>
     </BrowserRouter>
+    </ThemeProvider>
     
   )
 }

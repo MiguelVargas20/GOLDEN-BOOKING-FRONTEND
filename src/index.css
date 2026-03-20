@@ -20,6 +20,7 @@
 h1,h2,h3,h5 {
   font-family: var(--font-titulos);
   font-weight: 700;
+  
 }
 
 body {
@@ -35,5 +36,24 @@ h1 {
   line-height: 1.1;
 }
 
+/* Colores personalizados que se adaptan */
+[data-bs-theme="dark"] {
+    --bs-body-bg: #121212;
+     /* Un negro menos puro, más elegante */
+    --bs-body-color: #e0e0e0;
+}
+
+/* Para que tus cards de "Reservas Espacios" se vean bien */
+[data-bs-theme="dark"] .card {
+    background-color: #1e1e1e;
+    border-color: #333;
+    color: white;
+}
+
+/* Mantener el naranja brillante en modo oscuro */
+[data-bs-theme="dark"] .btn-primary {
+    background-color: #ff8c00; 
+    border-color: #ff8c00;
+}
 
 
