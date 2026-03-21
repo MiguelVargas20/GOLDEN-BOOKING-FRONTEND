@@ -4,6 +4,9 @@ import { Outlet } from "react-router-dom";
 import Carousel from 'react-bootstrap/Carousel';
 import Card from 'react-bootstrap/Card';
 
+//Importar renderizado paginas (Resrvas Home)
+import { Link } from "react-router-dom";
+
 //Imagenes para carrusel inicial
 import CarruselImg1 from '../assets/aaaa.jpg'
 import CarruselImg2 from '../assets/carrusel2.jpg'
@@ -16,6 +19,8 @@ import imgTennis from '../assets/imgTennis.png';
 import imgNatacion from '../assets/natacion.png';
 import imgGolf from '../assets/golf.jpg';
 
+
+
 //Imagen porque elegirnos
 import imgSection from '../assets/elegirnos.png';
 
@@ -25,18 +30,18 @@ const carruselData = [
     { img: CarruselImg1, id: 1 },
     { img: CarruselImg2, id: 2 },
     { img: CarruselImg3, id: 3 }
-];  
-{/*Constantes de imagenes para cards */}
+];
+{/*Constantes de imagenes para cards */ }
 const facilities = [
-  { id: 1, title: 'Fútbol', desc: 'Canchas Profesionales', img: imgFutbol },
-  { id: 2, title: 'Basketball', desc: 'Múltiples Canchas', img: imgBasket },
-  { id: 3, title: 'Tennis', desc: 'Categorias por Nivel', img: imgTennis },
-  { id: 4, title: 'Natación', desc: 'Olimpicas  Recreación', img: imgNatacion },
-  { id: 5, title: 'Golf', desc: 'Campo Abierto', img: imgGolf },
+    { id: 1, title: 'Fútbol', desc: 'Canchas Profesionales', img: imgFutbol },
+    { id: 2, title: 'Basketball', desc: 'Múltiples Canchas', img: imgBasket },
+    { id: 3, title: 'Tennis', desc: 'Categorias por Nivel', img: imgTennis },
+    { id: 4, title: 'Natación', desc: 'Olimpicas  Recreación', img: imgNatacion },
+    { id: 5, title: 'Golf', desc: 'Campo Abierto', img: imgGolf},
 
 ];
 
-{/*Constantes de imagenes para sección de porque elegirnos */}
+{/*Constantes de imagenes para sección de porque elegirnos */ }
 const features = [
     { title: "Reservas Fáciles", desc: "Interfaz intuitiva con confirmación instantánea.", icon: "📅", color: "#fff4e6" },
     { title: "Instalaciones Premium", desc: "Espacios de primera clase en un solo lugar.", icon: "🏅", color: "#fff4e6" },
@@ -97,9 +102,12 @@ export default function Home() {
                         <span className="text-orange fw-bold small">Instalaciones</span>
                         <h2 className="bungee-regular">RESERVAS ESPACIOS</h2>
                     </div>
-                    <a href="#all" className="text-orange fw-bold text-decoration-none small">
+                    <Link
+                        to="/reservas-deportivas"  // <-- Aquí va la URL que definiste en tu App.js, NO el archivo
+                        className="text-orange fw-bold text-decoration-none small"
+                    >
                         Ver todos los espacios →
-                    </a>
+                    </Link>
                 </div>
 
                 {/* Renderizado dinámico de tarjetas desde la constante 'facilities' */}

@@ -1,16 +1,16 @@
 import React from 'react';
-import { Navbar, Nav, Container, Button } from 'react-bootstrap'; // Importación única
+/* 1. Importamos NavDropdown desde react-bootstrap */
+import { Navbar, Nav, Container, Button, NavDropdown } from 'react-bootstrap'; 
+import { Link } from 'react-router-dom'; // Para navegación interna
 import logo from '../assets/LOGO.PNG';
 import styles from '../styles/Navbar.module.css';
 import { useTheme } from '../context/Themecontext.jsx';
 import { BsSun, BsMoonStarsFill } from 'react-icons/bs';
 
 export default function ComponentNavbar() {
-    // La lógica del tema debe ir dentro del componente que se renderiza
     const { isDarkMode, toggleTheme } = useTheme();
 
     return (
-        /* Cambié bg="white" por una condición para que el fondo también cambie en modo oscuro */
         <Navbar 
             bg={isDarkMode ? 'dark' : 'white'} 
             variant={isDarkMode ? 'dark' : 'light'}
@@ -18,28 +18,43 @@ export default function ComponentNavbar() {
             className={`${styles.customNavbar} shadow-sm py-3`}
         >
             <Container fluid className="px-md-5">
-
-                {/* Logo a la izquierda */}
-                <Navbar.Brand href="#home" className="d-flex align-items-center">
-                    <img
-                        src={logo}
-                        alt="Golden Booking Logo"
-                        className={styles.navbarLogo}
-                    />
+                <Navbar.Brand as={Link} to="/home" className="d-flex align-items-center">
+                    <img src={logo} alt="Logo" className={styles.navbarLogo} />
                 </Navbar.Brand>
 
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
 
                 <Navbar.Collapse id="basic-navbar-nav">
-                    {/* Menú Centrado */}
                     <Nav className="mx-auto">
-                        <Nav.Link href="/home" className={styles.navLink}>Inicio</Nav.Link>
-                        <Nav.Link href="/servicios" className={styles.navLink}>Servicios</Nav.Link>
-                        <Nav.Link href="/contactos" className={styles.navLink}>Contactanos</Nav.Link>
-                        <Nav.Link href="/usuarios" className={styles.navLink}>Usuarios</Nav.Link>
+                        <Nav.Link as={Link} to="/home" className={styles.navLink}>Inicio</Nav.Link>
+                        
+                        {/* --- INICIO DEL DROPDOWN DE SERVICIOS --- */}
+                        <NavDropdown 
+                            title="Servicios" 
+                            id="services-dropdown" 
+                            className={styles.navLink}
+                        >
+                            {/* Usamos as={Link} para que React Router maneje el cambio de página */}
+                            <NavDropdown.Item as={Link} to="/reservas-deportivas">
+                                Reservas Deportivas
+                            </NavDropdown.Item>
+                            
+                            <NavDropdown.Item as={Link} to="/reservas-hospedaje">
+                                Reservas Hoteleras
+                            </NavDropdown.Item>
+                            
+                            <NavDropdown.Divider />
+                            
+                            <NavDropdown.Item as={Link} to="/reservas-restaurante">
+                                Restaurante
+                            </NavDropdown.Item>
+                        </NavDropdown>
+                        {/* --- FIN DEL DROPDOWN --- */}
+
+                        <Nav.Link as={Link} to="/contactos" className={styles.navLink}>Contactanos</Nav.Link>
+                        <Nav.Link as={Link} to="/usuarios" className={styles.navLink}>Usuarios</Nav.Link>
                     </Nav>
                     
-                    {/* BOTÓN DE MODO OSCURO (React-Bootstrap) */}
                     <Button
                         variant="outline-warning"
                         className="ms-3"
@@ -49,11 +64,9 @@ export default function ComponentNavbar() {
                         {isDarkMode ? <BsSun /> : <BsMoonStarsFill />}
                     </Button>
 
-
-                    {/* Botón y Perfil a la derecha */}
                     <div className="d-flex align-items-center mt-3 mt-lg-0">
-                        <Button className={styles.adminLoginBtn}>
-                            Administrador
+                        <Button className={styles.adminLoginBtn} as={Link} to="/login">
+                            Admin Login
                         </Button>
                         <div className={styles.userIconContainer}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16">
@@ -62,7 +75,6 @@ export default function ComponentNavbar() {
                         </div>
                     </div>
                 </Navbar.Collapse>
-
             </Container>
         </Navbar>
     );
