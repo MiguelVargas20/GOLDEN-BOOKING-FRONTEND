@@ -87,6 +87,7 @@ body {
     font-weight: 800;
     line-height: 1.1;
     max-width: 600px;
+    text-align: left;
 }
 
 .orange-text {

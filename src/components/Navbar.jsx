@@ -1,11 +1,12 @@
 import React from 'react';
-/* 1. Importamos NavDropdown desde react-bootstrap */
 import { Navbar, Nav, Container, Button, NavDropdown } from 'react-bootstrap'; 
-import { Link } from 'react-router-dom'; // Para navegación interna
+import { Link } from 'react-router-dom';
 import logo from '../assets/LOGO.PNG';
 import styles from '../styles/Navbar.module.css';
 import { useTheme } from '../context/Themecontext.jsx';
 import { BsSun, BsMoonStarsFill } from 'react-icons/bs';
+// Importamos los nuevos iconos para el menú
+import { MdSportsTennis, MdHotel, MdRestaurant } from 'react-icons/md';
 
 export default function ComponentNavbar() {
     const { isDarkMode, toggleTheme } = useTheme();
@@ -28,28 +29,36 @@ export default function ComponentNavbar() {
                     <Nav className="mx-auto">
                         <Nav.Link as={Link} to="/home" className={styles.navLink}>Inicio</Nav.Link>
                         
-                        {/* --- INICIO DEL DROPDOWN DE SERVICIOS --- */}
+                        {/* --- DROPDOWN MEJORADO --- */}
                         <NavDropdown 
                             title="Servicios" 
                             id="services-dropdown" 
-                            className={styles.navLink}
+                            className={`${styles.navLink} ${styles.servicesDropdown}`}
                         >
-                            {/* Usamos as={Link} para que React Router maneje el cambio de página */}
-                            <NavDropdown.Item as={Link} to="/reservas-deportivas">
-                                Reservas Deportivas
+                            <NavDropdown.Item as={Link} to="/reservas-deportivas" className={styles.dropdownItemCustom}>
+                                <div className={styles.iconBox}><MdSportsTennis /></div>
+                                <div>
+                                    <span className={styles.itemTitle}>Reservas Deportivas</span>
+                                    <small className={styles.itemText}>Pádel, Tenis y Gimnasio de alto rendimiento.</small>
+                                </div>
                             </NavDropdown.Item>
                             
-                            <NavDropdown.Item as={Link} to="/reservas-hospedaje">
-                                Reservas Hoteleras
+                            <NavDropdown.Item as={Link} to="/reservas-hospedaje" className={styles.dropdownItemCustom}>
+                                <div className={styles.iconBox}><MdHotel /></div>
+                                <div>
+                                    <span className={styles.itemTitle}>Reservas Hoteleras</span>
+                                    <small className={styles.itemText}>Suites de lujo con vistas panorámicas.</small>
+                                </div>
                             </NavDropdown.Item>
                             
-                            <NavDropdown.Divider />
-                            
-                            <NavDropdown.Item as={Link} to="/reservas-restaurante">
-                                Restaurante
+                            <NavDropdown.Item as={Link} to="/reservas-restaurante" className={styles.dropdownItemCustom}>
+                                <div className={styles.iconBox}><MdRestaurant /></div>
+                                <div>
+                                    <span className={styles.itemTitle}>Restaurante</span>
+                                    <small className={styles.itemText}>Experiencia gastronómica de autor.</small>
+                                </div>
                             </NavDropdown.Item>
                         </NavDropdown>
-                        {/* --- FIN DEL DROPDOWN --- */}
 
                         <Nav.Link as={Link} to="/contactos" className={styles.navLink}>Contactanos</Nav.Link>
                         <Nav.Link as={Link} to="/usuarios" className={styles.navLink}>Usuarios</Nav.Link>

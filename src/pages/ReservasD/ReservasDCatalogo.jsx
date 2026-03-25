@@ -9,7 +9,7 @@ import imgTennis from '../../assets/imgTennis.png';
 import imgNatacion from '../../assets/natacion.png';
 import imgGolf from '../../assets/golf.jpg';
 import imgVoleybol from '../../assets/imgVoleybol.png';
-import imgPingPong from '../../assets/imgPingPong.png';
+import imgPingPong from '../../assets/imgPingPong.png'; 
 import imgPatinaje from '../../assets/imgPatinaje.png';
 import imgHockey from '../../assets/imgHockey.png';
 import imgCiclismo from '../../assets/imgCiclismo.png';

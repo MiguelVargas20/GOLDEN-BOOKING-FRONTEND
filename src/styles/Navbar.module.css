@@ -61,3 +61,58 @@
 .userIconContainer:hover {
     background-color: #fae5d3;
 }
+/* Contenedor del menú desplegable */
+.servicesDropdown :global(.dropdown-menu) {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    padding: 1rem;
+    min-width: 300px;
+}
+
+/* Item individual */
+.dropdownItemCustom {
+    display: flex !important;
+    align-items: center;
+    padding: 12px 15px !important;
+    border-radius: 8px !important;
+    transition: background 0.3s ease;
+    white-space: normal; /* Permite que el texto baje si es largo */
+}
+
+.dropdownItemCustom:hover {
+    background-color: #f8f9fa !important;
+}
+
+/* Caja del icono */
+.iconBox {
+    background-color: #fff4e6; /* Naranja muy suave */
+    color: #f68b1e;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+/* Título del item */
+.itemTitle {
+    display: block;
+    font-weight: 700;
+    color: #333;
+    font-size: 0.95rem;
+    line-height: 1.2;
+}
+
+/* Subtexto descriptivo */
+.itemText {
+    display: block;
+    color: #777;
+    font-size: 0.8rem;
+    font-weight: 400;
+    margin-top: 2px;
+}
