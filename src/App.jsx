@@ -18,6 +18,9 @@ import UsuariosC from './pages/UsuariosC.jsx';
 import { ThemeProvider } from './context/Themecontext';
 import RutaProtegida from './components/RutaProteccion.jsx';
 import ReservarEspacioD from './pages/ReservasD/ReservarEspacioD.jsx';
+import HabitacionD from './pages/HabitacionD.jsx';
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 export default function App() {
   return (
@@ -51,6 +54,8 @@ export default function App() {
 
             <Route path="/reservas-hospedaje" element={<ReservasH />} />
             <Route path="/reservas-restaurante" element={<ReservasD />} />
+            <Route path="/HabitacionD" element={<HabitacionD />} />
+
 
             {/* Usuarios — solo ADMIN */}
             <Route path="/usuarios" element={
@@ -62,6 +67,12 @@ export default function App() {
             <Route path="/usuarios-crear" element={
               <RutaProtegida soloAdmin={true}><UsuariosC /></RutaProtegida>
             } />
+
+
+            {/* Gestión de Habitaciones — solo ADMIN */}
+            <Route path="/nueva-habitacion" element={
+              <RutaProtegida soloAdmin={true}><HabitacionD /></RutaProtegida>
+            }/>
 
           </Route>
         </Routes>

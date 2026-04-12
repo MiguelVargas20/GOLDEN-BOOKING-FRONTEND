@@ -1,0 +1,82 @@
+/* HabitacionD.css */
+
+/* Fuentes e importaciones sugeridas si se usan iconos */
+@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css');
+
+.habitacion-container {
+    background-color: #f8f9fa;
+    padding: 20px;
+}
+
+.habitacion-card {
+    width: 100%;
+    max-width: 450px;
+    border-radius: 16px !important;
+    overflow: hidden;
+}
+
+/* Header con Degradado Dorado Moderno */
+.habitacion-card-header {
+    background: linear-gradient(135deg, #735c00 0%, #d4af37 50%, #735c00 100%);
+    border-bottom: none;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+}
+
+.habitacion-card-header h3 {
+    letter-spacing: -0.5px;
+    font-size: 1.5rem;
+}
+
+/* Estilos para inputs */
+.custom-input-group {
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus, .form-select:focus {
+    background-color: #fff !important;
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+    outline: none;
+}
+
+/* Botón con efectos Hover */
+.habitacion-submit-btn {
+    background: #b8860b !important;
+    color: #fff;
+    border-radius: 12px !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
+    text-transform: none;
+}
+
+.habitacion-submit-btn:hover {
+    background: #735c00 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(115, 92, 0, 0.4);
+}
+
+.habitacion-submit-btn:active {
+    transform: translateY(0);
+}
+
+/* Ajustes de tipografía */
+.form-label {
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+}
+
+/* Animación de entrada suave */
+.habitacion-card {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
