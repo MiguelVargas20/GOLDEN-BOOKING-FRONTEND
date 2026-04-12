@@ -17,10 +17,14 @@ import imgCiclismo from '../../assets/imgCiclismo.png';
 import { BsCalendar4 } from "react-icons/bs";
 import { BsArrowCounterclockwise } from "react-icons/bs";
 
+// Función para verificar si el usuario es ADMIN
+import { useAuth } from "../../context/AuthContext";
+
 function ReservasDCatalogo() {
     const [ruta, setRuta] = useState("");
     const [text, setText] = useState("");
     const navigate = useNavigate();
+    const { isAdmin } = useAuth();
 
     
     // Función para manejar el click en "Reservar" y navegar a la página de reserva con los datos necesarios
@@ -55,11 +59,15 @@ function ReservasDCatalogo() {
             </h1>
 
             <div className="botones-reservas">
+            
+            {/* Botón de gestión de reservas solo para administradores */}
+            {isAdmin() && (
                 <button
                     className="btn-reserva gestionar"
                     onClick={() => navigate("/reservas-deportivas/gestionar")}>
                     <BsCalendar4 /> Gestionar Reservas
                 </button>
+            )}
 
                 <button
                     className="btn-reserva mis"
