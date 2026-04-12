@@ -7,58 +7,65 @@ import Register from './pages/Register.jsx';
 import ReservasD from './pages/ReservasD/ReservasD.jsx';
 import ReservasDCatalogo from './pages/ReservasD/ReservasDCatalogo.jsx';
 import Crear from './components/Crear.jsx';
-import Editar from './components/Editar.jsx'
+import Editar from './components/Editar.jsx';
 import Contactos from './pages/Contactos.jsx';
 import GestionarReservas from './pages/ReservasD/GestionarReservas.jsx';
 import ReservasDSolicitadas from './pages/ReservasD/ReservasDSolicitadas.jsx';
-import ReservarEspacio from './pages/ReservasD/ReservarEspacio.jsx'
 import ReservasH from './pages/reservasH.jsx';
 import UsuariosH from './pages/UsuariosH.jsx';
 import UsuariosE from './pages/UsuariosE.jsx';
 import UsuariosC from './pages/UsuariosC.jsx';
 import { ThemeProvider } from './context/Themecontext';
+import RutaProtegida from './components/RutaProteccion.jsx';
+import ReservarEspacioD from './pages/ReservasD/ReservarEspacioD.jsx';
 
 export default function App() {
   return (
     <ThemeProvider>
       <BrowserRouter>
-      <Routes>
-        {/*RUTA PRINCIPAL*/}
-        <Route path="/" element={<Navigate to="/login" />} />
+        <Routes>
+          {/* RUTAS PÚBLICAS */}
+          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot" element={<Forgot />} />
 
-        {/*RUTAS SECUNDARIAS*/}
-        <Route element={<Layout/>}>
+          {/* RUTAS PROTEGIDAS — Layout con Outlet */}
+          <Route path="/" element={<RutaProtegida><Layout /></RutaProtegida>}>
 
-          <Route path="/home" element={<Home />} >
-            <Route index element={<Contactos/>}></Route>
+            <Route path="/home" element={<Home />}>
+              <Route index element={<Contactos />} />
+            </Route>
+
+            <Route path="/contactos" element={<Contactos />} />
+
+            {/* Reservas — cliente y admin */}
+            <Route path="/reservas-deportivas" element={<ReservasD />}>
+              <Route index element={<ReservasDCatalogo />} />
+              <Route path="mis-reservas" element={<ReservasDSolicitadas />} />
+              <Route path="reservar-espacio" element={<ReservarEspacioD />} />
+              <Route path="gestionar" element={<GestionarReservas />} />
+              <Route path="crear" element={<Crear />} />
+              <Route path="editar" element={<Editar />} />
+            </Route>
+
+            <Route path="/reservas-hospedaje" element={<ReservasH />} />
+            <Route path="/reservas-restaurante" element={<ReservasD />} />
+
+            {/* Usuarios — solo ADMIN */}
+            <Route path="/usuarios" element={
+              <RutaProtegida soloAdmin={true}><UsuariosH /></RutaProtegida>
+            } />
+            <Route path="/usuarios-edit" element={
+              <RutaProtegida soloAdmin={true}><UsuariosE /></RutaProtegida>
+            } />
+            <Route path="/usuarios-crear" element={
+              <RutaProtegida soloAdmin={true}><UsuariosC /></RutaProtegida>
+            } />
+
           </Route>
-
-          <Route path='/contactos' element={<Contactos />} />
-          <Route path="/usuarios" element={<UsuariosH />} />
-          <Route path="/usuarios-edit" element={<UsuariosE />} />
-          <Route path='/usuarios-crear' element={<UsuariosC/>} />
-
-          <Route path='/reservas-deportivas' element={<ReservasD />}>
-            <Route index element={<ReservasDCatalogo/>}/>
-            <Route path='mis-reservas' element={<ReservasDSolicitadas />}/>
-            <Route path='reservar-espacio' element={<ReservarEspacio/>} />
-            <Route path='gestionar' element={<GestionarReservas/>} />
-            <Route path='crear' element={<Crear/>} />
-            <Route path='editar' element={<Editar/>} />
-          </Route>
-
-          <Route path='/reservas-hospedaje' element={<ReservasH />} />
-          <Route path='/reservas-restaurante' element={<ReservasD />} />
-
-        </Route>
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/forgot" element={<Forgot />} />
-        
-      </Routes>
-    </BrowserRouter>
+        </Routes>
+      </BrowserRouter>
     </ThemeProvider>
-    
-  )
+  );
 }
-

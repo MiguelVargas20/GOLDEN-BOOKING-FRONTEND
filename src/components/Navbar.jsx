@@ -1,21 +1,28 @@
 import React from 'react';
-import { Navbar, Nav, Container, Button, NavDropdown } from 'react-bootstrap'; 
-import { Link } from 'react-router-dom';
+import { Navbar, Nav, Container, Button, NavDropdown } from 'react-bootstrap';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/LOGO.PNG';
 import styles from '../styles/Navbar.module.css';
 import { useTheme } from '../context/Themecontext.jsx';
 import { BsSun, BsMoonStarsFill } from 'react-icons/bs';
-// Importamos los nuevos iconos para el menú
 import { MdSportsTennis, MdHotel, MdRestaurant } from 'react-icons/md';
+import { useAuth } from '../context/AuthContext.jsx';
 
 export default function ComponentNavbar() {
     const { isDarkMode, toggleTheme } = useTheme();
+    const { user, logout, isAdmin } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        logout();
+        navigate("/login");
+    };
 
     return (
-        <Navbar 
-            bg={isDarkMode ? 'dark' : 'white'} 
+        <Navbar
+            bg={isDarkMode ? 'dark' : 'white'}
             variant={isDarkMode ? 'dark' : 'light'}
-            expand="lg" 
+            expand="lg"
             className={`${styles.customNavbar} shadow-sm py-3`}
         >
             <Container fluid className="px-md-5">
@@ -28,11 +35,10 @@ export default function ComponentNavbar() {
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mx-auto">
                         <Nav.Link as={Link} to="/home" className={styles.navLink}>Inicio</Nav.Link>
-                        
-                        {/* --- DROPDOWN MEJORADO --- */}
-                        <NavDropdown 
-                            title="Servicios" 
-                            id="services-dropdown" 
+
+                        <NavDropdown
+                            title="Servicios"
+                            id="services-dropdown"
                             className={`${styles.navLink} ${styles.servicesDropdown}`}
                         >
                             <NavDropdown.Item as={Link} to="/reservas-deportivas" className={styles.dropdownItemCustom}>
@@ -42,7 +48,7 @@ export default function ComponentNavbar() {
                                     <small className={styles.itemText}>Pádel, Tenis y Gimnasio de alto rendimiento.</small>
                                 </div>
                             </NavDropdown.Item>
-                            
+
                             <NavDropdown.Item as={Link} to="/reservas-hospedaje" className={styles.dropdownItemCustom}>
                                 <div className={styles.iconBox}><MdHotel /></div>
                                 <div>
@@ -50,7 +56,7 @@ export default function ComponentNavbar() {
                                     <small className={styles.itemText}>Suites de lujo con vistas panorámicas.</small>
                                 </div>
                             </NavDropdown.Item>
-                            
+
                             <NavDropdown.Item as={Link} to="/reservas-restaurante" className={styles.dropdownItemCustom}>
                                 <div className={styles.iconBox}><MdRestaurant /></div>
                                 <div>
@@ -61,9 +67,13 @@ export default function ComponentNavbar() {
                         </NavDropdown>
 
                         <Nav.Link as={Link} to="/contactos" className={styles.navLink}>Contactanos</Nav.Link>
-                        <Nav.Link as={Link} to="/usuarios" className={styles.navLink}>Usuarios</Nav.Link>
+
+                        {/* Solo mostrar Usuarios si es ADMIN */}
+                        {isAdmin() && (
+                            <Nav.Link as={Link} to="/usuarios" className={styles.navLink}>Usuarios</Nav.Link>
+                        )}
                     </Nav>
-                    
+
                     <Button
                         variant="outline-warning"
                         className="ms-3"
@@ -73,15 +83,28 @@ export default function ComponentNavbar() {
                         {isDarkMode ? <BsSun /> : <BsMoonStarsFill />}
                     </Button>
 
-                    <div className="d-flex align-items-center mt-3 mt-lg-0">
-                        <Button className={styles.adminLoginBtn} as={Link} to="/login">
-                            Admin Login
-                        </Button>
-                        <div className={styles.userIconContainer}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16">
-                                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4m-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10s-3.516.68-4.168 1.332c-.678.678-.83 1.418-.832 1.664z" />
-                            </svg>
-                        </div>
+                    <div className="d-flex align-items-center mt-3 mt-lg-0 gap-2 ms-3">
+                        {user ? (
+                            <>
+                                <span className={styles.navLink} style={{ fontWeight: 600 }}>
+                                    👤 {user.nombreCompleto}
+                                </span>
+                                {isAdmin() && (
+                                    <span className="badge bg-warning text-dark">ADMIN</span>
+                                )}
+                                <Button
+                                    variant="outline-danger"
+                                    onClick={handleLogout}
+                                    style={{ borderRadius: '50px' }}
+                                >
+                                    Cerrar sesión
+                                </Button>
+                            </>
+                        ) : (
+                            <Button className={styles.adminLoginBtn} as={Link} to="/login">
+                                Iniciar sesión
+                            </Button>
+                        )}
                     </div>
                 </Navbar.Collapse>
             </Container>
