@@ -1,20 +1,25 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { Form, Button, Alert } from "react-bootstrap";
 import React, { useState } from "react";
-import { crearReservaDeporte } from "../../api/reservaDeporteApi";
+import { crearReservaDeporte } from "../../api/ReservaDeporteApi.js";
+import { useAuth } from "../../context/AuthContext";
 
 function ReservarEspacioD() {
     const { state } = useLocation();
     const { ruta, text } = state || {}; // Aquí recibimos la imagen y el nombre del deporte
     const navigate = useNavigate();
 
+    // Obtenemos el usuario logueado para asociar la reserva a su documento
+    const { user } = useAuth();
+
+    // Estado para manejar el formulario de reserva
     const [formData, setFormData] = useState({
         tCancha: text || "",
         implAlquilados: "",
         rqrEntrenador: false,
         fInicioReserva: "",
         fFinReserva: "",
-        docUsuario: "123456" // Reemplazar con el documento del usuario logueado
+        docUsuario: user?.id || "" // ← tomar del usuario logueado
     });
 
     const [error, setError] = useState(null);

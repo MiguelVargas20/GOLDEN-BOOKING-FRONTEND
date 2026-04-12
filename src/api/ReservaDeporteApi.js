@@ -1,14 +1,14 @@
-const API_URL = "http://127.0.0.1:8080/api/reservas/deporte";
+const API_URL = `${import.meta.env.VITE_API_URL}/api/reservas/deporte`;
 
-// Función para crear reserva (POST)
+// Crear reserva (POST)
 export const crearReservaDeporte = async (data) => {
-  const token = localStorage.getItem("token"); // Por si manejas seguridad
+  const token = localStorage.getItem("token");
 
   const response = await fetch(API_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": token ? `Bearer ${token}` : "" // Opcional: si el back lo pide
+      "Authorization": token ? `Bearer ${token}` : ""
     },
     body: JSON.stringify(data),
   });
@@ -24,23 +24,48 @@ export const crearReservaDeporte = async (data) => {
   return responseJson;
 };
 
-// Función para listar todas (GET)
+// Listar todas las reservas (GET) — para ADMIN
 export const listarReservasDeporte = async () => {
-  const response = await fetch(API_URL);
-  const responseJson = await response.json();
+  const token = localStorage.getItem("token");
 
+  const response = await fetch(API_URL, {
+    headers: {
+      "Authorization": token ? `Bearer ${token}` : ""
+    }
+  });
+
+  const responseJson = await response.json();
   if (!response.ok) throw new Error("No se pudieron cargar las reservas");
-  
   return responseJson;
 };
 
-// Función para cancelar (PATCH)
+// Listar reservas del usuario logueado (GET) — para CLIENTE
+export const listarMisReservasDeporte = async (userId) => {
+  const token = localStorage.getItem("token");
+
+  const response = await fetch(API_URL, {
+    headers: {
+      "Authorization": token ? `Bearer ${token}` : ""
+    }
+  });
+
+  const data = await response.json();
+  if (!response.ok) throw new Error("Error al cargar reservas");
+
+  return data.filter(r => r.docUsuario === userId);
+};
+
+// Cancelar reserva (PATCH)
 export const cancelarReservaDeporte = async (id) => {
+  const token = localStorage.getItem("token");
+
   const response = await fetch(`${API_URL}/${id}/cancelar`, {
     method: "PATCH",
+    headers: {
+      "Authorization": token ? `Bearer ${token}` : ""
+    }
   });
 
   if (!response.ok) throw new Error("No se pudo cancelar la reserva");
-  
   return true;
 };

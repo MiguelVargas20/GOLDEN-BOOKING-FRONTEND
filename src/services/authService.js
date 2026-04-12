@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8080";
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 // Login
 export async function loginUsuario(data) {
@@ -15,7 +15,6 @@ export async function loginUsuario(data) {
     const json = await res.json();
 
     if (!res.ok) {
-      // ← Traducir mensajes de Spring Security
       const mensaje = json.error === "Bad credentials" || json.message === "Bad credentials"
         ? "Usuario o contraseña incorrectos"
         : json.error || json.message || "Error al iniciar sesión";
@@ -60,6 +59,29 @@ export async function registrarUsuario(data) {
       };
     }
 
+    return json;
+
+  } catch (error) {
+    if (error.message) throw error;
+    throw { message: "Error de conexión con el servidor" };
+  }
+}
+
+// Recuperar contraseña ← agregado
+export async function recuperarPassword(data) {
+  try {
+    const res = await fetch(`${BASE_URL}/auth/recuperar-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        username: data.username,
+        passwordAntigua: data.passwordAntigua,  // ← agregado
+        nuevaPassword: data.nuevaPassword,
+      }),
+    });
+
+    const json = await res.json();
+    if (!res.ok) throw { message: json.error || "Error al recuperar contraseña" };
     return json;
 
   } catch (error) {
