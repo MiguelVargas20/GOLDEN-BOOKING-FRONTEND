@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Row, Col, Card } from 'react-bootstrap';
 
-//Imagenes para cards de instalaciones
+// Imagenes para cards de instalaciones
 import imgFutbol from '../../assets/futbol.png';
 import imgBasket from '../../assets/basketball.png';
 import imgTennis from '../../assets/imgTennis.png';
@@ -21,15 +21,10 @@ import { BsArrowCounterclockwise } from "react-icons/bs";
 import { useAuth } from "../../context/AuthContext";
 
 function ReservasDCatalogo() {
-    const [ruta, setRuta] = useState("");
-    const [text, setText] = useState("");
     const navigate = useNavigate();
     const { isAdmin } = useAuth();
 
-    
-    // Función para manejar el click en "Reservar" y navegar a la página de reserva con los datos necesarios
-
-    // Ajustamos la función para recibir img y text directamente
+    // Función para manejar el click en "Reservar" y navegar a la página de reserva
     const add = (img, text) => {
         navigate("/reservas-deportivas/reservar-espacio", {
             state: {
@@ -54,36 +49,42 @@ function ReservasDCatalogo() {
 
     return (
         <div className="reservas-container">
-            <h1 className="titulo-reservas">
-                Reservas de <span>Espacios</span>
-            </h1>
-
+            {/* Contenedor Grid que alinea botones y título en la misma fila */}
             <div className="botones-reservas">
-            
-            {/* Botón de gestión de reservas solo para administradores */}
-            {isAdmin() && (
-                <button
-                    className="btn-reserva gestionar"
-                    onClick={() => navigate("/reservas-deportivas/gestionar")}>
-                    <BsCalendar4 /> Gestionar Reservas
-                </button>
-            )}
+                
+                {/* 1. LADO IZQUIERDO: Gestionar (Solo si es Admin) */}
+                {isAdmin() ? (
+                    <button
+                        className="btn-reserva gestionar"
+                        onClick={() => navigate("/reservas-deportivas/gestionar")}>
+                        <BsCalendar4 /> Gestionar Reservas
+                    </button>
+                ) : (
+                    <div /> /* Div vacío para que el título no se mueva de su sitio si no eres admin */
+                )}
 
+                {/* 2. CENTRO: Título alineado */}
+                <h1 className="titulo-reservas">
+                    RESERVAS DE <span>ESPACIOS</span>
+                </h1>
+
+                {/* 3. LADO DERECHO: Mis Reservas */}
                 <button
                     className="btn-reserva mis"
                     onClick={() => navigate("/reservas-deportivas/mis-reservas")}>
                     <BsArrowCounterclockwise /> Mis Reservas
                 </button>
+                
             </div>
 
+            {/* Cuadrícula de instalaciones */}
             <Row xs={1} sm={2} lg={5} className="g-3">
                 {facilities.map((item) => (
                     <Col key={item.id}>
-                        {/* 1. AGREGAMOS EL onClick AQUÍ */}
                         <Card 
                             className="h-100 facility-card border-0 shadow-sm"
-                            onClick={() => add(item.img, item.title)} // Llamada a la función
-                            style={{ cursor: 'pointer' }} // Para que el usuario sepa que es clickable
+                            onClick={() => add(item.img, item.title)}
+                            style={{ cursor: 'pointer' }}
                         >
                             <div className="img-container">
                                 <Card.Img variant="top" src={item.img} className="facility-img" />

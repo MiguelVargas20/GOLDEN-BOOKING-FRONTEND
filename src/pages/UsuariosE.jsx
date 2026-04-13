@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
+import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../styles/UsuariosE.css";
 import userImg from '../assets/edit-user.png';
@@ -10,7 +10,6 @@ export default function UsuariosE() {
   const { state } = useLocation();
   const usuario = state?.usuario;
 
-  // Formulario controlado para editar usuario
   const [formData, setFormData] = useState({
     nombre: "",
     apellido: "",
@@ -18,12 +17,9 @@ export default function UsuariosE() {
     estado: "ACTIVO"
   });
 
-  // Estados para manejo de errores y éxito
   const [error, setError] = useState(null);
   const [exito, setExito] = useState(false);
 
-
-  // Cargar datos del usuario al montar el componente
   useEffect(() => {
     if (usuario) {
       setFormData({
@@ -35,7 +31,6 @@ export default function UsuariosE() {
     }
   }, [usuario]);
 
-  // Función para manejar el envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -48,93 +43,93 @@ export default function UsuariosE() {
     }
   };
 
-  // Si no se recibió un usuario, mostrar mensaje de error
   if (!usuario) return (
     <div className="alert alert-warning m-4">
-      No se seleccionó ningún usuario. 
-      <button className="btn btn-link" onClick={() => navigate("/usuarios")}>
-        Volver
-      </button>
+      No se seleccionó ningún usuario.
+      <button className="btn btn-link" onClick={() => navigate("/usuarios")}>Volver</button>
     </div>
   );
 
-
-  // Renderizar formulario de edición
   return (
-    <Container className="editar-container">
-      <Card className="editar-card">
-        <Card.Header className="editar-header">
-          <h5>EDITAR USUARIO</h5>
-        </Card.Header>
-      <Card.Body>
-          {error && <div className="alert alert-danger">{error}</div>}
-          {exito && <div className="alert alert-success">¡Usuario actualizado!</div>}
+    <div className="editar-page">
 
-          <Row className="align-items-center">
-            <Col md={4} className="text-center">
-              <div className="editar-img-wrapper">
-                <img src={userImg} alt="usuario" className="editar-img" />
-              </div>
-              <p className="mt-2 text-muted small">ID: {usuario.id?.slice(-6)}</p>
-            </Col>
+      {/* Header */}
+      <div className="editar-page-header">
+        <h1 className="editar-page-title">EDITAR USUARIO</h1>
+        <span className="editar-page-id">ID: {usuario.id?.slice(-6)}</span>
+      </div>
 
-            <Col md={8}>
-              <Form onSubmit={handleSubmit}>
-                <Row>
-                  <Col md={6}>
-                    <Form.Group className="mb-3">
-                      <Form.Control
-                        type="text"
-                        placeholder="Nombre"
-                        className="input-custom"
-                        value={formData.nombre}
-                        onChange={(e) => setFormData({...formData, nombre: e.target.value})}
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col md={6}>
-                    <Form.Group className="mb-3">
-                      <Form.Control
-                        type="text"
-                        placeholder="Apellido"
-                        className="input-custom"
-                        value={formData.apellido}
-                        onChange={(e) => setFormData({...formData, apellido: e.target.value})}
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
+      {/* Alertas */}
+      {error && <div className="alert alert-danger mx-4">{error}</div>}
+      {exito && <div className="alert alert-success mx-4">¡Usuario actualizado correctamente!</div>}
 
-                <Form.Group className="mb-3">
+      {/* Contenido */}
+      <div className="editar-page-body">
+        <Row className="align-items-center w-100">
+
+          {/* Imagen */}
+          <Col md={3} className="text-center">
+            <div className="editar-avatar">
+              <img src={userImg} alt="usuario" className="editar-avatar-img" />
+            </div>
+            <p className="editar-avatar-label">{usuario.nombre} {usuario.apellido}</p>
+          </Col>
+
+          {/* Formulario */}
+          <Col md={9}>
+            <Form onSubmit={handleSubmit}>
+              <Row className="mb-3">
+                <Col md={6}>
+                  <Form.Label className="editar-label">Nombre</Form.Label>
+                  <Form.Control
+                    type="text"
+                    className="editar-input"
+                    value={formData.nombre}
+                    onChange={(e) => setFormData({...formData, nombre: e.target.value})}
+                  />
+                </Col>
+                <Col md={6}>
+                  <Form.Label className="editar-label">Apellido</Form.Label>
+                  <Form.Control
+                    type="text"
+                    className="editar-input"
+                    value={formData.apellido}
+                    onChange={(e) => setFormData({...formData, apellido: e.target.value})}
+                  />
+                </Col>
+              </Row>
+
+              <Row className="mb-3">
+                <Col md={8}>
+                  <Form.Label className="editar-label">Correo electrónico</Form.Label>
                   <Form.Control
                     type="email"
-                    placeholder="Email"
-                    className="input-custom"
+                    className="editar-input"
                     value={formData.email}
                     onChange={(e) => setFormData({...formData, email: e.target.value})}
                   />
-                </Form.Group>
-
-                <Form.Group className="mb-4">
+                </Col>
+                <Col md={4}>
+                  <Form.Label className="editar-label">Estado</Form.Label>
                   <Form.Select
-                    className="input-custom"
+                    className="editar-input"
                     value={formData.estado}
                     onChange={(e) => setFormData({...formData, estado: e.target.value})}
                   >
                     <option value="ACTIVO">Activo</option>
                     <option value="INACTIVO">Inactivo</option>
                   </Form.Select>
-                </Form.Group>
+                </Col>
+              </Row>
 
-                <div className="botones">
-                  <Button type="submit" className="btn-aceptar">GUARDAR</Button>
-                  <Button className="btn-cancelar" onClick={() => navigate("/usuarios")}>CANCELAR</Button>
-                </div>
-              </Form>
-            </Col>
-          </Row>
-        </Card.Body>
-      </Card>
-    </Container>
+              <div className="editar-botones">
+                <Button type="submit" className="editar-btn-guardar">GUARDAR</Button>
+                <Button className="editar-btn-cancelar" onClick={() => navigate("/usuarios")}>CANCELAR</Button>
+              </div>
+            </Form>
+          </Col>
+        </Row>
+      </div>
+    </div>
   );
 }

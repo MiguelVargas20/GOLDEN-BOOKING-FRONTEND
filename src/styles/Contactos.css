@@ -21,16 +21,15 @@
 h1{
   text-align: center;
 }
-.nombre {
-  grid-area: nombre;
-}
 
-.correo {
-  grid-area: correo;
-}
-
-.mensaje {
-  grid-area: mensaje;
+.tittle-contact{
+  font-size: 2,5rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin: 0;
+  letter-spacing: -0.5px;
+  text-transform: uppercase;
+  margin-right: 13rem;
 }
 
 /* COLUMNA IZQUIERDA DEL FORMULARIO */

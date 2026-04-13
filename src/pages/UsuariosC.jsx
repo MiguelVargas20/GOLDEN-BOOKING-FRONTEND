@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Container, Row, Col, Card, Form, Button } from "react-bootstrap";
+import { Row, Col, Form, Button } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import "../styles/UsuariosC.css";
 import userImg from '../assets/edit-user.png';
@@ -35,127 +35,127 @@ export default function UsuariosC() {
   };
 
   return (
-    <Container className="editar-container">
-      <Card className="editar-card">
-        <Card.Header className="editar-header">
-          <h5>CREAR USUARIO</h5>
-        </Card.Header>
+    <div className="crear-page">
 
-        <Card.Body className="p-4">
-          {error && <div className="alert alert-danger">{error}</div>}
-          {exito && <div className="alert alert-success">¡Usuario creado correctamente!</div>}
+      {/* Header */}
+      <div className="crear-page-header">
+        <h1 className="crear-page-title">CREAR USUARIO</h1>
+      </div>
 
-          <Row className="align-items-center">
-            <Col md={4} className="text-center">
-              <div className="editar-img-wrapper">
-                <img src={userImg} alt="usuario" className="editar-img" />
-              </div>
-            </Col>
+      {error && <div className="alert alert-danger">{error}</div>}
+      {exito && <div className="alert alert-success">¡Usuario creado correctamente!</div>}
 
-            <Col md={8}>
-              <Form onSubmit={handleSubmit}>
-                <Row>
-                  <Col md={6}>
-                    <Form.Group className="mb-3">
-                      <Form.Control
-                        type="text"
-                        placeholder="Nombre"
-                        className="input-custom"
-                        value={formData.nombre}
-                        onChange={(e) => setFormData({...formData, nombre: e.target.value})}
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col md={6}>
-                    <Form.Group className="mb-3">
-                      <Form.Control
-                        type="text"
-                        placeholder="Apellido"
-                        className="input-custom"
-                        value={formData.apellido}
-                        onChange={(e) => setFormData({...formData, apellido: e.target.value})}
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
+      <div className="crear-page-body">
+        <Row className="align-items-start w-100">
 
-                <Row>
-                  <Col md={4}>
-                    <Form.Group className="mb-3">
-                      <Form.Select
-                        className="input-custom"
-                        value={formData.tipoDoc}
-                        onChange={(e) => setFormData({...formData, tipoDoc: e.target.value})}
-                      >
-                        <option value="CC">CC</option>
-                        <option value="TI">TI</option>
-                        <option value="CE">CE</option>
-                      </Form.Select>
-                    </Form.Group>
-                  </Col>
-                  <Col md={8}>
-                    <Form.Group className="mb-3">
-                      <Form.Control
-                        type="text"
-                        placeholder="Número documento"
-                        className="input-custom"
-                        value={formData.numeroDoc}
-                        onChange={(e) => setFormData({...formData, numeroDoc: e.target.value})}
-                      />
-                    </Form.Group>
-                  </Col>
-                </Row>
+          {/* Avatar */}
+          <Col md={3} className="text-center">
+            <div className="crear-avatar">
+              <img src={userImg} alt="usuario" className="crear-avatar-img" />
+            </div>
+            <p className="crear-avatar-label">Nuevo usuario</p>
+          </Col>
 
-                <Form.Group className="mb-3">
+          {/* Formulario */}
+          <Col md={9}>
+            <Form onSubmit={handleSubmit}>
+              <Row className="mb-3">
+                <Col md={6}>
+                  <Form.Label className="crear-label">Nombre</Form.Label>
                   <Form.Control
                     type="text"
-                    placeholder="Username"
-                    className="input-custom"
+                    className="crear-input"
+                    value={formData.nombre}
+                    onChange={(e) => setFormData({...formData, nombre: e.target.value})}
+                  />
+                </Col>
+                <Col md={6}>
+                  <Form.Label className="crear-label">Apellido</Form.Label>
+                  <Form.Control
+                    type="text"
+                    className="crear-input"
+                    value={formData.apellido}
+                    onChange={(e) => setFormData({...formData, apellido: e.target.value})}
+                  />
+                </Col>
+              </Row>
+
+              <Row className="mb-3">
+                <Col md={3}>
+                  <Form.Label className="crear-label">Tipo doc.</Form.Label>
+                  <Form.Select
+                    className="crear-input"
+                    value={formData.tipoDoc}
+                    onChange={(e) => setFormData({...formData, tipoDoc: e.target.value})}
+                  >
+                    <option value="CC">CC</option>
+                    <option value="TI">TI</option>
+                    <option value="CE">CE</option>
+                  </Form.Select>
+                </Col>
+                <Col md={9}>
+                  <Form.Label className="crear-label">Número documento</Form.Label>
+                  <Form.Control
+                    type="text"
+                    className="crear-input"
+                    value={formData.numeroDoc}
+                    onChange={(e) => setFormData({...formData, numeroDoc: e.target.value})}
+                  />
+                </Col>
+              </Row>
+
+              <Row className="mb-3">
+                <Col md={6}>
+                  <Form.Label className="crear-label">Username</Form.Label>
+                  <Form.Control
+                    type="text"
+                    className="crear-input"
                     value={formData.username}
                     onChange={(e) => setFormData({...formData, username: e.target.value})}
                   />
-                </Form.Group>
-
-                <Form.Group className="mb-3">
+                </Col>
+                <Col md={6}>
+                  <Form.Label className="crear-label">Email</Form.Label>
                   <Form.Control
                     type="email"
-                    placeholder="Email"
-                    className="input-custom"
+                    className="crear-input"
                     value={formData.email}
                     onChange={(e) => setFormData({...formData, email: e.target.value})}
                   />
-                </Form.Group>
+                </Col>
+              </Row>
 
-                <Form.Group className="mb-3">
+              <Row className="mb-3">
+                <Col md={6}>
+                  <Form.Label className="crear-label">Contraseña</Form.Label>
                   <Form.Control
                     type="password"
-                    placeholder="Contraseña"
-                    className="input-custom"
+                    className="crear-input"
                     value={formData.password}
                     onChange={(e) => setFormData({...formData, password: e.target.value})}
                   />
-                </Form.Group>
-
-                <Form.Group className="mb-4">
+                </Col>
+                <Col md={6}>
+                  <Form.Label className="crear-label">Rol</Form.Label>
                   <Form.Select
-                    className="input-custom"
+                    className="crear-input"
                     value={formData.roles[0]}
                     onChange={(e) => setFormData({...formData, roles: [e.target.value]})}
                   >
                     <option value="ROL_CLIENTE">Cliente</option>
                     <option value="ROL_ADMIN">Administrador</option>
                   </Form.Select>
-                </Form.Group>
+                </Col>
+              </Row>
 
-                <div className="botones">
-                  <Button type="submit" className="btn-aceptar">CREAR</Button>
-                  <Button className="btn-cancelar" onClick={() => navigate("/usuarios")}>CANCELAR</Button>
-                </div>
-              </Form>
-            </Col>
-          </Row>
-        </Card.Body>
-      </Card>
-    </Container>
+              <div className="crear-botones">
+                <Button type="submit" className="crear-btn-guardar">CREAR</Button>
+                <Button className="crear-btn-cancelar" onClick={() => navigate("/usuarios")}>CANCELAR</Button>
+              </div>
+            </Form>
+          </Col>
+        </Row>
+      </div>
+    </div>
   );
 }
