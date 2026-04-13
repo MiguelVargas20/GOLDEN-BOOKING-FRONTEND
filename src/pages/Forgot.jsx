@@ -37,10 +37,9 @@ export default function Forgot() {
             return;
         }
 
-
         setLoading(true);
         try {
-           await recuperarPassword({ username, passwordAntigua, nuevaPassword });
+            await recuperarPassword({ username, passwordAntigua, nuevaPassword });
             setExito(true);
             setTimeout(() => navigate("/login"), 2500);
         } catch (err) {
@@ -76,7 +75,6 @@ export default function Forgot() {
                         onChange={(e) => setUsername(e.target.value)}
                         required
                     />
-                                        
                     <input
                         type="password"
                         placeholder="Contraseña actual"
@@ -84,7 +82,6 @@ export default function Forgot() {
                         onChange={(e) => setPasswordAntigua(e.target.value)}
                         required
                     />
-
                     <input
                         type="password"
                         placeholder="Nueva contraseña"
@@ -92,7 +89,6 @@ export default function Forgot() {
                         onChange={(e) => setNuevaPassword(e.target.value)}
                         required
                     />
-
                     <input
                         type="password"
                         placeholder="Confirmar contraseña"
@@ -101,21 +97,23 @@ export default function Forgot() {
                         required
                     />
 
-                    <button
-                        type="button"
-                        className="back-login-btn"
-                        onClick={() => navigate("/login")}
-                    >
-                        Volver al login <FaReply />
-                    </button>
+                    <div className="form-actions">
+                        <button
+                            className="btn-send-forgot"
+                            type="submit"
+                            disabled={loading}
+                        >
+                            {loading ? "ACTUALIZANDO..." : "ACTUALIZAR"}
+                        </button>
 
-                    <button
-                        className="btn-send-forgot"
-                        type="submit"
-                        disabled={loading}
-                    >
-                        {loading ? "ACTUALIZANDO..." : "ACTUALIZAR "}
-                    </button>
+                        <button
+                            type="button"
+                            className="back-login-btn"
+                            onClick={() => navigate("/login")}
+                        >
+                            Volver al login <FaReply />
+                        </button>
+                    </div>
                 </form>
             </div>
 

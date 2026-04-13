@@ -7,10 +7,10 @@
     background-color: #f8f9fa;
     padding: 20px;
 }
-
+/* Modifica esta clase en tu HabitacionD.css */
 .habitacion-card {
     width: 100%;
-    max-width: 450px;
+    max-width: 800px; /* Aumentado de 450px a 800px */
     border-radius: 16px !important;
     overflow: hidden;
 }
