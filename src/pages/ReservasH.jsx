@@ -105,8 +105,9 @@ function Navbar() {
 
                                 <button
                                     className="btn-detail"
-                                    onClick={() => navigate("/detalle/" + hotel.id)}y >
-                                    Ver detalle
+                                    onClick={() => navigate("/checkoutpage")}
+                                >
+                                    Confirmar y Pagar
                                 </button>
                             </div>
                         </div>
