@@ -1,0 +1,117 @@
+/* Contenedor principal con fondo limpio */
+.reservas-wrapper {
+  padding: 30px 40px;
+  background: #fff;
+  min-height: 100vh;
+}
+
+/* ── Header ─────────────────────────────── */
+.header-reservas {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.title-reservas {
+  font-size: 2rem; /* Ajustado ligeramente para balancear con el buscador */
+  font-weight: 700;
+  color: #2d3748;
+  margin: 0;
+  letter-spacing: -0.5px;
+  text-transform: uppercase;
+}
+
+/* Buscador "Normal" y Suave */
+.search-input-reservas {
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  background: white; /* Forzamos fondo blanco */
+  color: #4a5568;
+  width: 300px;
+  transition: all 0.2s ease;
+}
+
+.search-input-reservas:focus {
+  border-color: #f68b1e;
+  box-shadow: 0 0 0 3px rgba(246, 139, 30, 0.1);
+  outline: none;
+}
+
+.add-btn-reservas {
+  background: #f68b1e !important;
+  color: white !important;
+  border: none !important;
+  padding: 8px 22px !important;
+  border-radius: 8px !important;
+  font-weight: 700 !important;
+  font-size: 0.9rem !important;
+  transition: background 0.2s !important;
+  cursor: pointer;
+}
+
+.add-btn-reservas:hover {
+  background: #e67e22 !important;
+}
+
+/* ── Tabla con Marcos Suaves ──────────────── */
+.tabla-container-suave {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0; /* Marco exterior suave */
+  background: #fff;
+}
+
+.reservas-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.reservas-table thead th {
+  background: #2d3748;
+  color: white;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 14px 12px;
+  letter-spacing: 0.5px;
+  border: none;
+}
+
+.reservas-table tbody td {
+  padding: 14px 12px;
+  vertical-align: middle;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #4a5568;
+  border-bottom: 1px solid #f7fafc; /* Línea divisoria muy tenue */
+}
+
+/* Badge de Cancha (Mantiene el estilo celeste de tu imagen) */
+.badge-cancha {
+  background-color: #00d1ff;
+  color: white;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.75rem;
+}
+
+/* Botón Cancelar (Estilo Outlined Suave) */
+.btn-cancelar-outline {
+  background: white;
+  border: 1px solid #e2e8f0;
+  color: #e53e3e;
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+
+.btn-cancelar-outline:hover:not(:disabled) {
+  background: #fff5f5;
+  border-color: #e53e3e;
+}

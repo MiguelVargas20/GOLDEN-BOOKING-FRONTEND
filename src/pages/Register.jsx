@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
 import { IoEyeSharp } from "react-icons/io5";
-import { FaEyeSlash } from "react-icons/fa";
+import { FaEyeSlash, FaReply } from "react-icons/fa";
 import logo from '../assets/LOGO.png';
 import imagen_register from '../assets/imagen_register.png';
 import '../styles/Register.css';
@@ -38,28 +38,28 @@ export default function Register() {
   };
 
   return (
-    <div className="container-login">
-      <div className="left-panel-login">
-        <div className="logo-login">
+    <div className="register-container">
+      {/* PANEL IZQUIERDO */}
+      <div className="left-panel-register">
+        <div className="logo-register">
           <img src={logo} alt="Logo" />
         </div>
 
-        <h1 className="title-login">Crea tu cuenta</h1>
-        <p className="subtitle">Regístrate para acceder a tu reserva</p>
+        <h1 className="title-register">Crea tu cuenta</h1>
+        <p className="subtitle-register">Regístrate para acceder a tu reserva</p>
 
         {serverError && <p className="error-msg">{serverError}</p>}
 
-        <form className="form" onSubmit={handleSubmit(onSubmit)}>
-
-          <div className="input-group">
-            <input type="text" placeholder="Nombre" {...register("nombre")} />
-            {errors.nombre && <span className="error-text">{errors.nombre.message}</span>}
-            {fieldErrors.nombre && <span className="error-text">{fieldErrors.nombre}</span>}
-          </div>
-
-          <div className="input-group">
-            <input type="text" placeholder="Apellido" {...register("apellido")} />
-            {errors.apellido && <span className="error-text">{errors.apellido.message}</span>}
+        <form className="form-register" onSubmit={handleSubmit(onSubmit)}>
+          <div className="input-row">
+            <div className="input-group">
+              <input type="text" placeholder="Nombre" {...register("nombre")} />
+              {errors.nombre && <span className="error-text">{errors.nombre.message}</span>}
+            </div>
+            <div className="input-group">
+              <input type="text" placeholder="Apellido" {...register("apellido")} />
+              {errors.apellido && <span className="error-text">{errors.apellido.message}</span>}
+            </div>
           </div>
 
           <div className="input-group">
@@ -80,41 +80,40 @@ export default function Register() {
           <div className="input-group">
             <input type="text" placeholder="Username" {...register("username")} />
             {errors.username && <span className="error-text">{errors.username.message}</span>}
-            {fieldErrors.username && <span className="error-text">{fieldErrors.username}</span>}
           </div>
 
           <div className="input-group">
-            <input type="email" placeholder="usuario.nombre@gmail.com" {...register("email")} />
+            <input type="email" placeholder="usuario@correo.com" {...register("email")} />
             {errors.email && <span className="error-text">{errors.email.message}</span>}
-            {fieldErrors.email && <span className="error-text">{fieldErrors.email}</span>}
           </div>
 
-          <div className="input-group">
+          <div className="input-group password-wrapper">
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Contraseña"
               {...register("password")}
             />
-            <span className="password-toggle-icon" onClick={togglePasswordVisibility} style={{ cursor: "pointer" }}>
+            <span className="eye-icon" onClick={togglePasswordVisibility}>
               {showPassword ? <FaEyeSlash /> : <IoEyeSharp />}
             </span>
             {errors.password && <span className="error-text">{errors.password.message}</span>}
           </div>
 
-          <div className="redirect">
-            <button type="submit" className="btn-login" disabled={isSubmitting}>
+          <div className="register-actions">
+            <button type="submit" className="btn-register-submit" disabled={isSubmitting}>
               {isSubmitting ? "CARGANDO..." : "REGISTRARSE"}
             </button>
-            <button type="button" className="btn-login secondary" onClick={() => navigate("/")}>
-              VOLVER AL LOGIN
+            <button type="button" className="btn-back-login" onClick={() => navigate("/")}>
+              Volver al login <FaReply />
             </button>
           </div>
         </form>
       </div>
 
-      <div className="right-panel-login">
-        <div className="container-img">
-          <img src={imagen_register} alt="Registro" className="calendar-img" />
+      {/* PANEL DERECHO */}
+      <div className="right-panel-register">
+        <div className="image-wrapper-register">
+          <img src={imagen_register} alt="Registro" className="register-hero-img" />
         </div>
       </div>
     </div>

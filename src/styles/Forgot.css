@@ -1,116 +1,145 @@
 /* CONTENEDOR PRINCIPAL */
 .container-forgot {
-    position: fixed;
-    width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
     background: white;
-    padding-bottom: 30px;
-    height: 100vh;
+    min-height: 100vh;
+    width: 100%;
 }
 
-/* PANEL IZQUIERDO */
 .left-panel-forgot {
-    display: grid;
-    grid-template-rows: auto auto auto 1fr;
-    padding: 0 2rem;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 8%;
+    justify-content: flex-start;
 }
 
 /* LOGO */
 .logo-forgot {
-    height: 5rem;
-    margin-bottom: 6rem;
+    margin-bottom: 2rem;
 }
 
 .logo-forgot img {
-    height: 60px;
-    width: 28%;
-    margin-top: 1rem;
+    height: 50px;
+    width: auto;
 }
 
 /* TITULOS */
 .left-panel-forgot h1 {
-    font-size: 38px;
+    font-size: clamp(22px, 4vw, 32px);
     font-weight: 950;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
+    color: #333;
 }
 
 .subtitle-forgot {
-    color: #888;
+    font-size: 15px;
+    color: #777;
     margin-bottom: 2rem;
 }
 
-/* FORMULARIO */
+/* INPUTS ESTILIZADOS */
 .form-forgot {
-    display: grid;
-    grid-template-rows: auto auto 1fr;
-    row-gap: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
 }
 
 .form-forgot input {
-    width: 95%;
+    width: 100%;
     height: 3.5rem;
     padding: 0 20px;
-    border: 2px solid #ccc;
-    border-radius: 10px;
-    background: #f3f3f3;
+    border: 2px solid #eee;
+    border-radius: 12px;
+    background: #fdfdfd;
+    box-sizing: border-box;
+    font-size: 16px;
     outline: none;
-    font-size: 16px;
+    transition: border 0.3s;
 }
 
-/* BOTÓN VOLVER */
-.back-login-btn {
-    width: 60%;
-    height: 45px;
-    border: none;
-    background: none;
-    color: #444;
-    font-size: 16px;
-    cursor: pointer;
+.form-forgot input:focus {
+    border-color: #e1892c;
+}
+
+/* CONTENEDOR DE BOTONES */
+.form-actions {
     display: flex;
+    justify-content: space-between; /* Uno a cada lado */
     align-items: center;
-    gap: 10px;
+    width: 100%;
+    margin-top: 10px;
 }
 
-.back-login-btn:hover {
-    opacity: 0.7;
-}
-
-/* BOTÓN ENVIAR */
+/* BOTÓN ACTUALIZAR (Dorado) */
 .btn-send-forgot {
-    width: 180px;
+    width: 200px;
     height: 50px;
-    padding: 15px;
     background: linear-gradient(to bottom, #f5e200, #e1892c);
     color: black;
     font-weight: bold;
+    border: none;
     border-radius: 10px;
     cursor: pointer;
-    display: flex;
-    align-items: center;     
-    justify-content: center;
+    font-size: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
 }
 
 .btn-send-forgot:hover {
-    background: #ffbe1a;
+    transform: translateY(-2px);
+    filter: brightness(1.1);
+}
+
+/* BOTÓN VOLVER (Link discreto) */
+.back-login-btn {
+    background: none;
+    border: none;
+    color: #555;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.back-login-btn:hover {
+    color: #e1892c;
+    text-decoration: underline;
 }
 
 /* PANEL DERECHO */
 .right-panel-forgot {
     display: grid;
     place-items: center;
-    height: 100vh;
-    width: 100%;
+    padding: 20px;
 }
 
 .container-img-forgot {
-    width: 97%;
-    height: 97%;
-    padding: 0.5rem;
-    border-radius: 2%;
+    width: 95%;
+    height: 95%;
+    border-radius: 20px;
     background: linear-gradient(to bottom, #f5e200, #e1892c);
-    display: flex;             /* <-- permite centrar la imagen */
-    justify-content: center;   /* <-- centra horizontal */
-    align-items: center;   
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
+.forgot-img {
+    max-width: 80%;
+    height: auto;
+}
+
+/* RESPONSIVIDAD */
+@media (max-width: 900px) {
+    .container-forgot { grid-template-columns: 1fr; }
+    .right-panel-forgot { display: none; }
+    .left-panel-forgot { padding: 4rem 2rem; }
+    .form-actions {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .btn-send-forgot { width: 100%; }
+}

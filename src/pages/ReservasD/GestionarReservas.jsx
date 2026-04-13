@@ -2,15 +2,15 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { listarReservasDeporte, cancelarReservaDeporte } from "../../api/ReservaDeporteApi";
+import "../../styles/ReservasD/GestionarReservas.css"; // Asegúrate de tener este archivo CSS con los estilos necesarios
 
 function GestionarReservas() {
   const navigate = useNavigate();
   const [reservas, setReservas] = useState([]);
   const [error, setError] = useState(null);
 
-  // Función para capitalizar texto (ej: estado de reserva)
   const capitalizar = (texto) =>
-  texto ? texto.charAt(0).toUpperCase() + texto.slice(1).toLowerCase() : "—";
+    texto ? texto.charAt(0).toUpperCase() + texto.slice(1).toLowerCase() : "—";
 
   useEffect(() => {
     obtenerDatos();
@@ -38,63 +38,66 @@ function GestionarReservas() {
   };
 
   return (
-    <div className="reservas-container">
-      <div className="reservas-header d-flex justify-content-between align-items-center mb-4">
-        <h2>GESTIÓN DE RESERVAS (MONGO DB)</h2>
-        <button className="btn btn-primary" onClick={() => navigate("/reservas-deportivas")}>
+    <div className="reservas-wrapper">
+      <div className="header-reservas">
+        <h2 className="title-reservas">GESTIÓN DE RESERVAS (MONGO DB)</h2>
+        
+        {/* Buscador corregido: ahora es "normal" y suave */}
+        <input 
+          type="text" 
+          placeholder="Buscar reserva..." 
+          className="search-input-reservas"
+        />
+
+        <button className="add-btn-reservas" onClick={() => navigate("/reservas-deportivas")}>
           <FaPlus /> NUEVA
         </button>
       </div>
 
-      {error && <div className="alert alert-danger">{error}</div>}
-
-      {reservas.length === 0 ? (
-        <div className="alert alert-info">No hay reservas registradas.</div>
-      ) : (
-        <div className="tabla-container">
-          <table className="table table-hover shadow-sm">
-            <thead className="table-dark">
-              <tr>
-                <th>USUARIO</th>
-                <th>CANCHA</th>
-                <th>INICIO</th>
-                <th>FIN</th>
-                <th>PRECIO</th>
-                <th>ESTADO</th>
-                <th>ACCIONES</th>
+      <div className="tabla-container-suave">
+        <table className="reservas-table">
+          <thead>
+            <tr>
+              <th>USUARIO</th>
+              <th>CANCHA</th>
+              <th>INICIO</th>
+              <th>FIN</th>
+              <th>PRECIO</th>
+              <th>ESTADO</th>
+              <th>ACCIONES</th>
+            </tr>
+          </thead>
+          <tbody>
+            {reservas.map((r) => (
+              <tr key={r.idD}>
+                <td style={{ fontWeight: '500' }}>
+                  {r.docUsuario ? r.docUsuario : "—"}
+                </td>
+                <td>
+                  <span className="badge-cancha">{r.tCancha}</span>
+                </td>
+                <td>{new Date(r.fInicioReserva).toLocaleString()}</td>
+                <td>{new Date(r.fFinReserva).toLocaleString()}</td>
+                <td style={{ fontWeight: '600' }}>${r.pr?.toLocaleString()}</td>
+                <td>
+                  <span className={`badge ${r.estado === "CANCELADA" ? "bg-danger" : "bg-warning text-dark"}`} style={{fontSize: '0.7rem'}}>
+                    {r.estado || "PENDIENTE"}
+                  </span>
+                </td>
+                <td>
+                  <button
+                    className="btn-cancelar-outline"
+                    onClick={() => handleCancelar(r.idD)}
+                    disabled={r.estado === "CANCELADA"}
+                  >
+                    <FaTrash /> Cancelar
+                  </button>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {reservas.map((r) => (
-                <tr key={r.idD}>
-                  {/* ← campos corregidos según lo que devuelve el back */}
-                  <td title={r.docUsuario}>
-                      {r.docUsuario ? r.docUsuario.slice(-6) : "—"}
-                  </td>
-                  <td><span className="badge bg-info text-dark">{capitalizar(r.tCancha)}</span></td>
-                  <td>{r.fInicioReserva ? new Date(r.fInicioReserva).toLocaleString() : "-"}</td>
-                  <td>{r.fFinReserva ? new Date(r.fFinReserva).toLocaleString() : "-"}</td>
-                  <td>${r.pr?.toLocaleString() || 0}</td>
-                  <td>
-                    <span className={`badge ${r.estado === "CANCELADA" ? "bg-danger" : r.estado === "CONFIRMADA" ? "bg-success" : "bg-warning text-dark"}`}>
-                      {r.estado || "PENDIENTE"}
-                    </span>
-                  </td>
-                  <td>
-                    <button
-                      className="btn btn-outline-danger btn-sm"
-                      onClick={() => handleCancelar(r.idD)}
-                      disabled={r.estado === "CANCELADA"}
-                    >
-                      <FaTrash /> Cancelar
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

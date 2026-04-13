@@ -3,7 +3,6 @@ import { Container, Card, Form, Button, InputGroup, Row, Col } from 'react-boots
 import '../styles/HabitacionD.css';
 
 const HabitacionD = () => {
-    // 1. Estructura de Datos (useState)
     const [habitacion, setHabitacion] = useState({
         numeroHabitacion: '',
         precioNoche: 0,
@@ -11,7 +10,6 @@ const HabitacionD = () => {
         descripcion: ''
     });
 
-    // 2. Lógica: Función handleChange dinámica
     const handleChange = (e) => {
         const { name, value } = e.target;
         setHabitacion((prevState) => ({
@@ -20,11 +18,10 @@ const HabitacionD = () => {
         }));
     };
 
-    // 3. Lógica: Función handleSubmit
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log('Datos de la habitación registrados:', habitacion);
-        alert('Habitación registrada con éxito (ver consola)');
+        alert('Habitación registrada con éxito');
     };
 
     return (
@@ -34,64 +31,73 @@ const HabitacionD = () => {
                     <h3 className="m-0 font-weight-bold">Registro de Habitación</h3>
                     <p className="small mb-0 opacity-75">GESTIÓN EJECUTIVA DE PROPIEDADES</p>
                 </Card.Header>
-                <Card.Body className="p-4">
+                <Card.Body className="p-5"> {/* Aumenté el padding a 5 para más aire */}
                     <Form onSubmit={handleSubmit}>
-                        {/* Número de Habitación */}
-                        <Form.Group className="mb-4" controlId="numeroHabitacion">
-                            <Form.Label className="fw-bold text-muted small text-uppercase">Número de Habitación</Form.Label>
-                            <InputGroup className="custom-input-group">
-                                <InputGroup.Text className="bg-light border-0">
-                                    <i className="bi bi-door-closed"></i>
-                                </InputGroup.Text>
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Ej: 402-A"
-                                    name="numeroHabitacion"
-                                    value={habitacion.numeroHabitacion}
-                                    onChange={handleChange}
-                                    className="border-0 bg-light p-3"
-                                    required
-                                />
-                            </InputGroup>
-                        </Form.Group>
+                        
+                        {/* Fila 1: Número y Precio */}
+                        <Row>
+                            <Col md={6}>
+                                <Form.Group className="mb-4" controlId="numeroHabitacion">
+                                    <Form.Label className="fw-bold text-muted small text-uppercase">Número de Habitación</Form.Label>
+                                    <InputGroup className="custom-input-group">
+                                        <InputGroup.Text className="bg-light border-0">
+                                            <i className="bi bi-door-closed"></i>
+                                        </InputGroup.Text>
+                                        <Form.Control
+                                            type="text"
+                                            placeholder="Ej: 402-A"
+                                            name="numeroHabitacion"
+                                            value={habitacion.numeroHabitacion}
+                                            onChange={handleChange}
+                                            className="border-0 bg-light p-3"
+                                            required
+                                        />
+                                    </InputGroup>
+                                </Form.Group>
+                            </Col>
+                            <Col md={6}>
+                                <Form.Group className="mb-4" controlId="precioNoche">
+                                    <Form.Label className="fw-bold text-muted small text-uppercase">Precio por Noche</Form.Label>
+                                    <InputGroup className="custom-input-group">
+                                        <InputGroup.Text className="bg-light border-0 fw-bold">$</InputGroup.Text>
+                                        <Form.Control
+                                            type="number"
+                                            placeholder="0.00"
+                                            name="precioNoche"
+                                            value={habitacion.precioNoche}
+                                            onChange={handleChange}
+                                            className="border-0 bg-light p-3"
+                                            required
+                                        />
+                                    </InputGroup>
+                                </Form.Group>
+                            </Col>
+                        </Row>
 
-                        {/* Precio por Noche */}
-                        <Form.Group className="mb-4" controlId="precioNoche">
-                            <Form.Label className="fw-bold text-muted small text-uppercase">Precio por Noche</Form.Label>
-                            <InputGroup className="custom-input-group">
-                                <InputGroup.Text className="bg-light border-0 fw-bold">$</InputGroup.Text>
-                                <Form.Control
-                                    type="number"
-                                    placeholder="0.00"
-                                    name="precioNoche"
-                                    value={habitacion.precioNoche}
-                                    onChange={handleChange}
-                                    className="border-0 bg-light p-3"
-                                    required
-                                />
-                            </InputGroup>
-                        </Form.Group>
+                        {/* Fila 2: Estado (y puedes agregar otro campo aquí si quieres) */}
+                        <Row>
+                            <Col md={12}>
+                                <Form.Group className="mb-4" controlId="estadoHabitacion">
+                                    <Form.Label className="fw-bold text-muted small text-uppercase">Estado de la Habitación</Form.Label>
+                                    <InputGroup className="custom-input-group">
+                                        <InputGroup.Text className="bg-light border-0">
+                                            <i className="bi bi-info-circle"></i>
+                                        </InputGroup.Text>
+                                        <Form.Select
+                                            name="estadoHabitacion"
+                                            value={habitacion.estadoHabitacion}
+                                            onChange={handleChange}
+                                            className="border-0 bg-light p-3"
+                                        >
+                                            <option value="disponible">Disponible</option>
+                                            <option value="mantenimiento">En Mantenimiento</option>
+                                        </Form.Select>
+                                    </InputGroup>
+                                </Form.Group>
+                            </Col>
+                        </Row>
 
-                        {/* Estado de la Habitación */}
-                        <Form.Group className="mb-4" controlId="estadoHabitacion">
-                            <Form.Label className="fw-bold text-muted small text-uppercase">Estado de la Habitación</Form.Label>
-                            <InputGroup className="custom-input-group">
-                                <InputGroup.Text className="bg-light border-0">
-                                    <i className="bi bi-info-circle"></i>
-                                </InputGroup.Text>
-                                <Form.Select
-                                    name="estadoHabitacion"
-                                    value={habitacion.estadoHabitacion}
-                                    onChange={handleChange}
-                                    className="border-0 bg-light p-3"
-                                >
-                                    <option value="disponible">Disponible</option>
-                                    <option value="mantenimiento">En Mantenimiento</option>
-                                </Form.Select>
-                            </InputGroup>
-                        </Form.Group>
-
-                        {/* Descripción */}
+                        {/* Descripción (Ancho completo) */}
                         <Form.Group className="mb-4" controlId="descripcion">
                             <Form.Label className="fw-bold text-muted small text-uppercase">Descripción</Form.Label>
                             <Form.Control
@@ -106,7 +112,7 @@ const HabitacionD = () => {
                         </Form.Group>
 
                         {/* Botón de Envío */}
-                        <div className="d-grid gap-2 mt-5">
+                        <div className="d-grid gap-2 mt-4">
                             <Button variant="primary" type="submit" className="habitacion-submit-btn p-3 fw-bold border-0 shadow-sm">
                                 Finalizar Registro <i className="bi bi-arrow-right ms-2"></i>
                             </Button>

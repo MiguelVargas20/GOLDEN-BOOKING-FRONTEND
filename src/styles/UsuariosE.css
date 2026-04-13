@@ -1,76 +1,139 @@
-.editar-container {
-  margin-top: 40px;
+/* ── Página completa ─────────────────────── */
+.editar-page {
+  padding: 30px 40px;
+  background: #fff;
+  min-height: 100%;
+}
+
+/* Header con línea inferior como UsuariosH */
+/* Cambiar línea a naranja */
+.editar-page-header {
   display: flex;
-  justify-content: center;
-  border-radius: 5%;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #f68b1e; /* ← naranja */
+  padding-bottom: 14px;
+  margin-bottom: 30px;
 }
 
-.editar-card {
-  width: 95%;
-  height: 50vh;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-}
-
-.editar-header {
-  background: white;
-  border-bottom: 1px solid #ccc;
-  padding: 12px 20px;
-}
-
-.editar-header h5 {
+.editar-page-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #2d3748;
   margin: 0;
-  font-weight: 600;
+  letter-spacing: -0.5px;
 }
 
-.editar-img-wrapper {
-  width: 180px;
-  height: 180px;
-  border: 2px solid #aaa;
+.editar-page-id {
+  font-size: 0.85rem;
+  color: #a0aec0;
+  font-weight: 500;
+}
+
+/* ── Cuerpo ──────────────────────────────── */
+.editar-page-body {
+  display: flex;
+  width: 100%;
+}
+
+/* ── Avatar ──────────────────────────────── */
+.editar-avatar {
+  width: 140px;
+  height: 140px;
   border-radius: 50%;
-  margin: auto;
+  overflow: hidden;
+  margin: 0 auto 12px;
+  background: #fef9f0;
+  border: 2px solid #fae5d3;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: border-color 0.2s, transform 0.2s;
+  cursor: default;
+}
+.editar-avatar:hover {
+  border-color: #f68b1e;
+  transform: scale(1.03);
 }
 
-.editar-img {
-  width: 50vw;
-  height: 50vh;
+.editar-avatar-img {
+  width: 130px;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 50%;
 }
 
-.input-custom {
+.editar-avatar-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #4a5568;
+  text-align: center;
+  margin: 0;
+}
+
+/* ── Formulario ──────────────────────────── */
+.editar-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #718096;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.editar-input {
   border-radius: 8px !important;
-  padding: 10px;
-  margin-left: 50px;
+  border: 1px solid #e2e8f0 !important;
+  padding: 10px 14px !important;
+  font-size: 0.92rem !important;
+  color: #2d3748 !important;
+  transition: border-color 0.2s !important;
+  width: 100% !important;
 }
 
-.botones {
-  margin: 0px 280px 0px 300px;
+.editar-input:focus {
+  border-color: #f68b1e !important;
+  box-shadow: 0 0 0 3px rgba(246, 139, 30, 0.1) !important;
+  outline: none !important;
+}
+
+/* ── Botones ─────────────────────────────── */
+.editar-botones {
   display: flex;
-  gap: 20px;
+  justify-content: flex-start; /* ← cambiar flex-end por flex-start */
+  gap: 12px;
+  margin-top: 24px;
+}
+.editar-btn-guardar {
+  background-color: #f68b1e !important;
+  border: none !important;
+  padding: 10px 28px !important;
+  font-weight: 700 !important;
+  border-radius: 8px !important;
+  color: white !important;
+  font-size: 0.88rem !important;
+  transition: background 0.2s !important;
 }
 
-.btn-aceptar {
-  background-color: #4CAF50;
-  border: none;
-  padding: 10px 25px;
-  font-weight: bold;
-  border-radius: 8px;
+.editar-btn-guardar:hover {
+  background-color: #e67e22 !important;
 }
 
-.btn-aceptar:hover {
-  background-color: #46a149;
+.editar-btn-cancelar {
+  background-color: white !important;
+  border: 1px solid #e53e3e !important;
+  padding: 10px 28px !important;
+  font-weight: 700 !important;
+  border-radius: 8px !important;
+  color: #e53e3e !important;
+  font-size: 0.88rem !important;
+  transition: all 0.2s !important;
 }
 
-.btn-cancelar {
-  background-color: #e54b4b;
-  border: none;
-  padding: 10px 25px;
-  font-weight: bold;
-  border-radius: 8px;
+.editar-btn-cancelar:hover {
+  background-color: #e53e3e !important;
+  color: white !important;
 }
-
-.btn-cancelar:hover {
-  background-color: #d84343;
+.editar-page-body .row {
+  margin-bottom: 8px;
 }
