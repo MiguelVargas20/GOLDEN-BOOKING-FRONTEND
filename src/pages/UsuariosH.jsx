@@ -17,7 +17,6 @@ export default function UsuariosH() {
     obtenerUsuarios();
   }, []);
 
-
   // Función para cargar usuarios desde el backend
   const obtenerUsuarios = async () => {
     try {
@@ -41,21 +40,19 @@ export default function UsuariosH() {
     }
   };
 
-
-  //Filtrar por documento, nombre o email
+  // Filtrar por documento, nombre o email
   const usuariosFiltrados = usuarios.filter(u =>
       u.nombre?.toLowerCase().includes(busqueda.toLowerCase()) ||
       u.email?.toLowerCase().includes(busqueda.toLowerCase()) ||
-      u.documento?.numeroD?.includes(busqueda)  // ← buscar por documento
+      u.documento?.numeroD?.includes(busqueda)
   );
 
   if (loading) return <div className="p-4">Cargando usuarios...</div>;
   if (error) return <div className="alert alert-danger m-4">{error}</div>;
 
-  // Renderizar tabla de usuarios
   return (
     <Container fluid className="users-wrapper">
-      <Row className="align-items-center justify-content-between mb-3">
+      <Row className="align-items-center justify-content-between mb-4 header-usuarios">
         <Col md={3}>
           <Form.Control
             type="text"
@@ -93,14 +90,11 @@ export default function UsuariosH() {
           </tr>
         </thead>
         <tbody>
-          {/* Si no hay usuarios, mostrar mensaje */}
           {usuariosFiltrados.length === 0 ? (
             <tr>
               <td colSpan={6} className="text-center">No hay usuarios registrados</td>
             </tr>
           ) : (
-
-            // Renderizar usuarios filtrados
             usuariosFiltrados.map((u) => (
               <tr key={u.id}>
                 <td>{u.documento?.numeroD || u.id?.slice(-6)}</td>
@@ -108,7 +102,8 @@ export default function UsuariosH() {
                 <td>{u.apellido}</td>
                 <td>{u.email}</td>
                 <td>
-                  <span className={`badge ${u.estado === "ACTIVO" ? "bg-success" : "bg-danger"}`}>
+                  {/* --- CAMBIO AQUÍ: Implementación de los estilos sutiles --- */}
+                  <span className={`user-status ${u.estado?.toLowerCase()}`}>
                     {u.estado}
                   </span>
                 </td>

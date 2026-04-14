@@ -12,14 +12,13 @@
 }
 
 .title-users {
-  font-size: 2,5rem;
+  font-size: 2.5rem; /* Corregido de coma a punto */
   font-weight: 700;
   color: #2d3748;
   margin: 0;
   letter-spacing: -0.5px;
   text-transform: uppercase;
   margin-right: 13rem;
-  
 }
 
 .search-input {
@@ -28,7 +27,6 @@
   padding: 8px 16px;
   font-size: 0.9rem;
   transition: border-color 0.2s;
-
 }
 
 .search-input:focus {
@@ -38,7 +36,7 @@
 }
 
 .add-btn-users {
-  background: #f68b1e !important;  /* ← naranja del sistema */
+  background: #f68b1e !important;
   color: white !important;
   border: none !important;
   padding: 8px 22px !important;
@@ -54,13 +52,15 @@
 
 /* ── Tabla ───────────────────────────────── */
 .users-table {
+  width: 100%;
+  border-collapse: collapse;
   border-radius: 10px;
   overflow: hidden;
   border: 1px solid #e2e8f0;
 }
 
 .users-table thead th {
-  background: #2d3748;   /* ← oscuro como las tablas de reservas */
+  background: #2d3748;
   color: white;
   font-weight: 600;
   font-size: 0.85rem;
@@ -77,4 +77,26 @@
   font-size: 0.9rem;
   color: #4a5568;
   border-bottom: 1px solid #f7fafc;
+}
+
+/* ── NUEVOS ESTADOS (Iguales a Mis Reservas) ── */
+.user-status {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  display: inline-block;
+  text-transform: uppercase;
+}
+
+/* Activo usa el estilo de "confirmada" */
+.user-status.activo {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+/* Inactivo usa el estilo de "cancelada" */
+.user-status.inactivo {
+  background-color: #fee2e2;
+  color: #991b1b;
 }

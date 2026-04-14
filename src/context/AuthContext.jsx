@@ -6,7 +6,6 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
 
   const [user, setUser] = useState(() => {
-    // Recuperar sesión guardada si existe
     const saved = localStorage.getItem("user");
     return saved ? JSON.parse(saved) : null;
   });
@@ -19,26 +18,40 @@ export const AuthProvider = ({ children }) => {
   const login = async (data) => {
     const response = await loginUsuario(data);
 
-    // Guardar token y datos del usuario
-    localStorage.setItem("token", response.token);
-    localStorage.setItem("user", JSON.stringify({
-      id: response.id,
-      usuario: response.usuario,
-      nombreCompleto: response.nombreCompleto,
-      roles: response.roles,
-    }));
+    // Intentar obtener el perfil completo
+    let numeroDocumento = null;
+    try {
+        const perfilRes = await fetch(
+            `${import.meta.env.VITE_API_URL}/api/usuarios/${response.id}`,
+            {
+                headers: {
+                    "Authorization": `Bearer ${response.token}`
+                }
+            }
+        );
+        if (perfilRes.ok) {
+            const perfil = await perfilRes.json();
+            numeroDocumento = perfil.documento?.numeroD || null;
+        }
+    } catch (e) {
+        console.warn("No se pudo obtener el perfil completo:", e);
+    }
 
+    const userData = {
+        id: response.id,
+        usuario: response.usuario,
+        nombreCompleto: response.nombreCompleto,
+        roles: response.roles,
+        numeroDocumento: numeroDocumento,
+    };
+
+    localStorage.setItem("token", response.token);
+    localStorage.setItem("user", JSON.stringify(userData));
     setToken(response.token);
-    setUser({
-      id: response.id,
-      usuario: response.usuario,
-      nombreCompleto: response.nombreCompleto,
-      roles: response.roles,
-    });
+    setUser(userData);
 
     return response;
-  };
-
+};
   // Registro
   const registro = async (data) => {
     return await registrarUsuario(data);
@@ -52,10 +65,7 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
   };
 
-  // Verificar si es admin
   const isAdmin = () => user?.roles?.includes("ROL_ADMIN");
-
-  // Verificar si está autenticado
   const isAuthenticated = () => !!token;
 
   return (
