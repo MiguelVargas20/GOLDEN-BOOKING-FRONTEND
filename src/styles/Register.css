@@ -1,54 +1,69 @@
+/* --- CONTENEDOR PRINCIPAL --- */
 .register-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    justify-content: center;
     background: white;
     min-height: 100vh;
     width: 100%;
+    overflow: hidden; /* Evita scrolls accidentales en el body */
 }
 
-.left-panel-register {
+/* --- PANEL CENTRAL --- */
+.center-panel-register {
     display: flex;
     flex-direction: column;
-    padding: 1.5rem 10%;
-    justify-content: flex-start;
+    padding: 2rem 8%; /* Reducido el padding superior para ganar espacio */
+    background: white;
+    width: 100%;
+    height: 100vh;
+    justify-content: center; /* Centra el contenido verticalmente si hay espacio */
+    box-sizing: border-box;
 }
+
+/* --- LOGO A LA IZQUIERDA --- */
+.logo-register {
+    display: flex;
+    justify-content: flex-start; /* Logo a la izquierda */
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+
 .logo-register img {
-    height: 60px; /* Recuperamos un tamaño más cercano al original */
+    height: 60px; /* Tamaño más balanceado */
     width: auto;
 }
 
-/* TITULOS - Ajustado para ser más grande y similar a otras vistas */
-.left-panel-forgot h1 {
-    font-size: clamp(26px, 5vw, 36px); /* Aumentado el tamaño mínimo y máximo */
-    font-weight: 950;
-    margin-bottom: 0.8rem; /* Un poco más de espacio */
-    text-transform: uppercase;
+.header-text-register {
+    text-align: left; /* Alineado con el logo */
+    margin-bottom: 1.5rem;
 }
 
+/* --- TÍTULOS --- */
 .title-register {
-    font-size: clamp(20px, 3.5vw, 28px);
+    font-size: clamp(24px, 4vw, 32px);
     font-weight: 950;
     margin-bottom: 0.2rem;
     text-transform: uppercase;
 }
 
-.subtitle-forgot {
+.subtitle-register {
     color: #888;
-    font-size: 16px; /* Aumentado a 16px */
-    margin-bottom: 2.5rem; /* Un poco más de espacio */
+    font-size: 16px;
 }
+
+/* --- FORMULARIO --- */
 .form-register {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 18px; /* Gap más pequeño para evitar scroll */
     width: 100%;
 }
 
-/* FILA PARA NOMBRE Y APELLIDO */
+/* FILAS DOBLES */
 .input-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 15px;
 }
 
 .input-group {
@@ -57,9 +72,10 @@
     position: relative;
 }
 
+/* INPUTS MÁS COMPACTOS */
 .form-register input, .form-register select {
     width: 100%;
-    height: 3.2rem;
+    height: 3.2rem; /* Altura optimizada */
     padding: 0 15px;
     border: 2px solid #eee;
     border-radius: 10px;
@@ -67,41 +83,61 @@
     font-size: 15px;
     outline: none;
     box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+.form-register input:focus, .form-register select:focus {
+    border-color: #e1892c;
+    background: white;
 }
 
 /* ICONO OJO */
 .password-wrapper .eye-icon {
     position: absolute;
     right: 15px;
-    top: 1.1rem;
+    top: 50%;
+    transform: translateY(-50%);
     cursor: pointer;
     color: #666;
     font-size: 1.2rem;
 }
 
+/* ERRORES MÁS COMPACTOS */
 .error-text {
-    color: #dc3545;
-    font-size: 11px;
-    margin-top: 2px;
+  color: #e53e3e;
+  font-size: 0.75rem;
+  margin-top: 2px;
+  font-weight: 500;
 }
 
-/* ACCIONES */
+.error-msg {
+  background-color: #fff5f5;
+  border-left: 4px solid #e53e3e;
+  color: #c53030;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  margin-bottom: 10px;
+}
+
+/* --- ACCIONES --- */
 .register-actions {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 10px;
+    margin-top: 20px;
 }
 
 .btn-register-submit {
-    width: 180px;
-    height: 45px;
+    width: 200px;
+    height: 48px;
     background: linear-gradient(to bottom, #f5e200, #e1892c);
     border: none;
     border-radius: 10px;
     font-weight: bold;
     cursor: pointer;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    text-transform: uppercase;
 }
 
 .btn-back-login {
@@ -113,34 +149,21 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 14px;
+    font-size: 15px;
 }
 
-/* PANEL DERECHO */
-.right-panel-register {
-    display: grid;
-    place-items: center;
-    padding: 20px;
-    background: #fff;
-}
-
-.image-wrapper-register {
-    width: 95%;
-    height: 95%;
-    background: linear-gradient(to bottom, #f5e200, #e1892c);
-    border-radius: 25px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.register-hero-img {
-    max-width: 70%;
-    height: auto;
-}
-
-@media (max-width: 900px) {
-    .register-container { grid-template-columns: 1fr; }
-    .right-panel-register { display: none; }
-    .input-row { grid-template-columns: 1fr; }
+/* --- RESPONSIVIDAD --- */
+@media (max-width: 800px) {
+    .input-row { 
+        grid-template-columns: 1fr; /* Colapsa a una columna solo en tablets/móvil */
+        gap: 10px;
+    }
+    .center-panel-register {
+        overflow-y: auto; /* Permite scroll solo si la pantalla es realmente pequeña */
+        padding: 2rem 5%;
+    }
+    .register-actions {
+        flex-direction: column;
+        gap: 15px;
+    }
 }

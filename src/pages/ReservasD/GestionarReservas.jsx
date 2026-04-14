@@ -2,11 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { listarReservasDeporte, cancelarReservaDeporte } from "../../api/ReservaDeporteApi";
-import "../../styles/ReservasD/GestionarReservas.css"; // Asegúrate de tener este archivo CSS con los estilos necesarios
+import "../../styles/ReservasD/GestionarReservas.css";
 
 function GestionarReservas() {
   const navigate = useNavigate();
   const [reservas, setReservas] = useState([]);
+  const [busqueda, setBusqueda] = useState("");
   const [error, setError] = useState(null);
 
   const capitalizar = (texto) =>
@@ -22,7 +23,6 @@ function GestionarReservas() {
       setReservas(data);
     } catch (err) {
       setError("No se pudieron cargar las reservas");
-      console.error(err);
     }
   };
 
@@ -37,22 +37,33 @@ function GestionarReservas() {
     }
   };
 
+  // ← Filtrar por cancha, usuario o estado
+  const reservasFiltradas = reservas.filter(r =>
+    r.tCancha?.toLowerCase().includes(busqueda.toLowerCase()) ||
+    r.docUsuario?.toLowerCase().includes(busqueda.toLowerCase()) ||
+    r.estado?.toLowerCase().includes(busqueda.toLowerCase())
+  );
+
   return (
     <div className="reservas-wrapper">
       <div className="header-reservas">
-        <h2 className="title-reservas">GESTIÓN DE RESERVAS (MONGO DB)</h2>
-        
-        {/* Buscador corregido: ahora es "normal" y suave */}
-        <input 
-          type="text" 
-          placeholder="Buscar reserva..." 
+        <h2 className="title-reservas">GESTIÓN DE RESERVAS</h2>
+
+        {/* ← Buscador conectado al estado */}
+        <input
+          type="text"
+          placeholder="Buscar por cancha, usuario o estado..."
           className="search-input-reservas"
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
         />
 
         <button className="add-btn-reservas" onClick={() => navigate("/reservas-deportivas")}>
           <FaPlus /> NUEVA
         </button>
       </div>
+
+      {error && <div className="alert alert-danger m-3">{error}</div>}
 
       <div className="tabla-container-suave">
         <table className="reservas-table">
@@ -68,33 +79,46 @@ function GestionarReservas() {
             </tr>
           </thead>
           <tbody>
-            {reservas.map((r) => (
-              <tr key={r.idD}>
-                <td style={{ fontWeight: '500' }}>
-                  {r.docUsuario ? r.docUsuario : "—"}
-                </td>
-                <td>
-                  <span className="badge-cancha">{r.tCancha}</span>
-                </td>
-                <td>{new Date(r.fInicioReserva).toLocaleString()}</td>
-                <td>{new Date(r.fFinReserva).toLocaleString()}</td>
-                <td style={{ fontWeight: '600' }}>${r.pr?.toLocaleString()}</td>
-                <td>
-                  <span className={`badge ${r.estado === "CANCELADA" ? "bg-danger" : "bg-warning text-dark"}`} style={{fontSize: '0.7rem'}}>
-                    {r.estado || "PENDIENTE"}
-                  </span>
-                </td>
-                <td>
-                  <button
-                    className="btn-cancelar-outline"
-                    onClick={() => handleCancelar(r.idD)}
-                    disabled={r.estado === "CANCELADA"}
-                  >
-                    <FaTrash /> Cancelar
-                  </button>
+            {reservasFiltradas.length === 0 ? (
+              <tr>
+                <td colSpan={7} className="text-center py-4">
+                  No hay reservas que coincidan
                 </td>
               </tr>
-            ))}
+            ) : (
+              reservasFiltradas.map((r) => (
+                <tr key={r.idD}>
+                  <td>
+                    {/* ← Mostrar últimos 8 chars del docUsuario */}
+                    {r.docUsuario ? r.docUsuario.slice(-8) : "—"}
+                  </td>
+                  <td>
+                    <span className="badge-cancha">{capitalizar(r.tCancha)}</span>
+                  </td>
+                  <td>{r.fInicioReserva ? new Date(r.fInicioReserva).toLocaleString() : "—"}</td>
+                  <td>{r.fFinReserva ? new Date(r.fFinReserva).toLocaleString() : "—"}</td>
+                  <td>${r.pr?.toLocaleString() || 0}</td>
+                  <td>
+                    <span className={`badge ${
+                      r.estado === "CANCELADA" ? "bg-danger" :
+                      r.estado === "CONFIRMADA" ? "bg-success" :
+                      "bg-warning text-dark"
+                    }`} style={{fontSize: '0.7rem'}}>
+                      {r.estado || "PENDIENTE"}
+                    </span>
+                  </td>
+                  <td>
+                    <button
+                      className="btn-cancelar-outline"
+                      onClick={() => handleCancelar(r.idD)}
+                      disabled={r.estado === "CANCELADA"}
+                    >
+                      <FaTrash /> Cancelar
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

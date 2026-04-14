@@ -9,6 +9,7 @@ function ReservarEspacioD() {
     const { ruta, text } = state || {};
     const navigate = useNavigate();
     const { user } = useAuth();
+    const { isAdmin } = useAuth();
 
     const [formData, setFormData] = useState({
         tCancha: text || "",
@@ -16,9 +17,8 @@ function ReservarEspacioD() {
         rqrEntrenador: false,
         fInicioReserva: "",
         fFinReserva: "",
-        docUsuario: user?.id || ""
+        docUsuario: user?.numeroDocumento || user?.id || ""  // ← número de documento
     });
-
     const [error, setError] = useState(null);
 
     const handleSubmit = async (e) => {
@@ -28,7 +28,11 @@ function ReservarEspacioD() {
         try {
             await crearReservaDeporte(formData);
             alert("¡Reserva guardada con éxito!");
-            navigate("/reservas-deportivas/gestionar");
+            // ← cambiar esta línea:
+            navigate(isAdmin() 
+            ? "/reservas-deportivas/gestionar" 
+            : "/reservas-deportivas/mis-reservas");
+
         } catch (err) {
             setError(err.message || "Error al conectar con el servidor.");
         }

@@ -1,0 +1,136 @@
+/* ── Página ──────────────────────────────── */
+.mis-reservas-page {
+  padding: 30px 40px;
+  background: #fff;
+  min-height: 100%;
+}
+
+/* ── Header igual que UsuariosH ─────────── */
+.mis-reservas-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #f68b1e;
+  padding-bottom: 14px;
+  margin-bottom: 24px;
+}
+
+.mis-reservas-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.mis-reservas-loading {
+  padding: 40px;
+  text-align: center;
+  color: #718096;
+}
+
+/* ── Empty state ─────────────────────────── */
+.mis-reservas-empty {
+  text-align: center;
+  padding: 60px 20px;
+  color: #718096;
+}
+
+.mis-reservas-empty p {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #4a5568;
+  margin-bottom: 8px;
+}
+
+.mis-reservas-empty span {
+  font-size: 0.9rem;
+  color: #a0aec0;
+}
+
+/* ── Tabla igual que UsuariosH ──────────── */
+.mis-reservas-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.mis-reservas-table thead th {
+  background: #2d3748;
+  color: white;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-align: center;
+  padding: 14px 12px;
+  letter-spacing: 0.5px;
+  border: none;
+}
+
+.mis-reservas-table tbody td {
+  padding: 14px 12px;
+  vertical-align: middle;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #4a5568;
+  border-bottom: 1px solid #f7fafc;
+}
+
+.mis-reservas-table tbody tr:hover {
+  background-color: #fef9f0;
+}
+
+/* ── Badge cancha ────────────────────────── */
+.mis-reservas-badge {
+  background-color: #00d1ff;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.78rem;
+}
+
+/* ── Estado ──────────────────────────────── */
+.mis-reservas-estado {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.mis-reservas-estado.pendiente {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.mis-reservas-estado.confirmada {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.mis-reservas-estado.cancelada {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+/* ── Botón cancelar ──────────────────────── */
+.mis-reservas-btn-cancelar {
+  background: white;
+  border: 1px solid #fed7d7;
+  color: #e53e3e;
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.mis-reservas-btn-cancelar:hover:not(:disabled) {
+  background: #e53e3e;
+  color: white;
+  border-color: #e53e3e;
+}
+
+.mis-reservas-btn-cancelar:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
