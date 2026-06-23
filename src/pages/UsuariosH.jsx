@@ -43,6 +43,7 @@ export default function UsuariosH() {
   // Filtrar por documento, nombre o email
   const usuariosFiltrados = usuarios.filter(u =>
       u.nombre?.toLowerCase().includes(busqueda.toLowerCase()) ||
+      u.apellido?.toLowerCase().includes(busqueda.toLowerCase()) ||
       u.email?.toLowerCase().includes(busqueda.toLowerCase()) ||
       u.documento?.numeroD?.includes(busqueda)
   );
