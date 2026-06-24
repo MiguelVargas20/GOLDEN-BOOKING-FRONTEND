@@ -70,9 +70,9 @@ export default function App() {
 
 
             {/* Gestión de Habitaciones — solo ADMIN */}
-            <Route path="/nueva-habitacion" element={
+            <Route path="/crear-habitacion" element={
               <RutaProtegida soloAdmin={true}><HabitacionD /></RutaProtegida>
-            }/>
+            } />
 
           </Route>
         </Routes>
