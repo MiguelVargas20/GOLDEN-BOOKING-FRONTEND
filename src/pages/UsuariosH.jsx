@@ -3,6 +3,7 @@ import { Button, Col, Container, Form, Row, Table } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import '../styles/UsuariosH.css';
 import { listarUsuarios, eliminarUsuario } from "../api/UserApi";
+import Swal from 'sweetalert2';
 
 // Página de gestión de usuarios (solo para ADMIN)
 export default function UsuariosH() {
@@ -29,16 +30,42 @@ export default function UsuariosH() {
     }
   };
 
-  // Función para eliminar un usuario
-  const handleEliminar = async (id) => {
-    if (!window.confirm("¿Deseas eliminar este usuario?")) return;
-    try {
-      await eliminarUsuario(id);
-      obtenerUsuarios();
-    } catch {
-      alert("Error al eliminar usuario");
+
+// Función para eliminar un usuario
+
+const handleEliminar = async (id, nombre, apellido) => {
+    const resultado = await Swal.fire({
+        title: '¿Eliminar usuario?',
+        text: `Esta acción eliminará permanentemente a ${nombre} ${apellido} y no se puede deshacer.`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, eliminar',
+        cancelButtonText: 'Cancelar',
+        confirmButtonColor: '#e53e3e',
+        cancelButtonColor: '#6c757d',
+    });
+
+    if (resultado.isConfirmed) {
+        try {
+            await eliminarUsuario(id);
+            await Swal.fire({
+                title: '¡Eliminado!',
+                text: `${nombre} ${apellido} fue eliminado correctamente.`,
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false,
+            });
+            obtenerUsuarios();
+        } catch {
+            Swal.fire({
+                title: 'Error',
+                text: 'No se pudo eliminar el usuario.',
+                icon: 'error',
+                confirmButtonColor: '#e53e3e',
+            });
+        }
     }
-  };
+};
 
   // Filtrar por documento, nombre o email
   const usuariosFiltrados = usuarios.filter(u =>
@@ -117,7 +144,7 @@ export default function UsuariosH() {
                   </button>
                   <button
                     className="btn-delete"
-                    onClick={() => handleEliminar(u.id)}
+                    onClick={() => handleEliminar(u.id, u.nombre, u.apellido)}
                   >
                     ELIMINAR
                   </button>

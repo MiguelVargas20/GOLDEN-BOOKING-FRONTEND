@@ -14,35 +14,32 @@ export const AuthProvider = ({ children }) => {
     return localStorage.getItem("token") || null;
   });
 
-  // Login
+  // ── LOGIN ────────────────────────────────────────────────
   const login = async (data) => {
     const response = await loginUsuario(data);
 
-    // Intentar obtener el perfil completo
     let numeroDocumento = null;
     try {
-        const perfilRes = await fetch(
-            `${import.meta.env.VITE_API_URL}/api/usuarios/${response.id}`,
-            {
-                headers: {
-                    "Authorization": `Bearer ${response.token}`
-                }
-            }
-        );
-        if (perfilRes.ok) {
-            const perfil = await perfilRes.json();
-            numeroDocumento = perfil.documento?.numeroD || null;
+      const perfilRes = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/usuarios/${response.id}`,
+        {
+          headers: { Authorization: `Bearer ${response.token}` }
         }
+      );
+      if (perfilRes.ok) {
+        const perfil = await perfilRes.json();
+        numeroDocumento = perfil.documento?.numeroD || null;
+      }
     } catch (e) {
-        console.warn("No se pudo obtener el perfil completo:", e);
+      console.warn("No se pudo obtener el perfil completo:", e);
     }
 
     const userData = {
-        id: response.id,
-        usuario: response.usuario,
-        nombreCompleto: response.nombreCompleto,
-        roles: response.roles,
-        numeroDocumento: numeroDocumento,
+      id: response.id,
+      usuario: response.usuario,
+      nombreCompleto: response.nombreCompleto,
+      roles: response.roles,
+      numeroDocumento: numeroDocumento,
     };
 
     localStorage.setItem("token", response.token);
@@ -51,18 +48,31 @@ export const AuthProvider = ({ children }) => {
     setUser(userData);
 
     return response;
-};
-  // Registro
-  const registro = async (data) => {
-    return await registrarUsuario(data);
   };
 
-  // Logout
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    setToken(null);
-    setUser(null);
+  // ── LOGOUT ───────────────────────────────────────────────
+  const logout = async () => {
+    try {
+      const savedToken = localStorage.getItem("token"); // ← clave correcta
+      if (savedToken) {
+        await fetch(`${import.meta.env.VITE_API_URL}/auth/logout`, {
+          method: "POST",
+          headers: { Authorization: `Bearer ${savedToken}` }
+        });
+      }
+    } catch (err) {
+      console.warn("Logout remoto falló, limpiando sesión local:", err.message);
+    } finally {
+      localStorage.removeItem("token"); // ← clave correcta
+      localStorage.removeItem("user");  // ← clave correcta
+      setToken(null);
+      setUser(null);
+    }
+  };
+
+  // ── REGISTRO ─────────────────────────────────────────────
+  const registro = async (data) => {
+    return await registrarUsuario(data);
   };
 
   const isAdmin = () => user?.roles?.includes("ROL_ADMIN");

@@ -7,15 +7,34 @@ import { useTheme } from '../context/Themecontext.jsx';
 import { BsSun, BsMoonStarsFill, BsBoxArrowRight, BsPersonCircle } from 'react-icons/bs';
 import { MdSportsTennis, MdHotel, MdRestaurant } from 'react-icons/md';
 import { useAuth } from '../context/AuthContext.jsx';
+import Swal from 'sweetalert2';
 
 export default function ComponentNavbar() {
     const { isDarkMode, toggleTheme } = useTheme();
     const { user, logout, isAdmin } = useAuth();
     const navigate = useNavigate();
 
-    const handleLogout = () => {
-        logout();
-        navigate("/login");
+    const handleLogout = async () => {
+        const resultado = await Swal.fire({
+            title: '¿Cerrar sesión?',
+            text: 'Tu sesión será terminada y tendrás que volver a ingresar.',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, salir',
+            cancelButtonText: 'Cancelar',
+            confirmButtonColor: '#f38d1e',   // naranja Golden Booking
+            cancelButtonColor: '#6c757d',
+            borderRadius: '16px',
+            customClass: {
+                popup: 'swal-popup-custom',
+                title: 'swal-title-custom',
+            }
+        });
+
+        if (resultado.isConfirmed) {
+            await logout();
+            navigate("/login");
+        }
     };
 
     return (
