@@ -1,75 +1,248 @@
 /* HabitacionD.css */
-
-/* Fuentes e importaciones sugeridas si se usan iconos */
+@import url('https://fonts.googleapis.com/css2?family=Bungee&display=swap');
 @import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css');
 
+/* ── Contenedor general (Mayor amplitud y aire) ──────────────── */
 .habitacion-container {
-    background-color: #f8f9fa;
-    padding: 20px;
-}
-/* Modifica esta clase en tu HabitacionD.css */
-.habitacion-card {
-    width: 100%;
-    max-width: 800px; /* Aumentado de 450px a 800px */
-    border-radius: 16px !important;
-    overflow: hidden;
+    background-color: #ffffff;
+    min-height: 100vh;
+    padding: 4rem 2rem; /* Aumentado el espaciado superior/inferior */
 }
 
-/* Header con Degradado Dorado Moderno */
+/* Modificación directa sobre el div de ancho máximo para pantallas ultra-wide */
+.habitacion-container .container {
+    max-width: 1400px !important; /* Expandido de 1200px a 1400px para ocupar más pantalla */
+}
+
+/* ── Card principal ───────────────────────────────────────── */
+.habitacion-card {
+    width: 100%;
+    max-width: 1400px; 
+    border-radius: 24px !important; /* Bordes un poco más suaves */
+    overflow: hidden;
+    border: 1px solid #e2e8f0 !important;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.04) !important;
+    animation: fadeInUp 0.5s ease-out;
+}
+
+/* ── Header de la card ───────────────────────────────────── */
 .habitacion-card-header {
-    background: linear-gradient(135deg, #735c00 0%, #d4af37 50%, #735c00 100%);
-    border-bottom: none;
-    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+    background: #ffffff;
+    border-bottom: 2px solid #f3f4f6 !important;
+    padding: 2rem 2.5rem;
 }
 
 .habitacion-card-header h3 {
-    letter-spacing: -0.5px;
-    font-size: 1.5rem;
+    font-family: "Bungee", sans-serif;
+    font-weight: 400;
+    font-size: 1.8rem; /* Ligeramente más grande */
+    color: #1a1a2e;
+    letter-spacing: 0;
+    margin: 0;
 }
 
-/* Estilos para inputs */
-.custom-input-group {
-    border-radius: 12px;
-    overflow: hidden;
-    transition: all 0.3s ease;
+.habitacion-card-header h3 span {
+    color: #f38d1e;
 }
 
-.form-control:focus, .form-select:focus {
-    background-color: #fff !important;
-    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.2);
+/* ── Preview card interactiva (Columna izquierda) ────────────────────── */
+.habitacion-preview-card {
+    background: linear-gradient(145deg, #fdfaf7 0%, #fffbf7 100%);
+    border-radius: 24px;
+    border: 1px solid #f0e4cc;
+    padding: 3rem 2rem; /* Más espaciado interno vertical */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 6px 20px rgba(243, 141, 30, 0.04);
+    position: sticky;
+    top: 3rem;
+}
+
+.habitacion-preview-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 16px 32px rgba(243, 141, 30, 0.12);
+    border-color: #e2b672;
+}
+
+/* El círculo del emoji dentro de la vista previa */
+.preview-icon-badge {
+    background: #ffffff;
+    width: 100px; /* Escalado de 80px a 100px */
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.04);
+    border: 1px solid #f1f5f9;
+    font-size: 3.5rem; /* Icono más grande */
+    margin-bottom: 1.5rem;
+}
+
+/* ── Sección "datos" dentro del form ─────────────────────── */
+.habitacion-datos-label {
+    font-size: 0.8rem; /* Mayor visibilidad */
+    font-weight: 700;
+    letter-spacing: 1.8px;
+    color: #f38d1e;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+}
+
+/* ── Inputs y selects ────────────────────────────────────── */
+.campo-d {
+    background: #f8fafc !important;
+    border: 1.5px solid #e2e8f0 !important;
+    border-radius: 12px !important; /* Ajuste proporcional de bordes */
+    padding: 0.85rem 1.25rem !important; /* Más altos y cómodos para pantallas grandes */
+    font-size: 0.95rem !important; /* Texto un poco más legible */
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.campo-d:focus {
+    border-color: #f38d1e !important;
+    box-shadow: 0 0 0 4px rgba(243, 141, 30, 0.15) !important;
+    background: #ffffff !important;
     outline: none;
 }
 
-/* Botón con efectos Hover */
+/* ── Botón principal ─────────────────────────────────────── */
 .habitacion-submit-btn {
-    background: #b8860b !important;
-    color: #fff;
+    background-color: #f38d1e !important;
+    border: none !important;
     border-radius: 12px !important;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
-    text-transform: none;
+    font-weight: 700 !important;
+    padding: 0.8rem 2.5rem !important; /* Botón con más presencia */
+    font-size: 1rem !important;
+    color: #ffffff !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
 }
 
-.habitacion-submit-btn:hover {
-    background: #735c00 !important;
+.habitacion-submit-btn:hover:not(:disabled) {
+    background-color: #d97a12 !important;
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(115, 92, 0, 0.4);
+    box-shadow: 0 8px 22px rgba(243, 141, 30, 0.35);
 }
 
-.habitacion-submit-btn:active {
+/* ── Botón cancelar ──────────────────────────────────────── */
+.habitacion-cancel-btn {
+    border-radius: 12px !important;
+    font-weight: 600 !important;
+    padding: 0.8rem 2rem !important;
+    font-size: 1rem !important;
+    color: #475569 !important;
+    border-color: #cbd5e1 !important;
+}
+
+.habitacion-cancel-btn:hover {
+    background-color: #f1f5f9 !important;
+}
+
+/* ── Info-box del tipo seleccionado ──────────────────────── */
+.habitacion-tipo-info {
+    background: #fff8f0;
+    border: 1px solid #fde8c8;
+    border-radius: 12px;
+    padding: 1rem 1.25rem;
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+.habitacion-tipo-info strong {
+    color: #f38d1e;
+}
+
+/* ── Badges de estado ────────────────────────────────────── */
+.badge-disponible {
+    background: #e6f4ea;
+    color: #2e7d32;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 6px 18px;
+    border-radius: 20px;
+}
+
+.badge-ocupada {
+    background: #fce8e6;
+    color: #c62828;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 6px 18px;
+    border-radius: 20px;
+}
+
+.badge-mantenimiento {
+    background: #fff3e0;
+    color: #e65100;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 6px 18px;
+    border-radius: 20px;
+}
+
+/* ── Nueva Sección Visual de Amenidades / Estándares ─────── */
+.amenidades-sidebar {
+    margin-top: 2.5rem;
+    background: #f8fafc;
+    border-radius: 20px;
+    padding: 1.75rem; /* Más amplio por dentro */
+    border: 1px solid #e2e8f0;
+}
+
+.amenidad-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.95rem; /* Tipografía más grande y estilizada */
+    color: #475569;
+}
+
+.amenidad-item:last-child {
+    margin-bottom: 0;
+}
+
+.amenidad-item i {
+    color: #f38d1e;
+    font-size: 1.25rem;
+}
+
+/* Estilos de las etiquetas de los inputs del formulario */
+p[style*="font-size: 0.78rem"] {
+    font-size: 0.88rem !important; /* Incrementa sutilmente el tamaño de los labels */
+    margin-bottom: 8px !important;
+}
+
+/* ── NUEVO BOTÓN AGREGAR TIPO DE HABITACIÓN (Color naranja plano) ── */
+.btn-add-tipo-room {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ff8800 !important;
+    border: 1px solid #ff7700 !important;
+    color: #ffffff !important;
+    border-radius: 12px !important;
+    width: 52px;
+    height: 52px; /* Alineado al padding vertical del .campo-d */
+    font-size: 24px !important;
+    font-weight: 500 !important;
+    cursor: pointer;
+    padding: 0 !important;
+    transition: none !important; /* Cero animaciones o transiciones de color */
+}
+
+.btn-add-tipo-room:hover {
+    background: #ff8800 !important;
+    border-color: #ff7700 !important;
+    color: #ffffff !important;
+    transform: translateY(-1px);
+    box-shadow: 0px 4px 12px rgba(255, 136, 0, 0.2);
+}
+
+.btn-add-tipo-room:active {
     transform: translateY(0);
 }
 
-/* Ajustes de tipografía */
-.form-label {
-    letter-spacing: 0.5px;
-    margin-bottom: 0.5rem;
-}
-
-/* Animación de entrada suave */
-.habitacion-card {
-    animation: fadeInUp 0.6s ease-out;
-}
-
+/* ── Animación de entrada ────────────────────────────────── */
 @keyframes fadeInUp {
     from {
         opacity: 0;

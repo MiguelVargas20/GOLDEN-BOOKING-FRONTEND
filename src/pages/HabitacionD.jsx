@@ -2,19 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Row, Col, Form, Button, Alert, Spinner } from "react-bootstrap";
 import { crearHabitacion, listarTiposHabitacion } from "../api/habitacionApi";
-
-/**
- * HABITACIÓN D — vista de administración / registro
- *
- * Envía a: POST /api/habitaciones
- * HabitacionDto: {
- * numeroHabitacion,
- * datosTipoHabitacion: { id, nombreTipoHabitacion, descripcion, capacidadMaxima },
- * precioNoche,
- * estadoHabitacion,
- * descripcion
- * }
- */
+import "../styles/HabitacionD.css";
 
 const ESTADOS = [
   { value: "disponible", label: "✓ Disponible", color: "#2e7d32" },
@@ -57,7 +45,6 @@ export default function HabitacionD() {
     cargar();
   }, []);
 
-  // Tipo seleccionado actualmente (para mostrar info)
   const tipoSeleccionado = tipos.find((t) => t.id === idTipo);
 
   /* ── Submit ───────────────────────────────────────────── */
@@ -66,26 +53,24 @@ export default function HabitacionD() {
     setError("");
     setExito("");
 
-    // Validaciones
     if (!numeroHabitacion.trim())
       return setError("El número de habitación es requerido.");
     if (!idTipo) return setError("Selecciona un tipo de habitación.");
     if (!precioNoche || parseFloat(precioNoche) <= 0)
       return setError("Ingresa un precio por noche válido.");
 
-    setLoading(true); // ← CORREGIDO: Antes decía loading(true) y daría error
+    setLoading(true);
     try {
-      // Armamos el DTO exacto que espera el back
       const body = {
         numeroHabitacion: numeroHabitacion.trim(),
-        datosTipoHabitacion: tipoSeleccionado, // objeto completo del tipo
+        datosTipoHabitacion: tipoSeleccionado,
         precioNoche: parseFloat(precioNoche),
         estadoHabitacion: estadoHabitacion,
         descripcion: descripcion.trim() || null,
       };
 
       await crearHabitacion(body);
-      setExito("¡Habitacion registrada con éxito!");
+      setExito("¡Habitación registrada con éxito!");
       setTimeout(() => navigate("/reservas-hospedaje"), 1500);
     } catch (err) {
       setError(err.message || "Error al registrar la habitación.");
@@ -95,80 +80,56 @@ export default function HabitacionD() {
   };
 
   return (
-    <div
-      style={{
-        backgroundColor: "#f8f9fa",
-        minHeight: "100vh",
-        padding: "2rem 0",
-      }}
-    >
-      <div className="container" style={{ maxWidth: "860px" }}>
+    <div className="habitacion-container">
+      {/* Se expandió el max-width a 1200px para llenar pantallas grandes */}
+      <div className="container" style={{ maxWidth: "1200px" }}> 
         <Row className="g-5 align-items-start">
+          
           {/* ── Columna izquierda: info decorativa ──────── */}
-          <Col md={4}>
+          <Col lg={4} md={5}>
             <h2
               style={{
-                fontFamily: "Georgia, serif",
-                fontWeight: 700,
+                fontFamily: '"Bungee", sans-serif',
+                fontWeight: 400,
                 color: "#1a1a2e",
-                fontSize: "2rem",
+                fontSize: "2.2rem",
                 lineHeight: 1.2,
-                marginBottom: "1rem",
+                marginBottom: "0.5rem",
               }}
             >
-              Registro de Habitación
+              Registro de{" "}
+              <span style={{ color: "#f38d1e" }}>Habitación</span>
             </h2>
-            <p
-              style={{ color: "#64748b", fontSize: "0.9rem", lineHeight: 1.7 }}
-            >
+            <p style={{ color: "#64748b", fontSize: "0.85rem", letterSpacing: "1px", fontWeight: "600" }}>
               GESTIÓN EJECUTIVA DE PROPIEDADES
             </p>
 
-            {/* Preview */}
-            <div
-              style={{
-                background: "linear-gradient(135deg, #f5e6c8 0%, #e8d5a3 100%)",
-                borderRadius: "16px",
-                height: "220px",
-                marginTop: "1.5rem",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "0.5rem",
-                color: "#c9a84c",
-                border: "1px solid #e8d5a3",
-              }}
-            >
-              <span style={{ fontSize: "3rem" }}>🏨</span>
-              <span
-                style={{ fontWeight: 700, fontSize: "1rem", color: "#1a1a2e" }}
-              >
+            {/* Preview Integrada */}
+            <div className="habitacion-preview-card text-center d-flex flex-column align-items-center justify-content-center">
+              <div className="preview-icon-badge">🏨</div>
+              <span style={{ fontWeight: 700, fontSize: "1.2rem", color: "#1a1a2e" }}>
                 {numeroHabitacion ? `Hab. ${numeroHabitacion}` : "Vista previa"}
               </span>
+              
               {tipoSeleccionado && (
-                <span style={{ fontSize: "0.78rem", color: "#64748b" }}>
+                <span style={{ fontSize: "0.85rem", color: "#64748b", marginTop: "2px" }}>
                   {tipoSeleccionado.nombreTipoHabitacion}
                 </span>
               )}
+              
               {precioNoche && (
-                <span
-                  style={{
-                    fontSize: "0.85rem",
-                    fontWeight: 700,
-                    color: "#c9a84c",
-                  }}
-                >
+                <span style={{ fontSize: "1.1rem", fontWeight: 700, color: "#f38d1e", marginTop: "6px" }}>
                   ${parseFloat(precioNoche).toLocaleString("es-CO")} / noche
                 </span>
               )}
+              
               <span
                 style={{
-                  fontSize: "0.72rem",
+                  fontSize: "0.75rem",
                   fontWeight: 700,
-                  padding: "3px 12px",
+                  padding: "5px 16px",
                   borderRadius: "20px",
-                  marginTop: "4px",
+                  marginTop: "10px",
                   background:
                     estadoHabitacion === "disponible"
                       ? "#e6f4ea"
@@ -186,31 +147,40 @@ export default function HabitacionD() {
                 {ESTADOS.find((e) => e.value === estadoHabitacion)?.label}
               </span>
             </div>
+
+            {/* Elemento visual de soporte técnico / estándares */}
+            <div className="amenidades-sidebar">
+              <p style={{ fontSize: "0.7rem", fontWeight: 700, color: "#94a3b8", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "0.75rem" }}>
+                Estándares del Sistema
+              </p>
+              <div className="amenidad-item">
+                <i className="bi bi-shield-check"></i>
+                <span>Validación automática de duplicados</span>
+              </div>
+              <div className="amenidad-item">
+                <i className="bi bi-lightning-charge"></i>
+                <span>Sincronización en tiempo real con el PMS</span>
+              </div>
+              <div className="amenidad-item">
+                <i className="bi bi-currency-dollar"></i>
+                <span>Moneda base configurada en COP</span>
+              </div>
+            </div>
           </Col>
 
-          {/* ── Columna derecha: formulario ─────────────── */}
-          <Col md={8}>
+          {/* ── Columna derecha: formulario ──────────────── */}
+          <Col lg={8} md={7}>
             <div
               style={{
                 background: "#fff",
                 borderRadius: "20px",
-                padding: "2.5rem",
+                padding: "3rem",
                 border: "1px solid #e2e8f0",
-                boxShadow: "0 4px 16px rgba(0,0,0,.06)",
+                boxShadow: "0 10px 25px rgba(0,0,0,.03)",
               }}
             >
-              {/* Encabezado */}
-              <p
-                style={{
-                  fontSize: "0.7rem",
-                  fontWeight: 700,
-                  letterSpacing: "1.5px",
-                  color: "#c9a84c",
-                  textTransform: "uppercase",
-                  marginBottom: "0.5rem",
-                }}
-              >
-                DATOS DE LA HABITACIÓN
+              <p className="habitacion-datos-label">
+                Datos de la Habitación
               </p>
               <hr style={{ borderColor: "#e2e8f0", marginBottom: "1.75rem" }} />
 
@@ -247,46 +217,39 @@ export default function HabitacionD() {
                         </span>
                       </div>
                     ) : (
-                      <Form.Select
-                        value={idTipo}
-                        onChange={(e) => setIdTipo(e.target.value)}
-                        className="campo-d"
-                      >
-                        <option value="">Selecciona un tipo...</option>
-                        {tipos.map((t) => (
-                          <option key={t.id} value={t.id}>
-                            {t.nombreTipoHabitacion} — Cap. {t.capacidadMaxima}{" "}
-                            personas
-                          </option>
-                        ))}
-                      </Form.Select>
+                      <div className="d-flex gap-2">
+                        <Form.Select
+                          value={idTipo}
+                          onChange={(e) => setIdTipo(e.target.value)}
+                          className="campo-d flex-grow-1"
+                        >
+                          <option value="">Selecciona un tipo...</option>
+                          {tipos.map((t) => (
+                            <option key={t.id} value={t.id}>
+                              {t.nombreTipoHabitacion} — Cap. {t.capacidadMaxima} personas
+                            </option>
+                          ))}
+                        </Form.Select>
+                        <Button 
+                          type="button" 
+                          className="btn-add-tipo-room"
+                          onClick={() => navigate("/crear-tipo-habitacion")}
+                          title="Crear nuevo tipo de habitación"
+                        >
+                          +
+                        </Button>
+                      </div>
                     )}
                   </Col>
                 </Row>
 
                 {/* Info del tipo seleccionado */}
                 {tipoSeleccionado && (
-                  <div
-                    style={{
-                      background: "#fdf8ee",
-                      borderRadius: "10px",
-                      padding: "0.85rem 1rem",
-                      marginBottom: "1.5rem",
-                      border: "1px solid #f0e0b0",
-                      fontSize: "0.82rem",
-                      color: "#64748b",
-                    }}
-                  >
-                    <strong style={{ color: "#c9a84c" }}>
-                      {tipoSeleccionado.nombreTipoHabitacion}
-                    </strong>
-                    {tipoSeleccionado.descripcion &&
-                      ` — ${tipoSeleccionado.descripcion}`}
+                  <div className="habitacion-tipo-info mb-4">
+                    <strong>{tipoSeleccionado.nombreTipoHabitacion}</strong>
+                    {tipoSeleccionado.descripcion && ` — ${tipoSeleccionado.descripcion}`}
                     {tipoSeleccionado.capacidadMaxima && (
-                      <span>
-                        {" "}
-                        · 👥 Máx. {tipoSeleccionado.capacidadMaxima} personas
-                      </span>
+                      <span> · 👥 Máx. {tipoSeleccionado.capacidadMaxima} personas</span>
                     )}
                   </div>
                 )}
@@ -340,7 +303,7 @@ export default function HabitacionD() {
                   <CampoLabel label="Descripción" />
                   <Form.Control
                     as="textarea"
-                    rows={3}
+                    rows={4}
                     placeholder="Detalles de la suite, comodidades y vista..."
                     value={descripcion}
                     onChange={(e) => setDescripcion(e.target.value)}
@@ -349,14 +312,13 @@ export default function HabitacionD() {
                   />
                 </Form.Group>
 
-                <hr
-                  style={{ borderColor: "#e2e8f0", marginBottom: "1.5rem" }}
-                />
+                <hr style={{ borderColor: "#e2e8f0", marginBottom: "1.5rem" }} />
 
                 {/* Botones */}
                 <div className="d-flex justify-content-end gap-2">
                   <Button
                     variant="outline-secondary"
+                    className="habitacion-cancel-btn"
                     onClick={() => navigate("/reservas-hospedaje")}
                     disabled={loading}
                     style={{ borderRadius: "10px", fontWeight: 600 }}
@@ -365,14 +327,8 @@ export default function HabitacionD() {
                   </Button>
                   <Button
                     type="submit"
+                    className="habitacion-submit-btn"
                     disabled={loading}
-                    style={{
-                      background: "#c9a84c",
-                      border: "none",
-                      borderRadius: "10px",
-                      fontWeight: 700,
-                      padding: "0.5rem 2rem",
-                    }}
                   >
                     {loading ? (
                       <>
@@ -389,36 +345,13 @@ export default function HabitacionD() {
           </Col>
         </Row>
       </div>
-
-      <style>{`
-        .campo-d {
-          background: #f8fafc;
-          border: 1.5px solid #e2e8f0;
-          border-radius: 10px;
-          padding: 0.65rem 1rem;
-          font-size: 0.875rem;
-          transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        .campo-d:focus {
-          border-color: #c9a84c;
-          box-shadow: 0 0 0 3px rgba(201,168,76,.15);
-          background: #fff;
-        }
-      `}</style>
     </div>
   );
 }
 
 function CampoLabel({ label }) {
   return (
-    <p
-      style={{
-        fontSize: "0.78rem",
-        fontWeight: 600,
-        color: "#475569",
-        marginBottom: "6px",
-      }}
-    >
+    <p style={{ fontSize: "0.78rem", fontWeight: 600, color: "#475569", marginBottom: "6px" }}>
       {label}
     </p>
   );

@@ -20,6 +20,7 @@ import RutaProtegida from './components/RutaProteccion.jsx';
 import ReservarEspacioD from './pages/ReservasD/ReservarEspacioD.jsx';
 import HabitacionD from './pages/HabitacionD.jsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import TipoHabitacionD from './pages/TipoHabitacionD.jsx';
 
 
 export default function App() {
@@ -54,7 +55,9 @@ export default function App() {
 
             <Route path="/reservas-hospedaje" element={<ReservasH />} />
             <Route path="/reservas-restaurante" element={<ReservasD />} />
-            <Route path="/HabitacionD" element={<HabitacionD />} />
+
+            <Route path="/habitacionD" element={<HabitacionD />} />
+            <Route path="/tipo-habitacion" element={<TipoHabitacionD />} />
 
 
             {/* Usuarios — solo ADMIN */}

@@ -57,7 +57,7 @@ function ReservasDCatalogo() {
                     <button
                         className="btn-reserva gestionar"
                         onClick={() => navigate("/reservas-deportivas/gestionar")}>
-                        <BsCalendar4 /> Gestionar Reservas
+                        <BsCalendar4 /> GESTIONAR RESERVAS
                     </button>
                 ) : (
                     <div /> /* Div vacío para que el título no se mueva de su sitio si no eres admin */
@@ -72,7 +72,7 @@ function ReservasDCatalogo() {
                 <button
                     className="btn-reserva mis"
                     onClick={() => navigate("/reservas-deportivas/mis-reservas")}>
-                    <BsArrowCounterclockwise /> Mis Reservas
+                    <BsArrowCounterclockwise /> MIS RESERVAS
                 </button>
                 
             </div>

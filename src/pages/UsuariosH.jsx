@@ -74,7 +74,7 @@ export default function UsuariosH() {
             className="add-btn-users"
             onClick={() => navigate("/usuarios-crear")}
           >
-            ADD
+            AGREGAR USUARIO
           </Button>
         </Col>
       </Row>
@@ -113,13 +113,13 @@ export default function UsuariosH() {
                     className="btn-edit"
                     onClick={() => navigate("/usuarios-edit", { state: { usuario: u } })}
                   >
-                    EDIT
+                    EDITAR
                   </button>
                   <button
                     className="btn-delete"
                     onClick={() => handleEliminar(u.id)}
                   >
-                    DELETE
+                    ELIMINAR
                   </button>
                 </td>
               </tr>

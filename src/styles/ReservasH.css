@@ -82,15 +82,6 @@
     padding: 15px;
 }
 
-.dropdown-menu-guests {
-    width: 300px;
-    border-radius: 12px;
-    background: #ffffff;
-    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
-    border: 1px solid #e7a924;
-    padding: 15px;
-}
-
 /* ---------- BOTÓN PRINCIPAL (TOGGLE) ---------- */
 .dropdown-guests {
     background: linear-gradient(90deg, #fff5d6, #e7a924) !important;
@@ -138,6 +129,9 @@
     color: #5a3d00;
     cursor: pointer;
     transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .counter-btn:hover {
@@ -183,17 +177,18 @@
 .input-wrapper {
     display: flex;
     align-items: center;
-    background: #2c2c2c;
+    background: linear-gradient(90deg, #E7A924, #ffb347);
     border: 1px solid #ccc;
     border-radius: 8px;
-    padding: 8px 10px;
+    padding: 10px;
     transition: all 0.3s ease;
 }
 
 /* Icono */
 .icon {
-    margin-right: 8px;
-    font-size: 16px;
+    color: #e7a924;
+    font-size: 20px;
+    margin-right: 10px;
 }
 
 /* Input */
@@ -223,73 +218,37 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     cursor: pointer;
 }
 
-.title-dates {
-    margin-bottom: 10px;
-    font-weight: 600;
+.empty-banner {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
 }
 
-/* Contenedor */
-.dates-container {
-    display: flex;
-    gap: 15px;
-    margin-top: 10px;
-}
-
-/* Bloque */
-.date-box {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Label */
-.date-box label {
-    font-size: 13px;
-    margin-bottom: 5px;
-    color: #555;
-}
-
-/* Input wrapper */
-.input-wrapper {
+/* ── BOTÓN: CREAR HABITACIÓN (Estilo plano e idéntico a Mis Reservas) ── */
+.btn-create-room {
     display: flex;
     align-items: center;
-    background: linear-gradient(90deg, #E7A924, #ffb347);
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 10px;
-    transition: all 0.3s ease;
-}
-
-/* ICONO REACT */
-.icon {
-    color: #e7a924;
-    font-size: 20px;
-    margin-right: 10px;
-}
-
-/* Input */
-.input-wrapper input {
-    border: none;
-    background: transparent;
-    color: #fff;
-    width: 100%;
-    outline: none;
-    font-size: 14px;
-}
-
-/* Hover */
-.input-wrapper:hover {
-    border-color: #e7a924;
-}
-
-/* Focus */
-.input-wrapper:focus-within {
-    border-color: #e7a924;
-    box-shadow: 0 0 6px rgba(231, 169, 36, 0.4);
-}
-
-/* Icono calendario nativo */
-input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(1);
+    justify-content: center;
+    background: #ff8800; /* Color naranja plano exacto del botón */
+    padding: 10px 24px;
+    border-radius: 12px; /* Bordes ligeramente más redondeados como la muestra */
+    border: 1px solid #ff7700;
+    font-size: 16px;
+    color: #ffffff; /* Texto blanco impecable */
+    font-weight: 600;
     cursor: pointer;
+    box-shadow: 0px 4px 10px rgba(255, 136, 0, 0.15);
+    transition: none !important; /* Cero animaciones o transiciones de color */
+}
+
+.btn-create-room:hover {
+    background: #ff8800; /* Mantiene el color plano idéntico en hover */
+    border-color: #ff7700;
+    color: #ffffff;
+    transform: translateY(-2px); /* Mantiene la sutil elevación al posicionar el cursor */
+    box-shadow: 0px 6px 14px rgba(255, 119, 0, 0.3);
+}
+
+.btn-create-room:active {
+    transform: translateY(0);
 }

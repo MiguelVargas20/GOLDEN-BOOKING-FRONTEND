@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { IoStar, IoHeartOutline, IoHeart } from "react-icons/io5";
+import { IoStar, IoHeartOutline, IoHeart, IoAddCircleOutline } from "react-icons/io5";
 import { BiCalendar } from "react-icons/bi";
 import Dropdown from "react-bootstrap/Dropdown";
 import Row from "react-bootstrap/Row";
@@ -16,14 +16,14 @@ import "../styles/reservasH.css";
  * RESERVAS HOSPEDAJE
  *
  * Flujo:
- *  1. Carga habitaciones desde GET /api/habitaciones
- *  2. El usuario selecciona fechas y huéspedes por habitación
- *  3. Al hacer clic en "Ver detalle" va a /detalle/:id
- *  4. Al hacer clic en "Reservar" llama POST /api/reservas/hotel
+ * 1. Carga habitaciones desde GET /api/habitaciones
+ * 2. El usuario selecciona fechas y huéspedes por habitación
+ * 3. Al hacer clic en "Ver detalle" va a /detalle/:id
+ * 4. Al hacer clic en "Reservar" llama POST /api/reservas/hotel
  *
  * ReservaHotelDto que envía:
- *  { docUsuario, idHabitacion, fCheckIn, fCheckOut }
- *  El back calcula: noch, pTotal, numeroHabitacion, tHabitacion, pNoche
+ * { docUsuario, idHabitacion, fCheckIn, fCheckOut }
+ * El back calcula: noch, pTotal, numeroHabitacion, tHabitacion, pNoche
  */
 
 // Imagen placeholder por defecto si la habitación no tiene imagen
@@ -53,20 +53,22 @@ export default function ReservasHospedaje() {
             setLoading(true);
             try {
                 const data = await listarHabitaciones();
-                setHabitaciones(data);
+                setHabitaciones(data || []);
 
                 // Inicializar config para cada habitación
                 const configInicial = {};
-                data.forEach((h) => {
-                    configInicial[h.id] = {
-                        adultos: 2,
-                        ninos: 0,
-                        habitaciones: 1,
-                        checkIn: "",
-                        checkOut: "",
-                        favorito: false,
-                    };
-                });
+                if (data && Array.isArray(data)) {
+                    data.forEach((h) => {
+                        configInicial[h.id] = {
+                            adultos: 2,
+                            ninos: 0,
+                            habitaciones: 1,
+                            checkIn: "",
+                            checkOut: "",
+                            favorito: false,
+                        };
+                    });
+                }
                 setConfig(configInicial);
             } catch {
                 setError("No se pudieron cargar las habitaciones. Verifica tu conexión.");
@@ -163,10 +165,23 @@ export default function ReservasHospedaje() {
                 <div className="alert alert-danger text-center mx-3 mt-3">{mensajeError}</div>
             )}
 
+            {/* ── Sección de Acciones Administrativas ──────────────── */}
+            <Row className="mb-4 mx-1">
+                <Col className="d-flex justify-content-start">
+                    <button 
+                        className="btn-create-room"
+                        onClick={() => navigate("/crear-habitacion")} // Ajusta la ruta según tu app
+                    >
+                        <IoAddCircleOutline className="me-2 fs-5" />
+                        Crear Habitación
+                    </button>
+                </Col>
+            </Row>
+
             <Row>
                 <Col>
                     {habitaciones.length === 0 ? (
-                        <div className="text-center py-5 text-muted">
+                        <div className="text-center py-5 text-muted empty-banner">
                             No hay habitaciones disponibles en este momento.
                         </div>
                     ) : (
@@ -345,15 +360,15 @@ export default function ReservasHospedaje() {
     );
 }
 
-/* ── Subcomponente Counter ───────────────────────────────── */
+/* ── Subcomponente Counter Corregido con sus Clases CSS ───────────────── */
 function Counter({ label, value, setValue, min = 0 }) {
     return (
         <div className="counter-row">
             <span>{label}</span>
-            <div>
-                <button onClick={() => value > min && setValue(value - 1)}>-</button>
-                <span>{value}</span>
-                <button onClick={() => setValue(value + 1)}>+</button>
+            <div className="counter-buttons">
+                <button className="counter-btn" onClick={() => value > min && setValue(value - 1)}>-</button>
+                <span className="counter-value">{value}</span>
+                <button className="counter-btn" onClick={() => setValue(value + 1)}>+</button>
             </div>
         </div>
     );
