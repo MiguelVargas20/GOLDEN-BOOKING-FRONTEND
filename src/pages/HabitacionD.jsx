@@ -233,7 +233,7 @@ export default function HabitacionD() {
                         <Button 
                           type="button" 
                           className="btn-add-tipo-room"
-                          onClick={() => navigate("/crear-tipo-habitacion")}
+                          onClick={() => navigate("/tipo-habitacion")}
                           title="Crear nuevo tipo de habitación"
                         >
                           +

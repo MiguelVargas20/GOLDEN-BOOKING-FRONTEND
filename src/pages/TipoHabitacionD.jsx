@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Row, Col, Form, Button, Alert, Spinner, Table, Badge } from "react-bootstrap";
+import { Row, Col, Form, Button, Alert, Spinner, Table, Badge, Container } from "react-bootstrap";
 import {
   listarTiposHabitacion,
   crearTipoHabitacion,
@@ -10,13 +10,8 @@ import {
 /**
  * TIPO HABITACIÓN D — vista de administración
  *
- * Endpoints usados:
- *   GET    /api/tipohabitaciones
- *   POST   /api/tipohabitaciones
- *   PUT    /api/tipohabitaciones/:id
- *   DELETE /api/tipohabitaciones/:id
- *
- * TipoHabitacionDto: { id?, nombreTipoHabitacion, descripcion, capacidadMaxima }
+ * Flujo de pantalla completa para administración de categorías.
+ * Mantiene los estilos inline originales y añade los necesarios para la vista expandida.
  */
 
 const FORM_VACIO = {
@@ -99,7 +94,7 @@ export default function TipoHabitacionD() {
     if (!form.capacidadMaxima || parseInt(form.capacidadMaxima) <= 0)
       return setError("La capacidad máxima debe ser mayor a 0.");
 
-    // DTO que espera el back (nombres del DTO, no del modelo)
+    // DTO que espera el back
     const dto = {
       nombreTipoHabitacion: form.nombreTipoHabitacion.trim(),
       descripcion: form.descripcion.trim() || null,
@@ -113,7 +108,7 @@ export default function TipoHabitacionD() {
         await actualizarTipoHabitacion(editandoId, dto);
         setExito("¡Tipo de habitación actualizado con éxito!");
       } else {
-        // POST — el id lo genera MongoDB, no lo enviamos
+        // POST
         await crearTipoHabitacion(dto);
         setExito("¡Tipo de habitación creado con éxito!");
       }
@@ -146,50 +141,53 @@ export default function TipoHabitacionD() {
 
   /* ── Render ───────────────────────────────────────────── */
   return (
-    <div style={{ backgroundColor: "#ffffff", minHeight: "100vh", padding: "2rem 0" }}>
-      <div className="container" style={{ maxWidth: "960px" }}>
+    <div style={{ backgroundColor: "#ffffff", minHeight: "100vh", padding: "3rem 0" }}>
+      {/* container-fluid para ocupar todo el ancho */}
+      <Container fluid style={{ paddingLeft: "2.5rem", paddingRight: "2.5rem" }}>
 
         {/* ── Título de página ──────────────────────────── */}
-        <div className="mb-4">
+        <div className="mb-5">
           <h2
             style={{
               fontFamily: '"Bungee", sans-serif',
               fontWeight: 400,
               color: "#1a1a2e",
-              fontSize: "2rem",
-              marginBottom: "0.25rem",
+              fontSize: "2.75rem",
+              marginBottom: "0.5rem",
             }}
           >
             Tipos de <span style={{ color: "#f38d1e" }}>Habitación</span>
           </h2>
-          <p style={{ color: "#64748b", fontSize: "0.85rem", margin: 0 }}>
+          <p style={{ color: "#64748b", fontSize: "0.95rem", margin: 0 }}>
             GESTIÓN DE CATEGORÍAS — GOLDEN BOOKING
           </p>
         </div>
 
         {/* ── Alertas globales ──────────────────────────── */}
-        {error && (
-          <Alert variant="danger" className="small py-2" onClose={() => setError("")} dismissible>
-            {error}
-          </Alert>
-        )}
-        {exito && (
-          <Alert variant="success" className="small py-2" onClose={() => setExito("")} dismissible>
-            {exito}
-          </Alert>
-        )}
+        <div style={{ minHeight: "48px" }} className="mb-4"> {/* Evita saltos de layout */}
+          {error && (
+            <Alert variant="danger" className="small py-2" onClose={() => setError("")} dismissible>
+              {error}
+            </Alert>
+          )}
+          {exito && (
+            <Alert variant="success" className="small py-2" onClose={() => setExito("")} dismissible>
+              {exito}
+            </Alert>
+          )}
+        </div>
 
-        <Row className="g-4 align-items-start">
+        <Row className="g-5 align-items-start">
 
           {/* ══════════════════════════════════════════════
               Columna izquierda — Formulario
           ══════════════════════════════════════════════ */}
-          <Col md={5}>
+          <Col md={5} lg={4} className="pe-md-4">
             <div
               style={{
                 background: "#fff",
                 borderRadius: "20px",
-                padding: "2rem",
+                padding: "2.5rem",
                 border: "1px solid #e2e8f0",
                 boxShadow: "0 4px 16px rgba(0,0,0,.06)",
               }}
@@ -202,7 +200,7 @@ export default function TipoHabitacionD() {
                   letterSpacing: "1.5px",
                   color: "#f38d1e",
                   textTransform: "uppercase",
-                  marginBottom: "0.4rem",
+                  marginBottom: "0.5rem",
                 }}
               >
                 {editandoId ? "✏️ Editar Tipo" : "➕ Nuevo Tipo"}
@@ -213,26 +211,26 @@ export default function TipoHabitacionD() {
               <div
                 style={{
                   background: "#fdfaf7",
-                  border: "1px solid #f0e4cc",
+                  border: "1.5px solid #f0e4cc",
                   borderRadius: "14px",
-                  padding: "1.25rem",
-                  marginBottom: "1.5rem",
+                  padding: "2rem",
+                  marginBottom: "2rem",
                   textAlign: "center",
                 }}
               >
-                <span style={{ fontSize: "2.5rem" }}>🛏️</span>
+                <span style={{ fontSize: "3rem" }}>🛏️</span>
                 <p
                   style={{
                     fontFamily: '"Bungee", sans-serif',
                     color: "#1a1a2e",
-                    fontSize: "1rem",
-                    margin: "0.5rem 0 0.25rem",
+                    fontSize: "1.25rem",
+                    margin: "1rem 0 0.5rem",
                   }}
                 >
                   {form.nombreTipoHabitacion || "Nombre del tipo"}
                 </p>
                 {form.descripcion && (
-                  <p style={{ fontSize: "0.78rem", color: "#64748b", margin: "0 0 0.25rem" }}>
+                  <p style={{ fontSize: "0.85rem", color: "#64748b", margin: "0 0 0.5rem" }}>
                     {form.descripcion}
                   </p>
                 )}
@@ -242,11 +240,10 @@ export default function TipoHabitacionD() {
                       display: "inline-block",
                       background: "#fff3e0",
                       color: "#f38d1e",
-                      fontSize: "0.75rem",
+                      fontSize: "0.8rem",
                       fontWeight: 700,
-                      padding: "3px 12px",
+                      padding: "4px 14px",
                       borderRadius: "20px",
-                      marginTop: "4px",
                     }}
                   >
                     👥 Máx. {form.capacidadMaxima} personas
@@ -271,7 +268,7 @@ export default function TipoHabitacionD() {
                   <CampoLabel label="Descripción" />
                   <Form.Control
                     as="textarea"
-                    rows={3}
+                    rows={4}
                     name="descripcion"
                     placeholder="Características generales del tipo..."
                     value={form.descripcion}
@@ -316,7 +313,7 @@ export default function TipoHabitacionD() {
                       border: "none",
                       borderRadius: "10px",
                       fontWeight: 700,
-                      padding: "0.55rem 1rem",
+                      padding: "0.75rem 1.25rem",
                       color: "#fff",
                     }}
                   >
@@ -339,14 +336,15 @@ export default function TipoHabitacionD() {
           {/* ══════════════════════════════════════════════
               Columna derecha — Tabla de tipos existentes
           ══════════════════════════════════════════════ */}
-          <Col md={7}>
+          <Col md={7} lg={8} className="ps-md-4 pe-3">
             <div
               style={{
                 background: "#fff",
                 borderRadius: "20px",
-                padding: "2rem",
+                padding: "2.5rem",
                 border: "1px solid #e2e8f0",
                 boxShadow: "0 4px 16px rgba(0,0,0,.06)",
+                height: "100%", // Se estira para coincidir con la izquierda
               }}
             >
               <p
@@ -356,52 +354,53 @@ export default function TipoHabitacionD() {
                   letterSpacing: "1.5px",
                   color: "#f38d1e",
                   textTransform: "uppercase",
-                  marginBottom: "0.4rem",
+                  marginBottom: "0.5rem",
                 }}
               >
                 📋 Tipos Registrados
               </p>
-              <hr style={{ borderColor: "#e2e8f0", marginBottom: "1.25rem" }} />
+              <hr style={{ borderColor: "#e2e8f0", marginBottom: "1.5rem" }} />
 
               {loadingLista ? (
-                <div className="d-flex align-items-center gap-2 py-4 justify-content-center">
-                  <Spinner size="sm" style={{ color: "#f38d1e" }} />
+                <div className="d-flex flex-column align-items-center gap-2 py-5 justify-content-center h-100">
+                  <Spinner style={{ color: "#f38d1e" }} />
                   <span className="text-muted small">Cargando tipos...</span>
                 </div>
               ) : tipos.length === 0 ? (
                 <div
                   style={{
                     textAlign: "center",
-                    padding: "2.5rem 0",
+                    padding: "4rem 0",
                     color: "#94a3b8",
                   }}
+                  className="d-flex flex-column align-items-center justify-content-center h-100"
                 >
-                  <span style={{ fontSize: "2.5rem" }}>🛏️</span>
-                  <p className="mt-2 small">No hay tipos de habitación registrados aún.</p>
+                  <span style={{ fontSize: "3rem" }}>🛏️</span>
+                  <p className="mt-3 small">No hay tipos de habitación registrados aún.</p>
                 </div>
               ) : (
                 <div style={{ overflowX: "auto" }}>
-                  <Table hover responsive style={{ fontSize: "0.85rem" }}>
+                  <Table hover responsive style={{ fontSize: "0.875rem", width: "100%", borderCollapse: "separate", borderSpacing: "0" }}>
                     <thead>
                       <tr
                         style={{
                           background: "#1a1a2e",
                           color: "#fff",
-                          fontSize: "0.72rem",
-                          letterSpacing: "0.8px",
+                          fontSize: "0.75rem",
+                          letterSpacing: "1px",
                           textTransform: "uppercase",
                         }}
                       >
-                        <th style={{ padding: "0.85rem 1rem", fontWeight: 700, borderRadius: "0", border: "none" }}>
+                        <th style={{ padding: "1rem 1.25rem", fontWeight: 700, borderRadius: "10px 0 0 10px", border: "none" }}>
                           Nombre
                         </th>
-                        <th style={{ padding: "0.85rem 1rem", fontWeight: 700, border: "none" }}>
+                        <th style={{ padding: "1rem 1.25rem", fontWeight: 700, border: "none" }}>
                           Descripción
                         </th>
-                        <th style={{ padding: "0.85rem 1rem", fontWeight: 700, border: "none", textAlign: "center" }}>
+                        <th style={{ padding: "1rem 1.25rem", fontWeight: 700, border: "none", textAlign: "center" }}>
                           Cap.
                         </th>
-                        <th style={{ padding: "0.85rem 1rem", fontWeight: 700, border: "none", textAlign: "center" }}>
+                        <th style={{ padding: "1rem 1.25rem", fontWeight: 700, borderRadius: "0 10px 10px 0", border: "none", textAlign: "center" }}>
                           Acciones
                         </th>
                       </tr>
@@ -415,42 +414,46 @@ export default function TipoHabitacionD() {
                             transition: "background 0.2s",
                           }}
                         >
-                          <td style={{ padding: "0.85rem 1rem", verticalAlign: "middle", fontWeight: 600, color: "#1a1a2e" }}>
+                          <td style={{ padding: "1rem 1.25rem", verticalAlign: "middle", fontWeight: 600, color: "#1a1a2e", position: "relative" }}>
                             {editandoId === tipo.id && (
                               <span
                                 style={{
                                   display: "inline-block",
-                                  width: "6px",
-                                  height: "6px",
-                                  borderRadius: "50%",
+                                  position: "absolute",
+                                  left: 0,
+                                  top: "50%",
+                                  transform: "translateY(-50%)",
+                                  width: "4px",
+                                  height: "60%",
                                   background: "#f38d1e",
-                                  marginRight: "6px",
-                                  verticalAlign: "middle",
+                                  borderRadius: "0 4px 4px 0",
                                 }}
                               />
                             )}
-                            {tipo.nombreTipoHabitacion}
+                            <span style={{ paddingLeft: editandoId === tipo.id ? "10px" : "0" }}>
+                              {tipo.nombreTipoHabitacion}
+                            </span>
                           </td>
-                          <td style={{ padding: "0.85rem 1rem", verticalAlign: "middle", color: "#64748b" }}>
+                          <td style={{ padding: "1rem 1.25rem", verticalAlign: "middle", color: "#64748b" }}>
                             {tipo.descripcion || (
                               <span style={{ color: "#cbd5e1", fontStyle: "italic" }}>Sin descripción</span>
                             )}
                           </td>
-                          <td style={{ padding: "0.85rem 1rem", verticalAlign: "middle", textAlign: "center" }}>
+                          <td style={{ padding: "1rem 1.25rem", verticalAlign: "middle", textAlign: "center" }}>
                             <Badge
                               style={{
                                 background: "#fff3e0",
                                 color: "#f38d1e",
                                 fontWeight: 700,
-                                fontSize: "0.78rem",
-                                padding: "4px 10px",
+                                fontSize: "0.82rem",
+                                padding: "4px 12px",
                                 borderRadius: "20px",
                               }}
                             >
                               👥 {tipo.capacidadMaxima}
                             </Badge>
                           </td>
-                          <td style={{ padding: "0.85rem 1rem", verticalAlign: "middle", textAlign: "center" }}>
+                          <td style={{ padding: "1rem 1.25rem", verticalAlign: "middle", textAlign: "center" }}>
                             <div className="d-flex gap-2 justify-content-center">
                               {/* Botón editar */}
                               <button
@@ -484,16 +487,16 @@ export default function TipoHabitacionD() {
 
               {/* Contador */}
               {tipos.length > 0 && (
-                <p style={{ fontSize: "0.75rem", color: "#94a3b8", margin: "0.5rem 0 0", textAlign: "right" }}>
+                <p style={{ fontSize: "0.8rem", color: "#94a3b8", margin: "1rem 0 0", textAlign: "right" }}>
                   {tipos.length} tipo{tipos.length !== 1 ? "s" : ""} registrado{tipos.length !== 1 ? "s" : ""}
                 </p>
               )}
             </div>
           </Col>
         </Row>
-      </div>
+      </Container>
 
-      {/* ── Estilos internos ───────────────────────────────── */}
+      {/* ── Estilos internos (modificados para expansión) ──────────────── */}
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Bungee&display=swap');
 
@@ -502,7 +505,7 @@ export default function TipoHabitacionD() {
           background: #f8fafc !important;
           border: 1.5px solid #e2e8f0 !important;
           border-radius: 10px !important;
-          padding: 0.65rem 1rem !important;
+          padding: 0.75rem 1.25rem !important; /* Más relleno para inputs */
           font-size: 0.875rem !important;
           transition: border-color 0.2s, box-shadow 0.2s;
         }
@@ -515,13 +518,15 @@ export default function TipoHabitacionD() {
 
         /* Botón cancelar */
         .habitacion-cancel-btn {
+          background-color: #f1f5f9 !important;
           border-radius: 10px !important;
           font-weight: 600 !important;
           color: #475569 !important;
           border-color: #cbd5e1 !important;
+          padding: 0.75rem 1.25rem !important;
         }
         .habitacion-cancel-btn:hover {
-          background-color: #f1f5f9 !important;
+          background-color: #e2e8f0 !important;
         }
 
         /* Botón submit hover */
@@ -564,14 +569,6 @@ export default function TipoHabitacionD() {
           opacity: 0.5;
           cursor: not-allowed;
         }
-
-        /* Encabezado de tabla oscuro */
-        thead tr th:first-child {
-          border-radius: 10px 0 0 10px;
-        }
-        thead tr th:last-child {
-          border-radius: 0 10px 10px 0;
-        }
       `}</style>
     </div>
   );
@@ -582,7 +579,7 @@ function CampoLabel({ label }) {
   return (
     <p
       style={{
-        fontSize: "0.78rem",
+        fontSize: "0.82rem",
         fontWeight: 600,
         color: "#475569",
         marginBottom: "6px",

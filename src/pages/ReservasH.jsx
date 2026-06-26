@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { IoStar, IoHeartOutline, IoHeart, IoAddCircleOutline } from "react-icons/io5";
-import { BiCalendar } from "react-icons/bi";
-import Dropdown from "react-bootstrap/Dropdown";
+import { IoAddCircleOutline } from "react-icons/io5";
+import { BiCalendarAlt, BiGroup, BiMoney } from "react-icons/bi"; // Nuevos iconos
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Spinner from "react-bootstrap/Spinner";
@@ -10,44 +9,29 @@ import {
     listarHabitaciones,
     crearReservaHotel,
 } from "../api/ReservaHotelApi";
-import "../styles/reservasH.css";
+import "../styles/reservasH.css"; // Usa el nuevo CSS
 
-/**
- * RESERVAS HOSPEDAJE
- *
- * Flujo:
- * 1. Carga habitaciones desde GET /api/habitaciones
- * 2. El usuario selecciona fechas y huéspedes por habitación
- * 3. Al hacer clic en "Ver detalle" va a /detalle/:id
- * 4. Al hacer clic en "Reservar" llama POST /api/reservas/hotel
- *
- * ReservaHotelDto que envía:
- * { docUsuario, idHabitacion, fCheckIn, fCheckOut }
- * El back calcula: noch, pTotal, numeroHabitacion, tHabitacion, pNoche
- */
-
-// Imagen placeholder por defecto si la habitación no tiene imagen
+// Imagen placeholder
 const PLACEHOLDER =
     "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&q=80";
 
 export default function ReservasHospedaje() {
     const navigate = useNavigate();
 
-    // ── Estados globales ──────────────────────────────────────
+    // ── Estados globales
     const [habitaciones, setHabitaciones] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
 
-    // ── Estado por habitación (huéspedes, fechas, favorito) ──
-    // Guardamos un objeto indexado por habitacion.id
-    const [config, setConfig] = useState({});
+    // ── Estado por habitación (fechas) - Solo fechas, sin contador
+    const [fechas, setFechas] = useState({});
 
-    // ── Feedback de reserva ───────────────────────────────────
-    const [reservando, setReservando] = useState(null); // id de hab que se está reservando
+    // ── Feedback de reserva
+    const [reservando, setReservando] = useState(null); 
     const [mensajeExito, setMensajeExito] = useState("");
     const [mensajeError, setMensajeError] = useState("");
 
-    /* ── Cargar habitaciones al montar ───────────────────────── */
+    /* ── Cargar habitaciones al montar */
     useEffect(() => {
         const cargar = async () => {
             setLoading(true);
@@ -55,21 +39,17 @@ export default function ReservasHospedaje() {
                 const data = await listarHabitaciones();
                 setHabitaciones(data || []);
 
-                // Inicializar config para cada habitación
-                const configInicial = {};
+                // Inicializar fechas para cada habitación
+                const fechasIniciales = {};
                 if (data && Array.isArray(data)) {
                     data.forEach((h) => {
-                        configInicial[h.id] = {
-                            adultos: 2,
-                            ninos: 0,
-                            habitaciones: 1,
-                            checkIn: "",
-                            checkOut: "",
-                            favorito: false,
+                        fechasIniciales[h.id] = {
+                            checkIn: "", // YYYY-MM-DD
+                            checkOut: "", // YYYY-MM-DD
                         };
                     });
                 }
-                setConfig(configInicial);
+                setFechas(fechasIniciales);
             } catch {
                 setError("No se pudieron cargar las habitaciones. Verifica tu conexión.");
             } finally {
@@ -79,41 +59,35 @@ export default function ReservasHospedaje() {
         cargar();
     }, []);
 
-    /* ── Helpers de config por habitación ────────────────────── */
-    const getConfig = (id) =>
-        config[id] || { adultos: 2, ninos: 0, habitaciones: 1, checkIn: "", checkOut: "", favorito: false };
+    /* ── Helpers de fechas por habitación */
+    const getFechasHab = (id) =>
+        fechas[id] || { checkIn: "", checkOut: "" };
 
-    const setConfigHab = (id, campo, valor) => {
-        setConfig((prev) => ({
-            ...prev,
-            [id]: { ...getConfig(id), [campo]: valor },
-        }));
+    const setFechaHab = (id, campo, valor) => {
+        setFechas((prev) => {
+            const currentHabFechas = prev[id] || {};
+            const newFechas = { ...prev };
+            newFechas[id] = { ...currentHabFechas, [campo]: valor };
+            return newFechas;
+        });
     };
 
-    /* ── Calcular noches ─────────────────────────────────────── */
-    const calcularNoches = (checkIn, checkOut) => {
-        if (!checkIn || !checkOut) return 0;
-        const diff = new Date(checkOut) - new Date(checkIn);
-        return Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
-    };
-
-    /* ── Reservar habitación ─────────────────────────────────── */
+    /* ── Reservar habitación */
     const handleReservar = async (hab) => {
-        const cfg = getConfig(hab.id);
+        const habFechas = getFechasHab(hab.id);
 
         // Validaciones
-        if (!cfg.checkIn || !cfg.checkOut) {
+        if (!habFechas.checkIn || !habFechas.checkOut) {
             setMensajeError("Selecciona las fechas de check-in y check-out.");
             setTimeout(() => setMensajeError(""), 3000);
             return;
         }
-        if (new Date(cfg.checkIn) >= new Date(cfg.checkOut)) {
+        if (new Date(habFechas.checkIn) >= new Date(habFechas.checkOut)) {
             setMensajeError("La fecha de check-out debe ser posterior al check-in.");
             setTimeout(() => setMensajeError(""), 3000);
             return;
         }
 
-        // Obtener docUsuario del localStorage (guardado al hacer login)
         const docUsuario = localStorage.getItem("docUsuario");
         if (!docUsuario) {
             navigate("/login");
@@ -123,12 +97,11 @@ export default function ReservasHospedaje() {
         setReservando(hab.id);
         setMensajeError("");
         try {
-            // Body que espera el back (ReservaHotelDto)
             const body = {
                 docUsuario,
                 idHabitacion: hab.id,
-                fCheckIn: new Date(cfg.checkIn).toISOString(),
-                fCheckOut: new Date(cfg.checkOut).toISOString(),
+                fCheckIn: new Date(habFechas.checkIn).toISOString(),
+                fCheckOut: new Date(habFechas.checkOut).toISOString(),
             };
             await crearReservaHotel(body);
             setMensajeExito(`¡Reserva confirmada para ${hab.numeroHabitacion}!`);
@@ -141,7 +114,7 @@ export default function ReservasHospedaje() {
         }
     };
 
-    /* ── Render ──────────────────────────────────────────────── */
+    /* ── Render */
     if (loading) return (
         <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "60vh" }}>
             <Spinner animation="border" style={{ color: "#c9a84c" }} />
@@ -155,9 +128,8 @@ export default function ReservasHospedaje() {
     );
 
     return (
-        <div className="container-fluid main-container">
+        <div className="container-fluid main-container golden-booking-layout">
 
-            {/* ── Mensajes globales ─────────────────────────────── */}
             {mensajeExito && (
                 <div className="alert alert-success text-center mx-3 mt-3">{mensajeExito}</div>
             )}
@@ -165,12 +137,11 @@ export default function ReservasHospedaje() {
                 <div className="alert alert-danger text-center mx-3 mt-3">{mensajeError}</div>
             )}
 
-            {/* ── Sección de Acciones Administrativas ──────────────── */}
             <Row className="mb-4 mx-1">
                 <Col className="d-flex justify-content-start">
                     <button 
                         className="btn-create-room"
-                        onClick={() => navigate("/crear-habitacion")} // Ajusta la ruta según tu app
+                        onClick={() => navigate("/crear-habitacion")}
                     >
                         <IoAddCircleOutline className="me-2 fs-5" />
                         Crear Habitación
@@ -186,169 +157,106 @@ export default function ReservasHospedaje() {
                         </div>
                     ) : (
                         habitaciones.map((hab) => {
-                            const cfg = getConfig(hab.id);
-                            const noches = calcularNoches(cfg.checkIn, cfg.checkOut);
-                            const total = noches > 0 ? noches * (hab.precioNoche || 0) : null;
+                            const habFechas = getFechasHab(hab.id);
                             const disponible = hab.estadoHabitacion?.toLowerCase() === "disponible";
 
                             return (
                                 <div key={hab.id} className="hotel-card mb-4">
 
-                                    {/* Imagen */}
-                                    <img
-                                        src={hab.imagenUrl || PLACEHOLDER}
-                                        alt={hab.numeroHabitacion}
-                                        className="hotel-image"
-                                    />
-
-                                    {/* Info central */}
-                                    <div className="hotel-info">
-
-                                        {/* Header */}
-                                        <div className="hotel-header">
-                                            <h4>
-                                                {hab.numeroHabitacion} ·{" "}
-                                                {hab.datosTipoHabitacion?.nombreTipoHabitacion || "Habitación"}
-                                            </h4>
-                                            <div className="rating">
-                                                <IoStar /> {hab.rating || "4.8"}
-                                            </div>
-                                        </div>
-
-                                        {/* Descripción */}
-                                        {hab.descripcion && (
-                                            <p className="location">{hab.descripcion}</p>
-                                        )}
-
-                                        {/* Capacidad */}
-                                        <p className="location" style={{ fontSize: "0.82rem", color: "#888" }}>
-                                            👥 Capacidad: {hab.datosTipoHabitacion?.capacidadMaxima || "—"} personas
-                                        </p>
-
-                                        {/* Estado */}
-                                        <div className="amenities">
-                                            <span
-                                                style={{
-                                                    background: disponible ? "#e6f4ea" : "#fce8e6",
-                                                    color: disponible ? "#2e7d32" : "#c62828",
-                                                    borderRadius: "20px",
-                                                    padding: "3px 12px",
-                                                    fontSize: "0.78rem",
-                                                    fontWeight: 700,
-                                                }}
-                                            >
-                                                {disponible ? "✓ Disponible" : "✗ No disponible"}
-                                            </span>
-                                            <span>Free WiFi</span>
-                                            <span>Breakfast included</span>
-                                        </div>
-
-                                        {/* Selector de huéspedes */}
-                                        <Dropdown className="mb-3 w-100">
-                                            <Dropdown.Toggle className="dropdown-guests w-100">
-                                                {cfg.adultos} Adultos · {cfg.ninos} Niños · {cfg.habitaciones} Habitación(es)
-                                            </Dropdown.Toggle>
-                                            <Dropdown.Menu className="dropdown-menu-guests">
-                                                <Counter
-                                                    label="Adultos"
-                                                    value={cfg.adultos}
-                                                    setValue={(v) => setConfigHab(hab.id, "adultos", v)}
-                                                />
-                                                <Counter
-                                                    label="Niños"
-                                                    value={cfg.ninos}
-                                                    setValue={(v) => setConfigHab(hab.id, "ninos", v)}
-                                                />
-                                                <Counter
-                                                    label="Habitaciones"
-                                                    value={cfg.habitaciones}
-                                                    setValue={(v) => setConfigHab(hab.id, "habitaciones", v)}
-                                                    min={1}
-                                                />
-                                            </Dropdown.Menu>
-                                        </Dropdown>
-
-                                        {/* Fechas */}
-                                        <h4 className="title-dates">Selecciona tus fechas</h4>
-                                        <div className="dates-container">
-                                            <div className="date-box">
-                                                <label>Check-in</label>
-                                                <div className="input-wrapper">
-                                                    <BiCalendar className="icon" />
-                                                    <input
-                                                        type="date"
-                                                        value={cfg.checkIn}
-                                                        min={new Date().toISOString().split("T")[0]}
-                                                        onChange={(e) => setConfigHab(hab.id, "checkIn", e.target.value)}
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="date-box">
-                                                <label>Check-out</label>
-                                                <div className="input-wrapper">
-                                                    <BiCalendar className="icon" />
-                                                    <input
-                                                        type="date"
-                                                        value={cfg.checkOut}
-                                                        min={cfg.checkIn || new Date().toISOString().split("T")[0]}
-                                                        onChange={(e) => setConfigHab(hab.id, "checkOut", e.target.value)}
-                                                    />
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {/* Resumen de noches */}
-                                        {noches > 0 && (
-                                            <p style={{ fontSize: "0.85rem", color: "#888", marginTop: "8px" }}>
-                                                🌙 {noches} noche{noches !== 1 ? "s" : ""} ·{" "}
-                                                <strong style={{ color: "#c9a84c" }}>
-                                                    Total: ${total?.toLocaleString("es-CO")}
-                                                </strong>
-                                            </p>
-                                        )}
+                                    {/* 1. Imagen */}
+                                    <div className="hotel-image-container">
+                                        <img
+                                            src={hab.imagenUrl || PLACEHOLDER}
+                                            alt={hab.numeroHabitacion}
+                                            className="hotel-image"
+                                        />
                                     </div>
 
-                                    {/* Acciones derecha */}
-                                    <div className="hotel-actions">
-                                        {/* Favorito */}
-                                        <button
-                                            className="fav-btn"
-                                            onClick={() => setConfigHab(hab.id, "favorito", !cfg.favorito)}
-                                            style={{ background: "none", border: "none", cursor: "pointer" }}
-                                        >
-                                            {cfg.favorito
-                                                ? <IoHeart className="fav" style={{ color: "#e53935" }} />
-                                                : <IoHeartOutline className="fav" />
-                                            }
-                                        </button>
+                                    {/* 2. Información centralizada (Mejorada) */}
+                                    <div className="hotel-info-block">
 
-                                        {/* Precio */}
-                                        <h3>${hab.precioNoche?.toLocaleString("es-CO") || "—"}</h3>
-                                        <span>/ noche</span>
+                                        <div className="hotel-header">
+                                            {/* Título Estético Serif */}
+                                            <h4>
+                                                {hab.numeroHabitacion} ·{" "}
+                                                {hab.datosTipoHabitacion?.nombreTipoHabitacion }
+                                            </h4>
+                                        </div>
 
-                                        {/* Ver detalle */}
-                                        <button
-                                            className="btn-detail"
-                                            onClick={() => navigate(`/detalle/${hab.id}`)}
-                                        >
-                                            Ver detalle
-                                        </button>
+                                        {hab.descripcion && (
+                                            <p className="room-description">{hab.descripcion}</p>
+                                        )}
 
-                                        {/* Reservar */}
-                                        <button
-                                            className="btn-reservar"
-                                            onClick={() => handleReservar(hab)}
-                                            disabled={!disponible || reservando === hab.id}
-                                            style={{
-                                                marginTop: "8px",
-                                                background: disponible ? "#c9a84c" : "#ccc",
-                                                cursor: disponible ? "pointer" : "not-allowed",
-                                            }}
-                                        >
-                                            {reservando === hab.id ? (
-                                                <><span className="spinner-border spinner-border-sm me-1" />Reservando...</>
-                                            ) : "Reservar"}
-                                        </button>
+                                        {/* Bloque de Capacidad y Precio Base con Iconos */}
+                                        <div className="details-boxes mb-3">
+                                            <div className="details-box">
+                                                <BiGroup /> Max Capacidad: {hab.datosTipoHabitacion?.capacidadMaxima || "2"} Personas
+                                            </div>
+                                            <div className="details-box">
+                                                <BiMoney /> Precio Base: ${hab.precioNoche?.toLocaleString("es-CO")} / noche
+                                            </div>
+                                        </div>
+
+                                        <div className="amenities-tags mb-3">
+                                            <span className={`status-tag ${disponible ? 'disponible' : 'no-disponible'}`}>
+                                                {disponible ? "✓ Disponible" : "✗ No disponible"}
+                                            </span>
+                                            <span className="amenity-tag">Free WiFi</span>
+                                            <span className="amenity-tag">Breakfast included</span>
+                                        </div>
+
+                                        {/* ── SELECTOR DE FECHAS (CALENDARIO CÓMODO) INTEGRADO ── */}
+                                        <div className="booking-dates">
+                                            <div className="date-picker-row">
+                                                <div className="date-input-group">
+                                                    <label>Check-in (Desde)</label>
+                                                    <div className="date-input-wrapper">
+                                                        <BiCalendarAlt className="calendar-icon" />
+                                                        <input 
+                                                            type="date" 
+                                                            value={habFechas.checkIn} 
+                                                            min={new Date().toISOString().split("T")[0]} 
+                                                            onChange={(e) => setFechaHab(hab.id, "checkIn", e.target.value)} 
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div className="date-input-group">
+                                                    <label>Check-out (Hasta)</label>
+                                                    <div className="date-input-wrapper">
+                                                        <BiCalendarAlt className="calendar-icon" />
+                                                        <input 
+                                                            type="date" 
+                                                            value={habFechas.checkOut} 
+                                                            min={habFechas.checkIn || new Date().toISOString().split("T")[0]} 
+                                                            onChange={(e) => setFechaHab(hab.id, "checkOut", e.target.value)} 
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* 3. Precio y Acciones Derecha (CENTRADO VERTICAL Y HORIZONTAL) */}
+                                    <div className="hotel-actions-block">
+                                        <div className="price-block">
+                                            <p className="base-price">${hab.precioNoche?.toLocaleString("es-CO") || "—"}</p>
+                                            <span className="price-label">/ noche</span>
+                                        </div>
+
+                                        <div className="action-buttons">
+                                            <button className="btn-detail" onClick={() => navigate(`/detalle/${hab.id}`)}>
+                                                Ver detalle
+                                            </button>
+                                            <button 
+                                                className="btn-reservar" 
+                                                onClick={() => handleReservar(hab)} 
+                                                disabled={!disponible || reservando === hab.id}
+                                            >
+                                                {reservando === hab.id ? (
+                                                    <Spinner animation="border" size="sm" />
+                                                ) : "Reservar"}
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             );
@@ -356,20 +264,6 @@ export default function ReservasHospedaje() {
                     )}
                 </Col>
             </Row>
-        </div>
-    );
-}
-
-/* ── Subcomponente Counter Corregido con sus Clases CSS ───────────────── */
-function Counter({ label, value, setValue, min = 0 }) {
-    return (
-        <div className="counter-row">
-            <span>{label}</span>
-            <div className="counter-buttons">
-                <button className="counter-btn" onClick={() => value > min && setValue(value - 1)}>-</button>
-                <span className="counter-value">{value}</span>
-                <button className="counter-btn" onClick={() => setValue(value + 1)}>+</button>
-            </div>
         </div>
     );
 }

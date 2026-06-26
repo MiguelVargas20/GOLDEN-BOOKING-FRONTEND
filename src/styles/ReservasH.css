@@ -1,254 +1,323 @@
-.main-container {
-  padding: 20px;
-  background: #f7f7f7;
+/* ============================================================
+   RESERVAS HOSPEDAJE - CSS COMPLETO MEJORADO (GOLDEN BOOKING)
+   ============================================================ */
+
+/* ---------- CONFIGURACIÓN GLOBAL Y CONTENEDOR PRINCIPAL ---------- */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600&display=swap');
+
+.main-container.golden-booking-layout {
+    padding: 30px;
+    background: #fdfaf5; /* Fondo off-white suave y cálido */
+    font-family: 'Poppins', sans-serif; /* Tipografía limpia por defecto */
+    color: #333;
 }
 
-.filters {
-  background: white;
-  padding: 20px;
-  border-radius: 12px;
-}
-
-.hotel-card {
-  display: flex;
-  background: white;
-  border-radius: 16px;
-  overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
-
-.hotel-image {
-  width: 300px;
-  object-fit: cover;
-}
-
-.hotel-info {
-  flex: 1;
-  padding: 20px;
-}
-
-.hotel-header {
-  display: flex;
-  justify-content: space-between;
-}
-
-.rating {
-  background: #ffe8d6;
-  padding: 5px 10px;
-  border-radius: 10px;
-}
-
-.location {
-  color: gray;
-}
-
-.amenities span {
-  margin-right: 10px;
-  font-size: 12px;
-  background: #eee;
-  padding: 5px 10px;
-  border-radius: 10px;
-}
-
-.hotel-actions {
-  width: 180px;
-  padding: 20px;
-  text-align: center;
-  border-left: 1px solid #eee;
-}
-
-.btn-detail {
-  background: linear-gradient(90deg, #ff7a00, #ffb347);
-  border: none;
-  padding: 10px;
-  border-radius: 20px;
-  color: white;
-  width: 100%;
-}
-
-.fav {
-  font-size: 20px;
-  margin-bottom: 10px;
-  cursor: pointer;
-}
-
-/* ---------- DROPDOWN (CAJA) ---------- */
-.dropdown-menu-guests {
-    width: 300px;
-    border-radius: 12px;
-    background: #ffffff;
-    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
-    border: 1px solid #e7a924;
-    padding: 15px;
-}
-
-/* ---------- BOTÓN PRINCIPAL (TOGGLE) ---------- */
-.dropdown-guests {
-    background: linear-gradient(90deg, #fff5d6, #e7a924) !important;
-    padding: 10px !important;
-    border-radius: 8px !important;
-    border: 1px solid #e7a924 !important;
-    font-size: 16px !important;
-    color: #5a3d00 !important;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-.dropdown-guests:hover {
-    background: linear-gradient(90deg, #e7a924, #d9991f) !important;
-    border-color: #d9991f !important;
-}
-
-/* ---------- FILA CONTADOR ---------- */
-.counter-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 12px;
-    font-size: 16px;
-    color: #5a3d00;
-    font-weight: 500;
-}
-
-/* ---------- CONTENEDOR BOTONES ---------- */
-.counter-buttons {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-/* ---------- BOTONES (+ y -) ---------- */
-.counter-btn {
-    width: 34px;
-    height: 34px;
-    border: 1px solid #e7a924;
-    background: linear-gradient(180deg, #fff5d6, #e7a924);
-    border-radius: 50%;
-    font-size: 18px;
-    font-weight: bold;
-    color: #5a3d00;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.counter-btn:hover {
-    background: linear-gradient(180deg, #e7a924, #d9991f);
-    transform: scale(1.1);
-}
-
-/* ---------- NÚMERO DEL CONTADOR ---------- */
-.counter-value {
-    min-width: 20px;
-    text-align: center;
-    font-weight: bold;
-    color: #5a3d00;
-}
-
-.title-dates {
-    margin-bottom: 10px;
-    font-weight: 600;
-}
-
-/* Contenedor principal */
-.dates-container {
-    display: flex;
-    gap: 15px;
-    margin-top: 10px;
-}
-
-/* Cada bloque */
-.date-box {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Label */
-.date-box label {
-    font-size: 13px;
-    margin-bottom: 5px;
-    color: #555;
-}
-
-/* Input con icono */
-.input-wrapper {
-    display: flex;
-    align-items: center;
-    background: linear-gradient(90deg, #E7A924, #ffb347);
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 10px;
-    transition: all 0.3s ease;
-}
-
-/* Icono */
-.icon {
-    color: #e7a924;
-    font-size: 20px;
-    margin-right: 10px;
-}
-
-/* Input */
-.input-wrapper input {
-    border: none;
-    background: transparent;
-    color: #fff;
-    width: 100%;
-    outline: none;
-    font-size: 14px;
-}
-
-/* Hover */
-.input-wrapper:hover {
-    border-color: #e7a924;
-}
-
-/* Focus */
-.input-wrapper:focus-within {
-    border-color: #e7a924;
-    box-shadow: 0 0 6px rgba(231, 169, 36, 0.4);
-}
-
-/* Icono calendario */
-input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(1);
-    cursor: pointer;
-}
-
-.empty-banner {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
-
-/* ── BOTÓN: CREAR HABITACIÓN (Estilo plano e idéntico a Mis Reservas) ── */
+/* ---------- ACCIONES ADMINISTRATIVAS (BOTÓN CREAR HAB.) ---------- */
 .btn-create-room {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #ff8800; /* Color naranja plano exacto del botón */
+    background: #ff8800; /* Naranja plano exacto */
     padding: 10px 24px;
-    border-radius: 12px; /* Bordes ligeramente más redondeados como la muestra */
+    border-radius: 12px;
     border: 1px solid #ff7700;
     font-size: 16px;
     color: #ffffff; /* Texto blanco impecable */
     font-weight: 600;
     cursor: pointer;
     box-shadow: 0px 4px 10px rgba(255, 136, 0, 0.15);
-    transition: none !important; /* Cero animaciones o transiciones de color */
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
 }
 
 .btn-create-room:hover {
-    background: #ff8800; /* Mantiene el color plano idéntico en hover */
+    background: #ff8800;
     border-color: #ff7700;
     color: #ffffff;
-    transform: translateY(-2px); /* Mantiene la sutil elevación al posicionar el cursor */
+    transform: translateY(-2px); /* Sutil elevación */
     box-shadow: 0px 6px 14px rgba(255, 119, 0, 0.3);
 }
 
-.btn-create-room:active {
-    transform: translateY(0);
+/* ============================================================
+   TARJETA DE HABITACIÓN (HOTEL CARD) - ESTRUCTURA FLEX
+   ============================================================ */
+.hotel-card {
+    display: flex;
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+    border: 1px solid #eee;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 25px;
+}
+
+.hotel-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* --- BLOQUE 1: IMAGEN --- */
+.hotel-image-container {
+    flex-basis: 320px; /* Ancho fijo para la imagen */
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.hotel-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+/* --- BLOQUE 2: INFORMACIÓN CENTRAL --- */
+.hotel-info-block {
+    flex: 1; /* Ocupa el espacio restante */
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid #f0f0f0;
+}
+
+.hotel-header {
+    margin-bottom: 15px;
+}
+
+/* Estética de Títulos (Nuevo Título Elegante) */
+.hotel-header h4 {
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #222;
+    font-family: 'Playfair Display', serif; /* Tipografía Elegante Serif */
+    border-bottom: 2px solid #ff8800; /* Subrayado naranja sutil */
+    padding-bottom: 5px;
+    display: inline-block;
+}
+
+.room-description {
+    color: #666;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+/* Bloques de Detalles (Capacidad y Precio Base) */
+.details-boxes {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.details-box {
+    flex: 1;
+    background: #fdfaf5;
+    border: 1px solid #f3e5dc;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: #5a3d00;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Amenities Tags (Refinados) */
+.amenities-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.amenity-tag {
+    font-size: 0.78rem;
+    background: #f0f0f0;
+    color: #555;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.status-tag {
+    font-size: 0.8rem;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: 700;
+}
+
+.status-tag.disponible {
+    background: #e6f4ea;
+    color: #2e7d32;
+}
+
+.status-tag.no-disponible {
+    background: #fce8e6;
+    color: #c62828;
+}
+
+/* --- BLOQUE 3: PRECIO Y ACCIONES DERECHA (CENTRADOOO) --- */
+.hotel-actions-block {
+    flex-basis: 220px; /* Ancho fijo para la columna */
+    flex-shrink: 0;
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* ¡¡CENTRADO VERTICAL!! */
+    align-items: center;    /* ¡¡CENTRADO HORIZONTAL!! */
+    background: #fafafa;
+}
+
+/* Bloque de Precio (Dorado y Grande) */
+.price-block {
+    text-align: center;
+    margin-bottom: 25px; /* Separación con los botones */
+}
+
+.base-price {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #e7a924; /* Color dorado distintivo */
+    margin: 0;
+    line-height: 1;
+}
+
+.price-label {
+    font-size: 0.9rem;
+    color: #777;
+    font-weight: 500;
+}
+
+/* Botones de Acción */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
+.btn-detail, .btn-reservar {
+    width: 100%;
+    padding: 12px;
+    border-radius: 25px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+/* Botón Ver Detalle (Naranja Outlined) */
+.btn-detail {
+    background: white;
+    color: #ff8800;
+    border: 2px solid #ff8800;
+}
+
+.btn-detail:hover {
+    background: #fff3e0;
+}
+
+/* Botón Reservar (Naranja Sólido) */
+.btn-reservar {
+    background: #ff8800;
+    color: white;
+    border: none;
+    box-shadow: 0 4px 10px rgba(255, 136, 0, 0.2);
+}
+
+.btn-reservar:hover:not(:disabled) {
+    background: #e67a00;
+    box-shadow: 0 6px 15px rgba(255, 136, 0, 0.3);
+}
+
+.btn-reservar:disabled {
+    background: #ccc;
+    color: #888;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* ============================================================
+   SELECTOR DE FECHAS (CALENDARIO CÓMODO Y ESTÉTICO)
+   ============================================================ */
+.booking-dates {
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+    margin-top: auto; /* Empuja hacia abajo en info-block */
+}
+
+.date-picker-row {
+    display: flex;
+    gap: 20px;
+}
+
+.date-input-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.date-input-group label {
+    font-size: 0.8rem;
+    margin-bottom: 6px;
+    color: #777;
+    font-weight: 600;
+}
+
+/* Contenedor del Input (Estilo Golden Booking con Icono) */
+.date-input-wrapper {
+    display: flex;
+    align-items: center;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 12px 15px;
+    transition: all 0.3s ease;
+    cursor: pointer; /* Indica que es clickeable */
+}
+
+.date-input-wrapper:hover {
+    border-color: #ff8800;
+}
+
+.date-input-wrapper:focus-within {
+    border-color: #ff8800;
+    box-shadow: 0 0 0 3px rgba(255, 136, 0, 0.1);
+}
+
+/* Icono del Calendario en el Input */
+.date-input-wrapper .calendar-icon {
+    color: #ff8800; /* Naranja distintivo */
+    font-size: 1.2rem;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+/* Input Nativo Oculto pero Clickeable */
+.date-input-wrapper input {
+    border: none;
+    background: transparent;
+    color: #333;
+    width: 100%;
+    outline: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* Estilo para que el selector de calendario nativo sea grande y cómodo */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    background: transparent;
+    color: transparent; /* Oculta el icono nativo */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0; /* Lo hace invisible pero sigue funcionando */
 }
