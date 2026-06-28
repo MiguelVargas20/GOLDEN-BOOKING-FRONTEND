@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { listarMisReservasDeporte, cancelarReservaDeporte } from '../../api/ReservaDeporteApi';
 import '../../styles/ReservasD/MisReservas.css';
+import Swal from 'sweetalert2';
 
 function ReservasDSolicitadas() {
     const { user } = useAuth();
@@ -25,15 +26,43 @@ function ReservasDSolicitadas() {
         }
     };
 
-    const handleCancelar = async (id) => {
-        if (!window.confirm("¿Deseas cancelar esta reserva?")) return;
-        try {
-            await cancelarReservaDeporte(id);
-            obtenerMisReservas();
-        } catch {
-            alert("Error al cancelar la reserva");
-        }
-    };
+    const handleCancelar = async (id, cancha, fechaInicio) => {
+    const resultado = await Swal.fire({
+        title: '¿Cancelar reserva?',
+        html: `
+            <p><strong>Cancha:</strong> ${cancha}</p>
+            <p><strong>Fecha:</strong> ${new Date(fechaInicio).toLocaleString()}</p>
+            <p style="color:#e53e3e;margin-top:8px">Esta acción no se puede deshacer.</p>
+        `,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sí, cancelar reserva',
+        cancelButtonText: 'Mantener reserva',
+        confirmButtonColor: '#e53e3e',
+        cancelButtonColor: '#6c757d',
+    });
+
+    if (!resultado.isConfirmed) return;
+
+    try {
+        await cancelarReservaDeporte(id);
+        await Swal.fire({
+            title: '¡Reserva cancelada!',
+            text: 'Tu reserva fue cancelada correctamente.',
+            icon: 'success',
+            timer: 2000,
+            showConfirmButton: false,
+        });
+        obtenerMisReservas();
+    } catch {
+        Swal.fire({
+            title: 'Error',
+            text: 'No se pudo cancelar la reserva.',
+            icon: 'error',
+            confirmButtonColor: '#f38d1e',
+        });
+    }
+};
 
     if (loading) return <div className="mis-reservas-loading">Cargando reservas...</div>;
 
@@ -86,7 +115,7 @@ function ReservasDSolicitadas() {
                                 <td>
                                     <button
                                         className="mis-reservas-btn-cancelar"
-                                        onClick={() => handleCancelar(r.idD)}
+                                        onClick={() => handleCancelar(r.idD, r.tCancha, r.fInicioReserva)}
                                         disabled={r.estado === "CANCELADA"}
                                     >
                                         Cancelar

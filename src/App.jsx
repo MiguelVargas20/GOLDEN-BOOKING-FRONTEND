@@ -21,6 +21,7 @@ import ReservarEspacioD from './pages/ReservasD/ReservarEspacioD.jsx';
 import HabitacionD from './pages/HabitacionD.jsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import TipoHabitacionD from './pages/TipoHabitacionD.jsx';
+import GestionHabitacionesD from './pages/GestionHabitacionesD.jsx';
 
 
 export default function App() {
@@ -75,6 +76,9 @@ export default function App() {
             {/* Gestión de Habitaciones — solo ADMIN */}
             <Route path="/crear-habitacion" element={
               <RutaProtegida soloAdmin={true}><HabitacionD /></RutaProtegida>
+            } />
+            <Route path="/gestionar-habitaciones" element={
+              <RutaProtegida soloAdmin={true}><GestionHabitacionesD /></RutaProtegida>
             } />
 
           </Route>

@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from "react-router-dom";
-import { Form, Button, Alert, Row, Col, Badge } from "react-bootstrap";
+import { Form, Button, Row, Col, Badge } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
 import { crearReservaDeporte } from "../../api/ReservaDeporteApi.js";
 import { useAuth } from "../../context/AuthContext";
@@ -25,7 +25,6 @@ function ReservarEspacioD() {
         fFinReserva: "",
         docUsuario: user?.numeroDocumento || user?.id || ""
     });
-    const [error, setError] = useState(null);
 
     // ── Detectar en tiempo real si el espacio se ocupa ──────
     // Se ejecuta cada vez que llega un nuevo evento WebSocket
@@ -51,7 +50,6 @@ function ReservarEspacioD() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setError(null);
 
         // Verificar en tiempo real antes de enviar
         if (bloqueadoEnVivo) {
@@ -96,9 +94,15 @@ function ReservarEspacioD() {
                 : "/reservas-deportivas/mis-reservas");
 
         } catch (err) {
-            setError(err.message || "Error al conectar con el servidor.");
+            // ← antes era setError(err.message)
+            Swal.fire({
+                title: 'No disponible',
+                text: err.message || 'Error al conectar con el servidor.',
+                icon: 'error',
+                confirmButtonColor: '#f38d1e',
+            });
         }
-    };
+    }; // ← Se corrigió el cierre del bloque handleSubmit que estaba mezclado
 
     return (
         <div className='reserva-espacio-container p-4'>
@@ -118,8 +122,6 @@ function ReservarEspacioD() {
                     ⚠️ Este horario acaba de ser reservado por otra persona. Por favor elige otro.
                 </Alert>
             )}
-
-            {error && <Alert variant="danger">⚠️ {error}</Alert>}
 
             <div className="reservar-espacio-card shadow p-4 rounded bg-white mx-auto" style={{ maxWidth: '900px' }}>
                 <Row className="align-items-center">

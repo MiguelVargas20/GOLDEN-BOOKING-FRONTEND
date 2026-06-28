@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Row, Col, Form, Button, Alert, Spinner, Table, Badge, Container } from "react-bootstrap";
+import Swal from 'sweetalert2';
 import {
   listarTiposHabitacion,
   crearTipoHabitacion,
@@ -122,23 +123,50 @@ export default function TipoHabitacionD() {
   };
 
   /* ── Eliminar ─────────────────────────────────────────── */
-  const handleEliminar = async (id) => {
-    setEliminandoId(id);
-    setError("");
-    setExito("");
-    try {
-      await eliminarTipoHabitacion(id);
-      setExito("Tipo de habitación eliminado.");
-      // Si estábamos editando ese mismo, limpiamos el form
-      if (editandoId === id) resetForm();
-      cargarTipos();
-    } catch (err) {
-      setError(err.message || "Error al eliminar el tipo.");
-    } finally {
-      setEliminandoId(null);
-    }
-  };
+  const handleEliminar = async (id, nombre) => {
+      const resultado = await Swal.fire({
+          title: '¿Eliminar tipo de habitación?',
+          html: `
+              <p><strong>${nombre}</strong> será eliminado permanentemente.</p>
+              <p style="color:#e53e3e;margin-top:8px;font-size:0.9rem">
+                  Las habitaciones asociadas a este tipo podrían verse afectadas.
+              </p>
+          `,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Sí, eliminar',
+          cancelButtonText: 'Cancelar',
+          confirmButtonColor: '#e53e3e',
+          cancelButtonColor: '#6c757d',
+      });
 
+      if (!resultado.isConfirmed) return;
+
+      setEliminandoId(id);
+      setError("");
+      setExito("");
+      try {
+          await eliminarTipoHabitacion(id);
+          await Swal.fire({
+              title: '¡Eliminado!',
+              text: `"${nombre}" fue eliminado correctamente.`,
+              icon: 'success',
+              timer: 2000,
+              showConfirmButton: false,
+          });
+          if (editandoId === id) resetForm();
+          cargarTipos();
+      } catch (err) {
+          Swal.fire({
+              title: 'Error',
+              text: err.message || 'No se pudo eliminar el tipo.',
+              icon: 'error',
+              confirmButtonColor: '#f38d1e',
+          });
+      } finally {
+          setEliminandoId(null);
+      }
+  };
   /* ── Render ───────────────────────────────────────────── */
   return (
     <div style={{ backgroundColor: "#ffffff", minHeight: "100vh", padding: "3rem 0" }}>
@@ -466,7 +494,7 @@ export default function TipoHabitacionD() {
                               {/* Botón eliminar */}
                               <button
                                 className="btn-tabla-eliminar"
-                                onClick={() => handleEliminar(tipo.id)}
+                                onClick={() => handleEliminar(tipo.id, tipo.nombreTipoHabitacion)}
                                 disabled={eliminandoId === tipo.id}
                                 title="Eliminar"
                               >

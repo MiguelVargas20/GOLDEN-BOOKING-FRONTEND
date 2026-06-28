@@ -146,6 +146,13 @@ export default function ReservasHospedaje() {
                         <IoAddCircleOutline className="me-2 fs-5" />
                         Crear Habitación
                     </button>
+                    <button
+                        className="btn-create-room"
+                        onClick={() => navigate("/gestionar-habitaciones")}
+                        style={{ background: "#1a1a2e" }}
+                    >
+                        ⚙️ Gestionar Habitaciones
+                    </button>
                 </Col>
             </Row>
 
