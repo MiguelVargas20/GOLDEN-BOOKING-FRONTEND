@@ -28,28 +28,65 @@ background:#f5f5f5;
     gap: 20px;
 }
 
-.btn-reserva{
-padding:15px 30px;
-border:none;
-border-radius:12px;
-font-weight:600;
-cursor:pointer;
-color:white;
+.btn-reserva {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 24px;       /* Padding exacto del botón ejemplo */
+    border-radius: 12px;
+    font-size: 16px;          /* Unificado con el ejemplo */
+    font-weight: 600;
+    color: #ffffff !important; /* Texto blanco impecable */
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease !important;
 }
 
+/* ---------- CORRECCIÓN DE BOTONES (ESTILO PREMIUM UNIFICADO) ---------- */
+
+.btn-reserva {
+    display: inline-flex;     /* Cambio a inline-flex para ajustarse bien a la grilla */
+    align-items: center;
+    justify-content: center;
+    padding: 10px 24px;       /* Padding exacto del botón ejemplo */
+    border-radius: 12px !important; /* Forzar el redondeado suave */
+    font-size: 16px;          
+    font-weight: 600;
+    color: #ffffff !important; /* Texto blanco impecable */
+    cursor: pointer;
+    border: 1px solid transparent;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease !important;
+}
+
+/* Botón: GESTIONAR RESERVAS */
 .btn-reserva.gestionar {
-    justify-self: start; /* Empuja a la izquierda */
-}
-.gestionar{
-background:linear-gradient(90deg,#ff7a00,#ff5400);
+    justify-self: start;       /* Empuja a la izquierda en tu grilla */
+    background: #ff8800 !important; /* Naranja plano idéntico al ejemplo */
+    border: 1px solid #ff7700 !important; /* Borde sutil corregido a 1px */
+    box-shadow: 0px 4px 10px rgba(255, 136, 0, 0.15);
 }
 
-.mis{
-background:linear-gradient(90deg,#ffb300,#ff7a00);
+.btn-reserva.gestionar:hover {
+    background: #ff8800 !important;
+    border-color: #ff7700 !important;
+    transform: translateY(-2px); 
+    box-shadow: 0px 6px 14px rgba(255, 119, 0, 0.3);
 }
+
+/* Botón: MIS RESERVAS */
 .btn-reserva.mis {
-    justify-self: end; /* Empuja a la derecha */
+    justify-self: end;         /* Empuja a la derecha en tu grilla */
+    background: #1a1a2e !important; /* Azul marino oscuro exacto del ejemplo */
+    border: 1px solid #121222 !important;
+    box-shadow: 0px 4px 10px rgba(26, 26, 46, 0.15);
 }
+
+.btn-reserva.mis:hover {
+    background: #1a1a2e !important;
+    border-color: #121222 !important;
+    transform: translateY(-2px); 
+    box-shadow: 0px 6px 14px rgba(26, 26, 46, 0.3);
+}
+
 .categorias-header{
 display:flex;
 justify-content:space-between;

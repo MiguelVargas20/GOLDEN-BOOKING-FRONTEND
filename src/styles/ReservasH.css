@@ -12,30 +12,30 @@
     color: #333;
 }
 
-/* ---------- ACCIONES ADMINISTRATIVAS (BOTÓN CREAR HAB.) ---------- */
-.btn-create-room {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #ff8800; /* Naranja plano exacto */
-    padding: 10px 24px;
-    border-radius: 12px;
-    border: 1px solid #ff7700;
-    font-size: 16px;
-    color: #ffffff; /* Texto blanco impecable */
-    font-weight: 600;
-    cursor: pointer;
-    box-shadow: 0px 4px 10px rgba(255, 136, 0, 0.15);
-    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
-}
+    /* ---------- ACCIONES ADMINISTRATIVAS (BOTÓN CREAR HAB.) ---------- */
+    .btn-create-room {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #ff8800; /* Naranja plano exacto */
+        padding: 10px 24px;
+        border-radius: 12px;
+        border: 1px solid #ff7700;
+        font-size: 16px;
+        color: #ffffff; /* Texto blanco impecable */
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0px 4px 10px rgba(255, 136, 0, 0.15);
+        transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+    }
 
-.btn-create-room:hover {
-    background: #ff8800;
-    border-color: #ff7700;
-    color: #ffffff;
-    transform: translateY(-2px); /* Sutil elevación */
-    box-shadow: 0px 6px 14px rgba(255, 119, 0, 0.3);
-}
+    .btn-create-room:hover {
+        background: #ff8800;
+        border-color: #ff7700;
+        color: #ffffff;
+        transform: translateY(-2px); /* Sutil elevación */
+        box-shadow: 0px 6px 14px rgba(255, 119, 0, 0.3);
+    }
 
 /* ============================================================
    TARJETA DE HABITACIÓN (HOTEL CARD) - ESTRUCTURA FLEX

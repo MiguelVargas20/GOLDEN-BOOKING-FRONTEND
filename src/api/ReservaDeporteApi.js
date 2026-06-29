@@ -39,16 +39,20 @@ export const listarReservasDeporte = async (page = 0, size = 10) => {
 export const listarMisReservasDeporte = async (userId) => {
   const token = localStorage.getItem("token");
 
-  const response = await fetch(API_URL, {
+  // Pedimos todas las páginas o una página grande para filtrar las del usuario
+  const response = await fetch(`${API_URL}?page=0&size=100`, {
     headers: {
-      "Authorization": token ? `Bearer ${token}` : ""
+      Authorization: token ? `Bearer ${token}` : ""
     }
   });
 
   const data = await response.json();
   if (!response.ok) throw new Error("Error al cargar reservas");
 
-  return data.filter(r => r.docUsuario === userId);
+  // Extraer el array del objeto paginado
+  const lista = Array.isArray(data) ? data : (data.contenido || []);
+
+  return lista.filter(r => r.docUsuario === userId);
 };
 
 // Cancelar reserva (PATCH)
@@ -58,10 +62,18 @@ export const cancelarReservaDeporte = async (id) => {
   const response = await fetch(`${API_URL}/${id}/cancelar`, {
     method: "PATCH",
     headers: {
-      "Authorization": token ? `Bearer ${token}` : ""
+      Authorization: token ? `Bearer ${token}` : ""
     }
   });
 
-  if (!response.ok) throw new Error("No se pudo cancelar la reserva");
+  if (!response.ok) {
+    // Intentar leer el mensaje de error del back
+    try {
+      const errorData = await response.json();
+      throw new Error(errorData.message || errorData.error || "No se pudo cancelar la reserva");
+    } catch {
+      throw new Error("No se pudo cancelar la reserva");
+    }
+  }
   return true;
 };

@@ -55,9 +55,10 @@ function ReservasDCatalogo() {
                 {/* 1. LADO IZQUIERDO: Gestionar (Solo si es Admin) */}
                 {isAdmin() ? (
                     <button
-                        className="btn-reserva gestionar"
-                        onClick={() => navigate("/reservas-deportivas/gestionar")}>
-                        <BsCalendar4 /> GESTIONAR RESERVAS
+                        className="btn-reserva gestionar d-flex align-items-center justify-content-center"
+                        onClick={() => navigate("/reservas-deportivas/gestionar")}
+                    >
+                        <BsCalendar4 className="me-2 fs-5" /> GESTIONAR RESERVAS
                     </button>
                 ) : (
                     <div /> /* Div vacío para que el título no se mueva de su sitio si no eres admin */
@@ -70,11 +71,11 @@ function ReservasDCatalogo() {
 
                 {/* 3. LADO DERECHO: Mis Reservas */}
                 <button
-                    className="btn-reserva mis"
-                    onClick={() => navigate("/reservas-deportivas/mis-reservas")}>
-                    <BsArrowCounterclockwise /> MIS RESERVAS
+                    className="btn-reserva mis d-flex align-items-center justify-content-center"
+                    onClick={() => navigate("/reservas-deportivas/mis-reservas")}
+                >
+                    <BsArrowCounterclockwise className="me-2 fs-5" />MIS RESERVAS
                 </button>
-                
             </div>
 
             {/* Cuadrícula de instalaciones */}

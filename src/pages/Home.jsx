@@ -19,11 +19,8 @@ import imgTennis from '../assets/imgTennis.png';
 import imgNatacion from '../assets/natacion.png';
 import imgGolf from '../assets/golf.jpg';
 
-
-
 //Imagen porque elegirnos
 import imgSection from '../assets/elegirnos.png';
-
 
 // Datos para las láminas del Carrusel (Hero Section)
 const carruselData = [
@@ -31,17 +28,17 @@ const carruselData = [
     { img: CarruselImg2, id: 2 },
     { img: CarruselImg3, id: 3 }
 ];
-{/*Constantes de imagenes para cards */ }
+
+{/*Constantes de imagenes para cards */}
 const facilities = [
     { id: 1, title: 'Fútbol', desc: 'Canchas Profesionales', img: imgFutbol },
     { id: 2, title: 'Basketball', desc: 'Múltiples Canchas', img: imgBasket },
     { id: 3, title: 'Tennis', desc: 'Categorias por Nivel', img: imgTennis },
     { id: 4, title: 'Natación', desc: 'Olimpicas  Recreación', img: imgNatacion },
     { id: 5, title: 'Golf', desc: 'Campo Abierto', img: imgGolf},
-
 ];
 
-{/*Constantes de imagenes para sección de porque elegirnos */ }
+{/*Constantes de imagenes para sección de porque elegirnos */}
 const features = [
     { title: "Reservas Fáciles", desc: "Interfaz intuitiva con confirmación instantánea.", icon: "📅", color: "#fff4e6" },
     { title: "Instalaciones Premium", desc: "Espacios de primera clase en un solo lugar.", icon: "🏅", color: "#fff4e6" },
@@ -80,8 +77,14 @@ export default function Home() {
                                             Descubre reservas de espacios deportivos, hotelería y más.
                                         </p>
                                         <div className="hero-buttons">
-                                            <Button className="btn-orange">RESERVAR AHORA</Button>
-                                            <Button className="btn-outline-glass">CONTÁCTANOS</Button>
+                                            {/* Integración limpia usando 'as={Link}' apuntando a tus rutas */}
+                                            <Button as={Link} to="/reservas-deportivas" className="btn-orange">
+                                                RESERVAR AHORA
+                                            </Button>
+                                            
+                                            <Button as={Link} to="/contactos" className="btn-outline-glass">
+                                                CONTÁCTANOS
+                                            </Button>
                                         </div>
                                     </Carousel.Caption>
                                 </Carousel.Item>

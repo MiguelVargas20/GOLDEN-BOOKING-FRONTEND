@@ -6,6 +6,7 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Spinner from "react-bootstrap/Spinner";
 import { listarHabitaciones } from "../api/HabitacionApi";
+import { useAuth } from "../context/AuthContext";
 import {
     crearReservaHotel,
 } from "../api/ReservaHotelApi";
@@ -17,6 +18,9 @@ const PLACEHOLDER =
 
 export default function ReservasH() {
     const navigate = useNavigate();
+
+    // Función para verificar si el usuario es ADMIN
+    const { isAdmin } = useAuth();
 
     // ── Estados globales
     const [habitaciones, setHabitaciones] = useState([]);
@@ -151,21 +155,25 @@ export default function ReservasH() {
             )}
 
             <Row className="mb-4 mx-1">
-                <Col className="d-flex justify-content-start">
-                    <button 
-                        className="btn-create-room"
-                        onClick={() => navigate("/crear-habitacion")}
-                    >
-                        <IoAddCircleOutline className="me-2 fs-5" />
-                        Crear Habitación
-                    </button>
-                    <button
-                        className="btn-create-room"
-                        onClick={() => navigate("/gestionar-habitaciones")}
-                        style={{ background: "#1a1a2e" }}
-                    >
-                        ⚙️ Gestionar Habitaciones
-                    </button>
+                <Col className="d-flex justify-content-start gap-2">
+                    {isAdmin() && (
+                        <>
+                            <button
+                                className="btn-create-room"
+                                onClick={() => navigate("/crear-habitacion")}
+                            >
+                                <IoAddCircleOutline className="me-2 fs-5" />
+                                Crear Habitación
+                            </button>
+                            <button
+                                className="btn-create-room"
+                                onClick={() => navigate("/gestionar-habitaciones")}
+                                style={{ background: "#1a1a2e" }}
+                            >
+                                ⚙️ Gestionar Habitaciones
+                            </button>
+                        </>
+                    )}
                 </Col>
             </Row>
 

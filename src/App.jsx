@@ -37,6 +37,7 @@ import GestionHabitacionesD from './pages/GestionHabitacionesD.jsx';
 import UsuariosH from './pages/UsuariosH.jsx';
 import UsuariosE from './pages/UsuariosE.jsx';
 import UsuariosC from './pages/UsuariosC.jsx';
+import MiPerfil from './pages/MiPerfil.jsx';
 
 /**
  * Componente Principal de la Aplicación (App)
@@ -78,6 +79,9 @@ export default function App() {
 
                         {/* Sección informativa / Formulario de contacto directo */}
                         <Route path="/contactos" element={<Contactos />} />
+
+                        {/* Vista de perfil del usuario en sesión (Datos personales, historial, etc.) */}
+                        <Route path="/mi-perfil" element={<MiPerfil />} />
 
                         {/* -----------------------------------------------------
                             SUB-SISTEMA: RESERVAS DEPORTIVAS (Pádel, Tenis, etc.)
@@ -137,6 +141,8 @@ export default function App() {
                         <Route path="/usuarios-crear" element={
                             <RutaProtegida soloAdmin={true}><UsuariosC /></RutaProtegida>
                         } />
+
+                        
 
                         {/* --- MÓDULO CONTROL DE INFRAESTRUCTURA HOTELERA --- */}
                         {/* Formulario exclusivo para registrar nuevas habitaciones al catálogo */}

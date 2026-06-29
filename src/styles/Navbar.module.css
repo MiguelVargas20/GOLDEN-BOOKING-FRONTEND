@@ -5,7 +5,6 @@
     margin: 0; /* Asegúrate de que no tenga margen superior */
 }
 
-
 .customNavbar {
     border-bottom: 1px solid #f0f0f0;
     padding-top: 10px;   /* Reducido para que sea más elegante */
@@ -18,18 +17,25 @@
 .navLink {
     color: #4a5568 !important;
     font-weight: 600;
-    margin: 0 15px;
-    font-size: 0.95rem;
-    /* Aseguramos que el link se comporte como flex para centrar su texto internamente */
-    display: flex; 
-    align-items: center; 
-    height: 100%; 
-    padding: 0 !important; /* Quitamos paddings de Bootstrap que puedan desviar el centro */
-
+    margin: 0 10px;
+    font-size: 0.85rem !important; /* AQUÍ ESTÁ EL TAMAÑO: baja este número si lo quieres aún más pequeño (ej. 0.8rem) */
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 !important;
+    font-family: 'Poppins', sans-serif !important;
 }
 
+/* ── NUEVA REGLA: Fuerza el tamaño en el título de Servicios ── */
+.navLink :global(.dropdown-toggle) {
+    font-size: 0.82rem !important;
+    color: #4a5568 !important;
+    font-weight: 600 !important;
+    padding: 0 !important;
+}
 
-.navLink:hover {
+.navLink:hover,
+.navLink :global(.dropdown-toggle):hover {
     color: #f68b1e !important;
 }
 
@@ -76,13 +82,13 @@
 
 .userName {
     font-weight: 600;
-    font-size: 0.88rem;
+    font-size: 0.78rem;    /* antes 0.88rem */
     color: #4a5568;
     max-width: 140px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-
+    font-family: 'Poppins', sans-serif !important;
 }
 
 /* Badge ADMIN */
@@ -94,6 +100,16 @@
     padding: 2px 7px;
     border-radius: 10px;
     letter-spacing: 0.5px;
+}
+
+.clientBadge {
+    background-color: #0d6efd; /* Color azul de Bootstrap, cámbialo al color de tu marca */
+    color: white;
+    font-size: 0.75rem;
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: 8px;
 }
 
 /* Botón logout — solo icono */
@@ -122,9 +138,10 @@
     background-color: #f68b1e !important;
     border: none !important;
     border-radius: 10px !important;
-    padding: 8px 20px !important;
+    padding: 7px 16px !important;   /* ligeramente más compacto */
     font-weight: 700 !important;
-    font-size: 0.88rem !important;
+    font-size: 0.78rem !important;  /* antes 0.88rem */
+    font-family: 'Poppins', sans-serif !important;
 }
 
 .adminLoginBtn:hover {
@@ -133,9 +150,10 @@
 
 /* ── Dropdown servicios ─────────────────── */
 .servicesDropdown :global(.dropdown-menu) {
-    border: none;
+    background-color: #ffffff !important; /* Forzamos el fondo blanco */
+    border: none !important;
     border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important;
     padding: 1rem;
     min-width: 280px;
 }
@@ -171,15 +189,25 @@
     display: block;
     font-weight: 700;
     color: #333;
-    font-size: 0.9rem;
+    font-size: 0.82rem;    /* antes 0.9rem */
     line-height: 1.2;
+    font-family: 'Poppins', sans-serif !important;
 }
 
 .itemText {
     display: block;
     color: #777;
-    font-size: 0.78rem;
+    font-size: 0.72rem;    /* antes 0.78rem */
     font-weight: 400;
-
+    font-family: 'Poppins', sans-serif !important;
 }
 
+/* ── TIPOGRAFÍA POPPINS EN NAVBAR ── */
+.navLink,
+.userName,
+.adminBadge,
+.itemTitle,
+.itemText,
+.adminLoginBtn {
+    font-family: 'Poppins', sans-serif !important;
+}

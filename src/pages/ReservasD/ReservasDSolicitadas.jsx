@@ -17,7 +17,7 @@ function ReservasDSolicitadas() {
 
     const obtenerMisReservas = async () => {
         try {
-            const data = await listarMisReservasDeporte(user?.id);
+            const data = await listarMisReservasDeporte(user?.numeroDocumento || user?.id);
             setReservas(data);
         } catch (err) {
             setError("No se pudieron cargar tus reservas");
@@ -54,13 +54,29 @@ function ReservasDSolicitadas() {
             showConfirmButton: false,
         });
         obtenerMisReservas();
-    } catch {
-        Swal.fire({
-            title: 'Error',
-            text: 'No se pudo cancelar la reserva.',
-            icon: 'error',
-            confirmButtonColor: '#f38d1e',
-        });
+    } catch (err) {
+        // ── Manejo específico según el mensaje del back ──────
+        const mensaje = err?.message || '';
+
+        if (mensaje.toLowerCase().includes('cancelada')) {
+            // La reserva ya estaba cancelada — actualiza la lista para reflejar el estado real
+            obtenerMisReservas();
+            Swal.fire({
+                title: 'Reserva ya cancelada',
+                text: 'Esta reserva ya había sido cancelada anteriormente.',
+                icon: 'info',
+                confirmButtonColor: '#f38d1e',
+                timer: 3000,
+                timerProgressBar: true,
+            });
+        } else {
+            Swal.fire({
+                title: 'No se pudo cancelar',
+                text: mensaje || 'Ocurrió un error inesperado. Intenta de nuevo.',
+                icon: 'error',
+                confirmButtonColor: '#f38d1e',
+            });
+        }
     }
 };
 

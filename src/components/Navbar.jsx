@@ -1,5 +1,7 @@
+import { useState, useEffect } from 'react'; 
+import React  from 'react';
 import { Navbar, Nav, Container, Button, NavDropdown } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom'; // Importamos useLocation
 import logo from '../assets/LOGO.PNG';
 import styles from '../styles/Navbar.module.css';
 import { useTheme } from '../context/Themecontext.jsx';
@@ -11,17 +13,25 @@ import Swal from 'sweetalert2';
 /**
  * Componente ComponentNavbar
  * Barra de navegación principal y adaptativa (responsive) para Golden Booking.
- * Gestiona accesos rápidos, menú desplegable de servicios, cambio de tema (claro/oscuro)
- * y el estado de la autenticación de usuarios/administradores.
  */
 export default function ComponentNavbar() {
     const { isDarkMode, toggleTheme } = useTheme();
     const { user, logout, isAdmin } = useAuth();
     const navigate = useNavigate();
+    const location = useLocation();
+
+    // 1. Estado para el menú hamburguesa (móvil)
+    const [navExpanded, setNavExpanded] = useState(false);
+    
+
+
+    // 3. LA SOLUCIÓN DEFINITIVA: Forzar el cierre de TODO al cambiar de vista
+    useEffect(() => {
+        setNavExpanded(false);   // Cierra el menú hamburguesa en móviles
+     }, [location]);
 
     /**
-     * Manejador del cierre de sesión.
-     * Despliega una alerta de confirmación con SweetAlert2 antes de destruir la sesión.
+     * Manejador del cierre de sesión con SweetAlert2.
      */
     const handleLogout = async () => {
         const resultado = await Swal.fire({
@@ -31,16 +41,14 @@ export default function ComponentNavbar() {
             showCancelButton: true,
             confirmButtonText: 'Sí, salir',
             cancelButtonText: 'Cancelar',
-            confirmButtonColor: '#f38d1e', // Color corporativo naranja Golden Booking
+            confirmButtonColor: '#f38d1e',
             cancelButtonColor: '#6c757d',
-            borderRadius: '16px',
             customClass: {
                 popup: 'swal-popup-custom',
                 title: 'swal-title-custom',
             }
         });
 
-        // Si el usuario confirma, ejecuta el logout del contexto y redirige
         if (resultado.isConfirmed) {
             await logout();
             navigate("/login");
@@ -52,23 +60,22 @@ export default function ComponentNavbar() {
             bg={isDarkMode ? 'dark' : 'white'}
             variant={isDarkMode ? 'dark' : 'light'}
             expand="lg"
+            expanded={navExpanded} // Vinculado al estado móvil
+            onToggle={(isOpen) => setNavExpanded(isOpen)}
             className={`${styles.customNavbar} shadow-sm py-2`}
         >
             <Container fluid className="px-md-5">
-                {/* Fila contenedora con alineación vertical perfecta para corregir desajustes de altura 
-                */}
                 <div className="row w-100 align-items-center m-0">
                     
-                    {/* 1. COLUMNA IZQUIERDA: Logo corporativo */}
+                    {/* 1. COLUMNA IZQUIERDA: Logo */}
                     <div className="col-3 col-lg-3 d-flex justify-content-start align-items-center p-0">
                         <Navbar.Brand as={Link} to="/home" className="d-flex align-items-center m-0 p-0">
                             <img src={logo} alt="Logo" className={styles.navbarLogo} />
                         </Navbar.Brand>
                     </div>
 
-                    {/* 2. COLUMNA CENTRAL: Menú de navegación principal */}
+                    {/* 2. COLUMNA CENTRAL: Menú de navegación */}
                     <div className="col-6 col-lg-6 p-0">
-                        {/* Botón Hamburguesa de Bootstrap centrado exclusivamente en resoluciones móviles */}
                         <div className="d-lg-none d-flex justify-content-center">
                             <Navbar.Toggle aria-controls="basic-navbar-nav" />
                         </div>
@@ -79,14 +86,18 @@ export default function ComponentNavbar() {
                                     Inicio
                                 </Nav.Link>
 
-                                {/* Menú desplegable enriquecido de Servicios */}
+                                {/* 4. CONTROL TOTAL DEL DROPDOWN: show y onToggle configurados */}
                                 <NavDropdown
                                     title="Servicios"
                                     id="services-dropdown"
                                     className={`${styles.navLink} ${styles.servicesDropdown}`}
                                 >
-                                    {/* Opción: Reservas Deportivas */}
-                                    <NavDropdown.Item as={Link} to="/reservas-deportivas" className={styles.dropdownItemCustom}>
+                                    {/* Recuperamos el uso limpio de 'as={Link}' combinándolo con un cierre manual inmediato al hacer click */}
+                                    <NavDropdown.Item 
+                                        as={Link} 
+                                        to="/reservas-deportivas" 
+                                        className={styles.dropdownItemCustom}
+                                    >
                                         <div className={styles.iconBox}><MdSportsTennis /></div>
                                         <div>
                                             <span className={styles.itemTitle}>Reservas Deportivas</span>
@@ -94,8 +105,12 @@ export default function ComponentNavbar() {
                                         </div>
                                     </NavDropdown.Item>
 
-                                    {/* Opción: Reservas Hoteleras */}
-                                    <NavDropdown.Item as={Link} to="/reservas-hospedaje" className={styles.dropdownItemCustom}>
+                                    <NavDropdown.Item 
+                                        as={Link} 
+                                        to="/reservas-hospedaje" 
+                                        className={styles.dropdownItemCustom}
+                                        onClick={() => setShowServices(false)}
+                                    >
                                         <div className={styles.iconBox}><MdHotel /></div>
                                         <div>
                                             <span className={styles.itemTitle}>Reservas Hoteleras</span>
@@ -103,12 +118,16 @@ export default function ComponentNavbar() {
                                         </div>
                                     </NavDropdown.Item>
 
-                                    {/* Opción: Restaurante */}
-                                    <NavDropdown.Item as={Link} to="/reservas-restaurante" className={styles.dropdownItemCustom}>
+                                    <NavDropdown.Item 
+                                        as={Link} 
+                                        to="/reservas-restaurante" 
+                                        className={styles.dropdownItemCustom}
+                                        onClick={() => setShowServices(false)}
+                                    >
                                         <div className={styles.iconBox}><MdRestaurant /></div>
                                         <div>
                                             <span className={styles.itemTitle}>Restaurante</span>
-                                            <small className={styles.itemText}>Experiencia gastronómica.</small>
+                                            <small className={styles.itemText}>Experiencia gastronomica.</small>
                                         </div>
                                     </NavDropdown.Item>
                                 </NavDropdown>
@@ -117,7 +136,6 @@ export default function ComponentNavbar() {
                                     Contactanos
                                 </Nav.Link>
 
-                                {/* Acceso reservado únicamente a usuarios con privilegios de Administrador */}
                                 {isAdmin() && (
                                     <Nav.Link as={Link} to="/usuarios" className={styles.navLink}>
                                         Usuarios
@@ -127,10 +145,8 @@ export default function ComponentNavbar() {
                         </Navbar.Collapse>
                     </div>
 
-                    {/* 3. COLUMNA DERECHA: Acciones globales (Tema y Sesión de Usuario) */}
+                    {/* 3. COLUMNA DERECHA: Acciones globales */}
                     <div className="col-3 col-lg-3 d-flex justify-content-end align-items-center gap-2 p-0">
-                        
-                        {/* Interruptor para alternar entre Modo Claro y Oscuro */}
                         <button
                             className={styles.themeBtn}
                             onClick={toggleTheme}
@@ -138,20 +154,23 @@ export default function ComponentNavbar() {
                         >
                             {isDarkMode ? <BsSun size={16} /> : <BsMoonStarsFill size={16} />}
                         </button>
-
-                        {/* Renderizado dinámico según el estado de autenticación */}
-                        {user ? (
+                    {user ? (
                             <>
-                                {/* Caja de información de usuario activo */}
-                                <div className={`${styles.userInfo} d-none d-sm-flex align-items-center`}>
+                                <div
+                                    className={`${styles.userInfo} d-none d-sm-flex align-items-center`}
+                                    onClick={() => navigate("/mi-perfil")}
+                                    style={{ cursor: "pointer" }}
+                                    title="Ver mi perfil"
+                                >
                                     <BsPersonCircle size={18} className={styles.userIcon} />
                                     <span className={styles.userName}>{user.nombreCompleto}</span>
-                                    {isAdmin() && (
+                                    {isAdmin() ? (
                                         <span className={styles.adminBadge}>ADMIN</span>
+                                    ) : (
+                                        <span className={styles.clientBadge}>CLIENTE</span>
                                     )}
                                 </div>
 
-                                {/* Botón de salida para activar el Modal de Logout */}
                                 <button
                                     className={styles.logoutBtn}
                                     onClick={handleLogout}
@@ -161,7 +180,6 @@ export default function ComponentNavbar() {
                                 </button>
                             </>
                         ) : (
-                            /* En caso de no haber sesión, despliega el botón de acceso estándar */
                             <Button className={styles.adminLoginBtn} as={Link} to="/login">
                                 Iniciar sesión
                             </Button>

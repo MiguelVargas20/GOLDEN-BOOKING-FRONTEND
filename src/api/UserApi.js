@@ -14,7 +14,7 @@ export const listarUsuarios = async (page = 0, size = 10) => {
   });
   const data = await response.json();
   if (!response.ok) throw new Error("Error al cargar usuarios");
-  return data; // { contenido, paginaActual, totalPaginas, totalElementos }
+  return data;
 };
 
 // Obtener usuario por ID
@@ -27,7 +27,7 @@ export const obtenerUsuarioPorId = async (id) => {
   return data;
 };
 
-// Actualizar usuario
+// Actualizar usuario (ADMIN)
 export const actualizarUsuario = async (id, data) => {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "PUT",
@@ -39,7 +39,7 @@ export const actualizarUsuario = async (id, data) => {
   return json;
 };
 
-// Eliminar usuario
+// Eliminar usuario (ADMIN)
 export const eliminarUsuario = async (id) => {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "DELETE",
@@ -47,4 +47,16 @@ export const eliminarUsuario = async (id) => {
   });
   if (!response.ok) throw new Error("Error al eliminar usuario");
   return true;
+};                                          // ← cierre correcto aquí
+
+// Actualizar perfil propio (CLIENTE o ADMIN)
+export const actualizarMiPerfil = async (id, datos) => {
+  const res = await fetch(`${API_URL}/${id}/perfil`, {
+    method: "PATCH",
+    headers: authHeaders(),
+    body: JSON.stringify(datos)
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || "Error al actualizar perfil");
+  return data;
 };

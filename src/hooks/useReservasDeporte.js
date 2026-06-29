@@ -14,13 +14,28 @@ export function useReservasDeporte() {
     // ── Carga inicial de reservas existentes en MongoDB ──────
     const cargarReservasExistentes = async () => {
         try {
-
             // Llamada a la API para obtener todas las reservas existentes
-            const reservas = await listarReservasDeporte();
+            const respuesta = await listarReservasDeporte();
 
-            // Convierte las reservas existentes al mismo formato
-            // que usan los eventos WebSocket
-            const ocupados = reservas.map(r => ({
+            // 🔍 Agregamos este log temporal para que veas en la consola la estructura exacta de tu backend
+            console.log("Datos recibidos de listarReservasDeporte():", respuesta);
+
+            // 🛡️ SOLUCIÓN DEFINITIVA: Validamos dónde viene realmente el Array
+            let listaReservas = [];
+            if (Array.isArray(respuesta)) {
+                listaReservas = respuesta; // Si viene el array directo
+            } else if (respuesta && Array.isArray(respuesta.contenido)) {
+                listaReservas = respuesta.contenido; // 👈 SOLUCIÓN: Si viene paginado en español (.contenido)
+            } else if (respuesta && Array.isArray(respuesta.data)) {
+                listaReservas = respuesta.data; // Si viene envuelto en Axios (.data)
+            } else if (respuesta && Array.isArray(respuesta.content)) {
+                listaReservas = respuesta.content; // Si viene paginado de Spring Boot (.content)
+            } else {
+                console.warn("La respuesta de la API no contiene un formato de lista válido.");
+            }
+
+            // Convierte las reservas existentes al mismo formato que usan los eventos WebSocket
+            const ocupados = listaReservas.map(r => ({
                 espacioId:  r.tipoCancha,
                 fecha:      r.fechaReserva?.split('T')[0],
                 horaInicio: r.fechaReserva,
@@ -28,6 +43,7 @@ export function useReservasDeporte() {
                 estado:     "OCUPADO",
                 mensaje:    `La cancha ${r.tipoCancha} ya está reservada.`
             }));
+
             setEspaciosOcupados(ocupados);
         } catch (err) {
             console.warn("No se pudieron cargar reservas existentes:", err.message);
@@ -35,9 +51,8 @@ export function useReservasDeporte() {
     };
     // ─────────────────────────────────────────────────────────
 
-    // Efecto secundario: Se ejecuta una vez al montar el componente.
+    // ... (El resto de tu código de WebSockets permanece exactamente igual y sin cambios)
     useEffect(() => {
-
         // Configuración del cliente STOMP sobre SockJS
         const client = new Client({
             webSocketFactory: () => new SockJS(`${WS_URL}/ws`),
@@ -76,7 +91,7 @@ export function useReservasDeporte() {
                 });
             },
 
-            // ── Manejo de eventos de desconexión y errores ───────
+            // ── Manejo de eventos de conexión y errores ───────
             onDisconnect: () => {
                 setConectado(false);
                 console.log("WebSocket desconectado");
