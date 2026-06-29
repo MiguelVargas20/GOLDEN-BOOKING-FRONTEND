@@ -25,24 +25,28 @@ export default function GestionHabitacionesD() {
         idTipo: "",
     });
 
-    useEffect(() => { cargarDatos(); }, []);
+    // ── Paginación ───────────────────────────────────────────
+    const [paginaActual, setPaginaActual]     = useState(0);
+    const [totalPaginas, setTotalPaginas]     = useState(0);
+    const [totalElementos, setTotalElementos] = useState(0);
+    const TAMANIO_PAGINA = 8;
 
-    const cargarDatos = async () => {
+    useEffect(() => { cargarDatos(0); }, []);
+
+    const cargarDatos = async (pagina = 0) => {
         setLoading(true);
         try {
-            const [habs, tiposData] = await Promise.all([
-                listarHabitaciones(),
+            const [habsData, tiposData] = await Promise.all([
+                listarHabitaciones(pagina, TAMANIO_PAGINA),
                 listarTiposHabitacion(),
             ]);
-            setHabitaciones(habs);
+            setHabitaciones(habsData.contenido);
+            setPaginaActual(habsData.paginaActual);
+            setTotalPaginas(habsData.totalPaginas);
+            setTotalElementos(habsData.totalElementos);
             setTipos(tiposData);
         } catch {
-            Swal.fire({
-                title: 'Error',
-                text: 'No se pudieron cargar las habitaciones.',
-                icon: 'error',
-                confirmButtonColor: '#f38d1e',
-            });
+            Swal.fire({ title: "Error", text: "No se pudieron cargar las habitaciones.", icon: "error", confirmButtonColor: "#f38d1e" });
         } finally {
             setLoading(false);
         }
@@ -92,7 +96,7 @@ export default function GestionHabitacionesD() {
                 timer: 2000,
                 showConfirmButton: false,
             });
-            cargarDatos();
+            cargarDatos(paginaActual);
         } catch (err) {
             Swal.fire({ title: 'Error', text: err.message || 'No se pudo actualizar.', icon: 'error', confirmButtonColor: '#f38d1e' });
         } finally {
@@ -130,7 +134,11 @@ export default function GestionHabitacionesD() {
                 timer: 2000,
                 showConfirmButton: false,
             });
-            cargarDatos();
+            
+            const nuevaPagina = habitaciones.length === 1 && paginaActual > 0
+                ? paginaActual - 1
+                : paginaActual;
+            cargarDatos(nuevaPagina);
         } catch (err) {
             Swal.fire({ title: 'Error', text: err.message || 'No se pudo eliminar.', icon: 'error', confirmButtonColor: '#f38d1e' });
         } finally {
@@ -240,9 +248,53 @@ export default function GestionHabitacionesD() {
                         </tbody>
                     </Table>
                 )}
-                {habitaciones.length > 0 && (
+
+                {/* Controles de paginación */}
+                {totalPaginas > 1 && (
+                    <div className="d-flex justify-content-between align-items-center mt-3">
+                        <span style={{ fontSize: "0.8rem", color: "#94a3b8" }}>
+                            Página {paginaActual + 1} de {totalPaginas} — {totalElementos} habitaciones
+                        </span>
+                        <div className="d-flex gap-2">
+                            <button
+                                onClick={() => cargarDatos(paginaActual - 1)}
+                                disabled={paginaActual === 0}
+                                style={{ background: "none", border: "1.5px solid #e2e8f0", borderRadius: "8px", padding: "4px 12px", cursor: "pointer", color: "#64748b" }}
+                            >
+                                ← Anterior
+                            </button>
+                            {[...Array(totalPaginas)].map((_, i) => (
+                                <button
+                                    key={i}
+                                    onClick={() => cargarDatos(i)}
+                                    style={{
+                                        background: i === paginaActual ? "#f38d1e" : "none",
+                                        border: "1.5px solid #e2e8f0",
+                                        borderRadius: "8px",
+                                        padding: "4px 12px",
+                                        cursor: "pointer",
+                                        color: i === paginaActual ? "#fff" : "#64748b",
+                                        fontWeight: i === paginaActual ? 700 : 400,
+                                    }}
+                                >
+                                    {i + 1}
+                                </button>
+                            ))}
+                            <button
+                                onClick={() => cargarDatos(paginaActual + 1)}
+                                disabled={paginaActual === totalPaginas - 1}
+                                style={{ background: "none", border: "1.5px solid #e2e8f0", borderRadius: "8px", padding: "4px 12px", cursor: "pointer", color: "#64748b" }}
+                            >
+                                Siguiente →
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+                {/* Texto alternativo cuando solo hay 1 página disponible */}
+                {totalPaginas <= 1 && habitaciones.length > 0 && (
                     <p style={{ fontSize: "0.8rem", color: "#94a3b8", textAlign: "right", margin: "1rem 0 0" }}>
-                        {habitaciones.length} habitación{habitaciones.length !== 1 ? "es" : ""} registrada{habitaciones.length !== 1 ? "s" : ""}
+                        {totalElementos} habitación{totalElementos !== 1 ? "es" : ""} registrada{totalElementos !== 1 ? "s" : ""}
                     </p>
                 )}
             </div>

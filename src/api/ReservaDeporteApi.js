@@ -25,15 +25,11 @@ export const crearReservaDeporte = async (data) => {
 };
 
 // Listar todas las reservas (GET) — para ADMIN
-export const listarReservasDeporte = async () => {
+export const listarReservasDeporte = async (page = 0, size = 10) => {
   const token = localStorage.getItem("token");
-
-  const response = await fetch(API_URL, {
-    headers: {
-      "Authorization": token ? `Bearer ${token}` : ""
-    }
+  const response = await fetch(`${API_URL}?page=${page}&size=${size}`, {
+    headers: { Authorization: token ? `Bearer ${token}` : "" }
   });
-
   const responseJson = await response.json();
   if (!response.ok) throw new Error("No se pudieron cargar las reservas");
   return responseJson;

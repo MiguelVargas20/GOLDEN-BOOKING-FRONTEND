@@ -5,8 +5,8 @@ import { BiCalendarAlt, BiGroup, BiMoney } from "react-icons/bi"; // Nuevos icon
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Spinner from "react-bootstrap/Spinner";
+import { listarHabitaciones } from "../api/HabitacionApi";
 import {
-    listarHabitaciones,
     crearReservaHotel,
 } from "../api/ReservaHotelApi";
 import "../styles/reservasH.css"; // Usa el nuevo CSS
@@ -15,7 +15,7 @@ import "../styles/reservasH.css"; // Usa el nuevo CSS
 const PLACEHOLDER =
     "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&q=80";
 
-export default function ReservasHospedaje() {
+export default function ReservasH() {
     const navigate = useNavigate();
 
     // ── Estados globales
@@ -37,20 +37,33 @@ export default function ReservasHospedaje() {
             setLoading(true);
             try {
                 const data = await listarHabitaciones();
-                setHabitaciones(data || []);
-
-                // Inicializar fechas para cada habitación
-                const fechasIniciales = {};
-                if (data && Array.isArray(data)) {
-                    data.forEach((h) => {
-                        fechasIniciales[h.id] = {
-                            checkIn: "", // YYYY-MM-DD
-                            checkOut: "", // YYYY-MM-DD
-                        };
-                    });
+                
+                // ── VALIDACIÓN INTELIGENTE DEL FORMATO DE DATOS ──
+                let listaValida = [];
+                if (Array.isArray(data)) {
+                    listaValida = data;
+                } else if (data && Array.isArray(data.content)) {
+                    listaValida = data.content; // Si la API devuelve un objeto paginado tradicional
+                } else if (data && Array.isArray(data.contenido)) {
+                    listaValida = data.contenido; // Si la propiedad se llama contenido
+                } else {
+                    listaValida = []; // Salvavidas definitivo para que nunca de error .map
                 }
+
+                setHabitaciones(listaValida);
+
+                // Inicializar fechas para cada habitación usando la lista validada
+                const fechasIniciales = {};
+                listaValida.forEach((h) => {
+                    fechasIniciales[h.id] = {
+                        checkIn: "", // YYYY-MM-DD
+                        checkOut: "", // YYYY-MM-DD
+                    };
+                });
                 setFechas(fechasIniciales);
-            } catch {
+
+            } catch (err) {
+                console.error("Error en la petición:", err);
                 setError("No se pudieron cargar las habitaciones. Verifica tu conexión.");
             } finally {
                 setLoading(false);
@@ -58,7 +71,7 @@ export default function ReservasHospedaje() {
         };
         cargar();
     }, []);
-
+    
     /* ── Helpers de fechas por habitación */
     const getFechasHab = (id) =>
         fechas[id] || { checkIn: "", checkOut: "" };

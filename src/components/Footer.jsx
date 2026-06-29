@@ -2,12 +2,21 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { FaMapMarkerAlt, FaEnvelope, FaPhoneAlt, FaShareAlt, FaGlobe, FaMedal } from 'react-icons/fa';
 import styles from '../styles/Footer.module.css';
 
+/**
+ * Componente Footer
+ * Renderiza el pie de página premium del sitio web mediante un diseño responsivo de 3 columnas
+ * utilizando la grilla de React-Bootstrap y estilos basados en CSS Modules.
+ */
 export default function Footer() {
     return (
         <footer className={styles['footer-premium']}>
             <Container className="py-5">
+                {/* Fila principal: Distribuye el espacio entre columnas 
+                  y añade separación vertical en pantallas pequeñas (gy-4) 
+                */}
                 <Row className="justify-content-between gy-4">
-                    {/* Columna 1: Branding - Ocupa 4/12 partes */}
+                    
+                    {/* Columna 1: Branding / Identidad de la marca (Ocupa 4/12 en pantallas grandes) */}
                     <Col lg={4} md={12}>
                         <div className={`${styles['footer-brand']} mb-3`}>
                             <span className={styles['brand-text']}>GOLDEN BOOKING</span>
@@ -15,6 +24,7 @@ export default function Footer() {
                         <p className={styles['footer-info']}>
                             Web oficial del Club Valle Dorado, tu puerta de entrada a experiencias premium en reservas de espacios deportivos, hotelería y más.
                         </p>
+                        {/* Contenedor de iconos informativos / redes */}
                         <div className={styles['social-container']}>
                             <div className={styles['icon-circle']}><FaMedal /></div>
                             <div className={styles['icon-circle']}><FaShareAlt /></div>
@@ -22,7 +32,7 @@ export default function Footer() {
                         </div>
                     </Col>
 
-                    {/* Columna 2: Enlaces Rápidos - Ahora alineada más cerca de la marca */}
+                    {/* Columna 2: Enlaces Rápidos de navegación interna */}
                     <Col lg={3} md={6}>
                         <h5 className={styles['column-title']}>Enlaces Rápidos</h5>
                         <ul className={`list-unstyled ${styles['custom-links']}`}>
@@ -33,15 +43,22 @@ export default function Footer() {
                         </ul>
                     </Col>
 
-                    {/* Columna 3: Contacto - Alineada a la derecha */}
+                    {/* Columna 3: Información de Contacto directo */}
                     <Col lg={3} md={6}>
                         <h5 className={styles['column-title']}>Contacto</h5>
                         <ul className={`list-unstyled ${styles['contact-info']}`}>
-                            <li><FaMapMarkerAlt className={styles['icon-orange']} /> Valle Dorado, GT</li>
-                            <li><FaEnvelope className={styles['icon-orange']} /> contacto@valledorado.com</li>
-                            <li><FaPhoneAlt className={styles['icon-orange']} /> +502 5555-5555</li>
+                            <li>
+                                <FaMapMarkerAlt className={styles['icon-orange']} /> Valle Dorado, GT
+                            </li>
+                            <li>
+                                <FaEnvelope className={styles['icon-orange']} /> contacto@valledorado.com
+                            </li>
+                            <li>
+                                <FaPhoneAlt className={styles['icon-orange']} /> +502 5555-5555
+                            </li>
                         </ul>
                     </Col>
+
                 </Row>
             </Container>
         </footer>

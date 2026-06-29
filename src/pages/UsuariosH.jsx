@@ -13,16 +13,25 @@ export default function UsuariosH() {
   const [error, setError] = useState(null);
   const [busqueda, setBusqueda] = useState("");
 
-  // Cargar usuarios al montar el componente
+  // --- NUEVOS ESTADOS DE PAGINACIÓN ---
+  const [paginaActual, setPaginaActual]     = useState(0);
+  const [totalPaginas, setTotalPaginas]     = useState(0);
+  const [totalElementos, setTotalElementos] = useState(0);
+  const TAMANIO_PAGINA = 10;
+
+  // Cargar usuarios al montar el componente (inicia en la página 0)
   useEffect(() => {
-    obtenerUsuarios();
+    obtenerUsuarios(0);
   }, []);
 
-  // Función para cargar usuarios desde el backend
-  const obtenerUsuarios = async () => {
+  // --- FUNCIÓN ACTUALIZADA CON PAGINACIÓN ---
+  const obtenerUsuarios = async (pagina = 0) => {
     try {
-      const data = await listarUsuarios();
-      setUsuarios(data);
+      const data = await listarUsuarios(pagina, TAMANIO_PAGINA);
+      setUsuarios(data.contenido);
+      setPaginaActual(data.paginaActual);
+      setTotalPaginas(data.totalPaginas);
+      setTotalElementos(data.totalElementos);
     } catch (err) {
       setError("No se pudieron cargar los usuarios");
     } finally {
@@ -30,49 +39,50 @@ export default function UsuariosH() {
     }
   };
 
-
-// Función para eliminar un usuario
-
-const handleEliminar = async (id, nombre, apellido) => {
+  // Función para eliminar un usuario
+  const handleEliminar = async (id, nombre, apellido) => {
     const resultado = await Swal.fire({
-        title: '¿Eliminar usuario?',
-        text: `Esta acción eliminará permanentemente a ${nombre} ${apellido} y no se puede deshacer.`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Sí, eliminar',
-        cancelButtonText: 'Cancelar',
-        confirmButtonColor: '#e53e3e',
-        cancelButtonColor: '#6c757d',
+      title: '¿Eliminar usuario?',
+      text: `Esta acción eliminará permanentemente a ${nombre} ${apellido} y no se puede deshacer.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar',
+      confirmButtonColor: '#e53e3e',
+      cancelButtonColor: '#6c757d',
     });
 
     if (resultado.isConfirmed) {
-        try {
-            await eliminarUsuario(id);
-            await Swal.fire({
-                title: '¡Eliminado!',
-                text: `${nombre} ${apellido} fue eliminado correctamente.`,
-                icon: 'success',
-                timer: 2000,
-                showConfirmButton: false,
-            });
-            obtenerUsuarios();
-        } catch {
-            Swal.fire({
-                title: 'Error',
-                text: 'No se pudo eliminar el usuario.',
-                icon: 'error',
-                confirmButtonColor: '#e53e3e',
-            });
-        }
+      try {
+        await eliminarUsuario(id);
+        await Swal.fire({
+          title: '¡Eliminado!',
+          text: `${nombre} ${apellido} fue eliminado correctamente.`,
+          icon: 'success',
+          timer: 2000,
+          showConfirmButton: false,
+        });
+        const nuevaPagina = usuarios.length === 1 && paginaActual > 0 
+            ? paginaActual - 1 
+            : paginaActual;
+        obtenerUsuarios(nuevaPagina);
+      } catch {
+        Swal.fire({
+          title: 'Error',
+          text: 'No se pudo eliminar el usuario.',
+          icon: 'error',
+          confirmButtonColor: '#e53e3e',
+        });
+      }
     }
-};
+  };
 
   // Filtrar por documento, nombre o email
   const usuariosFiltrados = usuarios.filter(u =>
-      u.nombre?.toLowerCase().includes(busqueda.toLowerCase()) ||
-      u.apellido?.toLowerCase().includes(busqueda.toLowerCase()) ||
-      u.email?.toLowerCase().includes(busqueda.toLowerCase()) ||
-      u.documento?.numeroD?.includes(busqueda)
+    u.nombre?.toLowerCase().includes(busqueda.toLowerCase()) ||
+    u.apellido?.toLowerCase().includes(busqueda.toLowerCase()) ||
+    u.email?.toLowerCase().includes(busqueda.toLowerCase()) ||
+    u.documento?.numeroD?.includes(busqueda)
   );
 
   if (loading) return <div className="p-4">Cargando usuarios...</div>;
@@ -130,7 +140,6 @@ const handleEliminar = async (id, nombre, apellido) => {
                 <td>{u.apellido}</td>
                 <td>{u.email}</td>
                 <td>
-                  {/* --- CAMBIO AQUÍ: Implementación de los estilos sutiles --- */}
                   <span className={`user-status ${u.estado?.toLowerCase()}`}>
                     {u.estado}
                   </span>
@@ -154,6 +163,46 @@ const handleEliminar = async (id, nombre, apellido) => {
           )}
         </tbody>
       </Table>
+
+      {/* --- CONTROLES DE PAGINACIÓN INTEGARDOS --- */}
+      {totalPaginas > 1 && (
+        <div className="d-flex justify-content-between align-items-center mt-3 px-1">
+          <span style={{ fontSize: "0.85rem", color: "#64748b" }}>
+            Mostrando página {paginaActual + 1} de {totalPaginas} — {totalElementos} usuarios en total
+          </span>
+          <div className="d-flex gap-2">
+            <button
+              className="btn btn-outline-secondary btn-sm"
+              onClick={() => obtenerUsuarios(paginaActual - 1)}
+              disabled={paginaActual === 0}
+            >
+              ← Anterior
+            </button>
+            {/* Botones de páginas numeradas */}
+            {[...Array(totalPaginas)].map((_, i) => (
+              <button
+                key={i}
+                className={`btn btn-sm ${i === paginaActual 
+                  ? 'btn-warning' 
+                  : 'btn-outline-secondary'}`}
+                onClick={() => obtenerUsuarios(i)}
+                style={i === paginaActual 
+                  ? { background: '#f38d1e', border: 'none', color: '#fff' } 
+                  : {}}
+              >
+                {i + 1}
+              </button>
+            ))}
+            <button
+              className="btn btn-outline-secondary btn-sm"
+              onClick={() => obtenerUsuarios(paginaActual + 1)}
+              disabled={paginaActual === totalPaginas - 1}
+            >
+              Siguiente →
+            </button>
+          </div>
+        </div>
+      )}
     </Container>
   );
 }

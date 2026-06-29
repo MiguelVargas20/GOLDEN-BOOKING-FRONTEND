@@ -8,13 +8,13 @@ const authHeaders = () => ({
 });
 
 // Listar todos los usuarios (ADMIN)
-export const listarUsuarios = async () => {
-  const response = await fetch(API_URL, {
+export const listarUsuarios = async (page = 0, size = 10) => {
+  const response = await fetch(`${API_URL}?page=${page}&size=${size}`, {
     headers: authHeaders()
   });
   const data = await response.json();
   if (!response.ok) throw new Error("Error al cargar usuarios");
-  return data;
+  return data; // { contenido, paginaActual, totalPaginas, totalElementos }
 };
 
 // Obtener usuario por ID

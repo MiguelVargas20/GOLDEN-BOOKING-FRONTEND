@@ -1,56 +1,25 @@
+// ═══════════════════════════════════════════════════════════
+// ── Configuración Global y Autenticación ───────────────────
+// ═══════════════════════════════════════════════════════════
+
 const API_URL = import.meta.env.VITE_API_URL;
 
 const getToken = () => localStorage.getItem("token");
 
 const authHeaders = () => ({
   "Content-Type": "application/json",
-  "Authorization": `Bearer ${getToken()}`,
+  Authorization: `Bearer ${getToken()}`,
 });
 
-// ── Habitaciones ─────────────────────────────────────────
-// GET /api/habitaciones
-export const listarHabitaciones = async () => {
-  const res = await fetch(`${API_URL}/api/habitaciones`, {
-    headers: authHeaders(),
-  });
-  const data = await res.json();
-  if (!res.ok) throw new Error("Error al cargar habitaciones");
-  return data;
-};
+// ═══════════════════════════════════════════════════════════
+// ── Reservas Hotel ─────────────────────────────────────────
+// ═══════════════════════════════════════════════════════════
 
-// GET /api/habitaciones/disponibles  (si tienes ese endpoint)
-export const listarHabitacionesDisponibles = async () => {
-  const res = await fetch(`${API_URL}/api/habitaciones/disponibles`, {
-    headers: authHeaders(),
-  });
-  const data = await res.json();
-  if (!res.ok) throw new Error("Error al cargar habitaciones disponibles");
-  return data;
-};
-
-// GET /api/habitaciones/{id}
-export const obtenerHabitacionPorId = async (id) => {
-  const res = await fetch(`${API_URL}/api/habitaciones/${id}`, {
-    headers: authHeaders(),
-  });
-  const data = await res.json();
-  if (!res.ok) throw new Error("Habitación no encontrada");
-  return data;
-};
-
-// ── Tipos de habitación ───────────────────────────────────
-// GET /api/tipohabitaciones
-export const listarTiposHabitacion = async () => {
-  const res = await fetch(`${API_URL}/api/tipohabitaciones`, {
-    headers: authHeaders(),
-  });
-  const data = await res.json();
-  if (!res.ok) throw new Error("Error al cargar tipos de habitación");
-  return data;
-};
-
-// ── Reservas Hotel ────────────────────────────────────────
-// POST /api/reservas/hotel
+/**
+ * Registra una nueva reserva de hotel en el sistema.
+ * @param {Object} reserva - Objeto con los detalles de la reserva.
+ * @returns {Promise<Object>} La reserva creada por el servidor.
+ */
 export const crearReservaHotel = async (reserva) => {
   const res = await fetch(`${API_URL}/api/reservas/hotel`, {
     method: "POST",
@@ -62,7 +31,10 @@ export const crearReservaHotel = async (reserva) => {
   return data;
 };
 
-// GET /api/reservas/hotel
+/**
+ * Obtiene el listado completo de reservas de hotel.
+ * @returns {Promise<Array>} Lista de reservas.
+ */
 export const listarReservasHotel = async () => {
   const res = await fetch(`${API_URL}/api/reservas/hotel`, {
     headers: authHeaders(),
@@ -72,7 +44,11 @@ export const listarReservasHotel = async () => {
   return data;
 };
 
-// GET /api/reservas/hotel/{id}
+/**
+ * Obtiene los detalles de una reserva específica de hotel mediante su ID.
+ * @param {string|number} id - Identificador de la reserva.
+ * @returns {Promise<Object>} Datos de la reserva solicitada.
+ */
 export const obtenerReservaHotelPorId = async (id) => {
   const res = await fetch(`${API_URL}/api/reservas/hotel/${id}`, {
     headers: authHeaders(),
@@ -82,7 +58,11 @@ export const obtenerReservaHotelPorId = async (id) => {
   return data;
 };
 
-// PATCH /api/reservas/hotel/{id}/cancelar
+/**
+ * Cancela una reserva de hotel existente mediante su ID (Usa método PATCH).
+ * @param {string|number} id - Identificador de la reserva a cancelar.
+ * @returns {Promise<boolean>} Retorna true si la cancelación fue exitosa.
+ */
 export const cancelarReservaHotel = async (id) => {
   const res = await fetch(`${API_URL}/api/reservas/hotel/${id}/cancelar`, {
     method: "PATCH",
