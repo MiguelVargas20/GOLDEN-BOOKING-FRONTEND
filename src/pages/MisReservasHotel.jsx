@@ -3,6 +3,8 @@ import { useAuth } from "../context/AuthContext";
 import { listarMisReservasHotel, cancelarReservaHotel } from "../api/ReservaHotelApi";
 import Swal from "sweetalert2";
 import { Spinner } from "react-bootstrap";
+import LoadingSpinner from "../components/LoadingSpinner";
+
 
 export default function MisReservasHotel() {
     const { user } = useAuth();
@@ -62,11 +64,7 @@ export default function MisReservasHotel() {
         }
     };
 
-    if (loading) return (
-        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "60vh" }}>
-            <Spinner style={{ color: "#f38d1e" }} />
-        </div>
-    );
+    if (loading) return <LoadingSpinner />;
 
     return (
         <div style={{ padding: "2rem" }}>

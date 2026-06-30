@@ -1,323 +1,331 @@
-/* ============================================================
-   RESERVAS HOSPEDAJE - CSS COMPLETO MEJORADO (GOLDEN BOOKING)
-   ============================================================ */
-
-/* ---------- CONFIGURACIÓN GLOBAL Y CONTENEDOR PRINCIPAL ---------- */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@400;500;600&display=swap');
-
-.main-container.golden-booking-layout {
-    padding: 30px;
-    background: #fdfaf5; /* Fondo off-white suave y cálido */
-    font-family: 'Poppins', sans-serif; /* Tipografía limpia por defecto */
-    color: #333;
+/* ════════════════════════════════════════════
+   BADGE DE CONEXIÓN EN VIVO
+   ════════════════════════════════════════════ */
+.conexion-status-container {
+    margin-bottom: -10px;
 }
 
-    /* ---------- ACCIONES ADMINISTRATIVAS (BOTÓN CREAR HAB.) ---------- */
-    .btn-create-room {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #ff8800; /* Naranja plano exacto */
-        padding: 10px 24px;
-        border-radius: 12px;
-        border: 1px solid #ff7700;
-        font-size: 16px;
-        color: #ffffff; /* Texto blanco impecable */
-        font-weight: 600;
-        cursor: pointer;
-        box-shadow: 0px 4px 10px rgba(255, 136, 0, 0.15);
-        transition: transform 0.2s ease, box-shadow 0.2s ease !important;
-    }
+.conexion-badge {
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    background-color: #f4f5f7;
+    color: #495057;
+    display: inline-flex;
+    align-items: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
 
-    .btn-create-room:hover {
-        background: #ff8800;
-        border-color: #ff7700;
-        color: #ffffff;
-        transform: translateY(-2px); /* Sutil elevación */
-        box-shadow: 0px 6px 14px rgba(255, 119, 0, 0.3);
-    }
+.conexion-badge.en-vivo {
+    background-color: #e6f4ea;
+    color: #137333;
+}
 
-/* ============================================================
-   TARJETA DE HABITACIÓN (HOTEL CARD) - ESTRUCTURA FLEX
-   ============================================================ */
-.hotel-card {
+/* ════════════════════════════════════════════
+   HEADER COMPACTO v2
+   ════════════════════════════════════════════ */
+.botones-reservas-v2 {
     display: flex;
-    background: white;
-    border-radius: 16px;
-    overflow: hidden;
-    box-shadow: 0 6px 20px rgba(0,0,0,0.06);
-    border: 1px solid #eee;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    margin-bottom: 25px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
 }
 
-.hotel-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+.acciones-izquierda {
+    display: flex;
+    gap: 8px;
+    flex: 1;
 }
 
-/* --- BLOQUE 1: IMAGEN --- */
-.hotel-image-container {
-    flex-basis: 320px; /* Ancho fijo para la imagen */
+.acciones-derecha {
+    display: flex;
+    justify-content: flex-end;
+    flex: 1;
+}
+
+.titulo-reservas-v2 {
+    font-family: 'Bungee', sans-serif;
+    font-size: 1.8rem;
+    color: #1a1a2e;
+    margin: 0;
+    text-align: center;
     flex-shrink: 0;
+}
+
+.titulo-reservas-v2 span {
+    color: #ff8800;
+}
+
+.btn-reserva-sm {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 10px;
+    border: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    white-space: nowrap;
+}
+
+.btn-reserva-sm:hover {
+    transform: translateY(-1px);
+}
+
+.btn-reserva-sm.crear {
+    background: #ff8800;
+    color: #fff;
+}
+
+.btn-reserva-sm.crear:hover {
+    background: #e67a00;
+}
+
+.btn-reserva-sm.gestionar,
+.btn-reserva-sm.mis {
+    background: #1a1a2e;
+    color: #fff;
+}
+
+.btn-reserva-sm.gestionar:hover,
+.btn-reserva-sm.mis:hover {
+    background: #2b2b46;
+}
+
+/* ════════════════════════════════════════════
+   FILTROS PERSONALIZADOS
+   ════════════════════════════════════════════ */
+.filter-select-custom {
+    background-color: #ffffff !important;
+    color: #333333 !important;
+    border: 1px solid #ced4da !important;
+}
+
+/* ════════════════════════════════════════════
+   CARDS DE HABITACIÓN v2
+   ════════════════════════════════════════════ */
+.hotel-card-v2 {
+    background: #ffffff;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+    border: 1px solid #eee;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.hotel-card-v2:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.hotel-image-container-v2 {
+    height: 180px;
     overflow: hidden;
 }
 
-.hotel-image {
+.hotel-image-v2 {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.5s ease;
 }
 
-/* --- BLOQUE 2: INFORMACIÓN CENTRAL --- */
-.hotel-info-block {
-    flex: 1; /* Ocupa el espacio restante */
-    padding: 25px;
+.hotel-body-v2 {
+    padding: 18px;
     display: flex;
     flex-direction: column;
-    border-right: 1px solid #f0f0f0;
+    justify-content: space-between;
+    flex-grow: 1;
 }
 
-.hotel-header {
-    margin-bottom: 15px;
-}
-
-/* Estética de Títulos (Nuevo Título Elegante) */
-.hotel-header h4 {
-    margin: 0;
-    font-size: 1.6rem;
-    font-weight: 700;
-    color: #222;
-    font-family: 'Playfair Display', serif; /* Tipografía Elegante Serif */
-    border-bottom: 2px solid #ff8800; /* Subrayado naranja sutil */
-    padding-bottom: 5px;
-    display: inline-block;
-}
-
-.room-description {
-    color: #666;
-    font-size: 0.95rem;
-    line-height: 1.5;
-    margin-top: 10px;
-    margin-bottom: 20px;
-}
-
-/* Bloques de Detalles (Capacidad y Precio Base) */
-.details-boxes {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 20px;
-}
-
-.details-box {
-    flex: 1;
-    background: #fdfaf5;
-    border: 1px solid #f3e5dc;
-    padding: 12px;
-    border-radius: 8px;
-    font-size: 0.85rem;
-    color: #5a3d00;
-    font-weight: 600;
+.hotel-header-v2 {
     display: flex;
     align-items: center;
-    gap: 8px;
-}
-
-/* Amenities Tags (Refinados) */
-.amenities-tags {
-    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 6px;
 }
 
-.amenity-tag {
-    font-size: 0.78rem;
-    background: #f0f0f0;
-    color: #555;
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-weight: 600;
-}
-
-.status-tag {
-    font-size: 0.8rem;
-    padding: 5px 12px;
-    border-radius: 20px;
+.hotel-header-v2 h5 {
+    margin: 0;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.15rem;
     font-weight: 700;
+    color: #222;
 }
 
-.status-tag.disponible {
+.status-tag-v2 {
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 16px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.status-tag-v2.disponible {
     background: #e6f4ea;
     color: #2e7d32;
 }
 
-.status-tag.no-disponible {
+.status-tag-v2.no-disponible {
     background: #fce8e6;
     color: #c62828;
 }
 
-/* --- BLOQUE 3: PRECIO Y ACCIONES DERECHA (CENTRADOOO) --- */
-.hotel-actions-block {
-    flex-basis: 220px; /* Ancho fijo para la columna */
-    flex-shrink: 0;
-    padding: 25px;
+.details-row-v2 {
     display: flex;
-    flex-direction: column;
-    justify-content: center; /* ¡¡CENTRADO VERTICAL!! */
-    align-items: center;    /* ¡¡CENTRADO HORIZONTAL!! */
-    background: #fafafa;
+    gap: 14px;
+    font-size: 0.85rem;
+    color: #5a3d00;
+    font-weight: 600;
+    margin-bottom: 14px;
 }
 
-/* Bloque de Precio (Dorado y Grande) */
-.price-block {
-    text-align: center;
-    margin-bottom: 25px; /* Separación con los botones */
-}
-
-.base-price {
-    font-size: 2.2rem;
-    font-weight: 800;
-    color: #e7a924; /* Color dorado distintivo */
-    margin: 0;
-    line-height: 1;
-}
-
-.price-label {
-    font-size: 0.9rem;
-    color: #777;
-    font-weight: 500;
-}
-
-/* Botones de Acción */
-.action-buttons {
+.details-row-v2 span {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+/* INPUTS DE FECHA FIJADOS EN BLANCO IMPERATIVO */
+.date-picker-row-v2 {
+    display: flex;
     gap: 12px;
-    width: 100%;
+    margin-bottom: 12px;
 }
 
-.btn-detail, .btn-reservar {
-    width: 100%;
-    padding: 12px;
-    border-radius: 25px;
-    font-size: 0.95rem;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-align: center;
-}
-
-/* Botón Ver Detalle (Naranja Outlined) */
-.btn-detail {
-    background: white;
-    color: #ff8800;
-    border: 2px solid #ff8800;
-}
-
-.btn-detail:hover {
-    background: #fff3e0;
-}
-
-/* Botón Reservar (Naranja Sólido) */
-.btn-reservar {
-    background: #ff8800;
-    color: white;
-    border: none;
-    box-shadow: 0 4px 10px rgba(255, 136, 0, 0.2);
-}
-
-.btn-reservar:hover:not(:disabled) {
-    background: #e67a00;
-    box-shadow: 0 6px 15px rgba(255, 136, 0, 0.3);
-}
-
-.btn-reservar:disabled {
-    background: #ccc;
-    color: #888;
-    cursor: not-allowed;
-    box-shadow: none;
-}
-
-/* ============================================================
-   SELECTOR DE FECHAS (CALENDARIO CÓMODO Y ESTÉTICO)
-   ============================================================ */
-.booking-dates {
-    border-top: 1px solid #eee;
-    padding-top: 20px;
-    margin-top: auto; /* Empuja hacia abajo en info-block */
-}
-
-.date-picker-row {
-    display: flex;
-    gap: 20px;
-}
-
-.date-input-group {
+.date-input-group-v2 {
     flex: 1;
     display: flex;
     flex-direction: column;
 }
 
-.date-input-group label {
+.date-input-group-v2 label {
+    font-size: 0.75rem;
+    color: #666;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.date-input-group-v2 input[type="date"] {
+    background-color: #ffffff !important;
+    color: #2b2b2b !important;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    outline: none;
+    transition: border-color 0.2s ease;
+    width: 100%;
+}
+
+.date-input-group-v2 input[type="date"]:focus {
+    border-color: #ff8800;
+    box-shadow: 0 0 0 2px rgba(255, 136, 0, 0.15);
+}
+
+.date-input-group-v2 input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(30%) sepia(100%) saturate(500%) hue-rotate(15deg);
+    cursor: pointer;
+}
+
+/* ════════════════════════════════════════════
+   RESUMEN Y FOOTER
+   ════════════════════════════════════════════ */
+.resumen-total-v2 {
+    background: #fff3e0;
+    color: #5a3d00;
     font-size: 0.8rem;
-    margin-bottom: 6px;
+    font-weight: 700;
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    border-left: 4px solid #ff8800;
+}
+
+.hotel-footer-v2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 12px;
+    margin-top: auto;
+}
+
+.precio-v2 {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #e7a924;
+}
+
+.precio-v2 small {
+    font-size: 0.75rem;
     color: #777;
     font-weight: 600;
 }
 
-/* Contenedor del Input (Estilo Golden Booking con Icono) */
-.date-input-wrapper {
+.botones-v2 {
     display: flex;
-    align-items: center;
+    gap: 8px;
+}
+
+.btn-detail-sm, .btn-reservar-sm {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-detail-sm {
     background: #ffffff;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 12px 15px;
-    transition: all 0.3s ease;
-    cursor: pointer; /* Indica que es clickeable */
+    color: #ff8800;
+    border: 1.5px solid #ff8800;
 }
 
-.date-input-wrapper:hover {
-    border-color: #ff8800;
+.btn-detail-sm:hover {
+    background: #fff3e0;
 }
 
-.date-input-wrapper:focus-within {
-    border-color: #ff8800;
-    box-shadow: 0 0 0 3px rgba(255, 136, 0, 0.1);
-}
-
-/* Icono del Calendario en el Input */
-.date-input-wrapper .calendar-icon {
-    color: #ff8800; /* Naranja distintivo */
-    font-size: 1.2rem;
-    margin-right: 12px;
-    flex-shrink: 0;
-}
-
-/* Input Nativo Oculto pero Clickeable */
-.date-input-wrapper input {
+.btn-reservar-sm {
+    background: #ff8800;
+    color: #ffffff;
     border: none;
-    background: transparent;
-    color: #333;
-    width: 100%;
-    outline: none;
-    font-size: 0.95rem;
-    font-weight: 500;
-    cursor: pointer;
 }
 
-/* Estilo para que el selector de calendario nativo sea grande y cómodo */
-input[type="date"]::-webkit-calendar-picker-indicator {
-    cursor: pointer;
-    background: transparent;
-    color: transparent; /* Oculta el icono nativo */
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0; /* Lo hace invisible pero sigue funcionando */
+.btn-reservar-sm:hover:not(:disabled) {
+    background: #e67a00;
+    transform: translateY(-1px);
+}
+
+.btn-reservar-sm:disabled {
+    background: #e0e0e0;
+    color: #a0a0a0;
+    cursor: not-allowed;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .botones-reservas-v2 {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .acciones-izquierda, .acciones-derecha {
+        justify-content: center;
+        flex: none;
+        width: 100%;
+    }
+    .titulo-reservas-v2 {
+        order: -1;
+        font-size: 1.6rem;
+    }
 }

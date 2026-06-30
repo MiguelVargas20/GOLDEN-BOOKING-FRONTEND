@@ -7,12 +7,11 @@ const AuthContext = createContext();
 /**
  * Función auxiliar externa para validar la vigencia de un JWT (JSON Web Token).
  * Se ubica fuera del componente para evitar recreaciones en memoria en cada renderizado.
- * * @param {string} token - El JWT a evaluar.
+ * @param {string} token - El JWT a evaluar.
  * @returns {boolean} True si el token contiene un formato válido y no ha expirado.
  */
 const tokenEsValido = (token) => {
-
-  // Retorna falso si no hay token.
+    // Retorna falso si no hay token.
     if (!token) return false;
     try {
         // Un JWT consta de: header.payload.signature. El payload está codificado en Base64.
@@ -50,15 +49,13 @@ export const AuthProvider = ({ children }) => {
     const programarAlertasExpiracion = (token) => {
         limpiarTimers();
 
-        // Se intenta decodificar el token y calcular los tiempos de expiración.
         try {
             const payload = JSON.parse(atob(token.split('.')[1]));
             const expMs = payload.exp * 1000;
             const ahora = Date.now();
             const tiempoRestante = expMs - ahora;
 
-            // Si el tiempo restante es negativo o cero, no se programa nada.
-            if (tiempoRestante <= 0) return; // Si ya expiró, no procesa nada.
+            if (tiempoRestante <= 0) return; 
 
             // --- Notificación de advertencia: 5 minutos antes de expirar ---
             const tiempoAviso = tiempoRestante - 5 * 60 * 1000;
@@ -73,7 +70,7 @@ export const AuthProvider = ({ children }) => {
                         showConfirmButton: true,
                         confirmButtonText: 'Entendido',
                         confirmButtonColor: '#f38d1e',
-                        timer: 60000, // Se cierra automáticamente tras 1 minuto.
+                        timer: 60000, 
                         timerProgressBar: true,
                     });
                 }, tiempoAviso);
@@ -88,7 +85,7 @@ export const AuthProvider = ({ children }) => {
                     icon: 'info',
                     confirmButtonText: 'Ir al login',
                     confirmButtonColor: '#f38d1e',
-                    allowOutsideClick: false, // Forzar interacción del usuario.
+                    allowOutsideClick: false, 
                 });
                 logout();
             }, tiempoRestante);
@@ -103,7 +100,6 @@ export const AuthProvider = ({ children }) => {
     // ESTADOS INICIALES (ESTADO DE AUTENTICACIÓN)
     // ==========================================
 
-    // Inicialización de Token: Limpia el almacenamiento si ya caducó, sino programa alertas.
     const [token, setToken] = useState(() => {
         const savedToken = localStorage.getItem("token");
         if (savedToken && !tokenEsValido(savedToken)) {
@@ -112,13 +108,11 @@ export const AuthProvider = ({ children }) => {
             return null;
         }
         if (savedToken) {
-            // El setTimeout a 0 asegura que React monte por completo el árbol de componentes antes de ejecutar SweetAlerts.
             setTimeout(() => programarAlertasExpiracion(savedToken), 0);
         }
         return savedToken || null;
     });
 
-    // Inicialización de datos de Usuario: Condicionado a la vigencia del token previo.
     const [user, setUser] = useState(() => {
         const savedToken = localStorage.getItem("token");
         if (!tokenEsValido(savedToken)) return null;
@@ -137,32 +131,39 @@ export const AuthProvider = ({ children }) => {
     const login = async (data) => {
         const response = await loginUsuario(data);
         let numeroDocumento = null;
+        let tipoDocumento = null;
 
-        // Intento de obtener el perfil completo del usuario para extraer el número de documento.
+        // Intento de obtener el perfil completo del usuario para extraer la información del documento.
         try {
             const perfilRes = await fetch(
-                `${import.meta.env.VITE_API_URL}/api/usuarios/${response.id}`,
+                `${import.meta.env.VITE_API_URL}/api/usuarios/perfil/${response.id}`,
                 {
                     headers: { Authorization: `Bearer ${response.token}` }
                 }
             );
-
-            // Solo se procesa la respuesta si es exitosa (status 200-299).
             if (perfilRes.ok) {
                 const perfil = await perfilRes.json();
+                // Capturamos el número y el tipo según la respuesta real de tu backend
                 numeroDocumento = perfil.documento?.numeroD || null;
+                tipoDocumento = perfil.documento?.tipoD || null;
+            } else {
+                console.warn("No se pudo obtener perfil al loguear. Status:", perfilRes.status);
             }
         } catch (e) {
             console.warn("No se pudo obtener el perfil completo:", e);
         }
 
-        // Construcción del objeto de usuario con los datos esenciales.
+        // Construcción del objeto de usuario estructurado exactamente como pide tu modelo/interfaz
         const userData = {
             id: response.id,
             usuario: response.usuario,
             nombreCompleto: response.nombreCompleto,
             roles: response.roles,
-            numeroDocumento: numeroDocumento,
+            // Sincronizado con la interfaz anidada de TypeScript y listo para usar con el custom hook
+            documento: {
+                tipo: tipoDocumento || "",
+                numero: numeroDocumento || ""
+            }
         };
 
         // Persistencia local
@@ -183,11 +184,9 @@ export const AuthProvider = ({ children }) => {
     const logout = async () => {
         limpiarTimers();
         
-        // Intento de notificación al servidor para invalidar el token, pero no bloquea la limpieza local.
         try {
             const savedToken = localStorage.getItem("token"); 
 
-            // Solo se hace la llamada si hay un token válido.
             if (savedToken) {
                 await fetch(`${import.meta.env.VITE_API_URL}/auth/logout`, {
                     method: "POST",
@@ -197,10 +196,7 @@ export const AuthProvider = ({ children }) => {
         } catch (err) {
             console.warn("El logout en el servidor falló, procediendo con limpieza local:", err.message);
         } 
-        
-        // Garantiza la limpieza local de cualquier manera, incluso si la llamada al servidor falla.
         finally {
-            // Se garantiza la remoción local bajo cualquier circunstancia dentro del bloque 'finally'
             localStorage.removeItem("token"); 
             localStorage.removeItem("user");  
             setToken(null);
@@ -239,5 +235,4 @@ export const AuthProvider = ({ children }) => {
     );
 };
 
-// Hook personalizado para consumir el contexto de manera directa
 export const useAuth = () => useContext(AuthContext);

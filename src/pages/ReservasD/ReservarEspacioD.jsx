@@ -3,12 +3,15 @@ import { Form, Button, Row, Col, Badge, Alert } from "react-bootstrap";
 import React, { useState, useEffect } from "react";
 import { crearReservaDeporte } from "../../api/ReservaDeporteApi.js";
 import { useAuth } from "../../context/AuthContext";
-import { useReservasDeporte } from "../../hooks/useReservasDeporte";  // ← NUEVO
-import Swal from "sweetalert2";                                        // ← NUEVO
+import { useReservasDeporte } from "../../hooks/useReservasDeporte";  
+import Swal from "sweetalert2";                                        
 import { BiCalendarAlt } from "react-icons/bi";
 import DatePicker, { registerLocale } from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css"; // Importante: el estilo CSS
-import { es } from 'date-fns/locale'; // Opcional: para español
+import "react-datepicker/dist/react-datepicker.css"; 
+import { es } from 'date-fns/locale'; 
+import { useRequierePerfilCompleto } from "../../hooks/useRequirePerfilCompleto.js";
+
+registerLocale("es", es); 
 
 function ReservarEspacioD() {
     const { state } = useLocation();
@@ -21,24 +24,25 @@ function ReservarEspacioD() {
     const [bloqueadoEnVivo, setBloqueadoEnVivo] = useState(false);
     // ─────────────────────────────────────────────────────────
 
+    // ── Hook para verificar perfil completo ───────────────────
+    const { verificarPerfil } = useRequierePerfilCompleto();
+
     const [formData, setFormData] = useState({
-    tCancha: text || "",
-    implAlquilados: "",
-    rqrEntrenador: false,
-    fInicioReserva: "",
-    fFinReserva: "",
-    docUsuario: ""
+        tCancha: text || "",
+        implAlquilados: "",
+        rqrEntrenador: false,
+        fInicioReserva: "",
+        fFinReserva: "",
+        docUsuario: ""
     });
 
     // ── Detectar en tiempo real si el espacio se ocupa ──────
-    // Se ejecuta cada vez que llega un nuevo evento WebSocket
     useEffect(() => {
         if (!formData.fInicioReserva || !formData.tCancha) return;
 
         const ocupado = estaOcupado(formData.tCancha, formData.fInicioReserva);
         if (ocupado && !bloqueadoEnVivo) {
             setBloqueadoEnVivo(true);
-            // Alerta automática si alguien más reservó mientras llenabas el form
             Swal.fire({
                 title: '¡Espacio ocupado!',
                 text: `La cancha de ${text} para ese horario acaba de ser reservada por otra persona.`,
@@ -55,19 +59,11 @@ function ReservarEspacioD() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // ── Validar que el usuario tenga documento cargado ──────
-        const docUsuario = user?.numeroDocumento;
-        if (!docUsuario) {
-            Swal.fire({
-                title: 'Perfil incompleto',
-                text: 'No se encontró tu número de documento. Actualiza tu perfil antes de reservar.',
-                icon: 'error',
-                confirmButtonColor: '#f38d1e',
-            });
-            return;
-        }
+        // ── Validar perfil completo usando el Custom Hook Centralizado ──
+        const docUsuario = verificarPerfil(user);
+        if (!docUsuario) return; // Detiene la ejecución si el perfil está incompleto (el hook maneja el alert)
 
-        // Verificar en tiempo real antes de enviar
+        // Verificar en tiempo real disponibilidad antes de enviar
         if (bloqueadoEnVivo) {
             Swal.fire({
                 title: 'Horario no disponible',
@@ -78,13 +74,26 @@ function ReservarEspacioD() {
             return;
         }
 
+        // Validación básica de coherencia de fechas
+        if (!formData.fInicioReserva || !formData.fFinReserva) {
+            Swal.fire({
+                title: 'Fechas requeridas',
+                text: 'Por favor selecciona los horarios de entrada y salida.',
+                icon: 'warning',
+                confirmButtonColor: '#f38d1e'
+            });
+            return;
+        }
+
         // Confirmación antes de reservar
         const confirmacion = await Swal.fire({
             title: '¿Confirmar reserva?',
             html: `
-                <p><strong>Espacio:</strong> ${text}</p>
-                <p><strong>Entrada:</strong> ${formData.fInicioReserva}</p>
-                <p><strong>Salida:</strong> ${formData.fFinReserva}</p>
+                <div style="text-align: left; padding: 0 1rem;">
+                    <p><strong>Espacio:</strong> ${text}</p>
+                    <p><strong>Entrada:</strong> ${new Date(formData.fInicioReserva).toLocaleString()}</p>
+                    <p><strong>Salida:</strong> ${new Date(formData.fFinReserva).toLocaleString()}</p>
+                </div>
             `,
             icon: 'question',
             showCancelButton: true,
@@ -97,23 +106,23 @@ function ReservarEspacioD() {
         if (!confirmacion.isConfirmed) return;
 
         try {
-        // ── Aseguramos el docUsuario correcto justo antes de enviar ──
-        const datosReserva = { ...formData, docUsuario };
+            // Aseguramos el docUsuario correcto verificado por el hook justo antes de enviar 
+            const datosReserva = { ...formData, docUsuario };
 
-        await crearReservaDeporte(datosReserva);
-        await Swal.fire({
-            title: '¡Reserva confirmada!',
-            text: 'Tu espacio quedó reservado exitosamente.',
-            icon: 'success',
-            timer: 2000,
-            showConfirmButton: false,
-        });
-        navigate(isAdmin()
-            ? "/reservas-deportivas/gestionar"
-            : "/reservas-deportivas/mis-reservas");
+            await crearReservaDeporte(datosReserva);
+            await Swal.fire({
+                title: '¡Reserva confirmada!',
+                text: 'Tu espacio quedó reservado exitosamente.',
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false,
+            });
+            
+            navigate(isAdmin()
+                ? "/reservas-deportivas/gestionar"
+                : "/reservas-deportivas/mis-reservas");
 
         } catch (err) {
-            // ← antes era setError(err.message)
             Swal.fire({
                 title: 'No disponible',
                 text: err.message || 'Error al conectar con el servidor.',
@@ -121,7 +130,7 @@ function ReservarEspacioD() {
                 confirmButtonColor: '#f38d1e',
             });
         }
-    }; // ← Se corrigió el cierre del bloque handleSubmit que estaba mezclado
+    }; 
 
     return (
         <div className='reserva-espacio-container p-4'>
@@ -129,13 +138,11 @@ function ReservarEspacioD() {
                 <h2 className="text-center fw-bold mb-0">
                     RESERVAR ESPACIO: {text?.toUpperCase()}
                 </h2>
-                {/* Indicador de conexión WebSocket */}
                 <Badge bg={conectado ? "success" : "secondary"} className="py-2 px-3">
                     {conectado ? "🟢 En vivo" : "⚪ Conectando..."}
                 </Badge>
             </div>
 
-            {/* Alerta si el horario seleccionado se ocupó en tiempo real */}
             {bloqueadoEnVivo && (
                 <Alert variant="danger" className="text-center fw-bold">
                     ⚠️ Este horario acaba de ser reservado por otra persona. Por favor elige otro.
@@ -144,7 +151,6 @@ function ReservarEspacioD() {
 
             <div className="reservar-espacio-card shadow p-4 rounded bg-white mx-auto" style={{ maxWidth: '900px' }}>
                 <Row className="align-items-center">
-                    {/* COLUMNA IZQUIERDA: Imagen */}
                     <Col md={5} className="mb-4 mb-md-0">
                         <div className="img-detalle text-center">
                             <img
@@ -156,7 +162,6 @@ function ReservarEspacioD() {
                         </div>
                     </Col>
 
-                    {/* COLUMNA DERECHA: Formulario */}
                     <Col md={7}>
                         <Form onSubmit={handleSubmit}>
                             <Form.Group className="mb-3">
@@ -175,52 +180,46 @@ function ReservarEspacioD() {
                             />
 
                             <Row>
+                                <Col md={6} className="mb-3">
+                                    <Form.Label className="fw-bold">Entrada</Form.Label>
+                                    <div className="date-input-wrapper-sport">
+                                        <BiCalendarAlt className="calendar-icon" />
+                                        <DatePicker
+                                            selected={formData.fInicioReserva ? new Date(formData.fInicioReserva) : null}
+                                            onChange={(date) => setFormData({ ...formData, fInicioReserva: date ? date.toISOString() : "" })}
+                                            showTimeSelect
+                                            dateFormat="Pp"
+                                            locale="es"
+                                            className="form-control custom-date-input"
+                                            placeholderText="dd/mm/aaaa --:--"
+                                            minDate={new Date()}
+                                        />
+                                    </div>
+                                </Col>
 
-                            {/* Campo de Entrada (Check-in) */}
-                            <Col md={6} className="mb-3">
-                              <Form.Label className="fw-bold">Entrada</Form.Label>
-                                <div className="date-input-wrapper-sport">
-                                    <BiCalendarAlt className="calendar-icon" />
-                                    <DatePicker
-                                        selected={formData.fInicioReserva ? new Date(formData.fInicioReserva) : null}
-                                        onChange={(date) => setFormData({ ...formData, fInicioReserva: date.toISOString() })}
-                                        showTimeSelect
-                                        dateFormat="Pp"
-                                        locale="es"
-                                        className="form-control custom-date-input"
-                                        placeholderText="dd/mm/aaaa --:--"
-                                        minDate={new Date()}
-                                    />
-                                </div>
-                            </Col>
+                                <Col md={6} className="mb-3">
+                                    <Form.Label className="fw-bold">Salida</Form.Label>
+                                    <div className="date-input-wrapper-sport">
+                                        <BiCalendarAlt className="calendar-icon" />
+                                        <DatePicker
+                                            selected={formData.fFinReserva ? new Date(formData.fFinReserva) : null}
+                                            onChange={(date) => setFormData({ ...formData, fFinReserva: date ? date.toISOString() : "" })}
+                                            showTimeSelect
+                                            dateFormat="Pp"
+                                            locale="es"
+                                            className="form-control custom-date-input"
+                                            placeholderText="dd/mm/aaaa --:--"
+                                            minDate={formData.fInicioReserva ? new Date(formData.fInicioReserva) : new Date()}
+                                        />
+                                    </div>
+                                </Col>
+                            </Row>
 
-                            {/* Campo de Salida (Check-out) */}
-                            <Col md={6} className="mb-3">
-                                <Form.Label className="fw-bold">Salida</Form.Label>
-                                <div className="date-input-wrapper-sport">
-                                    <BiCalendarAlt className="calendar-icon" />
-                                    <DatePicker
-                                        selected={formData.fFinReserva ? new Date(formData.fFinReserva) : null}
-                                        onChange={(date) => setFormData({ ...formData, fFinReserva: date.toISOString() })}
-                                        showTimeSelect
-                                        dateFormat="Pp"
-                                        locale="es"
-                                        className="form-control custom-date-input"
-                                        placeholderText="dd/mm/aaaa --:--"
-                                        // La fecha mínima de salida es la de inicio seleccionada
-                                        minDate={formData.fInicioReserva ? new Date(formData.fInicioReserva) : new Date()}
-                                        // Opcional: si quieres asegurar que no sea antes de la hora de inicio:
-                                        minTime={formData.fInicioReserva ? new Date(formData.fInicioReserva) : new Date()}
-                                        maxTime={new Date(new Date().setHours(23, 59, 0))}
-                                    />
-                                </div>
-                            </Col>
-                        </Row>
                             <div className="d-flex gap-3 mt-4">
                                 <Button
                                     type="submit"
                                     className="w-100 fw-bold border-0"
-                                    disabled={bloqueadoEnVivo}  // ← desactiva si está ocupado
+                                    disabled={bloqueadoEnVivo}  
                                     style={{ backgroundColor: bloqueadoEnVivo ? '#6c757d' : '#f38d1e' }}
                                 >
                                     {bloqueadoEnVivo ? 'HORARIO NO DISPONIBLE' : 'CONFIRMAR RESERVA'}

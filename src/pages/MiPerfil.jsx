@@ -4,6 +4,7 @@ import { Container, Row, Col, Form, Spinner } from "react-bootstrap";
 import { useAuth } from "../context/AuthContext";
 import { actualizarMiPerfil } from "../api/UserApi";
 import Swal from "sweetalert2";
+import LoadingSpinner from "../components/LoadingSpinner";
 import userImg from "../assets/edit-user.png";
 
 const API_URL = import.meta.env.VITE_API_URL;
@@ -96,11 +97,7 @@ export default function MiPerfil() {
         }
     };
 
-    if (loading) return (
-        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "60vh" }}>
-            <Spinner style={{ color: "#f38d1e" }} />
-        </div>
-    );
+    if (loading) return <LoadingSpinner />;
 
     return (
         <div className="editar-page">

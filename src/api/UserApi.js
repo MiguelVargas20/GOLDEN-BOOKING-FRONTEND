@@ -51,7 +51,7 @@ export const eliminarUsuario = async (id) => {
 
 // Actualizar perfil propio (CLIENTE o ADMIN)
 export const actualizarMiPerfil = async (id, datos) => {
-  const res = await fetch(`${API_URL}/${id}/perfil`, {
+  const res = await fetch(`${API_URL}/perfil/${id}`, {
     method: "PATCH",
     headers: authHeaders(),
     body: JSON.stringify(datos)

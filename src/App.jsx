@@ -41,6 +41,9 @@ import UsuariosE from './pages/UsuariosE.jsx';
 import UsuariosC from './pages/UsuariosC.jsx';
 import MiPerfil from './pages/MiPerfil.jsx';
 
+// Módulo: Mensajes (Exclusivo ADMIN)
+import { AdminMensajes } from "./components/AdminMensajes.jsx";
+
 /**
  * Componente Principal de la Aplicación (App)
  * Configura el proveedor de tema, el enrutamiento dinámico de React Router Dom v6
@@ -75,8 +78,7 @@ export default function App() {
 
                         {/* Vista de Inicio del Sistema */}
                         <Route path="/home" element={<Home />}>
-                            {/* Sub-vista por defecto en Home: Muestra los contactos */}
-                            <Route index element={<Contactos />} />
+                            
                         </Route>
 
                         {/* Sección informativa / Formulario de contacto directo */}
@@ -150,7 +152,10 @@ export default function App() {
                             <RutaProtegida soloAdmin={true}><UsuariosC /></RutaProtegida>
                         } />
 
-                        
+                        {/* --- MÓDULO CONTROL DE MENSAJES --- */}
+                        <Route path="/mensajes" element={
+                            <RutaProtegida soloAdmin={true}><AdminMensajes /></RutaProtegida>
+                        } />
 
                         {/* --- MÓDULO CONTROL DE INFRAESTRUCTURA HOTELERA --- */}
                         {/* Formulario exclusivo para registrar nuevas habitaciones al catálogo */}
