@@ -73,4 +73,75 @@
     justify-content: center;
     gap: 1rem;    
 }
+/* Contenedor que agrupa el icono y el input */
+.date-input-wrapper-sport {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
 
+/* Posiciona el icono dentro del input */
+.date-input-wrapper-sport .calendar-icon {
+    position: absolute;
+    left: 10px;
+    color: #6c757d;
+    pointer-events: none; /* Permite hacer clic en el input detrás del icono */
+    z-index: 1;
+}
+
+/* Ajusta el padding del input para dejar espacio al icono */
+.custom-date-input {
+    padding-left: 35px !important;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    height: 45px;
+    transition: border-color 0.3s;
+}
+
+.custom-date-input:focus {
+    border-color: #f38d1e;
+    box-shadow: 0 0 0 0.2rem rgba(243, 141, 30, 0.25);
+}
+
+/* Contenedor principal del calendario */
+.react-datepicker {
+    font-family: 'Arial', sans-serif;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Cabecera (Mes y botones de navegación) */
+.react-datepicker__header {
+    background-color: #f38d1e; /* Tu color naranja corporativo */
+    color: white;
+    border-bottom: none;
+    border-radius: 8px 8px 0 0;
+}
+
+.react-datepicker__current-month, 
+.react-datepicker__day-name {
+    color: white !important;
+}
+
+/* Día seleccionado */
+.react-datepicker__day--selected, 
+.react-datepicker__day--keyboard-selected {
+    background-color: #f38d1e !important;
+    border-radius: 50%;
+}
+
+/* Hover en los días */
+.react-datepicker__day:hover {
+    background-color: #ffe0bd;
+}
+
+/* Panel de tiempo */
+.react-datepicker__time-container {
+    border-left: 1px solid #ddd;
+}
+
+.react-datepicker__time-list-item--selected {
+    background-color: #f38d1e !important;
+}

@@ -5,6 +5,10 @@ import { crearReservaDeporte } from "../../api/ReservaDeporteApi.js";
 import { useAuth } from "../../context/AuthContext";
 import { useReservasDeporte } from "../../hooks/useReservasDeporte";  // ← NUEVO
 import Swal from "sweetalert2";                                        // ← NUEVO
+import { BiCalendarAlt } from "react-icons/bi";
+import DatePicker, { registerLocale } from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css"; // Importante: el estilo CSS
+import { es } from 'date-fns/locale'; // Opcional: para español
 
 function ReservarEspacioD() {
     const { state } = useLocation();
@@ -156,23 +160,47 @@ function ReservarEspacioD() {
                             />
 
                             <Row>
-                                <Form.Group className="col-md-6 mb-3">
-                                    <Form.Label className="fw-bold">Entrada</Form.Label>
-                                    <Form.Control
-                                        type="datetime-local"
-                                        onChange={(e) => setFormData({ ...formData, fInicioReserva: e.target.value })}
-                                    />
-                                </Form.Group>
 
-                                <Form.Group className="col-md-6 mb-3">
-                                    <Form.Label className="fw-bold">Salida</Form.Label>
-                                    <Form.Control
-                                        type="datetime-local"
-                                        onChange={(e) => setFormData({ ...formData, fFinReserva: e.target.value })}
+                            {/* Campo de Entrada (Check-in) */}
+                            <Col md={6} className="mb-3">
+                              <Form.Label className="fw-bold">Entrada</Form.Label>
+                                <div className="date-input-wrapper-sport">
+                                    <BiCalendarAlt className="calendar-icon" />
+                                    <DatePicker
+                                        selected={formData.fInicioReserva ? new Date(formData.fInicioReserva) : null}
+                                        onChange={(date) => setFormData({ ...formData, fInicioReserva: date.toISOString() })}
+                                        showTimeSelect
+                                        dateFormat="Pp"
+                                        locale="es"
+                                        className="form-control custom-date-input"
+                                        placeholderText="dd/mm/aaaa --:--"
+                                        minDate={new Date()}
                                     />
-                                </Form.Group>
-                            </Row>
+                                </div>
+                            </Col>
 
+                            {/* Campo de Salida (Check-out) */}
+                            <Col md={6} className="mb-3">
+                                <Form.Label className="fw-bold">Salida</Form.Label>
+                                <div className="date-input-wrapper-sport">
+                                    <BiCalendarAlt className="calendar-icon" />
+                                    <DatePicker
+                                        selected={formData.fFinReserva ? new Date(formData.fFinReserva) : null}
+                                        onChange={(date) => setFormData({ ...formData, fFinReserva: date.toISOString() })}
+                                        showTimeSelect
+                                        dateFormat="Pp"
+                                        locale="es"
+                                        className="form-control custom-date-input"
+                                        placeholderText="dd/mm/aaaa --:--"
+                                        // La fecha mínima de salida es la de inicio seleccionada
+                                        minDate={formData.fInicioReserva ? new Date(formData.fInicioReserva) : new Date()}
+                                        // Opcional: si quieres asegurar que no sea antes de la hora de inicio:
+                                        minTime={formData.fInicioReserva ? new Date(formData.fInicioReserva) : new Date()}
+                                        maxTime={new Date(new Date().setHours(23, 59, 0))}
+                                    />
+                                </div>
+                            </Col>
+                        </Row>
                             <div className="d-flex gap-3 mt-4">
                                 <Button
                                     type="submit"

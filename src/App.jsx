@@ -32,6 +32,7 @@ import ReservasH from './pages/reservasH.jsx';
 import HabitacionD from './pages/HabitacionD.jsx';
 import TipoHabitacionD from './pages/TipoHabitacionD.jsx';
 import GestionHabitacionesD from './pages/GestionHabitacionesD.jsx';
+import DetalleHabitacion from "./pages/DetalleHabitacion";
 
 // Módulo: Gestión de Usuarios (Exclusivo ADMIN)
 import UsuariosH from './pages/UsuariosH.jsx';
@@ -120,6 +121,9 @@ export default function App() {
                         
                         {/* Configuración y listado de tipos de habitación (Deluxe, Suite, etc.) */}
                         <Route path="/tipo-habitacion" element={<TipoHabitacionD />} />
+                        
+                        {/* Panel de administración de habitaciones (Disponibilidad, Precios, Estados) */}
+                        <Route path="/detalle/:id" element={<DetalleHabitacion />} />|
 
                         {/* =========================================================
                             RUTAS PROTEGIDAS CON PRIVILEGIOS DE ADMINISTRADOR

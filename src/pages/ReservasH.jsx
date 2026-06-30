@@ -1,67 +1,59 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react"; // <--- Agregué useMemo
 import { useNavigate } from "react-router-dom";
 import { IoAddCircleOutline } from "react-icons/io5";
-import { BiCalendarAlt, BiGroup, BiMoney } from "react-icons/bi"; // Nuevos iconos
+import { BiCalendarAlt, BiGroup, BiMoney } from "react-icons/bi";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Spinner from "react-bootstrap/Spinner";
+import Form from "react-bootstrap/Form"; // <--- Agregué Form para los filtros
 import { listarHabitaciones } from "../api/HabitacionApi";
 import { useAuth } from "../context/AuthContext";
-import {
-    crearReservaHotel,
-} from "../api/ReservaHotelApi";
-import "../styles/reservasH.css"; // Usa el nuevo CSS
+import { crearReservaHotel } from "../api/ReservaHotelApi";
+import "../styles/reservasH.css";
 
-// Imagen placeholder
 const PLACEHOLDER =
     "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&q=80";
 
 export default function ReservasH() {
     const navigate = useNavigate();
-
-    // Función para verificar si el usuario es ADMIN
     const { isAdmin } = useAuth();
 
-    // ── Estados globales
     const [habitaciones, setHabitaciones] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-
-    // ── Estado por habitación (fechas) - Solo fechas, sin contador
     const [fechas, setFechas] = useState({});
-
-    // ── Feedback de reserva
     const [reservando, setReservando] = useState(null); 
     const [mensajeExito, setMensajeExito] = useState("");
     const [mensajeError, setMensajeError] = useState("");
 
-    /* ── Cargar habitaciones al montar */
+    // --- NUEVOS ESTADOS PARA FILTROS ---
+    const [filterTipo, setFilterTipo] = useState("Todos");
+    const [ordenPrecio, setOrdenPrecio] = useState("normal");
+
     useEffect(() => {
         const cargar = async () => {
             setLoading(true);
             try {
                 const data = await listarHabitaciones();
                 
-                // ── VALIDACIÓN INTELIGENTE DEL FORMATO DE DATOS ──
                 let listaValida = [];
                 if (Array.isArray(data)) {
                     listaValida = data;
                 } else if (data && Array.isArray(data.content)) {
-                    listaValida = data.content; // Si la API devuelve un objeto paginado tradicional
+                    listaValida = data.content;
                 } else if (data && Array.isArray(data.contenido)) {
-                    listaValida = data.contenido; // Si la propiedad se llama contenido
+                    listaValida = data.contenido;
                 } else {
-                    listaValida = []; // Salvavidas definitivo para que nunca de error .map
+                    listaValida = []; 
                 }
 
                 setHabitaciones(listaValida);
 
-                // Inicializar fechas para cada habitación usando la lista validada
                 const fechasIniciales = {};
                 listaValida.forEach((h) => {
                     fechasIniciales[h.id] = {
-                        checkIn: "", // YYYY-MM-DD
-                        checkOut: "", // YYYY-MM-DD
+                        checkIn: "",
+                        checkOut: "",
                     };
                 });
                 setFechas(fechasIniciales);
@@ -75,8 +67,21 @@ export default function ReservasH() {
         };
         cargar();
     }, []);
-    
-    /* ── Helpers de fechas por habitación */
+
+    // --- LÓGICA DE FILTRADO Y ORDENAMIENTO (OPTIMIZADA) ---
+    const habitacionesFiltradas = useMemo(() => {
+        let lista = [...habitaciones];
+        
+        if (filterTipo !== "Todos") {
+            lista = lista.filter(h => h.datosTipoHabitacion?.nombreTipoHabitacion === filterTipo);
+        }
+        
+        if (ordenPrecio === "asc") lista.sort((a, b) => a.precioNoche - b.precioNoche);
+        else if (ordenPrecio === "desc") lista.sort((a, b) => b.precioNoche - a.precioNoche);
+        
+        return lista;
+    }, [habitaciones, filterTipo, ordenPrecio]);
+
     const getFechasHab = (id) =>
         fechas[id] || { checkIn: "", checkOut: "" };
 
@@ -89,11 +94,9 @@ export default function ReservasH() {
         });
     };
 
-    /* ── Reservar habitación */
     const handleReservar = async (hab) => {
         const habFechas = getFechasHab(hab.id);
 
-        // Validaciones
         if (!habFechas.checkIn || !habFechas.checkOut) {
             setMensajeError("Selecciona las fechas de check-in y check-out.");
             setTimeout(() => setMensajeError(""), 3000);
@@ -131,7 +134,6 @@ export default function ReservasH() {
         }
     };
 
-    /* ── Render */
     if (loading) return (
         <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "60vh" }}>
             <Spinner animation="border" style={{ color: "#c9a84c" }} />
@@ -145,7 +147,7 @@ export default function ReservasH() {
     );
 
     return (
-        <div className="container-fluid main-container golden-booking-layout">
+        <div className="reservas-container container-fluid main-container golden-booking-layout">
 
             {mensajeExito && (
                 <div className="alert alert-success text-center mx-3 mt-3">{mensajeExito}</div>
@@ -154,44 +156,71 @@ export default function ReservasH() {
                 <div className="alert alert-danger text-center mx-3 mt-3">{mensajeError}</div>
             )}
 
-            <Row className="mb-4 mx-1">
-                <Col className="d-flex justify-content-start gap-2">
-                    {isAdmin() && (
-                        <>
-                            <button
-                                className="btn-create-room"
-                                onClick={() => navigate("/crear-habitacion")}
-                            >
-                                <IoAddCircleOutline className="me-2 fs-5" />
-                                Crear Habitación
-                            </button>
-                            <button
-                                className="btn-create-room"
-                                onClick={() => navigate("/gestionar-habitaciones")}
-                                style={{ background: "#1a1a2e" }}
-                            >
-                                ⚙️ Gestionar Habitaciones
-                            </button>
-                        </>
-                    )}
-                </Col>
-            </Row>
+            <div className="botones-reservas mt-4 mb-5 mx-3">
+                {isAdmin() ? (
+                    <button
+                        className="btn-reserva gestionar d-flex align-items-center justify-content-center"
+                        onClick={() => navigate("/crear-habitacion")}
+                    >
+                        <IoAddCircleOutline className="me-2 fs-5" /> Crear Habitación
+                    </button>
+                ) : (
+                    <div />
+                )}
+
+                <h1 className="titulo-reservas">
+                    RESERVAS <span>HOTELERAS</span>
+                </h1>
+
+                {isAdmin() ? (
+                    <button
+                        className="btn-reserva mis d-flex align-items-center justify-content-center"
+                        onClick={() => navigate("/gestionar-habitaciones")}
+                    >
+                        ⚙️ Gestionar Habitaciones
+                    </button>
+                ) : (
+                    <div />
+                )}
+            </div>
+
+            {/* --- PANEL DE FILTROS NUEVO --- */}
+            <div className="mx-3 mb-4 p-3 bg-light rounded shadow-sm border">
+                <Row className="align-items-center">
+                    <Col md={6}>
+                        <Form.Label className="fw-bold">Filtrar por tipo:</Form.Label>
+                        <Form.Select onChange={(e) => setFilterTipo(e.target.value)}>
+                            <option value="Todos">Todos los tipos</option>
+                            <option value="Simple">Simple</option>
+                            <option value="Familiar">Familiar</option>
+                            <option value="Suite">Suite</option>
+                        </Form.Select>
+                    </Col>
+                    <Col md={6}>
+                        <Form.Label className="fw-bold">Ordenar por precio:</Form.Label>
+                        <Form.Select onChange={(e) => setOrdenPrecio(e.target.value)}>
+                            <option value="normal">Sin orden</option>
+                            <option value="asc">Menor a mayor</option>
+                            <option value="desc">Mayor a menor</option>
+                        </Form.Select>
+                    </Col>
+                </Row>
+            </div>
 
             <Row>
                 <Col>
-                    {habitaciones.length === 0 ? (
+                    {habitacionesFiltradas.length === 0 ? (
                         <div className="text-center py-5 text-muted empty-banner">
-                            No hay habitaciones disponibles en este momento.
+                            No se encontraron habitaciones con esos criterios.
                         </div>
                     ) : (
-                        habitaciones.map((hab) => {
+                        // Mapeamos las habitaciones filtradas
+                        habitacionesFiltradas.map((hab) => {
                             const habFechas = getFechasHab(hab.id);
                             const disponible = hab.estadoHabitacion?.toLowerCase() === "disponible";
 
                             return (
-                                <div key={hab.id} className="hotel-card mb-4">
-
-                                    {/* 1. Imagen */}
+                                <div key={hab.id} className="hotel-card mb-4 mx-3">
                                     <div className="hotel-image-container">
                                         <img
                                             src={hab.imagenUrl || PLACEHOLDER}
@@ -200,11 +229,8 @@ export default function ReservasH() {
                                         />
                                     </div>
 
-                                    {/* 2. Información centralizada (Mejorada) */}
                                     <div className="hotel-info-block">
-
                                         <div className="hotel-header">
-                                            {/* Título Estético Serif */}
                                             <h4>
                                                 {hab.numeroHabitacion} ·{" "}
                                                 {hab.datosTipoHabitacion?.nombreTipoHabitacion }
@@ -215,7 +241,6 @@ export default function ReservasH() {
                                             <p className="room-description">{hab.descripcion}</p>
                                         )}
 
-                                        {/* Bloque de Capacidad y Precio Base con Iconos */}
                                         <div className="details-boxes mb-3">
                                             <div className="details-box">
                                                 <BiGroup /> Max Capacidad: {hab.datosTipoHabitacion?.capacidadMaxima || "2"} Personas
@@ -233,7 +258,6 @@ export default function ReservasH() {
                                             <span className="amenity-tag">Breakfast included</span>
                                         </div>
 
-                                        {/* ── SELECTOR DE FECHAS (CALENDARIO CÓMODO) INTEGRADO ── */}
                                         <div className="booking-dates">
                                             <div className="date-picker-row">
                                                 <div className="date-input-group">
@@ -264,7 +288,6 @@ export default function ReservasH() {
                                         </div>
                                     </div>
 
-                                    {/* 3. Precio y Acciones Derecha (CENTRADO VERTICAL Y HORIZONTAL) */}
                                     <div className="hotel-actions-block">
                                         <div className="price-block">
                                             <p className="base-price">${hab.precioNoche?.toLocaleString("es-CO") || "—"}</p>
@@ -293,5 +316,5 @@ export default function ReservasH() {
                 </Col>
             </Row>
         </div>
-    );
+    ); 
 }
