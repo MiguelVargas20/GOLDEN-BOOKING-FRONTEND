@@ -171,10 +171,10 @@ export default function MiPerfil() {
 
                             <div className="editar-botones">
                                 <button type="submit" className="editar-btn-guardar" disabled={saving}>
-                                    {saving ? "Guardando..." : "GUARDAR CAMBIOS"}
+                                    {saving ? "Guardando..." : "Guardar Cambios"}
                                 </button>
                                 <button type="button" className="editar-btn-cancelar" onClick={() => navigate(-1)}>
-                                    CANCELAR
+                                    Cancelar
                                 </button>
                             </div>
                         </Form>

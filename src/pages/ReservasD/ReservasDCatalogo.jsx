@@ -58,7 +58,7 @@ function ReservasDCatalogo() {
                         className="btn-reserva gestionar d-flex align-items-center justify-content-center"
                         onClick={() => navigate("/reservas-deportivas/gestionar")}
                     >
-                        <BsCalendar4 className="me-2 fs-5" /> GESTIONAR RESERVAS
+                        <BsCalendar4 className="me-2 fs-5" /> Gestionar Reservas
                     </button>
                 ) : (
                     <div /> /* Div vacío para que el título no se mueva de su sitio si no eres admin */
@@ -74,7 +74,7 @@ function ReservasDCatalogo() {
                     className="btn-reserva mis d-flex align-items-center justify-content-center"
                     onClick={() => navigate("/reservas-deportivas/mis-reservas")}
                 >
-                    <BsArrowCounterclockwise className="me-2 fs-5" />MIS RESERVAS
+                    <BsArrowCounterclockwise className="me-2 fs-5" />Mis Reservas
                 </button>
             </div>
 

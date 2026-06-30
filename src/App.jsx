@@ -33,6 +33,7 @@ import HabitacionD from './pages/HabitacionD.jsx';
 import TipoHabitacionD from './pages/TipoHabitacionD.jsx';
 import GestionHabitacionesD from './pages/GestionHabitacionesD.jsx';
 import DetalleHabitacion from "./pages/DetalleHabitacion";
+import MisReservasHotel from './pages/MisReservasHotel.jsx';
 
 // Módulo: Gestión de Usuarios (Exclusivo ADMIN)
 import UsuariosH from './pages/UsuariosH.jsx';
@@ -124,6 +125,9 @@ export default function App() {
                         
                         {/* Panel de administración de habitaciones (Disponibilidad, Precios, Estados) */}
                         <Route path="/detalle/:id" element={<DetalleHabitacion />} />|
+
+                        {/* Panel de administración de habitaciones (Disponibilidad, Precios, Estados) */}
+                        <Route path="/mis-reservas-hotel" element={<MisReservasHotel />} />
 
                         {/* =========================================================
                             RUTAS PROTEGIDAS CON PRIVILEGIOS DE ADMINISTRADOR

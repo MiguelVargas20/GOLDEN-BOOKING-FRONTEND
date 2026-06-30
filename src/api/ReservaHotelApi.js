@@ -17,8 +17,6 @@ const authHeaders = () => ({
 
 /**
  * Registra una nueva reserva de hotel en el sistema.
- * @param {Object} reserva - Objeto con los detalles de la reserva.
- * @returns {Promise<Object>} La reserva creada por el servidor.
  */
 export const crearReservaHotel = async (reserva) => {
   const res = await fetch(`${API_URL}/api/reservas/hotel`, {
@@ -32,8 +30,7 @@ export const crearReservaHotel = async (reserva) => {
 };
 
 /**
- * Obtiene el listado completo de reservas de hotel.
- * @returns {Promise<Array>} Lista de reservas.
+ * Obtiene el listado completo de reservas de hotel (ADMIN).
  */
 export const listarReservasHotel = async () => {
   const res = await fetch(`${API_URL}/api/reservas/hotel`, {
@@ -46,8 +43,6 @@ export const listarReservasHotel = async () => {
 
 /**
  * Obtiene los detalles de una reserva específica de hotel mediante su ID.
- * @param {string|number} id - Identificador de la reserva.
- * @returns {Promise<Object>} Datos de la reserva solicitada.
  */
 export const obtenerReservaHotelPorId = async (id) => {
   const res = await fetch(`${API_URL}/api/reservas/hotel/${id}`, {
@@ -59,9 +54,7 @@ export const obtenerReservaHotelPorId = async (id) => {
 };
 
 /**
- * Cancela una reserva de hotel existente mediante su ID (Usa método PATCH).
- * @param {string|number} id - Identificador de la reserva a cancelar.
- * @returns {Promise<boolean>} Retorna true si la cancelación fue exitosa.
+ * Cancela una reserva de hotel existente mediante su ID (PATCH).
  */
 export const cancelarReservaHotel = async (id) => {
   const res = await fetch(`${API_URL}/api/reservas/hotel/${id}/cancelar`, {
@@ -70,4 +63,16 @@ export const cancelarReservaHotel = async (id) => {
   });
   if (!res.ok) throw new Error("Error al cancelar reserva");
   return true;
+};                                          {/* ← cierre correcto */}
+
+/**
+ * Lista las reservas hoteleras de un usuario específico (CLIENTE).
+ */
+export const listarMisReservasHotel = async (docUsuario) => {
+  const res = await fetch(`${API_URL}/api/reservas/hotel/usuario/${docUsuario}`, {
+    headers: authHeaders(),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error("Error al cargar tus reservas");
+  return data;
 };

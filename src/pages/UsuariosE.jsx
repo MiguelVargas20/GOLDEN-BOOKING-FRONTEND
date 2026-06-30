@@ -123,8 +123,8 @@ export default function UsuariosE() {
               </Row>
 
               <div className="editar-botones">
-                <Button type="submit" className="editar-btn-guardar">GUARDAR</Button>
-                <Button className="editar-btn-cancelar" onClick={() => navigate("/usuarios")}>CANCELAR</Button>
+                <Button type="submit" className="editar-btn-guardar">Guardar</Button>
+                <Button className="editar-btn-cancelar" onClick={() => navigate("/usuarios")}>Cancelar</Button>
               </div>
             </Form>
           </Col>

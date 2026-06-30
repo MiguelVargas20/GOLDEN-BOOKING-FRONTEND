@@ -80,13 +80,13 @@ function Crear() {
                             className="btn btn-crear crear" 
                             onClick={() => navigate("/reservas-deportivas")}
                         >
-                            CREAR
+                            Crear
                         </button>
                         <button 
                             className="btn btn-crear cancelar" 
                             onClick={() => navigate("/reservas-deportivas")}
                         >
-                            CANCELAR
+                            Cancelar
                         </button>
                     </div>
                 </div>

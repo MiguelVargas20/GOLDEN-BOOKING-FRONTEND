@@ -149,8 +149,8 @@ export default function UsuariosC() {
               </Row>
 
               <div className="crear-botones">
-                <Button type="submit" className="crear-btn-guardar">CREAR</Button>
-                <Button className="crear-btn-cancelar" onClick={() => navigate("/usuarios")}>CANCELAR</Button>
+                <Button type="submit" className="crear-btn-guardar">Crear</Button>
+                <Button className="crear-btn-cancelar" onClick={() => navigate("/usuarios")}>Cancelar</Button>
               </div>
             </Form>
           </Col>

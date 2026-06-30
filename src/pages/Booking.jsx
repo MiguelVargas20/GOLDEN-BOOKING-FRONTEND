@@ -76,8 +76,8 @@ function Navbar() {
                     </Form.Select>
 
                     <Col className='buttons-booking'>
-                        <button className='button-buscar'>BUSCAR</button>
-                        <button className='button-buscar'>CANCELAR</button>
+                        <button className='button-buscar'>Buscar</button>
+                        <button className='button-buscar'>Cancelar</button>
                     </Col>
 
                 </Col>

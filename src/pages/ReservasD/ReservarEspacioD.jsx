@@ -22,12 +22,12 @@ function ReservarEspacioD() {
     // ─────────────────────────────────────────────────────────
 
     const [formData, setFormData] = useState({
-        tCancha: text || "",
-        implAlquilados: "",
-        rqrEntrenador: false,
-        fInicioReserva: "",
-        fFinReserva: "",
-        docUsuario: user?.numeroDocumento || user?.id || ""
+    tCancha: text || "",
+    implAlquilados: "",
+    rqrEntrenador: false,
+    fInicioReserva: "",
+    fFinReserva: "",
+    docUsuario: ""
     });
 
     // ── Detectar en tiempo real si el espacio se ocupa ──────
@@ -54,6 +54,18 @@ function ReservarEspacioD() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // ── Validar que el usuario tenga documento cargado ──────
+        const docUsuario = user?.numeroDocumento;
+        if (!docUsuario) {
+            Swal.fire({
+                title: 'Perfil incompleto',
+                text: 'No se encontró tu número de documento. Actualiza tu perfil antes de reservar.',
+                icon: 'error',
+                confirmButtonColor: '#f38d1e',
+            });
+            return;
+        }
 
         // Verificar en tiempo real antes de enviar
         if (bloqueadoEnVivo) {
@@ -85,17 +97,20 @@ function ReservarEspacioD() {
         if (!confirmacion.isConfirmed) return;
 
         try {
-            await crearReservaDeporte(formData);
-            await Swal.fire({
-                title: '¡Reserva confirmada!',
-                text: 'Tu espacio quedó reservado exitosamente.',
-                icon: 'success',
-                timer: 2000,
-                showConfirmButton: false,
-            });
-            navigate(isAdmin()
-                ? "/reservas-deportivas/gestionar"
-                : "/reservas-deportivas/mis-reservas");
+        // ── Aseguramos el docUsuario correcto justo antes de enviar ──
+        const datosReserva = { ...formData, docUsuario };
+
+        await crearReservaDeporte(datosReserva);
+        await Swal.fire({
+            title: '¡Reserva confirmada!',
+            text: 'Tu espacio quedó reservado exitosamente.',
+            icon: 'success',
+            timer: 2000,
+            showConfirmButton: false,
+        });
+        navigate(isAdmin()
+            ? "/reservas-deportivas/gestionar"
+            : "/reservas-deportivas/mis-reservas");
 
         } catch (err) {
             // ← antes era setError(err.message)
@@ -211,7 +226,7 @@ function ReservarEspacioD() {
                                     {bloqueadoEnVivo ? 'HORARIO NO DISPONIBLE' : 'CONFIRMAR RESERVA'}
                                 </Button>
                                 <Button variant="outline-secondary" className="w-100" onClick={() => navigate(-1)}>
-                                    CANCELAR
+                                    Cancelar
                                 </Button>
                             </div>
                         </Form>

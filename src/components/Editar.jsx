@@ -60,14 +60,14 @@ function Editar() {
                                 className="btn-editar aceptar-editar"
                                 onClick={() => navigate("/reservas-deportivas")}
                             >
-                                ACEPTAR
+                                Aceptar                 
                             </button>
 
                             <button
                                 className="btn-editar cancelar-editar"
                                 onClick={() => navigate("/reservas-deportivas")}
                             >
-                                CANCELAR
+                                Cancelar
                             </button>
                         </div>
                     </div>
