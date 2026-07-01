@@ -17,7 +17,7 @@ function ReservasDSolicitadas() {
 
     const obtenerMisReservas = async () => {
         try {
-            const data = await listarMisReservasDeporte(user?.documento?.numero);
+            const data = await listarMisReservasDeporte(); // sin argumentos
             
             setReservas(data);
         } catch (err) {

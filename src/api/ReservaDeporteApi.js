@@ -36,23 +36,15 @@ export const listarReservasDeporte = async (page = 0, size = 10) => {
 };
 
 // Listar reservas del usuario logueado (GET) — para CLIENTE
-export const listarMisReservasDeporte = async (userId) => {
+// ANTES: pedía 100 reservas de todos y filtraba en el navegador
+export const listarMisReservasDeporte = async () => {
   const token = localStorage.getItem("token");
-
-  // Pedimos todas las páginas o una página grande para filtrar las del usuario
-  const response = await fetch(`${API_URL}?page=0&size=100`, {
-    headers: {
-      Authorization: token ? `Bearer ${token}` : ""
-    }
+  const response = await fetch(`${API_URL}/mis-reservas`, {
+    headers: { Authorization: token ? `Bearer ${token}` : "" }
   });
-
   const data = await response.json();
-  if (!response.ok) throw new Error("Error al cargar reservas");
-
-  // Extraer el array del objeto paginado
-  const lista = Array.isArray(data) ? data : (data.contenido || []);
-
-  return lista.filter(r => r.docUsuario === userId);
+  if (!response.ok) throw new Error(data.error || "Error al cargar reservas");
+  return data; // ya viene filtrado y seguro desde el backend
 };
 
 // Cancelar reserva (PATCH)

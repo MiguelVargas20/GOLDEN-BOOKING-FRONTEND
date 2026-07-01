@@ -9,19 +9,31 @@ const TAMANIO_PAGINA = 8;
 
 function GestionarReservas() {
   const navigate = useNavigate();
+  const [cargando, setCargando] = useState(true);
   const [reservas, setReservas]               = useState([]);
   const [busqueda, setBusqueda]               = useState("");
+  const [busquedaDebounced, setBusquedaDebounced] = useState("");
+
   const [error, setError]                     = useState(null);
   const [paginaActual, setPaginaActual]       = useState(0);
   const [totalPaginas, setTotalPaginas]       = useState(0);
   const [totalElementos, setTotalElementos]   = useState(0);
-
+  
   const capitalizar = (texto) =>
     texto ? texto.charAt(0).toUpperCase() + texto.slice(1).toLowerCase() : "—";
 
-  useEffect(() => { obtenerDatos(0); }, []);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setBusquedaDebounced(busqueda);
+    }, 300);
 
+    return () => clearTimeout(timer); // cancela el timer anterior si el user sigue tecleando
+  }, [busqueda]);
+
+  useEffect(() => { obtenerDatos(0); }, []);
+  
   const obtenerDatos = async (pagina = 0) => {
+    setCargando(true);
     try {
       const data = await listarReservasDeporte(pagina, TAMANIO_PAGINA);
       setReservas(data.contenido);
@@ -30,6 +42,8 @@ function GestionarReservas() {
       setTotalElementos(data.totalElementos);
     } catch (err) {
       setError("No se pudieron cargar las reservas");
+    } finally {
+      setCargando(false);
     }
   };
 
@@ -67,11 +81,11 @@ function GestionarReservas() {
     }
   };
 
-  // Filtro local sobre la página actual
+  // Filtro local utilizando el valor debounced (Protege el rendimiento en renderizados sucesivos)
   const reservasFiltradas = reservas.filter(r =>
-    r.tCancha?.toLowerCase().includes(busqueda.toLowerCase()) ||
-    r.docUsuario?.toLowerCase().includes(busqueda.toLowerCase()) ||
-    r.estado?.toLowerCase().includes(busqueda.toLowerCase())
+    r.tCancha?.toLowerCase().includes(busquedaDebounced.toLowerCase()) ||
+    r.docUsuario?.toLowerCase().includes(busquedaDebounced.toLowerCase()) ||
+    r.estado?.toLowerCase().includes(busquedaDebounced.toLowerCase())
   );
 
   return (
@@ -106,7 +120,13 @@ function GestionarReservas() {
             </tr>
           </thead>
           <tbody>
-            {reservasFiltradas.length === 0 ? (
+            {cargando ? (
+              <tr>
+                <td colSpan={7} className="text-center py-4">
+                  Cargando reservas...
+                </td>
+              </tr>
+            ) : reservasFiltradas.length === 0 ? (
               <tr>
                 <td colSpan={7} className="text-center py-4">
                   No hay reservas que coincidan
