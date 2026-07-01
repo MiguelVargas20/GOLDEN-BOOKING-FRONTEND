@@ -15,7 +15,7 @@ export default function MisReservasHotel() {
 
     const obtenerReservas = async () => {
         try {
-            const docUsuario = user?.numeroDocumento;
+            const docUsuario = user?.documento?.numero;
             if (!docUsuario) {
                 setLoading(false);
                 return;

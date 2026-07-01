@@ -17,7 +17,8 @@ function ReservasDSolicitadas() {
 
     const obtenerMisReservas = async () => {
         try {
-            const data = await listarMisReservasDeporte(user?.numeroDocumento || user?.id);
+            const data = await listarMisReservasDeporte(user?.documento?.numero);
+            
             setReservas(data);
         } catch (err) {
             setError("No se pudieron cargar tus reservas");

@@ -11,6 +11,22 @@ const authHeaders = () => ({
   Authorization: `Bearer ${getToken()}`,
 });
 
+// Extrae el mensaje real que manda el GlobalExceptionHandler del backend.
+// Ahí el body siempre viene como { error: "..." } o, en validaciones,
+// { errores: { campo: "mensaje" } }. Si no logramos parsear nada,
+// devolvemos un texto genérico como último recurso.
+const extraerMensajeError = async (res, fallback) => {
+  try {
+    const data = await res.json();
+    if (data?.error) return data.error;
+    if (data?.errores) return Object.values(data.errores).join(" | ");
+    if (data?.message) return data.message;
+  } catch {
+    // el body no era JSON (ej. 401 sin body, error de red, etc.)
+  }
+  return `${fallback} (HTTP ${res.status})`;
+};
+
 // ═══════════════════════════════════════════════════════════
 // ── Reservas Hotel ─────────────────────────────────────────
 // ═══════════════════════════════════════════════════════════
@@ -24,9 +40,8 @@ export const crearReservaHotel = async (reserva) => {
     headers: authHeaders(),
     body: JSON.stringify(reserva),
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message || "Error al crear reserva");
-  return data;
+  if (!res.ok) throw new Error(await extraerMensajeError(res, "Error al crear reserva"));
+  return res.json();
 };
 
 /**
@@ -36,9 +51,8 @@ export const listarReservasHotel = async () => {
   const res = await fetch(`${API_URL}/api/reservas/hotel`, {
     headers: authHeaders(),
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error("Error al cargar reservas");
-  return data;
+  if (!res.ok) throw new Error(await extraerMensajeError(res, "Error al cargar reservas"));
+  return res.json();
 };
 
 /**
@@ -48,9 +62,8 @@ export const obtenerReservaHotelPorId = async (id) => {
   const res = await fetch(`${API_URL}/api/reservas/hotel/${id}`, {
     headers: authHeaders(),
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error("Reserva no encontrada");
-  return data;
+  if (!res.ok) throw new Error(await extraerMensajeError(res, "Reserva no encontrada"));
+  return res.json();
 };
 
 /**
@@ -61,9 +74,9 @@ export const cancelarReservaHotel = async (id) => {
     method: "PATCH",
     headers: authHeaders(),
   });
-  if (!res.ok) throw new Error("Error al cancelar reserva");
+  if (!res.ok) throw new Error(await extraerMensajeError(res, "Error al cancelar reserva"));
   return true;
-};                                          {/* ← cierre correcto */}
+};
 
 /**
  * Lista las reservas hoteleras de un usuario específico (CLIENTE).
@@ -72,7 +85,6 @@ export const listarMisReservasHotel = async (docUsuario) => {
   const res = await fetch(`${API_URL}/api/reservas/hotel/usuario/${docUsuario}`, {
     headers: authHeaders(),
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error("Error al cargar tus reservas");
-  return data;
+  if (!res.ok) throw new Error(await extraerMensajeError(res, "Error al cargar tus reservas"));
+  return res.json();
 };
