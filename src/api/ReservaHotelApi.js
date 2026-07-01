@@ -81,8 +81,8 @@ export const cancelarReservaHotel = async (id) => {
 /**
  * Lista las reservas hoteleras de un usuario específico (CLIENTE).
  */
-export const listarMisReservasHotel = async (docUsuario) => {
-  const res = await fetch(`${API_URL}/api/reservas/hotel/usuario/${docUsuario}`, {
+export const listarMisReservasHotel = async () => {
+  const res = await fetch(`${API_URL}/api/reservas/hotel/mis-reservas`, {
     headers: authHeaders(),
   });
   if (!res.ok) throw new Error(await extraerMensajeError(res, "Error al cargar tus reservas"));

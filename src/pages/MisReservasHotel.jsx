@@ -13,22 +13,16 @@ export default function MisReservasHotel() {
 
     useEffect(() => { obtenerReservas(); }, []);
 
-    const obtenerReservas = async () => {
-        try {
-            const docUsuario = user?.documento?.numero;
-            if (!docUsuario) {
-                setLoading(false);
-                return;
-            }
-            const data = await listarMisReservasHotel(docUsuario);
-            setReservas(data);
-        } catch (err) {
-            Swal.fire({ title: "Error", text: "No se pudieron cargar tus reservas.", icon: "error", confirmButtonColor: "#f38d1e" });
-        } finally {
-            setLoading(false);
-        }
-    };
-
+const obtenerReservas = async () => {
+    try {
+        const data = await listarMisReservasHotel();
+        setReservas(data);
+    } catch (err) {
+        Swal.fire({ title: "Error", text: "No se pudieron cargar tus reservas.", icon: "error", confirmButtonColor: "#f38d1e" });
+    } finally {
+        setLoading(false);
+    }
+};
     const handleCancelar = async (id, numeroHab) => {
         const resultado = await Swal.fire({
             title: "¿Cancelar reserva?",

@@ -144,6 +144,8 @@ export const AuthProvider = ({ children }) => {
             if (perfilRes.ok) {
                 const perfil = await perfilRes.json();
                 // Capturamos el número y el tipo según la respuesta real de tu backend
+
+                console.log("PERFIL CRUDO DEL BACKEND:", perfil);
                 numeroDocumento = perfil.documento?.numeroD || null;
                 tipoDocumento = perfil.documento?.tipoD || null;
             } else {
