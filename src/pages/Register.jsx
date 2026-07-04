@@ -34,84 +34,96 @@ export default function Register() {
   };
 
   return (
-    <div className="register-container">
-      <div className="center-panel-register">
-        {/* LOGO A LA IZQUIERDA */}
-        <div className="logo-register">
-          <img src={logo} alt="Logo" />
-        </div>
+    <div className="register-page">
+      {/* SECCIÓN IZQUIERDA: FORMULARIO */}
+      <div className="form-side">
+        <div className="form-content">
+          <header className="register-header">
+            <img src={logo} alt="Golden Booking Logo" className="main-logo" />
+            <h1 className="register-title">Crea tu cuenta</h1>
+            <p className="register-subtitle">Regístrate para gestionar tus reservas de lujo</p>
+          </header>
 
-        <div className="header-text-register">
-            <h1 className="title-register">Crea tu cuenta</h1>
-            <p className="subtitle-register">Regístrate para acceder a tu reserva</p>
-        </div>
+          {serverError && <div className="server-error-banner">{serverError}</div>}
 
-        {serverError && <p className="error-msg">{serverError}</p>}
+          <form className="professional-form" onSubmit={handleSubmit(onSubmit)}>
+            <div className="input-grid">
+              <div className="field-group">
+                <label>Nombre</label>
+                <input type="text" placeholder="Ej: Juan" {...register("nombre")} className={errors.nombre ? "input-error" : ""} />
+                {errors.nombre && <span className="helper-text">{errors.nombre.message}</span>}
+              </div>
 
-        <form className="form-register" onSubmit={handleSubmit(onSubmit)}>
-          {/* FILA 1: NOMBRE Y APELLIDO */}
-          <div className="input-row">
-            <div className="input-group">
-              <input type="text" placeholder="Nombre" {...register("nombre")} />
-              {errors.nombre && <span className="error-text">{errors.nombre.message}</span>}
-            </div>
-            <div className="input-group">
-              <input type="text" placeholder="Apellido" {...register("apellido")} />
-              {errors.apellido && <span className="error-text">{errors.apellido.message}</span>}
-            </div>
-          </div>
+              <div className="field-group">
+                <label>Apellido</label>
+                <input type="text" placeholder="Ej: Pérez" {...register("apellido")} className={errors.apellido ? "input-error" : ""} />
+                {errors.apellido && <span className="helper-text">{errors.apellido.message}</span>}
+              </div>
 
-          {/* FILA 2: TIPO Y NÚMERO DE DOCUMENTO (Para ahorrar espacio vertical) */}
-          <div className="input-row">
-            <div className="input-group">
-                <select {...register("tipoDoc")}>
-                <option value="">Tipo de documento</option>
-                <option value="CC">Cédula de ciudadanía</option>
-                <option value="TI">Tarjeta de identidad</option>
-                <option value="CE">Cédula de extranjería</option>
+              <div className="field-group">
+                <label>Tipo de documento</label>
+                <select {...register("tipoDoc")} className={errors.tipoDoc ? "input-error" : ""}>
+                  <option value="">Seleccione...</option>
+                  <option value="CC">Cédula de ciudadanía</option>
+                  <option value="TI">Tarjeta de identidad</option>
+                  <option value="CE">Cédula de extranjería</option>
                 </select>
-                {errors.tipoDoc && <span className="error-text">{errors.tipoDoc.message}</span>}
-            </div>
-            <div className="input-group">
-                <input type="text" placeholder="Número de documento" {...register("numeroDoc")} />
-                {errors.numeroDoc && <span className="error-text">{errors.numeroDoc.message}</span>}
-            </div>
-          </div>
+                {errors.tipoDoc && <span className="helper-text">{errors.tipoDoc.message}</span>}
+              </div>
 
-          {/* FILA 3: USERNAME Y EMAIL */}
-          <div className="input-row">
-            <div className="input-group">
-                <input type="text" placeholder="Username" {...register("username")} />
-                {errors.username && <span className="error-text">{errors.username.message}</span>}
-            </div>
-            <div className="input-group">
-                <input type="email" placeholder="usuario@correo.com" {...register("email")} />
-                {errors.email && <span className="error-text">{errors.email.message}</span>}
-            </div>
-          </div>
+              <div className="field-group">
+                <label>Número de documento</label>
+                <input type="text" placeholder="123456..." {...register("numeroDoc")} className={errors.numeroDoc ? "input-error" : ""} />
+                {errors.numeroDoc && <span className="helper-text">{errors.numeroDoc.message}</span>}
+              </div>
 
-          {/* CONTRASEÑA */}
-          <div className="input-group password-wrapper">
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Contraseña"
-              {...register("password")}
-            />
-            <span className="eye-icon" onClick={togglePasswordVisibility}>
-              {showPassword ? <FaEyeSlash /> : <IoEyeSharp />}
-            </span>
-            {errors.password && <span className="error-text">{errors.password.message}</span>}
-          </div>
+              <div className="field-group">
+                <label>Nombre de usuario</label>
+                <input type="text" placeholder="juanp123" {...register("username")} className={errors.username ? "input-error" : ""} />
+                {errors.username && <span className="helper-text">{errors.username.message}</span>}
+              </div>
 
-          <div className="register-actions">
-            <button type="submit" className="btn-register-submit" disabled={isSubmitting}>
-              {isSubmitting ? "CARGANDO..." : "REGISTRARSE"}
-            </button>
-            <button type="button" className="btn-back-login" onClick={() => navigate("/")}>
-              Volver al login <FaReply />
-            </button>
-          </div>
-        </form>
+              <div className="field-group">
+                <label>Correo electrónico</label>
+                <input type="email" placeholder="usuario@correo.com" {...register("email")} className={errors.email ? "input-error" : ""} />
+                {errors.email && <span className="helper-text">{errors.email.message}</span>}
+              </div>
+            </div>
+
+            <div className="field-group full-width">
+              <label>Contraseña</label>
+              <div className="password-input-container">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Mínimo 8 caracteres"
+                  {...register("password")}
+                  className={errors.password ? "input-error" : ""}
+                />
+                <button type="button" className="eye-toggle" onClick={togglePasswordVisibility}>
+                  {showPassword ? <FaEyeSlash /> : <IoEyeSharp />}
+                </button>
+              </div>
+              {errors.password && <span className="helper-text">{errors.password.message}</span>}
+            </div>
+
+            <div className="form-footer">
+              <button type="submit" className="submit-gold-btn" disabled={isSubmitting}>
+                {isSubmitting ? "PROCESANDO..." : "REGISTRARSEHORA"}
+              </button>
+              <button type="button" className="back-link" onClick={() => navigate("/")}>
+                <FaReply /> Volver al inicio de sesión
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      {/* SECCIÓN DERECHA: IMAGEN PROFESIONAL */}
+      <div className="image-side">
+        <div className="image-overlay">
+          <h2>Experiencias inolvidables</h2>
+          <p>Tu próxima reserva en Golden Booking está a un paso.</p>
+        </div>
       </div>
     </div>
   );
