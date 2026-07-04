@@ -6,7 +6,8 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import { listarHabitaciones } from "../api/HabitacionApi";
-import { crearReservaHotel } from "../api/ReservaHotelApi";
+import { crearReservaHotel, obtenerFechasOcupadas } from "../api/ReservaHotelApi"; // 🆕 obtenerFechasOcupadas
+import { haySolapamiento } from "../utils/fechasHotel"; // 🆕
 import { useAuth } from "../context/AuthContext";
 import { useRequierePerfilCompleto } from "../hooks/useRequirePerfilCompleto";
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -26,6 +27,9 @@ export default function ReservasH() {
     const [error, setError] = useState("");
     const [fechas, setFechas] = useState({});
     const [reservando, setReservando] = useState(null);
+
+    // 🆕 mapa { idHabitacion: [{checkIn, checkOut}, ...] } con las reservas activas de cada habitación
+    const [rangosOcupadosPorHabitacion, setRangosOcupadosPorHabitacion] = useState({});
 
     const [filterTipo, setFilterTipo] = useState("Todos");
     const [ordenPrecio, setOrdenPrecio] = useState("normal");
@@ -48,6 +52,23 @@ export default function ReservasH() {
                     fechasIniciales[h.id] = { checkIn: "", checkOut: "" };
                 });
                 setFechas(fechasIniciales);
+
+                // 🆕 Traemos las fechas ocupadas de TODAS las habitaciones en paralelo.
+                // Si una falla individualmente, no tumbamos la carga completa:
+                // esa habitación simplemente queda con rangosOcupados = [] y confiamos
+                // en el backend (409) como red de seguridad para ella.
+                const entradas = await Promise.all(
+                    listaValida.map(async (h) => {
+                        try {
+                            const rangos = await obtenerFechasOcupadas(h.id);
+                            return [h.id, rangos];
+                        } catch (errFechas) {
+                            console.error(`No se pudieron cargar fechas ocupadas de ${h.id}:`, errFechas);
+                            return [h.id, []];
+                        }
+                    })
+                );
+                setRangosOcupadosPorHabitacion(Object.fromEntries(entradas));
 
             } catch (err) {
                 console.error("Error en la petición:", err);
@@ -107,9 +128,20 @@ export default function ReservasH() {
             return;
         }
 
-        // Uso del Custom Hook centralizado
+        // 🆕 Validación de solapamiento ANTES de gastar una llamada al backend.
+        const ocupadas = rangosOcupadosPorHabitacion[hab.id] || [];
+        if (haySolapamiento(habFechas.checkIn, habFechas.checkOut, ocupadas)) {
+            Swal.fire({
+                title: "Fechas no disponibles",
+                text: `La habitación ${hab.numeroHabitacion} ya está reservada en parte de ese rango. Elige otras fechas.`,
+                icon: "error",
+                confirmButtonColor: "#f38d1e",
+            });
+            return;
+        }
+
         const docUsuario = verificarPerfil(user);
-        if (!docUsuario) return; 
+        if (!docUsuario) return;
 
         const { noches, total } = calcularNochesYTotal(hab);
 
@@ -151,8 +183,22 @@ export default function ReservasH() {
                 timer: 2500,
                 showConfirmButton: false,
             });
+
+            // 🆕 Refrescamos las fechas ocupadas de ESTA habitación, para que
+            // si el mismo admin/usuario abre otra tarjeta de la misma habitación
+            // sin recargar la página, ya vea el nuevo rango bloqueado.
+            try {
+                const actualizadas = await obtenerFechasOcupadas(hab.id);
+                setRangosOcupadosPorHabitacion((prev) => ({ ...prev, [hab.id]: actualizadas }));
+            } catch {
+                // no crítico: en el peor caso, el usuario recarga y las ve igual
+            }
+
             navigate("/mis-reservas-hotel");
         } catch (err) {
+            // Red de seguridad: si hubo una condición de carrera (dos personas
+            // reservando la misma habitación/fecha casi al mismo tiempo), el
+            // backend responde 409 y el mensaje llega aquí tal cual.
             Swal.fire({ title: "No se pudo reservar", text: err.message || "Error al crear la reserva.", icon: "error", confirmButtonColor: "#f38d1e" });
         } finally {
             setReservando(null);
@@ -170,12 +216,10 @@ export default function ReservasH() {
     return (
         <div className="reservas-container container-fluid main-container golden-booking-layout py-3">
 
-            {/* Indicador de estado del sistema unificado en la parte superior */}
             <div className="conexion-status-container mx-3 text-end">
                 <span className="conexion-badge en-vivo">🟢 En vivo</span>
             </div>
 
-            {/* ── Header compacto ── */}
             <div className="botones-reservas-v2 mt-2 mb-4 mx-3">
                 <div className="acciones-izquierda">
                     {isAdmin() && (
@@ -210,7 +254,6 @@ export default function ReservasH() {
                 </div>
             </div>
 
-            {/* ── Panel de filtros ──────────── */}
             <div className="mx-3 mb-4 p-3 bg-white rounded shadow-sm border border-light-subtle">
                 <Row className="g-3 align-items-center">
                     <Col sm={12} md={6}>
@@ -233,7 +276,6 @@ export default function ReservasH() {
                 </Row>
             </div>
 
-            {/* ── Grid de habitaciones ── */}
             <Row className="mx-1">
                 {habitacionesFiltradas.length === 0 ? (
                     <div className="text-center py-5 text-muted empty-banner">
@@ -242,10 +284,16 @@ export default function ReservasH() {
                 ) : (
                     habitacionesFiltradas.map((hab) => {
                         const habFechas = getFechasHab(hab.id);
-                        const disponible =
-                            hab.estadoHabitacion?.toLowerCase() === "disponible" ||
-                            hab.estado?.toLowerCase() === "disponible";
+
+                        // 🆕 "disponible" ahora significa "no está en mantenimiento",
+                        // no "libre en este instante" — eso se valida por fecha.
+                        const enMantenimiento =
+                            hab.estadoHabitacion?.toLowerCase() === "mantenimiento" ||
+                            hab.estado?.toLowerCase() === "mantenimiento";
+                        const disponible = !enMantenimiento;
+
                         const { noches, total } = calcularNochesYTotal(hab);
+                        const ocupadas = rangosOcupadosPorHabitacion[hab.id] || [];
 
                         return (
                             <Col xs={12} lg={6} key={hab.id} className="mb-4">
@@ -266,7 +314,7 @@ export default function ReservasH() {
                                                 {hab.datosTipoHabitacion?.nombreTipoHabitacion}
                                             </h5>
                                             <span className={`status-tag-v2 ${disponible ? "disponible" : "no-disponible"}`}>
-                                                {disponible ? "✓ Disponible" : "✗ Ocupada"}
+                                                {disponible ? "✓ Disponible" : "✗ Mantenimiento"}
                                             </span>
                                         </div>
 
@@ -274,6 +322,13 @@ export default function ReservasH() {
                                             <span><BiGroup /> {hab.datosTipoHabitacion?.capacidadMaxima || "2"} pers.</span>
                                             <span><BiMoney /> ${hab.precioNoche?.toLocaleString("es-CO")}/noche</span>
                                         </div>
+
+                                        {/* 🆕 Aviso si esta habitación tiene reservas activas */}
+                                        {ocupadas.length > 0 && (
+                                            <p className="small text-muted mb-0">
+                                                📅 {ocupadas.length} reserva{ocupadas.length !== 1 ? "s" : ""} activa{ocupadas.length !== 1 ? "s" : ""} — evita cruzar esas fechas.
+                                            </p>
+                                        )}
 
                                         <div className="date-picker-row-v2">
                                             <div className="date-input-group-v2">

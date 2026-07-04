@@ -9,10 +9,10 @@ import mapa from '../assets/mapa.png';
 import mapaimg from '../assets/mapa-img.png';
 
 export default function Contactos() {
-    const { user } = useAuth();
+    const { user, isAdmin } = useAuth();
     const navigate = useNavigate();
 
-    const esAdmin = user?.role === "admin" || user?.esAdmin === true; 
+    const esAdmin = isAdmin();
 
     const [formData, setFormData] = useState({
         nombre: user?.nombreCompleto || "",

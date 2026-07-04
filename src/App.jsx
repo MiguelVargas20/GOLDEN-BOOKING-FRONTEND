@@ -42,7 +42,7 @@ import UsuariosC from './pages/UsuariosC.jsx';
 import MiPerfil from './pages/MiPerfil.jsx';
 
 // Módulo: Mensajes (Exclusivo ADMIN)
-import { AdminMensajes } from "./components/AdminMensajes.jsx";
+import  AdminMensajes  from "./components/AdminMensajes.jsx";
 
 /**
  * Componente Principal de la Aplicación (App)

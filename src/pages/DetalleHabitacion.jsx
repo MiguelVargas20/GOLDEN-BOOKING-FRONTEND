@@ -3,7 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Spinner, Button, Container, Row, Col, Card } from "react-bootstrap";
 import { BiArrowBack, BiGroup, BiCalendar } from "react-icons/bi";
 import { obtenerHabitacionPorId } from "../api/HabitacionApi";
-import { crearReservaHotel } from "../api/ReservaHotelApi";
+import { crearReservaHotel, obtenerFechasOcupadas } from "../api/ReservaHotelApi"; // 🆕 obtenerFechasOcupadas
+import { haySolapamiento } from "../utils/fechasHotel"; // 🆕
 import { useAuth } from "../context/AuthContext";
 import Swal from "sweetalert2";
 import "../styles/DetalleHabitacion.css";
@@ -23,6 +24,8 @@ export default function DetalleHabitacion() {
     const [checkOut, setCheckOut] = useState("");
     const [reservando, setReservando] = useState(false);
 
+    const [rangosOcupados, setRangosOcupados] = useState([]); // 🆕
+
     useEffect(() => {
         const cargar = async () => {
             setLoading(true);
@@ -30,6 +33,17 @@ export default function DetalleHabitacion() {
             try {
                 const data = await obtenerHabitacionPorId(id);
                 setHabitacion(data);
+
+                // 🆕 Traemos las fechas ya ocupadas de ESTA habitación.
+                // Si falla (ej. red), no bloqueamos la vista: simplemente
+                // la validación en el submit y el backend siguen siendo
+                // la red de seguridad.
+                try {
+                    const ocupadas = await obtenerFechasOcupadas(id);
+                    setRangosOcupados(ocupadas);
+                } catch (errFechas) {
+                    console.error("No se pudieron cargar fechas ocupadas:", errFechas);
+                }
             } catch (err) {
                 console.error(err);
                 setError("No se pudo encontrar esta habitación. Puede que ya no exista o el enlace sea inválido.");
@@ -56,6 +70,19 @@ export default function DetalleHabitacion() {
         }
         if (new Date(checkIn) >= new Date(checkOut)) {
             Swal.fire({ title: "Fechas inválidas", text: "El check-out debe ser posterior al check-in.", icon: "warning", confirmButtonColor: "#f38d1e" });
+            return;
+        }
+
+        // 🆕 Validación local ANTES de gastar una llamada al backend:
+        // si el rango elegido choca con alguna reserva activa, avisamos
+        // de una vez con el modal que ya tienes implementado.
+        if (haySolapamiento(checkIn, checkOut, rangosOcupados)) {
+            Swal.fire({
+                title: "Fechas no disponibles",
+                text: "Esta habitación ya está reservada en parte de ese rango. Elige otras fechas.",
+                icon: "error",
+                confirmButtonColor: "#f38d1e",
+            });
             return;
         }
 
@@ -114,6 +141,10 @@ export default function DetalleHabitacion() {
             });
             navigate("/mis-reservas-hotel");
         } catch (err) {
+            // 🆕 Este catch es tu red de seguridad final: si por una condición
+            // de carrera (dos usuarios reservando al mismo tiempo) el backend
+            // rechaza con 409, el mensaje "Esta habitación ya está reservada
+            // para esas fechas..." llega aquí tal cual y se muestra en el modal.
             Swal.fire({ title: "No se pudo reservar", text: err.message || "Error al crear la reserva.", icon: "error", confirmButtonColor: "#f38d1e" });
         } finally {
             setReservando(false);
@@ -126,7 +157,6 @@ export default function DetalleHabitacion() {
         </div>
     );
 
-    // ── Estado de error: ya no asumimos que `habitacion` existe ──
     if (error || !habitacion) {
         return (
             <Container className="main-container golden-booking-layout py-5 text-center">
@@ -142,6 +172,9 @@ export default function DetalleHabitacion() {
         habitacion.estadoHabitacion?.toLowerCase() === "disponible";
     const { noches, total } = calcularNochesYTotal();
 
+    // 🆕 Fecha mínima de check-out: si ya eligió check-in, además del
+    // requisito "posterior al check-in", podríamos sugerir saltar directo
+    // al primer día libre, pero eso ya es una mejora opcional (ver nota al final).
     return (
         <Container className="main-container golden-booking-layout py-5">
             <Button variant="link" className="btn-detail mb-4" onClick={() => navigate(-1)}>
@@ -175,7 +208,14 @@ export default function DetalleHabitacion() {
                             <div className="details-box"><BiCalendar /> WiFi: Incluido</div>
                         </div>
 
-                        {/* ── Selección de fechas in-situ ── */}
+                        {/* 🆕 Aviso visual si hay fechas ocupadas, para que el usuario
+                            entienda por qué le puede fallar cierto rango */}
+                        {rangosOcupados.length > 0 && (
+                            <p className="small text-muted mt-3 mb-0">
+                                📅 Esta habitación tiene {rangosOcupados.length} reserva{rangosOcupados.length !== 1 ? "s" : ""} activa{rangosOcupados.length !== 1 ? "s" : ""}. Si eliges fechas que se crucen, te avisaremos.
+                            </p>
+                        )}
+
                         <Row className="g-2 mt-4">
                             <Col xs={6}>
                                 <label className="small fw-semibold text-muted">Check-in</label>

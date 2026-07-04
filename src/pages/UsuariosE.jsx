@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Row, Col, Form, Button } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../styles/UsuariosE.css";
 import userImg from '../assets/edit-user.png';
 import { actualizarUsuario } from "../api/UserApi";
 
-export default function UsuariosE() {
+const UsuariosE = () => {
   const navigate = useNavigate();
   const { state } = useLocation();
   const usuario = state?.usuario;
@@ -132,4 +132,6 @@ export default function UsuariosE() {
       </div>
     </div>
   );
-}
+};
+
+export default UsuariosE;

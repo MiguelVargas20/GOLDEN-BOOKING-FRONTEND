@@ -1,11 +1,11 @@
+import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 
 export function useRequierePerfilCompleto() {
     const navigate = useNavigate();
 
-    const verificarPerfil = (user) => {
-        // Adaptación a la estructura anidada de tu interfaz RegisterData
+    const verificarPerfil = useCallback((user) => {
         const docUsuario = user?.documento?.numero; 
         
         if (!docUsuario) {
@@ -25,8 +25,8 @@ export function useRequierePerfilCompleto() {
             });
             return false;
         }
-        return docUsuario; // Retorna el número de documento limpio si existe
-    };
+        return docUsuario; 
+    }, [navigate]);
 
     return { verificarPerfil };
 }

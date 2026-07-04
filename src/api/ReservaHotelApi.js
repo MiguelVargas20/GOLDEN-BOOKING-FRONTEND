@@ -88,3 +88,17 @@ export const listarMisReservasHotel = async () => {
   if (!res.ok) throw new Error(await extraerMensajeError(res, "Error al cargar tus reservas"));
   return res.json();
 };
+
+/**
+ * Obtiene los rangos de fechas en los que una habitación específica
+ * ya tiene reservas activas (no canceladas).
+ * Se usa para bloquear esas fechas en el datepicker ANTES de que el
+ * usuario intente reservar.
+ */
+export const obtenerFechasOcupadas = async (idHabitacion) => {
+  const res = await fetch(`${API_URL}/api/reservas/hotel/habitacion/${idHabitacion}/ocupadas`, {
+    headers: authHeaders(),
+  });
+  if (!res.ok) throw new Error(await extraerMensajeError(res, "Error al consultar disponibilidad"));
+  return res.json(); // [{ checkIn: "...", checkOut: "..." }, ...]
+};

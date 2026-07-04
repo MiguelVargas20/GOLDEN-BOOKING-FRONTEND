@@ -50,10 +50,10 @@ function ReservarEspacioD() {
                 confirmButtonText: 'Entendido',
                 confirmButtonColor: '#f38d1e',
             });
-        } else if (!ocupado) {
+        } else if (!ocupado && bloqueadoEnVivo) {
             setBloqueadoEnVivo(false);
         }
-    }, [espaciosOcupados, formData.fInicioReserva, formData.tCancha]);
+    }, [espaciosOcupados, formData.fInicioReserva, formData.tCancha, bloqueadoEnVivo, text, estaOcupado]);
     // ─────────────────────────────────────────────────────────
 
     const handleSubmit = async (e) => {
@@ -61,7 +61,7 @@ function ReservarEspacioD() {
 
         // ── Validar perfil completo usando el Custom Hook Centralizado ──
         const docUsuario = verificarPerfil(user);
-        if (!docUsuario) return; // Detiene la ejecución si el perfil está incompleto (el hook maneja el alert)
+        if (!docUsuario) return; 
 
         // Verificar en tiempo real disponibilidad antes de enviar
         if (bloqueadoEnVivo) {
@@ -106,7 +106,6 @@ function ReservarEspacioD() {
         if (!confirmacion.isConfirmed) return;
 
         try {
-            // Aseguramos el docUsuario correcto verificado por el hook justo antes de enviar 
             const datosReserva = { ...formData, docUsuario };
 
             await crearReservaDeporte(datosReserva);
@@ -165,9 +164,11 @@ function ReservarEspacioD() {
                     <Col md={7}>
                         <Form onSubmit={handleSubmit}>
                             <Form.Group className="mb-3">
+                                <Form.Item className="d-none" />
                                 <Form.Label className="fw-bold">Implementos Adicionales</Form.Label>
                                 <Form.Control
                                     placeholder="Ej: Balones de fútbol, raquetas..."
+                                    value={formData.implAlquilados}
                                     onChange={(e) => setFormData({ ...formData, implAlquilados: e.target.value })}
                                 />
                             </Form.Group>
@@ -176,6 +177,7 @@ function ReservarEspacioD() {
                                 type="switch"
                                 label="¿Requiere un entrenador profesional?"
                                 className="mb-3 fw-bold"
+                                checked={formData.rqrEntrenador}
                                 onChange={(e) => setFormData({ ...formData, rqrEntrenador: e.target.checked })}
                             />
 

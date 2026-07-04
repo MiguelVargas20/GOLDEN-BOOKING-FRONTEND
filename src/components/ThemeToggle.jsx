@@ -1,8 +1,9 @@
-import { useTheme } from './context/ThemeContext';
-import { BsSun, BsMoonStarsFill } from 'react-icons/bs'; // Necesitas react-icons
+import React from 'react';
+import { useTheme } from '../context/Themecontext.jsx';
+import { BsSun, BsMoonStarsFill } from 'react-icons/bs';
 
-// Componente ThemeToggle
-const ThemeToggle = () => {
+// Componente ThemeToggle exportado por defecto
+export default function ThemeToggle() {
     const { isDarkMode, toggleTheme } = useTheme();
 
     // Renderiza un botón que alterna entre el modo oscuro y claro
@@ -12,8 +13,7 @@ const ThemeToggle = () => {
             onClick={toggleTheme}
             style={{ borderRadius: '50px' }}
         >
-            // Renderiza el icono correspondiente según el estado del tema
             {isDarkMode ? <BsSun /> : <BsMoonStarsFill />}
         </button>
     );
-};
+}
