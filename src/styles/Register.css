@@ -1,58 +1,72 @@
-/* Importar una fuente moderna si no la tienes */
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap');
 
 .register-page {
     display: flex;
-    min-height: 100vh;
+    height: 100vh; /* Obliga a medir exactamente el alto de la pantalla */
+    width: 100%;
     font-family: 'Montserrat', sans-serif;
-    background-color: #fff;
+    background-color: #ffffff;
+    overflow: hidden; /* Evita que toda la página haga scroll y rompa el diseño */
 }
 
-/* LADO IZQUIERDO: FORMULARIO */
+/* LADO IZQUIERDO: FORMULARIO (50% de la pantalla) */
 .form-side {
-    flex: 1;
+    width: 50%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 40px;
+    box-sizing: border-box; /* Asegura que el padding no haga crecer el contenedor */
+    overflow-y: auto; 
+    
+    /* --- CÓDIGO PARA OCULTAR LA BARRA DE DESPLAZAMIENTO --- */
+    scrollbar-width: none; /* Oculta la barra en Firefox */
+    -ms-overflow-style: none; /* Oculta la barra en IE y Edge */
+}
+
+/* Oculta la barra en Chrome, Safari y Opera */
+.form-side::-webkit-scrollbar {
+    display: none;
 }
 
 .form-content {
-    max-width: 550px;
+    max-width: 600px;
     width: 100%;
+    padding: 20px 0; /* Un poco de aire arriba y abajo */
 }
-
 .register-header {
-    margin-bottom: 30px;
+    margin-bottom: 40px;
 }
 
 .main-logo {
-    height: 70px;
-    margin-bottom: 20px;
+    height: 60px; /* Ajustado según la imagen */
+    margin-bottom: 25px;
     display: block;
 }
 
 .register-title {
-    font-size: 2.2rem;
-    font-weight: 900;
-    color: #1a202c; /* Azul casi negro */
+    font-size: 2.8rem;
+    font-weight: 900; /* Extra bold para igualar tu diseño */
+    color: #17202a; /* Azul/Gris muy oscuro */
     text-transform: uppercase;
     margin: 0;
-    letter-spacing: -1px;
+    letter-spacing: -0.5px;
 }
 
 .register-subtitle {
-    color: #718096;
-    font-size: 1rem;
+    color: #8391a5;
+    font-size: 1.1rem;
     margin-top: 5px;
+    font-weight: 400;
 }
 
 /* GRID DEL FORMULARIO */
 .input-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin-bottom: 20px;
+    gap: 25px 20px; /* Más espacio vertical entre filas */
+    margin-bottom: 25px;
 }
 
 .field-group {
@@ -67,27 +81,31 @@
 
 .field-group label {
     font-size: 0.85rem;
-    font-weight: 700;
-    color: #2d3748;
+    font-weight: 800; /* Texto muy grueso como en la imagen */
+    color: #17202a;
     text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
+/* ESTILO DE LOS INPUTS IGUAL AL MOCKUP */
 .professional-form input, 
 .professional-form select {
-    padding: 12px 16px;
-    border: 2px solid #edf2f7;
+    padding: 14px 18px;
+    border: 1px solid #e2e8f0;
     border-radius: 12px;
-    background: #f8fafc;
-    font-size: 0.95rem;
+    background: #f4f7f9; /* Gris azulado muy claro */
+    color: #334155;
+    font-size: 1rem;
     transition: all 0.3s ease;
     outline: none;
+    font-family: inherit;
 }
 
+/* Cuando el usuario escribe o hace focus */
 .professional-form input:focus, 
 .professional-form select:focus {
-    border-color: #e1892c;
-    background: #fff;
-    box-shadow: 0 0 0 4px rgba(225, 137, 44, 0.1);
+    border-color: #cbd5e1;
+    background: #e2e8f0; /* Se oscurece un poco al estilo de tu imagen */
 }
 
 /* PASSWORD FIELD */
@@ -108,122 +126,78 @@
     transform: translateY(-50%);
     background: none;
     border: none;
-    color: #a0aec0;
+    color: #475569;
     cursor: pointer;
     font-size: 1.2rem;
     display: flex;
     align-items: center;
 }
 
-/* ERRORES */
-.input-error {
-    border-color: #fc8181 !important;
-}
-
-.helper-text {
-    color: #e53e3e;
-    font-size: 0.75rem;
-    font-weight: 600;
-}
-
-.server-error-banner {
-    background: #fff5f5;
-    color: #c53030;
-    padding: 12px;
-    border-radius: 8px;
-    border-left: 4px solid #e53e3e;
-    margin-bottom: 20px;
-    font-size: 0.9rem;
-}
-
 /* BOTONES */
 .form-footer {
-    margin-top: 35px;
+    margin-top: 30px;
     display: flex;
-    flex-direction: column;
-    gap: 15px;
+    flex-direction: row; /* Coloca los elementos uno al lado del otro */
+    justify-content: space-between; /* Uno a la izquierda, otro a la derecha */
+    align-items: center;
 }
 
 .submit-gold-btn {
-    background: linear-gradient(135deg, #f5e200 0%, #e1892c 100%);
-    color: #fff;
+    width: 200px; /* Mantiene el tamaño del botón como en tu diseño original */
+    background: linear-gradient(180deg, #ffdb00 0%, #ff8a00 100%);
+    color: #000000;
     border: none;
     padding: 16px;
-    border-radius: 12px;
-    font-weight: 800;
-    font-size: 1rem;
+    border-radius: 8px;
+    font-weight: 900;
+    font-size: 1.1rem;
     cursor: pointer;
     text-transform: uppercase;
-    box-shadow: 0 10px 20px rgba(225, 137, 44, 0.3);
+    box-shadow: 0 4px 10px rgba(255, 138, 0, 0.2);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .submit-gold-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 15px 25px rgba(225, 137, 44, 0.4);
+    box-shadow: 0 6px 15px rgba(255, 138, 0, 0.4);
 }
 
-.submit-gold-btn:disabled {
-    opacity: 0.7;
-    cursor: not-allowed;
-    transform: none;
-}
-
-.back-link {
-    background: none;
-    border: none;
-    color: #4a5568;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    cursor: pointer;
-    font-size: 0.9rem;
-}
-
-.back-link:hover {
-    color: #e1892c;
-}
-
-/* LADO DERECHO: IMAGEN */
+/* LADO DERECHO: IMAGEN (50% de la pantalla) */
 .image-side {
-    flex: 1.2;
-    background-image: url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80');
+    width: 50%;
+    height: 100%;
     background-size: cover;
     background-position: center;
+    background-repeat: no-repeat;
     position: relative;
     display: flex;
     align-items: flex-end;
-    padding: 60px;
+    justify-content: center;
+    padding: 0;
 }
 
-/* Opcional: overlay para que el texto sobre la imagen se vea bien */
+
+/* CAJA DE TEXTO OSCURA SOBRE LA IMAGEN */
 .image-overlay {
-    background: rgba(26, 32, 44, 0.8);
-    backdrop-filter: blur(10px);
-    padding: 30px;
-    border-radius: 20px;
+    background: linear-gradient(to top, #1a202c 0%, rgba(26, 32, 44, 0.9) 70%, transparent 100%);
+    width: 80%;
+    border-radius: 20px 20px 0 0; /* Borde curvo arriba, recto abajo */
+    padding: 40px 30px 20px 30px;
     color: #fff;
-    max-width: 400px;
-    border: 1px solid rgba(255,255,255,0.1);
+    text-align: center;
 }
 
 .image-overlay h2 {
     margin: 0;
-    font-size: 1.8rem;
-    font-weight: 800;
-}
-
-.image-overlay p {
-    margin: 10px 0 0;
-    opacity: 0.8;
+    font-size: 2rem;
+    font-weight: 900;
+    text-transform: uppercase;
 }
 
 /* RESPONSIVE */
 @media (max-width: 1100px) {
     .image-side {
-        display: none;
+        display: none; /* Oculta la imagen en pantallas pequeñas */
     }
 }
 
@@ -234,4 +208,17 @@
     .field-group.full-width {
         grid-column: span 1;
     }
+}
+.back-link-clean {
+    background: transparent !important; /* Fuerza a quitar el fondo gris oscuro */
+    border: none !important;
+    color: #17202a;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    box-shadow: none !important; /* Quita cualquier sombra por defecto */
+    padding: 0 !important;
 }

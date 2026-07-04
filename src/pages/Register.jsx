@@ -108,20 +108,24 @@ export default function Register() {
 
             <div className="form-footer">
               <button type="submit" className="submit-gold-btn" disabled={isSubmitting}>
-                {isSubmitting ? "PROCESANDO..." : "REGISTRARSEHORA"}
+                {isSubmitting ? "PROCESANDO..." : "REGISTRARSE"}
               </button>
-              <button type="button" className="back-link" onClick={() => navigate("/")}>
-                <FaReply /> Volver al inicio de sesión
+              
+              <button type="button" className="back-link-clean" onClick={() => navigate("/")}>
+                Volver al login <FaReply />
               </button>
             </div>
           </form>
         </div>
       </div>
 
-      {/* SECCIÓN DERECHA: IMAGEN PROFESIONAL */}
-      <div className="image-side">
+      {/* SECCIÓN DERECHA: IMAGEN (ESTRICTAMENTE 50%) */}
+      <div 
+        className="image-side" 
+        style={{ backgroundImage: `url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80')` }}
+      >
         <div className="image-overlay">
-          <h2>Experiencias inolvidables</h2>
+          <h2>EXPERIENCIAS INOLVIDABLES</h2>
           <p>Tu próxima reserva en Golden Booking está a un paso.</p>
         </div>
       </div>
