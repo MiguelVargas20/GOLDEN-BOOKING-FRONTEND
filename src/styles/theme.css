@@ -1,0 +1,55 @@
+/* ===========================================
+   THEME.CSS — Variables globales de color
+   Se adaptan automáticamente según data-bs-theme
+   =========================================== */
+
+:root {
+    /* Texto */
+    --gb-text-primary: #4a5568;
+    --gb-text-muted: #718096;
+
+    /* Bordes */
+    --gb-border: #e2e8f0;
+    --gb-border-danger: #fed7d7;
+
+    /* Superficies (fondos de tarjetas, dropdowns, etc.) */
+    --gb-surface: #ffffff;
+    --gb-surface-hover: #f7fafc;
+
+    /* Bloque de usuario (perfil en navbar) */
+    --gb-user-bg: #fef9f0;
+    --gb-user-border: #fae5d3;
+
+    /* Items de dropdown / listas */
+    --gb-item-hover: #fef9f0;
+    --gb-icon-bg: #fff4e6;
+    --gb-item-title: #333333;
+    --gb-item-text: #777777;
+}
+
+[data-bs-theme='dark'] {
+    --gb-text-primary: #e2e8f0;
+    --gb-text-muted: #a0aec0;
+
+    --gb-border: #4a5568;
+    --gb-border-danger: #742a2a;
+
+    --gb-surface: #1a202c;
+    --gb-surface-hover: #2d3748;
+
+    --gb-user-bg: #2d2415;
+    --gb-user-border: #4a3a1f;
+
+    --gb-item-hover: #2d3748;
+    --gb-icon-bg: #3a2e1a;
+    --gb-item-title: #f7fafc;
+    --gb-item-text: #a0aec0;
+}
+/* ===== Transición suave entre temas ===== */
+body,
+.navbar,
+.card,
+[class*="wrapper"],
+[class*="Navbar"] {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}

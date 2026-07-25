@@ -1,0 +1,216 @@
+/* ═══════════════════════════════════════════════════════════
+   AdminMensajes — Layout refinado y estructurado
+   ═══════════════════════════════════════════════════════════ */
+
+.mensajes-page {
+  max-width: 850px;
+}
+
+/* ── Encabezado ─────────────────────────────────────────── */
+.mensajes-titulo {
+  font-weight: 800;
+  font-size: 2.1rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.mensajes-titulo .accent {
+  color: #f38d1e;
+}
+
+.mensajes-toolbar {
+  gap: 1rem;
+}
+
+/* ── Buscador estilo píldora ────────────────────────────── */
+.mensajes-buscador {
+  border-radius: 999px;
+  border: 1px solid #e0e0e0;
+  padding: 0.55rem 1.2rem;
+  font-size: 0.92rem;
+  background-color: #fff;
+  transition: all 0.2s ease;
+}
+
+.mensajes-buscador:focus {
+  outline: none;
+  border-color: #f38d1e;
+  box-shadow: 0 0 0 3px rgba(243, 141, 30, 0.15);
+}
+
+/* ── Switch "solo no leídos" ────────────────────────────── */
+.form-switch .form-check-input:checked {
+  background-color: #f38d1e;
+  border-color: #f38d1e;
+}
+
+/* ── Cards de mensaje ───────────────────────────────────── */
+.mensaje-card {
+  border: 1px solid #f0f0f0;
+  border-radius: 16px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mensaje-card:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
+}
+
+.mensaje-card.no-leido {
+  border-left: 5px solid #f38d1e;
+}
+
+.card-vacia {
+  background: #fafafa;
+  border-radius: 14px;
+  border: 1px dashed #e0e0e0;
+}
+
+/* ── Contenido y Tipografía ─────────────────────────────── */
+.mensaje-remitente {
+  font-weight: 700;
+  color: #2b2b2b;
+  font-size: 1.05rem;
+}
+
+.mensaje-correo {
+  color: #718096;
+  font-size: 0.85rem;
+}
+
+.mensaje-fecha {
+  color: #a0aec0;
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.etiqueta {
+  display: block;
+  font-weight: 700;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #8a8a8a;
+  margin-bottom: 0.3rem;
+}
+
+.contenido-texto {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #2d3748;
+  margin-bottom: 0.4rem;
+}
+
+/* ── Cajas delimitadoras ────────────────────────────────── */
+.mensaje-contenido-box {
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem;
+}
+
+.respuesta-enviada {
+  background-color: #fff8f0;
+  border-left: 4px solid #f38d1e;
+  border-radius: 10px;
+  padding: 0.9rem 1.1rem;
+  margin-top: 1rem;
+}
+
+.respuesta-enviada .etiqueta {
+  color: #f38d1e;
+}
+
+/* ── Badges de estado ───────────────────────────────────── */
+.badge-nuevo {
+  background-color: #e63946;
+  color: #fff;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.72rem;
+  padding: 0.4em 0.85em;
+}
+
+.badge-respondido {
+  background-color: #e6f4ea;
+  color: #1e7e34;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.72rem;
+  padding: 0.4em 0.85em;
+}
+
+.badge-pendiente {
+  background-color: #edf2f7;
+  color: #4a5568;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.72rem;
+  padding: 0.4em 0.85em;
+}
+
+/* ── Botones ────────────────────────────────────────────── */
+.btn-mensaje-primario {
+  background-color: #f38d1e;
+  border-color: #f38d1e;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 0.45rem 1.2rem;
+  transition: all 0.2s ease;
+}
+
+.btn-mensaje-primario:hover {
+  background-color: #d97a12;
+  border-color: #d97a12;
+}
+
+.btn-mensaje-primario:disabled {
+  background-color: #f5c88f;
+  border-color: #f5c88f;
+}
+
+.btn-mensaje-secundario {
+  background-color: #14213d;
+  border-color: #14213d;
+  color: #fff;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 0.45rem 1.2rem;
+  transition: all 0.2s ease;
+}
+
+.btn-mensaje-secundario:hover {
+  background-color: #0d1730;
+  border-color: #0d1730;
+  color: #fff;
+}
+
+/* ── Caja de responder ──────────────────────────────────── */
+.caja-responder {
+  background-color: #fcfcfc;
+  border: 1px solid #ebd8c3;
+  border-radius: 12px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.caja-responder textarea {
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
+  resize: vertical;
+}
+
+.caja-responder textarea:focus {
+  border-color: #f38d1e;
+  box-shadow: 0 0 0 3px rgba(243, 141, 30, 0.15);
+}
+
+/* ── Paginación ─────────────────────────────────────────── */
+.mensajes-paginacion .btn {
+  border-radius: 999px;
+  font-weight: 600;
+  padding: 0.35rem 1rem;
+}

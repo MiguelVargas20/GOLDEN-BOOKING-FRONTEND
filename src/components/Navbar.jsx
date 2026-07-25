@@ -10,8 +10,10 @@ import { MdSportsTennis, MdHotel, MdRestaurant } from 'react-icons/md';
 import { useAuth } from '../context/AuthContext.jsx';
 import Swal from 'sweetalert2';
 
-// 1. Nuevas importaciones de notificaciones
+// 1. Notificaciones para el ADMIN (mensajes sin leer en la bandeja)
 import { useMensajesNoLeidos } from "../hooks/useMensajesNoLeidos";
+// 🆕 Notificaciones para el USUARIO NORMAL (respuestas del admin que no ha visto)
+import { useRespuestasNoVistas } from "../hooks/useRespuestasNoVistas";
 import { BiBell } from "react-icons/bi";
 
 /**
@@ -23,8 +25,9 @@ export default function ComponentNavbar() {
     const { user, logout, isAdmin } = useAuth();
     const navigate = useNavigate();
 
-    // 2. Hook de mensajes no leídos
+    // 2. Hooks de notificaciones (cada uno solo hace polling si aplica al rol del usuario)
     const noLeidos = useMensajesNoLeidos();
+    const respuestasNoVistas = useRespuestasNoVistas();
 
     // Estado para el menú hamburguesa (móvil)
     const [navExpanded, setNavExpanded] = useState(false);
@@ -161,7 +164,7 @@ export default function ComponentNavbar() {
                         </button>
                     {user ? (
                             <>
-                                {/* 3. NOTIFICACIONES PARA ADMINISTRADORES */}
+                                {/* 3. NOTIFICACIONES PARA ADMINISTRADORES (bandeja de mensajes recibidos) */}
                                 {isAdmin() && (
                                     <div 
                                         className="position-relative d-flex align-items-center justify-content-center mx-1 mx-md-2" 
@@ -181,6 +184,31 @@ export default function ComponentNavbar() {
                                             >
                                                 {noLeidos > 9 ? "9+" : noLeidos}
                                                 <span className="visually-hidden">mensajes no leídos</span>
+                                            </span>
+                                        )}
+                                    </div>
+                                )}
+
+                                {/* 🆕 NOTIFICACIONES PARA USUARIOS NORMALES (respuestas del admin a sus mensajes) */}
+                                {!isAdmin() && (
+                                    <div 
+                                        className="position-relative d-flex align-items-center justify-content-center mx-1 mx-md-2" 
+                                        onClick={() => handleNavigate("/mis-mensajes")}
+                                        style={{ 
+                                            cursor: "pointer", 
+                                            color: isDarkMode ? "#f8f9fa" : "#212529",
+                                            transition: "color 0.3s ease"
+                                        }}
+                                        title="Mis mensajes"
+                                    >
+                                        <BiBell size={22} />
+                                        {respuestasNoVistas > 0 && (
+                                            <span 
+                                                className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                                style={{ fontSize: "0.6rem", padding: "0.3em 0.5em" }}
+                                            >
+                                                {respuestasNoVistas > 9 ? "9+" : respuestasNoVistas}
+                                                <span className="visually-hidden">respuestas nuevas</span>
                                             </span>
                                         )}
                                     </div>

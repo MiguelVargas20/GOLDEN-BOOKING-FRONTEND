@@ -1,0 +1,106 @@
+/* ═══════════════════════════════════════════════════════════
+   MisMensajes — Cliente UI
+   ═══════════════════════════════════════════════════════════ */
+
+.mis-mensajes-page {
+  max-width: 800px;
+}
+
+.mis-mensajes-titulo {
+  font-weight: 800;
+  font-size: 2.1rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+.mis-mensajes-titulo .accent {
+  color: #f38d1e;
+}
+
+/* ── Card Principal ─────────────────────────────────────── */
+.mensaje-enviado-card {
+  border: 1px solid #f0f0f0;
+  border-radius: 16px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.mensaje-enviado-card:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.07);
+}
+
+.card-vacia {
+  background: #fafafa;
+  border-radius: 14px;
+  border: 1px dashed #e0e0e0;
+}
+
+/* ── Detalle del mensaje y respuesta ─────────────────────── */
+.mensaje-fecha {
+  color: #a0aec0;
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.badge-nueva-respuesta {
+  background-color: #f38d1e;
+  color: #fff;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.72rem;
+  padding: 0.4em 0.85em;
+}
+
+.etiqueta {
+  display: block;
+  font-weight: 700;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: #8a8a8a;
+  margin-bottom: 0.3rem;
+}
+
+.contenido-texto {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #2d3748;
+}
+
+.tu-mensaje {
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  padding: 0.9rem 1.1rem;
+  margin-bottom: 0.8rem;
+}
+
+.respuesta-admin {
+  background-color: #fff8f0;
+  border-left: 4px solid #f38d1e;
+  border-radius: 10px;
+  padding: 0.9rem 1.1rem;
+}
+
+.respuesta-admin .etiqueta {
+  color: #f38d1e;
+}
+
+.pendiente-respuesta {
+  background-color: #f8f9fa;
+  border: 1px dashed #cbd5e0;
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  color: #718096;
+  font-size: 0.88rem;
+  font-style: italic;
+}
+
+/* ── Paginación ─────────────────────────────────────────── */
+.mis-mensajes-paginacion .btn {
+  border-radius: 999px;
+  font-weight: 600;
+  padding: 0.35rem 1rem;
+}

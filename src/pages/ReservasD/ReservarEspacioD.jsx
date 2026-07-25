@@ -164,7 +164,6 @@ function ReservarEspacioD() {
                     <Col md={7}>
                         <Form onSubmit={handleSubmit}>
                             <Form.Group className="mb-3">
-                                <Form.Item className="d-none" />
                                 <Form.Label className="fw-bold">Implementos Adicionales</Form.Label>
                                 <Form.Control
                                     placeholder="Ej: Balones de fútbol, raquetas..."

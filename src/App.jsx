@@ -1,6 +1,5 @@
 // 1. LIBRERÍAS Y ESTILOS GLOBALES
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 // 2. CONTEXTOS Y COMPONENTES DE CONTROL
 import { ThemeProvider } from './context/Themecontext';
@@ -44,6 +43,9 @@ import MiPerfil from './pages/MiPerfil.jsx';
 // Módulo: Mensajes (Exclusivo ADMIN)
 import  AdminMensajes  from "./components/AdminMensajes.jsx";
 
+// Módulo: Mensajes (Usuario normal — ve sus propios mensajes y respuestas del admin)
+import MisMensajes from './pages/MisMensajes.jsx';
+
 /**
  * Componente Principal de la Aplicación (App)
  * Configura el proveedor de tema, el enrutamiento dinámico de React Router Dom v6
@@ -86,6 +88,9 @@ export default function App() {
 
                         {/* Vista de perfil del usuario en sesión (Datos personales, historial, etc.) */}
                         <Route path="/mi-perfil" element={<MiPerfil />} />
+
+                        {/* Historial de mensajes que el usuario en sesión envió, con respuestas del admin */}
+                        <Route path="/mis-mensajes" element={<MisMensajes />} />
 
                         {/* -----------------------------------------------------
                             SUB-SISTEMA: RESERVAS DEPORTIVAS (Pádel, Tenis, etc.)
