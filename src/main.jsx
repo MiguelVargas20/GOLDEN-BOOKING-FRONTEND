@@ -8,6 +8,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import './styles/theme.css';
 
+import './styles/dark-mode-overrides.css';   // ← nuevo, va último
+
 import App from './App.jsx';
 import { AuthProvider } from './context/AuthContext.jsx';
 

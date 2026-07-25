@@ -1,0 +1,369 @@
+/* ============================================================
+   DARK-MODE-OVERRIDES.CSS
+   Capa de parches para modo oscuro sobre CSS ya existente.
+   No modifica los archivos originales — solo los corrige
+   cuando data-bs-theme="dark" está activo.
+   ============================================================ */
+
+/* ── Reservas Deportivas (ReservasD.module.css) ── */
+[data-bs-theme='dark'] .reservas-container,
+[data-bs-theme='dark'] .crear-espacio-container,
+[data-bs-theme='dark'] .editar-containerRD {
+    background: var(--gb-surface) !important;
+}
+
+[data-bs-theme='dark'] .titulo-reservas,
+[data-bs-theme='dark'] .categorias-header h2,
+[data-bs-theme='dark'] .reservas-header h2,
+[data-bs-theme='dark'] .titulo {
+    color: var(--gb-item-title) !important;
+}
+
+[data-bs-theme='dark'] .upload-box,
+[data-bs-theme='dark'] .card-editar,
+[data-bs-theme='dark'] .card-header {
+    border-color: var(--gb-border) !important;
+    color: var(--gb-text-primary);
+}
+
+[data-bs-theme='dark'] .input {
+    background-color: var(--gb-surface-hover) !important;
+    border-color: var(--gb-border) !important;
+    color: var(--gb-text-primary) !important;
+}
+
+[data-bs-theme='dark'] .buscador {
+    border-color: var(--gb-border) !important;
+    background: var(--gb-surface);
+}
+
+[data-bs-theme='dark'] .buscador input {
+    background-color: transparent !important;
+    color: var(--gb-text-primary) !important;
+}
+
+[data-bs-theme='dark'] .tabla-container,
+[data-bs-theme='dark'] .tabla-container-suave {
+    border-color: var(--gb-border) !important;
+    background: var(--gb-surface) !important;
+}
+
+[data-bs-theme='dark'] table,
+[data-bs-theme='dark'] .reservas-table,
+[data-bs-theme='dark'] .mis-reservas-table,
+[data-bs-theme='dark'] .users-table {
+    background: var(--gb-surface);
+}
+
+[data-bs-theme='dark'] thead,
+[data-bs-theme='dark'] .reservas-table thead th,
+[data-bs-theme='dark'] .mis-reservas-table thead th,
+[data-bs-theme='dark'] .users-table thead th {
+    background: #0d1424 !important; /* un poco más oscuro que la superficie, mantiene contraste */
+    color: #fff !important;
+}
+
+[data-bs-theme='dark'] td,
+[data-bs-theme='dark'] .reservas-table tbody td,
+[data-bs-theme='dark'] .mis-reservas-table tbody td,
+[data-bs-theme='dark'] .users-table tbody td,
+[data-bs-theme='dark'] td:nth-child(3) {
+    color: var(--gb-text-primary) !important;
+    border-bottom-color: var(--gb-border) !important;
+}
+
+[data-bs-theme='dark'] .btn-edit {
+    background: #3a4150 !important;
+    color: #fff !important;
+}
+
+/* ── Reservas Header v2 / cards de hotel (reservasH extras) ── */
+[data-bs-theme='dark'] .filter-select-custom {
+    background-color: var(--gb-surface-hover) !important;
+    color: var(--gb-text-primary) !important;
+    border-color: var(--gb-border) !important;
+}
+
+[data-bs-theme='dark'] .hotel-card-v2,
+[data-bs-theme='dark'] .hotel-card {
+    background: var(--gb-surface) !important;
+    border-color: var(--gb-border) !important;
+}
+
+[data-bs-theme='dark'] .hotel-header-v2 h5,
+[data-bs-theme='dark'] .hotel-header h4 {
+    color: var(--gb-item-title) !important;
+}
+
+[data-bs-theme='dark'] .details-row-v2 {
+    color: #e8c98a !important; /* variante clara del dorado #5a3d00 original */
+}
+
+[data-bs-theme='dark'] .resumen-total-v2,
+[data-bs-theme='dark'] .details-box {
+    background: #3a2e1a !important;
+    color: #e8c98a !important;
+}
+
+[data-bs-theme='dark'] .hotel-footer-v2,
+[data-bs-theme='dark'] .price-block {
+    border-color: var(--gb-border) !important;
+}
+
+[data-bs-theme='dark'] .precio-v2 small,
+[data-bs-theme='dark'] .price-label {
+    color: var(--gb-text-muted) !important;
+}
+
+[data-bs-theme='dark'] .conexion-badge {
+    background-color: var(--gb-surface-hover) !important;
+    color: var(--gb-text-primary) !important;
+}
+
+/* ── AdminMensajes ── */
+[data-bs-theme='dark'] .mensajes-buscador,
+[data-bs-theme='dark'] .mensaje-card,
+[data-bs-theme='dark'] .caja-responder {
+    background-color: var(--gb-surface) !important;
+    border-color: var(--gb-border) !important;
+}
+
+[data-bs-theme='dark'] .card-vacia {
+    background: var(--gb-surface-hover) !important;
+    border-color: var(--gb-border) !important;
+}
+
+[data-bs-theme='dark'] .mensaje-remitente,
+[data-bs-theme='dark'] .contenido-texto {
+    color: var(--gb-text-primary) !important;
+}
+
+[data-bs-theme='dark'] .mensaje-contenido-box {
+    background-color: var(--gb-surface-hover) !important;
+}
+
+[data-bs-theme='dark'] .respuesta-enviada {
+    background-color: #3a2e1a !important;
+}
+
+[data-bs-theme='dark'] .badge-pendiente {
+    background-color: var(--gb-surface-hover) !important;
+    color: var(--gb-text-primary) !important;
+}
+
+[data-bs-theme='dark'] .caja-responder textarea {
+    background-color: var(--gb-surface-hover) !important;
+    border-color: var(--gb-border) !important;
+    color: var(--gb-text-primary) !important;
+}
+
+/* ── HabitacionD (crear/gestionar habitación) ── */
+[data-bs-theme='dark'] .habitacion-container {
+    background-color: var(--gb-surface) !important;
+}
+
+[data-bs-theme='dark'] .habitacion-card,
+[data-bs-theme='dark'] .habitacion-card-header {
+    background: var(--gb-surface) !important;
+    border-color: var(--gb-border) !important;
+}
+
+[data-bs-theme='dark'] .habitacion-card-header h3 {
+    color: var(--gb-item-title) !important;
+}
+
+[data-bs-theme='dark'] .habitacion-preview-card {
+    background: linear-gradient(145deg, #241d12 0%, #2a2114 100%) !important;
+    border-color: #4a3a1f !important;
+}
+
+[data-bs-theme='dark'] .preview-icon-badge {
+    background: var(--gb-surface-hover) !important;
+    border-color: var(--gb-border) !important;
+}
+
+[data-bs-theme='dark'] .campo-d {
+    background: var(--gb-surface-hover) !important;
+    border-color: var(--gb-border) !important;
+    color: var(--gb-text-primary) !important;
+}
+
+[data-bs-theme='dark'] .habitacion-cancel-btn {
+    color: var(--gb-text-primary) !important;
+    border-color: var(--gb-border) !important;
+}
+
+[data-bs-theme='dark'] .habitacion-tipo-info {
+    background: #3a2e1a !important;
+    border-color: #4a3a1f !important;
+    color: var(--gb-text-muted) !important;
+}
+
+[data-bs-theme='dark'] .amenidades-sidebar {
+    background: var(--gb-surface-hover) !important;
+    border-color: var(--gb-border) !important;
+}
+
+[data-bs-theme='dark'] .amenidad-item {
+    color: var(--gb-text-primary) !important;
+}
+
+/* ── DetalleHabitacion ── */
+[data-bs-theme='dark'] .main-container.golden-booking-layout {
+    background: var(--gb-surface) !important;
+}
+
+[data-bs-theme='dark'] .room-description {
+    color: var(--gb-text-muted) !important;
+}
+
+[data-bs-theme='dark'] .price-label {
+    color: var(--gb-text-muted) !important;
+}
+
+/* ── Contactos ── */
+[data-bs-theme='dark'] .contact-box {
+    background: var(--gb-surface) !important;
+    border-color: var(--gb-border) !important;
+}
+
+[data-bs-theme='dark'] .input-field,
+[data-bs-theme='dark'] .textarea-field {
+    background-color: var(--gb-surface-hover) !important;
+    border-color: var(--gb-border) !important;
+    color: var(--gb-text-primary) !important;
+}
+
+[data-bs-theme='dark'] .tittle-contact {
+    color: var(--gb-item-title) !important;
+}
+
+/* ── Forgot password ── */
+[data-bs-theme='dark'] .container-forgot {
+    background: var(--gb-surface) !important;
+}
+
+[data-bs-theme='dark'] .left-panel-forgot h1 {
+    color: var(--gb-item-title) !important;
+}
+
+[data-bs-theme='dark'] .subtitle-forgot,
+[data-bs-theme='dark'] .back-login-btn {
+    color: var(--gb-text-muted) !important;
+}
+
+[data-bs-theme='dark'] .form-forgot input {
+    background: var(--gb-surface-hover) !important;
+    border-color: var(--gb-border) !important;
+    color: var(--gb-text-primary) !important;
+}
+
+/* ── Login ── */
+[data-bs-theme='dark'] .container-login {
+    background: var(--gb-surface) !important;
+    color: var(--gb-text-primary) !important;
+}
+
+[data-bs-theme='dark'] .form input {
+    background: var(--gb-surface-hover) !important;
+    color: var(--gb-text-primary) !important;
+    border-color: var(--gb-border) !important;
+}
+
+[data-bs-theme='dark'] .check span,
+[data-bs-theme='dark'] .subtitle,
+[data-bs-theme='dark'] .forgot-link {
+    color: var(--gb-text-primary) !important;
+}
+
+/* ── Home (secciones fuera del hero) ── */
+[data-bs-theme='dark'] body {
+    background: var(--bs-body-bg) !important;
+}
+
+[data-bs-theme='dark'] .why-choose-section {
+    background-color: var(--gb-surface-hover) !important;
+}
+
+[data-bs-theme='dark'] .feature-item {
+    background-color: var(--gb-surface) !important;
+}
+
+/* ── Usuarios: tabla, crear, editar ── */
+[data-bs-theme='dark'] .users-wrapper,
+[data-bs-theme='dark'] .crear-page,
+[data-bs-theme='dark'] .editar-page {
+    background: var(--gb-surface) !important;
+}
+
+[data-bs-theme='dark'] .title-users,
+[data-bs-theme='dark'] .crear-page-title,
+[data-bs-theme='dark'] .editar-page-title {
+    color: var(--gb-item-title) !important;
+}
+
+[data-bs-theme='dark'] .search-input,
+[data-bs-theme='dark'] .search-input-reservas,
+[data-bs-theme='dark'] .crear-input,
+[data-bs-theme='dark'] .editar-input {
+    background-color: var(--gb-surface-hover) !important;
+    border-color: var(--gb-border) !important;
+    color: var(--gb-text-primary) !important;
+}
+
+[data-bs-theme='dark'] .crear-avatar,
+[data-bs-theme='dark'] .editar-avatar {
+    background: #3a2e1a !important;
+    border-color: #4a3a1f !important;
+}
+
+[data-bs-theme='dark'] .crear-avatar-label,
+[data-bs-theme='dark'] .editar-avatar-label,
+[data-bs-theme='dark'] .crear-label,
+[data-bs-theme='dark'] .editar-label {
+    color: var(--gb-text-muted) !important;
+}
+
+/* ── Mis Reservas ── */
+[data-bs-theme='dark'] .mis-reservas-page {
+    background: var(--gb-surface) !important;
+}
+
+[data-bs-theme='dark'] .mis-reservas-title {
+    color: var(--gb-item-title) !important;
+}
+
+[data-bs-theme='dark'] .mis-reservas-loading,
+[data-bs-theme='dark'] .mis-reservas-empty {
+    color: var(--gb-text-muted) !important;
+}
+
+[data-bs-theme='dark'] .mis-reservas-table tbody tr:hover {
+    background-color: var(--gb-surface-hover) !important;
+}
+
+[data-bs-theme='dark'] .mis-reservas-btn-cancelar,
+[data-bs-theme='dark'] .btn-cancelar-outline {
+    background: var(--gb-surface) !important;
+    border-color: var(--gb-border) !important;
+}
+
+/* ── DatePicker (reservar espacio deportivo) ── */
+[data-bs-theme='dark'] .react-datepicker {
+    background-color: var(--gb-surface) !important;
+    border-color: var(--gb-border) !important;
+}
+
+[data-bs-theme='dark'] .react-datepicker__day {
+    color: var(--gb-text-primary) !important;
+}
+
+[data-bs-theme='dark'] .react-datepicker__time-container {
+    border-left-color: var(--gb-border) !important;
+}
+
+[data-bs-theme='dark'] .custom-date-input {
+    background-color: var(--gb-surface-hover) !important;
+    border-color: var(--gb-border) !important;
+    color: var(--gb-text-primary) !important;
+}
