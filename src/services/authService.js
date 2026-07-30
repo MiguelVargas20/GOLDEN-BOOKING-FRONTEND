@@ -122,3 +122,65 @@ export async function recuperarPassword(data) {
         throw { message: "Error de conexión con el servidor" };
     }
 }
+
+/**
+ * Solicita el envío de un correo con un enlace para restablecer la contraseña,
+ * cuando el usuario no recuerda su contraseña actual (a diferencia de
+ * recuperarPassword, que sí la requiere).
+ * @param {string} correo - Correo del usuario que solicita la recuperación.
+ * @returns {Promise<Object>} Mensaje de confirmación (genérico por seguridad,
+ * no revela si el correo existe o no en el sistema).
+ * @throws {Object} Error de conexión con el servidor.
+ */
+export async function solicitarRecuperacion(correo) {
+    try {
+        const res = await fetch(`${BASE_URL}/auth/solicitar-recuperacion`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ correo }),
+        });
+
+        const json = await res.json();
+
+        if (!res.ok) {
+            throw { message: json.error || "Error al solicitar la recuperación" };
+        }
+
+        return json;
+
+    } catch (error) {
+        if (error.message) throw error;
+        throw { message: "Error de conexión con el servidor" };
+    }
+}
+
+/**
+ * Restablece la contraseña usando el token recibido por correo.
+ * @param {Object} data - Objeto con ({ token, nuevaPassword }).
+ * @returns {Promise<Object>} Confirmación del cambio exitoso.
+ * @throws {Object} Error si el token es inválido, expiró, o la contraseña no es válida.
+ */
+export async function restablecerPassword(data) {
+    try {
+        const res = await fetch(`${BASE_URL}/auth/restablecer-password`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                token: data.token,
+                nuevaPassword: data.nuevaPassword,
+            }),
+        });
+
+        const json = await res.json();
+
+        if (!res.ok) {
+            throw { message: json.error || "Error al restablecer la contraseña" };
+        }
+
+        return json;
+
+    } catch (error) {
+        if (error.message) throw error;
+        throw { message: "Error de conexión con el servidor" };
+    }
+}

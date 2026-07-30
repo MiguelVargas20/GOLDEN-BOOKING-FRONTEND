@@ -196,7 +196,7 @@ export default function TipoHabitacionD() {
           {error && (
             <Alert variant="danger" className="small py-2" onClose={() => setError("")} dismissible>
               {error}
-            </Alert>
+            </Alert>  
           )}
           {exito && (
             <Alert variant="success" className="small py-2" onClose={() => setExito("")} dismissible>

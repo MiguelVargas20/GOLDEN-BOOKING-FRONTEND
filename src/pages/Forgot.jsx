@@ -4,46 +4,30 @@ import "../styles/Forgot.css";
 import { FaReply } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { recuperarPassword } from "../services/authService";
+import { solicitarRecuperacion } from "../services/authService";
 
 export default function Forgot() {
     const navigate = useNavigate();
-    const [username, setUsername] = useState("");
-    const [nuevaPassword, setNuevaPassword] = useState("");
-    const [confirmar, setConfirmar] = useState("");
+    const [correo, setCorreo] = useState("");
     const [error, setError] = useState("");
     const [exito, setExito] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [passwordAntigua, setPasswordAntigua] = useState("");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
 
-        if (!username.trim()) {
-            setError("El username es obligatorio");
-            return;
-        }
-        if (nuevaPassword.length < 6) {
-            setError("La contraseña debe tener mínimo 6 caracteres");
-            return;
-        }
-        if (nuevaPassword !== confirmar) {
-            setError("Las contraseñas no coinciden");
-            return;
-        }
-        if (!passwordAntigua.trim()) {
-            setError("La contraseña actual es obligatoria");
+        if (!correo.trim()) {
+            setError("El correo es obligatorio");
             return;
         }
 
         setLoading(true);
         try {
-            await recuperarPassword({ username, passwordAntigua, nuevaPassword });
+            await solicitarRecuperacion(correo.trim());
             setExito(true);
-            setTimeout(() => navigate("/login"), 2500);
         } catch (err) {
-            setError(err.message || "Error al actualizar la contraseña");
+            setError(err.message || "Error al solicitar la recuperación");
         } finally {
             setLoading(false);
         }
@@ -58,63 +42,44 @@ export default function Forgot() {
                 </div>
 
                 <h1>¿Olvidaste tu contraseña?</h1>
-                <p className="subtitle-forgot">Ingresa tu usuario y crea una nueva contraseña</p>
+                <p className="subtitle-forgot">Ingresa tu correo y te enviaremos un enlace para restablecerla</p>
 
                 {error && <p className="error-msg">{error}</p>}
                 {exito && (
                     <p className="success-msg">
-                        ✅ Contraseña actualizada. Redirigiendo al login...
+                        ✅ Si el correo está registrado, te enviamos un enlace. Revisa tu bandeja (y spam).
                     </p>
                 )}
 
-                <form className="form-forgot" onSubmit={handleSubmit}>
-                    <input
-                        type="text"
-                        placeholder="Tu username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        required
-                    />
-                    <input
-                        type="password"
-                        placeholder="Contraseña actual"
-                        value={passwordAntigua}
-                        onChange={(e) => setPasswordAntigua(e.target.value)}
-                        required
-                    />
-                    <input
-                        type="password"
-                        placeholder="Nueva contraseña"
-                        value={nuevaPassword}
-                        onChange={(e) => setNuevaPassword(e.target.value)}
-                        required
-                    />
-                    <input
-                        type="password"
-                        placeholder="Confirmar contraseña"
-                        value={confirmar}
-                        onChange={(e) => setConfirmar(e.target.value)}
-                        required
-                    />
+                {!exito && (
+                    <form className="form-forgot" onSubmit={handleSubmit}>
+                        <input
+                            type="email"
+                            placeholder="Tu correo electrónico"
+                            value={correo}
+                            onChange={(e) => setCorreo(e.target.value)}
+                            required
+                        />
 
-                    <div className="form-actions">
-                        <button
-                            className="btn-send-forgot"
-                            type="submit"
-                            disabled={loading}
-                        >
-                            {loading ? "ACTUALIZANDO..." : "ACTUALIZAR"}
-                        </button>
+                        <div className="form-actions">
+                            <button
+                                className="btn-send-forgot"
+                                type="submit"
+                                disabled={loading}
+                            >
+                                {loading ? "ENVIANDO..." : "ENVIAR ENLACE"}
+                            </button>
 
-                        <button
-                            type="button"
-                            className="back-login-btn"
-                            onClick={() => navigate("/login")}
-                        >
-                            Volver al login <FaReply />
-                        </button>
-                    </div>
-                </form>
+                            <button
+                                type="button"
+                                className="back-login-btn"
+                                onClick={() => navigate("/login")}
+                            >
+                                Volver al login <FaReply />
+                            </button>
+                        </div>
+                    </form>
+                )}
             </div>
 
             {/* PANEL DERECHO */}

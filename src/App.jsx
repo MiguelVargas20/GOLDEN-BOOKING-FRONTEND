@@ -46,8 +46,12 @@ import  AdminMensajes  from "./components/AdminMensajes.jsx";
 // Módulo: Mensajes (Usuario normal — ve sus propios mensajes y respuestas del admin)
 import MisMensajes from './pages/MisMensajes.jsx';
 
-//
+// Módulo: Verificación de cuenta (Público)
 import VerificarCuenta from './pages/VerificarCuenta.jsx';
+
+// Módulo: Restablecimiento de contraseña (Público)
+import RestablecerPassword from './pages/RestablecerPassword.jsx';
+
 
 /**
  * Componente Principal de la Aplicación (App)
@@ -76,6 +80,8 @@ export default function App() {
                     <Route path="/forgot" element={<Forgot />} />
 
                     <Route path="/verificar-cuenta" element={<VerificarCuenta />} />
+
+                    <Route path="/restablecer-password" element={<RestablecerPassword />} />
 
                     {/* =========================================================
                         RUTAS PROTEGIDAS GLOBALMENTE (Requieren sesión activa)

@@ -1,16 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { BsCheckCircleFill, BsXCircleFill } from "react-icons/bs";
-import Swal from "sweetalert2";
 
 export default function VerificarCuenta() {
     const [searchParams] = useSearchParams();
     const token = searchParams.get("token");
 
-    const [estado, setEstado] = useState("cargando"); // cargando | exito | error
+    const [estado, setEstado] = useState("cargando");
     const [mensaje, setMensaje] = useState("");
+    const yaVerificado = useRef(false); // ← el candado
 
     useEffect(() => {
+        if (yaVerificado.current) return; // ← si ya corrió una vez, no vuelve a correr
+        yaVerificado.current = true;
+
         const verificar = async () => {
             if (!token) {
                 setEstado("error");
