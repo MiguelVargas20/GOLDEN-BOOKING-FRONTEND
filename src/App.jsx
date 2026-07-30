@@ -46,6 +46,9 @@ import  AdminMensajes  from "./components/AdminMensajes.jsx";
 // Módulo: Mensajes (Usuario normal — ve sus propios mensajes y respuestas del admin)
 import MisMensajes from './pages/MisMensajes.jsx';
 
+//
+import VerificarCuenta from './pages/VerificarCuenta.jsx';
+
 /**
  * Componente Principal de la Aplicación (App)
  * Configura el proveedor de tema, el enrutamiento dinámico de React Router Dom v6
@@ -71,6 +74,8 @@ export default function App() {
                     
                     {/* Formulario de recuperación de contraseñas olvidadas */}
                     <Route path="/forgot" element={<Forgot />} />
+
+                    <Route path="/verificar-cuenta" element={<VerificarCuenta />} />
 
                     {/* =========================================================
                         RUTAS PROTEGIDAS GLOBALMENTE (Requieren sesión activa)
