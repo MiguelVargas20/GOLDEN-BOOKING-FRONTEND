@@ -13,6 +13,15 @@ import { useRequierePerfilCompleto } from "../../hooks/useRequirePerfilCompleto.
 
 registerLocale("es", es); 
 
+// Convierte un objeto Date a un string "YYYY-MM-DDTHH:mm:ss" usando
+// la hora LOCAL del navegador, sin conversión a UTC (a diferencia de
+// .toISOString(), que siempre convierte a UTC y desfasa la hora).
+function toLocalISOString(date) {
+    const pad = (n) => String(n).padStart(2, "0");
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+}
+
+
 function ReservarEspacioD() {
     const { state } = useLocation();
     const { ruta, text } = state || {};
@@ -187,7 +196,7 @@ function ReservarEspacioD() {
                                         <BiCalendarAlt className="calendar-icon" />
                                         <DatePicker
                                             selected={formData.fInicioReserva ? new Date(formData.fInicioReserva) : null}
-                                            onChange={(date) => setFormData({ ...formData, fInicioReserva: date ? date.toISOString() : "" })}
+                                            onChange={(date) => setFormData({ ...formData, fInicioReserva: date ? toLocalISOString(date) : "" })}
                                             showTimeSelect
                                             dateFormat="Pp"
                                             locale="es"
@@ -204,7 +213,7 @@ function ReservarEspacioD() {
                                         <BiCalendarAlt className="calendar-icon" />
                                         <DatePicker
                                             selected={formData.fFinReserva ? new Date(formData.fFinReserva) : null}
-                                            onChange={(date) => setFormData({ ...formData, fFinReserva: date ? date.toISOString() : "" })}
+                                            onChange={(date) => setFormData({ ...formData, fFinReserva: date ? toLocalISOString(date) : "" })}
                                             showTimeSelect
                                             dateFormat="Pp"
                                             locale="es"
