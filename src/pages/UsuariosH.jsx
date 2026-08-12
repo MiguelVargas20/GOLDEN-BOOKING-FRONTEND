@@ -166,11 +166,11 @@ export default function UsuariosH() {
 
       {/* --- CONTROLES DE PAGINACIÓN INTEGARDOS --- */}
       {totalPaginas > 1 && (
-        <div className="d-flex justify-content-between align-items-center mt-3 px-1">
+        <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-3 px-1">
           <span style={{ fontSize: "0.85rem", color: "#64748b" }}>
             Mostrando página {paginaActual + 1} de {totalPaginas} — {totalElementos} usuarios en total
           </span>
-          <div className="d-flex gap-2">
+          <div className="d-flex flex-wrap gap-2">
             <button
               className="btn btn-outline-secondary btn-sm"
               onClick={() => obtenerUsuarios(paginaActual - 1)}

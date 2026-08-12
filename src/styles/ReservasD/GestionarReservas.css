@@ -10,6 +10,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
   margin-bottom: 24px;
 }
 
@@ -30,7 +32,8 @@
   font-size: 0.9rem;
   background: white; /* Forzamos fondo blanco */
   color: #4a5568;
-  width: 300px;
+  width: 100%;
+  max-width: 300px;
   transition: all 0.2s ease;
 }
 
@@ -59,7 +62,7 @@
 /* ── Tabla con Marcos Suaves ──────────────── */
 .tabla-container-suave {
   border-radius: 10px;
-  overflow: hidden;
+  overflow-x: auto;
   border: 1px solid #e2e8f0; /* Marco exterior suave */
   background: #fff;
 }

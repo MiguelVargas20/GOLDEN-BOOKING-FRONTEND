@@ -1,10 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800;900&display=swap');
-
 .register-page {
     display: flex;
     height: 100vh; /* Obliga a medir exactamente el alto de la pantalla */
     width: 100%;
-    font-family: 'Montserrat', sans-serif;
     background-color: #ffffff;
     overflow: hidden; /* Evita que toda la página haga scroll y rompa el diseño */
 }

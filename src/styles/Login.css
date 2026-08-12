@@ -1,10 +1,7 @@
-
 /* CONTENEDOR PRINCIPAL */  
 .container-login {
-
-    position: fixed;
     width: 100%;
-    max-width: 100% !important;
+    min-height: 100vh;
     margin: 0;
     padding: 0;
     display: grid;
@@ -14,6 +11,38 @@
     color: #000;
     padding-bottom: 30px;
     box-sizing: border-box !important; 
+}
+
+/* Debajo de este ancho ya no cabe el panel del formulario junto al
+   panel decorativo sin aplastarse: se apilan en una sola columna y
+   se oculta la imagen (es decorativa, no aporta al login en móvil). */
+@media (max-width: 991px) {
+    .container-login {
+        grid-template-columns: 1fr;
+    }
+
+    .right-panel-login {
+        display: none;
+    }
+
+    .left-panel-login {
+        padding: 0 1.5rem;
+    }
+
+    .title-login {
+        font-size: 2rem;
+    }
+
+    .btn-login {
+        width: auto;
+        padding: 12px 20px;
+    }
+
+    .options,
+    .redirect {
+        flex-wrap: wrap;
+        row-gap: 10px;
+    }
 }
 
 .password-input-wrapper {
@@ -48,16 +77,18 @@
 }
 
 .logo-login {
-    height: 5rem;
-    width: 30rem;
+    height: auto;
+    width: 100%;
+    max-width: 30rem;
     margin-left: 21px;
     color: #c89d00;
     margin-bottom: 4rem;
 }
 
 .logo-login img {
-    height: 76%;
+    height: auto;
     width: 35%;
+    max-width: 168px;
     margin-top: 1rem;
 }
 
@@ -191,4 +222,3 @@
     width: 100%;
     height: 98%;
 }
-

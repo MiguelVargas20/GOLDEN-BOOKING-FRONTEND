@@ -234,7 +234,7 @@
     color: var(--gb-text-primary) !important;
 }
 
-[data-bs-theme='dark'] .tittle-contact {
+[data-bs-theme='dark'] .title-contacts {
     color: var(--gb-item-title) !important;
 }
 

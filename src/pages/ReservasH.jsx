@@ -154,7 +154,7 @@ export default function ReservasH() {
         const confirmacion = await Swal.fire({
             title: "¿Confirmar reserva?",
             html: `
-                <div style="text-align:left;padding:0 1rem; font-family: sans-serif;">
+                <div style="text-align:left;padding:0 1rem; font-family: 'Poppins', sans-serif;">
                     <p><strong>Habitación:</strong> ${hab.numeroHabitacion}</p>
                     <p><strong>Check-in:</strong> ${new Date(habFechas.checkIn).toLocaleDateString()}</p>
                     <p><strong>Check-out:</strong> ${new Date(habFechas.checkOut).toLocaleDateString()}</p>

@@ -43,7 +43,7 @@
 
 /* Contenedor principal del calendario desplegable */
 .react-datepicker {
-    font-family: 'Arial', sans-serif;
+    font-family: 'Poppins', sans-serif;
     border: 1px solid #ddd;
     border-radius: 8px;
     background-color: #fff;
