@@ -194,7 +194,11 @@
     gap: 4px;
 }
 
-/* INPUTS DE FECHA FIJADOS EN BLANCO IMPERATIVO */
+/* Layout de la fila de fechas. El estilo del input en sí (icono,
+   borde, colores, dark mode) ahora vive en DatePickerCompartido.css
+   y es el mismo para hotel y deporte — ver .date-input-wrapper y
+   .custom-date-input. Antes este bloque fijaba el fondo del input
+   en blanco con !important, lo que rompía el dark mode. */
 .date-picker-row-v2 {
     display: flex;
     gap: 12px;
@@ -212,29 +216,6 @@
     color: #666;
     font-weight: 600;
     margin-bottom: 4px;
-}
-
-.date-input-group-v2 input[type="date"] {
-    background-color: #ffffff !important;
-    color: #2b2b2b !important;
-    border: 1px solid #cccccc;
-    border-radius: 8px;
-    padding: 8px 10px;
-    font-size: 0.85rem;
-    font-weight: 500;
-    outline: none;
-    transition: border-color 0.2s ease;
-    width: 100%;
-}
-
-.date-input-group-v2 input[type="date"]:focus {
-    border-color: #ff8800;
-    box-shadow: 0 0 0 2px rgba(255, 136, 0, 0.15);
-}
-
-.date-input-group-v2 input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(30%) sepia(100%) saturate(500%) hue-rotate(15deg);
-    cursor: pointer;
 }
 
 /* ════════════════════════════════════════════

@@ -8,6 +8,7 @@ import Swal from "sweetalert2";
 import { BiCalendarAlt } from "react-icons/bi";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css"; 
+import "../../styles/DatePickerCompartido.css";
 import { es } from 'date-fns/locale'; 
 import { useRequierePerfilCompleto } from "../../hooks/useRequirePerfilCompleto.js";
 
@@ -192,7 +193,7 @@ function ReservarEspacioD() {
                             <Row>
                                 <Col md={6} className="mb-3">
                                     <Form.Label className="fw-bold">Entrada</Form.Label>
-                                    <div className="date-input-wrapper-sport">
+                                    <div className="date-input-wrapper">
                                         <BiCalendarAlt className="calendar-icon" />
                                         <DatePicker
                                             selected={formData.fInicioReserva ? new Date(formData.fInicioReserva) : null}
@@ -209,7 +210,7 @@ function ReservarEspacioD() {
 
                                 <Col md={6} className="mb-3">
                                     <Form.Label className="fw-bold">Salida</Form.Label>
-                                    <div className="date-input-wrapper-sport">
+                                    <div className="date-input-wrapper">
                                         <BiCalendarAlt className="calendar-icon" />
                                         <DatePicker
                                             selected={formData.fFinReserva ? new Date(formData.fFinReserva) : null}

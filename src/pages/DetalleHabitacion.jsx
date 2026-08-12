@@ -1,13 +1,19 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Spinner, Button, Container, Row, Col, Card } from "react-bootstrap";
-import { BiArrowBack, BiGroup, BiCalendar } from "react-icons/bi";
+import { BiArrowBack, BiGroup, BiCalendar, BiCalendarAlt } from "react-icons/bi";
 import { obtenerHabitacionPorId } from "../api/HabitacionApi";
 import { crearReservaHotel, obtenerFechasOcupadas } from "../api/ReservaHotelApi"; // 🆕 obtenerFechasOcupadas
-import { haySolapamiento } from "../utils/fechasHotel"; // 🆕
+import { haySolapamiento, toLocalDateString } from "../utils/fechasHotel"; // 🆕
 import { useAuth } from "../context/AuthContext";
 import Swal from "sweetalert2";
+import DatePicker, { registerLocale } from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import "../styles/DatePickerCompartido.css";
+import { es } from "date-fns/locale";
 import "../styles/DetalleHabitacion.css";
+
+registerLocale("es", es);
 
 const PLACEHOLDER = "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80";
 
@@ -218,24 +224,36 @@ export default function DetalleHabitacion() {
 
                         <Row className="g-2 mt-4">
                             <Col xs={6}>
-                                <label className="small fw-semibold text-muted">Check-in</label>
-                                <input
-                                    type="date"
-                                    className="form-control"
-                                    value={checkIn}
-                                    min={new Date().toISOString().split("T")[0]}
-                                    onChange={(e) => setCheckIn(e.target.value)}
-                                />
+                                <label className="small fw-semibold text-muted d-block mb-1">Check-in</label>
+                                <div className="date-input-wrapper">
+                                    <BiCalendarAlt className="calendar-icon" />
+                                    <DatePicker
+                                        selected={checkIn ? new Date(checkIn) : null}
+                                        onChange={(date) => setCheckIn(date ? toLocalDateString(date) : "")}
+                                        dateFormat="dd/MM/yyyy"
+                                        locale="es"
+                                        className="form-control custom-date-input"
+                                        placeholderText="dd/mm/aaaa"
+                                        minDate={new Date()}
+                                        portalId="datepicker-portal"
+                                    />
+                                </div>
                             </Col>
                             <Col xs={6}>
-                                <label className="small fw-semibold text-muted">Check-out</label>
-                                <input
-                                    type="date"
-                                    className="form-control"
-                                    value={checkOut}
-                                    min={checkIn || new Date().toISOString().split("T")[0]}
-                                    onChange={(e) => setCheckOut(e.target.value)}
-                                />
+                                <label className="small fw-semibold text-muted d-block mb-1">Check-out</label>
+                                <div className="date-input-wrapper">
+                                    <BiCalendarAlt className="calendar-icon" />
+                                    <DatePicker
+                                        selected={checkOut ? new Date(checkOut) : null}
+                                        onChange={(date) => setCheckOut(date ? toLocalDateString(date) : "")}
+                                        dateFormat="dd/MM/yyyy"
+                                        locale="es"
+                                        className="form-control custom-date-input"
+                                        placeholderText="dd/mm/aaaa"
+                                        minDate={checkIn ? new Date(checkIn) : new Date()}
+                                        portalId="datepicker-portal"
+                                    />
+                                </div>
                             </Col>
                         </Row>
 
