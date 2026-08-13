@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate, Link } from "react-router-dom";
 import logo from "../assets/LOGO.png";
 import forgot from "../assets/forgot.png";
 import "../styles/Forgot.css";
+import "../styles/BotonesCompartidos.css";
 import { restablecerPassword } from "../services/authService";
 
 export default function RestablecerPassword() {
@@ -81,7 +82,7 @@ export default function RestablecerPassword() {
 
                         <div className="form-actions">
                             <button
-                                className="btn-send-forgot"
+                                className="btn-gb btn-gb-primary btn-gb-lg"
                                 type="submit"
                                 disabled={loading}
                             >

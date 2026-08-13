@@ -3,6 +3,7 @@ import { Container, Row, Col, Card, Button, Spinner, Badge, Form } from "react-b
 import Swal from "sweetalert2";
 import { listarMensajes, marcarMensajeLeido, responderMensaje } from "../api/ContactoApi";
 import "../styles/AdminMensajes.css";
+import "../styles/BotonesCompartidos.css";
 
 export default function AdminMensajes() {
   const [mensajes, setMensajes] = useState([]);
@@ -176,13 +177,13 @@ export default function AdminMensajes() {
                 {/* Acciones */}
                 <div className="d-flex justify-content-end gap-2 flex-wrap">
                   {!m.leido && (
-                    <Button className="btn-mensaje-secundario" size="sm" onClick={() => handleMarcarLeido(m.id)}>
+                    <Button className="btn-gb btn-gb-neutral btn-gb-sm" size="sm" onClick={() => handleMarcarLeido(m.id)}>
                       Marcar como leído
                     </Button>
                   )}
                   {!m.respuesta && (
                     <Button
-                      className="btn-mensaje-primario"
+                      className="btn-gb btn-gb-primary btn-gb-sm"
                       size="sm"
                       onClick={() => toggleResponder(m.id)}
                     >
@@ -204,7 +205,7 @@ export default function AdminMensajes() {
                     />
                     <div className="d-flex justify-content-end mt-2">
                       <Button
-                        className="btn-mensaje-primario"
+                        className="btn-gb btn-gb-primary btn-gb-sm"
                         size="sm"
                         disabled={enviandoRespuesta}
                         onClick={() => handleEnviarRespuesta(m.id)}

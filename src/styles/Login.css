@@ -33,11 +33,6 @@
         font-size: 2rem;
     }
 
-    .btn-login {
-        width: auto;
-        padding: 12px 20px;
-    }
-
     .options,
     .redirect {
         flex-wrap: wrap;
@@ -181,27 +176,6 @@
     grid-template-columns: 1fr 1fr;
 }
 
-/* BOTÓN */
-.btn-login {
-    width: 40%;
-    height: 50px;
-    padding: 15px;
-    background: linear-gradient(to bottom, #f5e200, #e1892c);
-    color: black;
-    border-radius: 10px;
-    font-weight: bold;
-    cursor: pointer;
-    display: flex;
-    align-items: center;     
-    justify-content: center;
-}
-
-.btn-login:hover {
-    background: #ffbe1a;
-}
-.btn-send-forgot:hover {
-    background: #ffbe1a;
-}
 /* PANEL DERECHO - GRID CENTRADO */
 .right-panel-login {
     display: grid;

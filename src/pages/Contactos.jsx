@@ -5,6 +5,7 @@ import Swal from "sweetalert2";
 import { enviarMensaje } from "../api/ContactoApi";
 import { useAuth } from "../context/AuthContext";
 import '../styles/Contactos.css';
+import '../styles/BotonesCompartidos.css';
 import mapa from '../assets/mapa.png';
 import mapaimg from '../assets/mapa-img.png';
 
@@ -118,7 +119,7 @@ export default function Contactos() {
                                 />
                             </Form.Group>
 
-                            <button type="submit" className="btn-reservar w-100 mt-2" disabled={enviando}>
+                            <button type="submit" className="btn-gb btn-gb-primary btn-gb-lg w-100 mt-2" disabled={enviando}>
                                 {enviando ? <Spinner size="sm" /> : "ENVIAR MENSAJE"}
                             </button>
                         </Col>

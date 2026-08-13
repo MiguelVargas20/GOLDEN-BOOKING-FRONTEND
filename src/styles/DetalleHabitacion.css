@@ -107,7 +107,7 @@
 }
 
 .btn-reservar {
-    background: #ff8800 !important;
+    background: var(--gb-primary) !important;
     border: none !important;
     padding: 18px !important;
     border-radius: 15px !important;
@@ -116,13 +116,13 @@
     text-transform: uppercase;
     letter-spacing: 1px;
     transition: all 0.3s !important;
-    box-shadow: 0 4px 15px rgba(255, 136, 0, 0.3);
+    box-shadow: 0 4px 15px rgba(243, 141, 30, 0.3);
 }
 
 .btn-reservar:hover {
-    background: #e67a00 !important;
+    background: var(--gb-primary-hover) !important;
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(255, 136, 0, 0.4);
+    box-shadow: 0 8px 20px rgba(243, 141, 30, 0.4);
 }
 
 /* --- RESPONSIVIDAD --- */

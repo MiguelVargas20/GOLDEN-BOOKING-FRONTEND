@@ -217,8 +217,8 @@ p[style*="font-size: 0.78rem"] {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #ff8800 !important;
-    border: 1px solid #ff7700 !important;
+    background: var(--gb-primary) !important;
+    border: 1px solid var(--gb-primary) !important;
     color: #ffffff !important;
     border-radius: 12px !important;
     width: 52px;
@@ -231,11 +231,11 @@ p[style*="font-size: 0.78rem"] {
 }
 
 .btn-add-tipo-room:hover {
-    background: #ff8800 !important;
-    border-color: #ff7700 !important;
+    background: var(--gb-primary-hover) !important;
+    border-color: var(--gb-primary-hover) !important;
     color: #ffffff !important;
     transform: translateY(-1px);
-    box-shadow: 0px 4px 12px rgba(255, 136, 0, 0.2);
+    box-shadow: 0px 4px 12px rgba(243, 141, 30, 0.2);
 }
 
 .btn-add-tipo-room:active {

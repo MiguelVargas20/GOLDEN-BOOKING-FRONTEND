@@ -2,6 +2,8 @@ import React from "react";
 // Se unificaron las importaciones de la misma librería para optimizar el código
 import { useLocation, useNavigate } from "react-router-dom";
 import { FaUpload } from "react-icons/fa";
+import "../styles/ReservasD/ReservasD.css";
+import "../styles/BotonesCompartidos.css";
 
 /**
  * Componente Crear
@@ -77,13 +79,13 @@ function Crear() {
                     {/* Botones de acción del formulario con redirección */}
                     <div className="botones">
                         <button 
-                            className="btn btn-crear crear" 
+                            className="btn-gb btn-gb-primary" 
                             onClick={() => navigate("/reservas-deportivas")}
                         >
                             Crear
                         </button>
                         <button 
-                            className="btn btn-crear cancelar" 
+                            className="btn-gb btn-gb-danger" 
                             onClick={() => navigate("/reservas-deportivas")}
                         >
                             Cancelar

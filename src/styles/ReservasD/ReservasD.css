@@ -28,20 +28,7 @@ background:#f5f5f5;
     gap: 20px;
 }
 
-.btn-reserva {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px 24px;       /* Padding exacto del botón ejemplo */
-    border-radius: 12px;
-    font-size: 16px;          /* Unificado con el ejemplo */
-    font-weight: 600;
-    color: #ffffff !important; /* Texto blanco impecable */
-    cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease !important;
-}
-
-/* ---------- CORRECCIÓN DE BOTONES (ESTILO PREMIUM UNIFICADO) ---------- */
+/* ---------- BOTONES DE NAVEGACIÓN (GESTIONAR / MIS RESERVAS) ---------- */
 
 .btn-reserva {
     display: inline-flex;     /* Cambio a inline-flex para ajustarse bien a la grilla */
@@ -60,29 +47,29 @@ background:#f5f5f5;
 /* Botón: GESTIONAR RESERVAS */
 .btn-reserva.gestionar {
     justify-self: start;       /* Empuja a la izquierda en tu grilla */
-    background: #ff8800 !important; /* Naranja plano idéntico al ejemplo */
-    border: 1px solid #ff7700 !important; /* Borde sutil corregido a 1px */
-    box-shadow: 0px 4px 10px rgba(255, 136, 0, 0.15);
+    background: var(--gb-neutral) !important;
+    border: 1px solid var(--gb-neutral) !important;
+    box-shadow: 0px 4px 10px rgba(26, 26, 46, 0.15);
 }
 
 .btn-reserva.gestionar:hover {
-    background: #ff8800 !important;
-    border-color: #ff7700 !important;
+    background: var(--gb-neutral-hover) !important;
+    border-color: var(--gb-neutral-hover) !important;
     transform: translateY(-2px); 
-    box-shadow: 0px 6px 14px rgba(255, 119, 0, 0.3);
+    box-shadow: 0px 6px 14px rgba(26, 26, 46, 0.3);
 }
 
 /* Botón: MIS RESERVAS */
 .btn-reserva.mis {
     justify-self: end;         /* Empuja a la derecha en tu grilla */
-    background: #1a1a2e !important; /* Azul marino oscuro exacto del ejemplo */
-    border: 1px solid #121222 !important;
+    background: var(--gb-neutral) !important;
+    border: 1px solid var(--gb-neutral) !important;
     box-shadow: 0px 4px 10px rgba(26, 26, 46, 0.15);
 }
 
 .btn-reserva.mis:hover {
-    background: #1a1a2e !important;
-    border-color: #121222 !important;
+    background: var(--gb-neutral-hover) !important;
+    border-color: var(--gb-neutral-hover) !important;
     transform: translateY(-2px); 
     box-shadow: 0px 6px 14px rgba(26, 26, 46, 0.3);
 }
@@ -169,22 +156,7 @@ flex-wrap:wrap;
     margin: 1rem 3rem 0;
 }
 
-.btn-crear {
-    padding: 0.5rem 2rem;
-    font-size: 1.05rem;
-    font-weight: 600;
-    width: 100px;
-}
-
-.crear {
-    background: linear-gradient(to bottom, #7ed957, #4caf50);
-    box-shadow: 0 4px 0 #3e8e41;
-}
-
-.cancelar {
-    background: linear-gradient(to bottom, #dd8856, #e70606);
-    box-shadow: 0 4px 0 #a02304;
-}
+/* ---------- FORMULARIOS DE CREAR / EDITAR (Crear.jsx, Editar.jsx) ---------- */
 
 /* Estilos de gestión de reservas */
 .reservas-container {
@@ -387,25 +359,6 @@ td:nth-child(3) {
     margin-top: 10px;
 }
 
-.btn-editar {
-    padding: 12px 30px !important;
-    border-radius: 10px;
-    font-weight: bold;
-    border: none;
-    cursor: pointer;
-    color: #fff;
-}
-
-.aceptar-editar {
-    background: linear-gradient(to bottom, #7ed957, #4caf50);
-    box-shadow: 0 4px 0 #3e8e41;
-}
-
-
-.cancelar-editar {
-    background: linear-gradient(to bottom, #ff6b6b, #e74c3c);
-    box-shadow: 0 4px 0 #c0392b;
-}
 /* MEDIA QUERY CELULAR */
 
 @media (max-width: 768px) {
@@ -451,8 +404,7 @@ td:nth-child(3) {
         gap: 15px;
     }
 
-    .btn-crear,
-    .btn-editar {
+    .botones .btn-gb {
         width: 100%;
     }
 

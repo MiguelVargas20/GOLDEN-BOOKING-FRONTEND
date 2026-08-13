@@ -1,4 +1,4 @@
-import { useState } from 'react'; 
+import { useState, useEffect } from 'react'; 
 import React from 'react';
 import { Navbar, Nav, Container, Button, NavDropdown } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
@@ -31,6 +31,23 @@ export default function ComponentNavbar() {
 
     // Estado para el menú hamburguesa (móvil)
     const [navExpanded, setNavExpanded] = useState(false);
+
+    // Estado controlado del dropdown "Servicios". Antes quedaba 100% en manos
+    // del comportamiento default de react-bootstrap (solo cierra con click
+    // afuera / Escape / click en un item), así que si cambiabas de ventana o
+    // pestaña, react-bootstrap nunca se enteraba y el dropdown quedaba abierto
+    // al volver. Se fuerza el cierre explícitamente al perder el foco.
+    const [servicesOpen, setServicesOpen] = useState(false);
+
+    useEffect(() => {
+        const cerrarDropdown = () => setServicesOpen(false);
+        document.addEventListener('visibilitychange', cerrarDropdown);
+        window.addEventListener('blur', cerrarDropdown);
+        return () => {
+            document.removeEventListener('visibilitychange', cerrarDropdown);
+            window.removeEventListener('blur', cerrarDropdown);
+        };
+    }, []);
 
     // Función auxiliar para navegar y cerrar el menú móvil a la vez de forma limpia
     const handleNavigate = (path) => {
@@ -98,13 +115,15 @@ export default function ComponentNavbar() {
                                 <NavDropdown
                                     title="Servicios"
                                     id="services-dropdown"
+                                    show={servicesOpen}
+                                    onToggle={(isOpen) => setServicesOpen(isOpen)}
                                     className={`${styles.navLink} ${styles.servicesDropdown}`}
                                 >
                                     <NavDropdown.Item 
                                         as={Link} 
                                         to="/reservas-deportivas" 
                                         className={styles.dropdownItemCustom}
-                                        onClick={() => setNavExpanded(false)}
+                                        onClick={() => { setServicesOpen(false); setNavExpanded(false); }}
                                     >
                                         <div className={styles.iconBox}><MdSportsTennis /></div>
                                         <div>
@@ -117,7 +136,7 @@ export default function ComponentNavbar() {
                                         as={Link} 
                                         to="/reservas-hospedaje" 
                                         className={styles.dropdownItemCustom}
-                                        onClick={() => setNavExpanded(false)}
+                                        onClick={() => { setServicesOpen(false); setNavExpanded(false); }}
                                     >
                                         <div className={styles.iconBox}><MdHotel /></div>
                                         <div>
@@ -130,7 +149,7 @@ export default function ComponentNavbar() {
                                         as={Link} 
                                         to="/reservas-restaurante" 
                                         className={styles.dropdownItemCustom}
-                                        onClick={() => setNavExpanded(false)}
+                                        onClick={() => { setServicesOpen(false); setNavExpanded(false); }}
                                     >
                                         <div className={styles.iconBox}><MdRestaurant /></div>
                                         <div>

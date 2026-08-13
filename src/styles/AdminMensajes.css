@@ -151,43 +151,6 @@
 }
 
 /* ── Botones ────────────────────────────────────────────── */
-.btn-mensaje-primario {
-  background-color: #f38d1e;
-  border-color: #f38d1e;
-  border-radius: 999px;
-  font-weight: 600;
-  font-size: 0.85rem;
-  padding: 0.45rem 1.2rem;
-  transition: all 0.2s ease;
-}
-
-.btn-mensaje-primario:hover {
-  background-color: #d97a12;
-  border-color: #d97a12;
-}
-
-.btn-mensaje-primario:disabled {
-  background-color: #f5c88f;
-  border-color: #f5c88f;
-}
-
-.btn-mensaje-secundario {
-  background-color: #14213d;
-  border-color: #14213d;
-  color: #fff;
-  border-radius: 999px;
-  font-weight: 600;
-  font-size: 0.85rem;
-  padding: 0.45rem 1.2rem;
-  transition: all 0.2s ease;
-}
-
-.btn-mensaje-secundario:hover {
-  background-color: #0d1730;
-  border-color: #0d1730;
-  color: #fff;
-}
-
 /* ── Caja de responder ──────────────────────────────────── */
 .caja-responder {
   background-color: #fcfcfc;

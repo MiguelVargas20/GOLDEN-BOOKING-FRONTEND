@@ -1,5 +1,6 @@
 import { Col, Container, Row, Button } from "react-bootstrap";
 import '../styles/Home.css';
+import '../styles/BotonesCompartidos.css';
 import { Outlet } from "react-router-dom";
 import Carousel from 'react-bootstrap/Carousel';
 import Card from 'react-bootstrap/Card';
@@ -78,7 +79,7 @@ export default function Home() {
                                         </p>
                                         <div className="hero-buttons">
                                             {/* Integración limpia usando 'as={Link}' apuntando a tus rutas */}
-                                            <Button as={Link} to="/reservas-deportivas" className="btn-orange">
+                                            <Button as={Link} to="/reservas-deportivas" className="btn-gb btn-gb-primary btn-gb-lg">
                                                 RESERVAR AHORA
                                             </Button>
                                             
@@ -100,7 +101,7 @@ export default function Home() {
             */}
             <Container className="py-5">
                 {/* Cabecera con título y enlace de navegación */}
-                <div className="d-flex justify-content-between align-items-end mb-4">
+                <div className="d-flex justify-content-between align-items-end mb-4 instalaciones-header">
                     <div>
                         <span className="text-orange fw-bold small">Instalaciones</span>
                         <h2 className="bungee-regular">RESERVAS ESPACIOS</h2>

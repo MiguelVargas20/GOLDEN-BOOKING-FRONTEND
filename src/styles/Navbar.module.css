@@ -205,3 +205,30 @@
 .adminLoginBtn {
     font-family: 'Poppins', sans-serif !important;
 }
+
+/* ── DARK MODE (explícito, no solo variables) ──────────────
+   El resto de la app usa overrides explícitos por atributo en
+   dark-mode-overrides.css, pero ese archivo no puede alcanzar
+   estas clases porque son de un CSS Module (hash único por
+   build). Por eso el fallback a blanco se colaba a veces.
+   Se pone aquí mismo, con :global(), para que sí aplique. */
+:global([data-bs-theme='dark']) .servicesDropdown :global(.dropdown-menu) {
+    background-color: #1a202c !important;
+    border-color: #2d3748 !important;
+}
+
+:global([data-bs-theme='dark']) .dropdownItemCustom:hover {
+    background-color: #2d3748 !important;
+}
+
+:global([data-bs-theme='dark']) .iconBox {
+    background-color: #3a2e1a;
+}
+
+:global([data-bs-theme='dark']) .itemTitle {
+    color: #f7fafc;
+}
+
+:global([data-bs-theme='dark']) .itemText {
+    color: #a0aec0;
+}

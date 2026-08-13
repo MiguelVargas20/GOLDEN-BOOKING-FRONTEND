@@ -17,6 +17,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import "../styles/DatePickerCompartido.css";
 import { es } from "date-fns/locale";
 import "../styles/reservasH.css";
+import "../styles/BotonesCompartidos.css";
 
 registerLocale("es", es);
 
@@ -231,7 +232,7 @@ export default function ReservasH() {
                     {isAdmin() && (
                         <>
                             <button
-                                className="btn-reserva-sm crear"
+                                className="btn-gb btn-gb-primary btn-gb-sm"
                                 onClick={() => navigate("/crear-habitacion")}
                             >
                                 <IoAddCircleOutline /> Crear
@@ -383,11 +384,11 @@ export default function ReservasH() {
                                                 <small>{noches > 0 ? ` (${noches}n)` : " /noche"}</small>
                                             </span>
                                             <div className="botones-v2">
-                                                <button className="btn-detail-sm" onClick={() => navigate(`/detalle/${hab.id}`)}>
+                                                <button className="btn-gb btn-gb-secondary btn-gb-sm" onClick={() => navigate(`/detalle/${hab.id}`)}>
                                                     Detalle
                                                 </button>
                                                 <button
-                                                    className="btn-reservar-sm"
+                                                    className="btn-gb btn-gb-primary btn-gb-sm"
                                                     onClick={() => handleReservar(hab)}
                                                     disabled={!disponible || reservando === hab.id}
                                                 >

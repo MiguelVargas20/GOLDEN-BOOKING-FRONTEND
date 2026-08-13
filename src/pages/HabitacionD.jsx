@@ -5,9 +5,9 @@ import { crearHabitacion, listarTiposHabitacion } from "../api/habitacionApi";
 import "../styles/HabitacionD.css";
 
 const ESTADOS = [
-  { value: "disponible", label: "✓ Disponible", color: "#2e7d32" },
-  { value: "ocupada", label: "✗ Ocupada", color: "#c62828" },
-  { value: "mantenimiento", label: "⚙ Mantenimiento", color: "#e65100" },
+  { value: "disponible", label: "✓ Disponible", color: "var(--gb-status-success-text)" },
+  { value: "ocupada", label: "✗ Ocupada", color: "var(--gb-status-danger-text)" },
+  { value: "mantenimiento", label: "⚙ Mantenimiento", color: "var(--gb-status-warning-text)" },
 ];
 
 export default function HabitacionD() {
@@ -91,34 +91,34 @@ export default function HabitacionD() {
               style={{
                 fontFamily: '"Bungee", sans-serif',
                 fontWeight: 400,
-                color: "#1a1a2e",
+                color: "var(--gb-item-title)",
                 fontSize: "2.2rem",
                 lineHeight: 1.2,
                 marginBottom: "0.5rem",
               }}
             >
               Registro de{" "}
-              <span style={{ color: "#f38d1e" }}>Habitación</span>
+              <span style={{ color: "var(--gb-primary)" }}>Habitación</span>
             </h2>
-            <p style={{ color: "#64748b", fontSize: "0.85rem", letterSpacing: "1px", fontWeight: "600" }}>
+            <p style={{ color: "var(--gb-text-muted)", fontSize: "0.85rem", letterSpacing: "1px", fontWeight: "600" }}>
               GESTIÓN EJECUTIVA DE PROPIEDADES
             </p>
 
             {/* Preview Integrada */}
             <div className="habitacion-preview-card text-center d-flex flex-column align-items-center justify-content-center">
               <div className="preview-icon-badge">🏨</div>
-              <span style={{ fontWeight: 700, fontSize: "1.2rem", color: "#1a1a2e" }}>
+              <span style={{ fontWeight: 700, fontSize: "1.2rem", color: "var(--gb-item-title)" }}>
                 {numeroHabitacion ? `Hab. ${numeroHabitacion}` : "Vista previa"}
               </span>
               
               {tipoSeleccionado && (
-                <span style={{ fontSize: "0.85rem", color: "#64748b", marginTop: "2px" }}>
+                <span style={{ fontSize: "0.85rem", color: "var(--gb-text-muted)", marginTop: "2px" }}>
                   {tipoSeleccionado.nombreTipoHabitacion}
                 </span>
               )}
               
               {precioNoche && (
-                <span style={{ fontSize: "1.1rem", fontWeight: 700, color: "#f38d1e", marginTop: "6px" }}>
+                <span style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--gb-primary)", marginTop: "6px" }}>
                   ${parseFloat(precioNoche).toLocaleString("es-CO")} / noche
                 </span>
               )}
@@ -150,7 +150,7 @@ export default function HabitacionD() {
 
             {/* Elemento visual de soporte técnico / estándares */}
             <div className="amenidades-sidebar">
-              <p style={{ fontSize: "0.7rem", fontWeight: 700, color: "#94a3b8", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "0.75rem" }}>
+              <p style={{ fontSize: "0.7rem", fontWeight: 700, color: "var(--gb-text-muted)", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "0.75rem" }}>
                 Estándares del Sistema
               </p>
               <div className="amenidad-item">
@@ -172,7 +172,7 @@ export default function HabitacionD() {
           <Col lg={8} md={7}>
             <div
               style={{
-                background: "#fff",
+                background: "var(--gb-surface)",
                 borderRadius: "20px",
                 padding: "3rem",
                 border: "1px solid #e2e8f0",
@@ -182,7 +182,7 @@ export default function HabitacionD() {
               <p className="habitacion-datos-label">
                 Datos de la Habitación
               </p>
-              <hr style={{ borderColor: "#e2e8f0", marginBottom: "1.75rem" }} />
+              <hr style={{ borderColor: "var(--gb-border)", marginBottom: "1.75rem" }} />
 
               {error && (
                 <Alert variant="danger" className="small py-2">
@@ -265,7 +265,7 @@ export default function HabitacionD() {
                           left: "0.85rem",
                           top: "50%",
                           transform: "translateY(-50%)",
-                          color: "#94a3b8",
+                          color: "var(--gb-text-muted)",
                           fontWeight: 700,
                         }}
                       >
@@ -312,7 +312,7 @@ export default function HabitacionD() {
                   />
                 </Form.Group>
 
-                <hr style={{ borderColor: "#e2e8f0", marginBottom: "1.5rem" }} />
+                <hr style={{ borderColor: "var(--gb-border)", marginBottom: "1.5rem" }} />
 
                 {/* Botones */}
                 <div className="d-flex justify-content-end gap-2">
@@ -351,7 +351,7 @@ export default function HabitacionD() {
 
 function CampoLabel({ label }) {
   return (
-    <p style={{ fontSize: "0.78rem", fontWeight: 600, color: "#475569", marginBottom: "6px" }}>
+    <p style={{ fontSize: "0.78rem", fontWeight: 600, color: "var(--gb-text-primary)", marginBottom: "6px" }}>
       {label}
     </p>
   );
