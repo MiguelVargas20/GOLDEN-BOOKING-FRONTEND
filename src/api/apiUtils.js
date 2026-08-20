@@ -14,17 +14,11 @@ export const authHeaders = () => ({
   Authorization: `Bearer ${getToken()}`,
 });
 
-// Extrae el mensaje real que manda el GlobalExceptionHandler del backend.
-// Ahí el body siempre viene como { error: "..." } o, en validaciones,
-// { errores: { campo: "mensaje" } }.
-export const extraerMensajeError = async (res, fallback) => {
+export const extraerMensajeError = async (response) => {
   try {
-    const data = await res.json();
-    if (data?.error) return data.error;
-    if (data?.errores) return Object.values(data.errores).join(" | ");
-    if (data?.message) return data.message;
+    const data = await response.json();
+    return data.error || data.message || "Ocurrió un error inesperado";
   } catch {
-    // el body no era JSON (ej. 401 sin body, error de red, etc.)
+    return "Ocurrió un error inesperado";
   }
-  return `${fallback} (HTTP ${res.status})`;
 };

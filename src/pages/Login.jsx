@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { loginSchema } from "../schemas/loginschema";
+import { loginSchema } from "../schemas/LoginSchema";
 import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
@@ -48,17 +48,21 @@ export default function Login() {
           {serverError && <p className="error-msg">{serverError}</p>}
 
           <form className="form" onSubmit={handleSubmit(onSubmit)}>
-            <div className="input-group">
-              <input
-                type="text"
-                placeholder="Ingrese su usuario"
-                {...register("username")}
-              />
-              {errors.username && <span className="error-text">{errors.username.message}</span>}
-            </div>
+                <div className="input-group">
+      <label htmlFor="username">Usuario</label>
+      <input
+        id="username"
+        type="text"
+        placeholder="Ingrese su usuario"
+        {...register("username")}
+      />
+      {errors.username && <span className="error-text">{errors.username.message}</span>}
+    </div>
 
             <div className="input-group">
+              <label htmlFor="password">Contraseña</label>
               <input
+                id="password"
                 type={showPassword ? "text" : "password"}
                 placeholder="Ingrese su contraseña"
                 {...register("password")}

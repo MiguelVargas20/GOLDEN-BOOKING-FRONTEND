@@ -48,21 +48,20 @@ export default function Register() {
 
           <form className="professional-form" onSubmit={handleSubmit(onSubmit)}>
             <div className="input-grid">
+             <div className="field-group">
+  <label htmlFor="nombre">Nombre</label>
+  <input id="nombre" type="text" placeholder="Ej: Juan" {...register("nombre")} className={errors.nombre ? "input-error" : ""} />
+  {errors.nombre && <span className="helper-text">{errors.nombre.message}</span>}
+</div>
               <div className="field-group">
-                <label>Nombre</label>
-                <input type="text" placeholder="Ej: Juan" {...register("nombre")} className={errors.nombre ? "input-error" : ""} />
-                {errors.nombre && <span className="helper-text">{errors.nombre.message}</span>}
-              </div>
-
-              <div className="field-group">
-                <label>Apellido</label>
-                <input type="text" placeholder="Ej: Pérez" {...register("apellido")} className={errors.apellido ? "input-error" : ""} />
+                <label htmlFor="apellido">Apellido</label>
+                <input id="apellido" type="text" placeholder="Ej: Pérez" {...register("apellido")} className={errors.apellido ? "input-error" : ""} />
                 {errors.apellido && <span className="helper-text">{errors.apellido.message}</span>}
               </div>
 
               <div className="field-group">
-                <label>Tipo de documento</label>
-                <select {...register("tipoDoc")} className={errors.tipoDoc ? "input-error" : ""}>
+                <label htmlFor="tipoDoc">Tipo de documento</label>
+                <select id="tipoDoc" {...register("tipoDoc")} className={errors.tipoDoc ? "input-error" : ""}>
                   <option value="">Seleccione...</option>
                   <option value="CC">Cédula de ciudadanía</option>
                   <option value="TI">Tarjeta de identidad</option>
@@ -72,28 +71,29 @@ export default function Register() {
               </div>
 
               <div className="field-group">
-                <label>Número de documento</label>
-                <input type="text" placeholder="123456..." {...register("numeroDoc")} className={errors.numeroDoc ? "input-error" : ""} />
+                <label htmlFor="numeroDoc">Número de documento</label>
+                <input id="numeroDoc" type="text" placeholder="123456..." {...register("numeroDoc")} className={errors.numeroDoc ? "input-error" : ""} />
                 {errors.numeroDoc && <span className="helper-text">{errors.numeroDoc.message}</span>}
               </div>
 
               <div className="field-group">
-                <label>Nombre de usuario</label>
-                <input type="text" placeholder="juanp123" {...register("username")} className={errors.username ? "input-error" : ""} />
+                <label htmlFor="username">Nombre de usuario</label>
+                <input id="username" type="text" placeholder="juanp123" {...register("username")} className={errors.username ? "input-error" : ""} />
                 {errors.username && <span className="helper-text">{errors.username.message}</span>}
               </div>
 
               <div className="field-group">
-                <label>Correo electrónico</label>
-                <input type="email" placeholder="usuario@correo.com" {...register("email")} className={errors.email ? "input-error" : ""} />
+                <label htmlFor="email">Correo electrónico</label>
+                <input id="email" type="email" placeholder="usuario@correo.com" {...register("email")} className={errors.email ? "input-error" : ""} />
                 {errors.email && <span className="helper-text">{errors.email.message}</span>}
               </div>
             </div>
 
             <div className="field-group full-width">
-              <label>Contraseña</label>
+              <label htmlFor="password">Contraseña</label>
               <div className="password-input-container">
                 <input
+                  id="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Mínimo 8 caracteres"
                   {...register("password")}

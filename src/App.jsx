@@ -1,4 +1,5 @@
 // 1. LIBRERÍAS Y ESTILOS GLOBALES
+import { lazy, Suspense } from 'react';
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 
 // 2. CONTEXTOS Y COMPONENTES DE CONTROL
@@ -30,18 +31,15 @@ import Editar from './components/Editar.jsx';
 import ReservasH from './pages/reservasH.jsx';
 import HabitacionD from './pages/HabitacionD.jsx';
 import TipoHabitacionD from './pages/TipoHabitacionD.jsx';
-import GestionHabitacionesD from './pages/GestionHabitacionesD.jsx';
 import DetalleHabitacion from "./pages/DetalleHabitacion";
 import MisReservasHotel from './pages/MisReservasHotel.jsx';
 
 // Módulo: Gestión de Usuarios (Exclusivo ADMIN)
-import UsuariosH from './pages/UsuariosH.jsx';
 import UsuariosE from './pages/UsuariosE.jsx';
 import UsuariosC from './pages/UsuariosC.jsx';
 import MiPerfil from './pages/MiPerfil.jsx';
 
 // Módulo: Mensajes (Exclusivo ADMIN)
-import  AdminMensajes  from "./components/AdminMensajes.jsx";
 
 // Módulo: Mensajes (Usuario normal — ve sus propios mensajes y respuestas del admin)
 import MisMensajes from './pages/MisMensajes.jsx';
@@ -52,7 +50,10 @@ import VerificarCuenta from './pages/VerificarCuenta.jsx';
 // Módulo: Restablecimiento de contraseña (Público)
 import RestablecerPassword from './pages/RestablecerPassword.jsx';
 
-
+// Lazy load: solo ADMIN
+const GestionHabitacionesD = lazy(() => import('./pages/GestionHabitacionesD.jsx'));
+const UsuariosH = lazy(() => import('./pages/UsuariosH.jsx'));
+const AdminMensajes = lazy(() => import('./components/AdminMensajes.jsx'));
 /**
  * Componente Principal de la Aplicación (App)
  * Configura el proveedor de tema, el enrutamiento dinámico de React Router Dom v6
@@ -60,10 +61,11 @@ import RestablecerPassword from './pages/RestablecerPassword.jsx';
  */
 export default function App() {
     return (
-        <ThemeProvider>
-            <BrowserRouter>
-                <Routes>
-                    
+  <ThemeProvider>
+    <BrowserRouter>
+      <Suspense fallback={<div className="loading-spinner">Cargando...</div>}>
+
+          {/* ================================================== */}
                     {/* =========================================================
                         RUTAS PÚBLICAS (Accesibles sin iniciar sesión)
                         ========================================================= */}
@@ -185,7 +187,7 @@ export default function App() {
                         } />
 
                     </Route>
-                </Routes>
+                </Suspense>
             </BrowserRouter>
         </ThemeProvider>
     );

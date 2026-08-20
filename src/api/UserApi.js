@@ -1,11 +1,4 @@
-const API_URL = `${import.meta.env.VITE_API_URL}/api/usuarios`;
-
-const getToken = () => localStorage.getItem("token");
-
-const authHeaders = () => ({
-  "Content-Type": "application/json",
-  "Authorization": `Bearer ${getToken()}`
-});
+import { API_URL, authHeaders } from "./apiUtils";
 
 // Listar todos los usuarios (ADMIN)
 export const listarUsuarios = async (page = 0, size = 10) => {

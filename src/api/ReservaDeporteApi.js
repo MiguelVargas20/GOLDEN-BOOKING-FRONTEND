@@ -1,4 +1,4 @@
-const API_URL = `${import.meta.env.VITE_API_URL}/api/reservas/deporte`;
+import { API_URL, authHeaders } from "./apiUtils";
 
 // Crear reserva (POST)
 export const crearReservaDeporte = async (data) => {
