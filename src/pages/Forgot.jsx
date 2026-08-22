@@ -1,6 +1,7 @@
 import logo from "../assets/LOGO.png";
 import forgot from "../assets/forgot.png";
 import "../styles/Forgot.css";
+import "../styles/BotonesCompartidos.css";
 import { FaReply } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
@@ -63,7 +64,7 @@ export default function Forgot() {
 
                         <div className="form-actions">
                             <button
-                                className="btn-send-forgot"
+                                className="btn-gb btn-gb-primary btn-gb-lg"
                                 type="submit"
                                 disabled={loading}
                             >

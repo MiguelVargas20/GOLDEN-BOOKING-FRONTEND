@@ -25,6 +25,22 @@
     --gb-icon-bg: #fff4e6;
     --gb-item-title: #333333;
     --gb-item-text: #777777;
+
+    /* Marca / acciones (sistema de botones compartido) */
+    --gb-primary: #f38d1e;
+    --gb-primary-hover: #e07b0f;
+    --gb-danger: #e53e3e;
+    --gb-danger-hover: #c53030;
+    --gb-neutral: #1a1a2e;
+    --gb-neutral-hover: #14213d;
+
+    /* Estados (disponible / ocupada / mantenimiento, etc.) */
+    --gb-status-success-bg: #e6f4ea;
+    --gb-status-success-text: #2e7d32;
+    --gb-status-danger-bg: #fce8e6;
+    --gb-status-danger-text: #c62828;
+    --gb-status-warning-bg: #fff3e0;
+    --gb-status-warning-text: #e65100;
 }
 
 [data-bs-theme='dark'] {
@@ -44,6 +60,22 @@
     --gb-icon-bg: #3a2e1a;
     --gb-item-title: #f7fafc;
     --gb-item-text: #a0aec0;
+
+    --gb-primary: #f38d1e;
+    --gb-primary-hover: #e07b0f;
+    --gb-danger: #ef5350;
+    --gb-danger-hover: #e53e3e;
+    --gb-neutral: #2d3748;
+    --gb-neutral-hover: #4a5568;
+
+    /* Estados — mismo rol semántico (verde/rojo/naranja) pero con
+       fondos oscuros y texto claro para que se lean sobre --gb-surface */
+    --gb-status-success-bg: #1b3a24;
+    --gb-status-success-text: #6fcf7d;
+    --gb-status-danger-bg: #3a1f1f;
+    --gb-status-danger-text: #ff8a80;
+    --gb-status-warning-bg: #3a2e1a;
+    --gb-status-warning-text: #ffb74d;
 }
 /* ===== Transición suave entre temas ===== */
 body,

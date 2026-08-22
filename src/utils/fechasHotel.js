@@ -29,6 +29,19 @@ export const haySolapamiento = (checkIn, checkOut, rangosOcupados) => {
  * nativo tipo <input type="date">, que no soporta rangos directamente
  * pero sí podemos usar esto para validar on-change.
  */
+/**
+ * Convierte un objeto Date a un string "YYYY-MM-DD" usando la fecha LOCAL
+ * del navegador. A propósito NO usamos date.toISOString().split("T")[0]:
+ * toISOString() primero convierte la fecha a UTC, y como el DatePicker nos
+ * da una fecha a medianoche en la hora local del usuario, ese cambio de
+ * huso puede correr el día seleccionado (mismo patrón que ya usa
+ * ReservarEspacioD.jsx con toLocalISOString, aquí solo sin la hora).
+ */
+export const toLocalDateString = (date) => {
+  const pad = (n) => String(n).padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+};
+
 export const obtenerDiasOcupados = (rangosOcupados) => {
   const dias = new Set();
   rangosOcupados.forEach(({ checkIn, checkOut }) => {

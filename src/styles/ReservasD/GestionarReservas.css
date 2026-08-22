@@ -10,6 +10,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
   margin-bottom: 24px;
 }
 
@@ -30,7 +32,8 @@
   font-size: 0.9rem;
   background: white; /* Forzamos fondo blanco */
   color: #4a5568;
-  width: 300px;
+  width: 100%;
+  max-width: 300px;
   transition: all 0.2s ease;
 }
 
@@ -40,26 +43,10 @@
   outline: none;
 }
 
-.add-btn-reservas {
-  background: #f68b1e !important;
-  color: white !important;
-  border: none !important;
-  padding: 8px 22px !important;
-  border-radius: 8px !important;
-  font-weight: 700 !important;
-  font-size: 0.9rem !important;
-  transition: background 0.2s !important;
-  cursor: pointer;
-}
-
-.add-btn-reservas:hover {
-  background: #e67e22 !important;
-}
-
 /* ── Tabla con Marcos Suaves ──────────────── */
 .tabla-container-suave {
   border-radius: 10px;
-  overflow: hidden;
+  overflow-x: auto;
   border: 1px solid #e2e8f0; /* Marco exterior suave */
   background: #fff;
 }
@@ -97,21 +84,4 @@
   border-radius: 6px;
   font-weight: 600;
   font-size: 0.75rem;
-}
-
-/* Botón Cancelar (Estilo Outlined Suave) */
-.btn-cancelar-outline {
-  background: white;
-  border: 1px solid #e2e8f0;
-  color: #e53e3e;
-  padding: 5px 12px;
-  border-radius: 6px;
-  font-size: 0.8rem;
-  font-weight: 600;
-  transition: all 0.2s;
-}
-
-.btn-cancelar-outline:hover:not(:disabled) {
-  background: #fff5f5;
-  border-color: #e53e3e;
 }

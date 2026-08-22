@@ -99,17 +99,18 @@ function ReservasDSolicitadas() {
                     <span>¡Reserva tu primer espacio desde el catálogo!</span>
                 </div>
             ) : (
-                <table className="mis-reservas-table">
-                    <thead>
-                        <tr>
-                            <th>CANCHA</th>
-                            <th>INICIO</th>
-                            <th>FIN</th>
-                            <th>PRECIO</th>
-                            <th>ESTADO</th>
-                            <th>ACCIONES</th>
-                        </tr>
-                    </thead>
+                <div style={{ overflowX: "auto" }}>
+                    <table className="mis-reservas-table">
+                        <thead>
+                            <tr>
+                                <th>CANCHA</th>
+                                <th>INICIO</th>
+                                <th>FIN</th>
+                                <th>PRECIO</th>
+                                <th>ESTADO</th>
+                                <th>ACCIONES</th>
+                            </tr>
+                        </thead>
                     <tbody>
                         {reservas.map((r) => (
                             <tr key={r.idD}>
@@ -141,7 +142,8 @@ function ReservasDSolicitadas() {
                             </tr>
                         ))}
                     </tbody>
-                </table>
+                    </table>
+                </div>
             )}
         </div>
     );

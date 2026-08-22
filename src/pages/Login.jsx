@@ -2,6 +2,7 @@ import { IoEyeSharp } from "react-icons/io5";
 import calendario from "../assets/CALENDARIO.png";
 import logo from "../assets/LOGO.png";
 import "../styles/Login.css";
+import "../styles/BotonesCompartidos.css";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -77,10 +78,10 @@ export default function Login() {
             </div>
 
             <div className="redirect">
-              <button type="submit" className="btn-login" disabled={isSubmitting}>
+              <button type="submit" className="btn-gb btn-gb-primary btn-gb-lg" disabled={isSubmitting}>
                 {isSubmitting ? "CARGANDO..." : "INGRESAR"}
               </button>
-              <button type="button" className="btn-login" onClick={() => navigate("/register")}>
+              <button type="button" className="btn-gb btn-gb-secondary btn-gb-lg" onClick={() => navigate("/register")}>
                 REGISTRARSE
               </button>
             </div>

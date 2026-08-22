@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Button, Col, Container, Form, Row, Table } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import '../styles/UsuariosH.css';
+import '../styles/BotonesCompartidos.css';
 import { listarUsuarios, eliminarUsuario } from "../api/UserApi";
 import Swal from 'sweetalert2';
 
@@ -108,7 +109,7 @@ export default function UsuariosH() {
         <Col md="auto">
           <Button
             variant="success"
-            className="add-btn-users"
+            className="btn-gb btn-gb-primary"
             onClick={() => navigate("/usuarios-crear")}
           >
             Agregar Usuario
@@ -146,13 +147,13 @@ export default function UsuariosH() {
                 </td>
                 <td className="opciones-usuarios">
                   <button
-                    className="btn-edit"
+                    className="btn-gb btn-gb-secondary btn-gb-sm"
                     onClick={() => navigate("/usuarios-edit", { state: { usuario: u } })}
                   >
                     Editar
                   </button>
                   <button
-                    className="btn-delete"
+                    className="btn-gb btn-gb-danger btn-gb-sm"
                     onClick={() => handleEliminar(u.id, u.nombre, u.apellido)}
                   >
                     Eliminar
@@ -166,11 +167,11 @@ export default function UsuariosH() {
 
       {/* --- CONTROLES DE PAGINACIÓN INTEGARDOS --- */}
       {totalPaginas > 1 && (
-        <div className="d-flex justify-content-between align-items-center mt-3 px-1">
+        <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-3 px-1">
           <span style={{ fontSize: "0.85rem", color: "#64748b" }}>
             Mostrando página {paginaActual + 1} de {totalPaginas} — {totalElementos} usuarios en total
           </span>
-          <div className="d-flex gap-2">
+          <div className="d-flex flex-wrap gap-2">
             <button
               className="btn btn-outline-secondary btn-sm"
               onClick={() => obtenerUsuarios(paginaActual - 1)}

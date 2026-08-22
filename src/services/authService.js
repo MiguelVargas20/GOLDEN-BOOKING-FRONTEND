@@ -1,3 +1,5 @@
+import { extraerMensajeError } from "../api/apiUtils";
+
 const BASE_URL = import.meta.env.VITE_API_URL;
 
 /**
@@ -18,18 +20,14 @@ export async function loginUsuario(data) {
             }),
         });
 
-        // Convierte la respuesta a JSON
-        const json = await res.json();
-
-        // Validación de respuesta HTTP
+        // Validación de respuesta HTTP (sin leer el body todavía)
         if (!res.ok) {
-            const mensaje = json.error === "Bad credentials" || json.message === "Bad credentials"
-                ? "Usuario o contraseña incorrectos"
-                : json.error || json.message || "Error al iniciar sesión";
-            throw { message: mensaje };
+            const mensaje = await extraerMensajeError(res, "Error al iniciar sesión");
+            const esCredencialInvalida = mensaje.includes("Bad credentials");
+            throw { message: esCredencialInvalida ? "Usuario o contraseña incorrectos" : mensaje };
         }
 
-        return json;
+        return await res.json();
 
     // Manejo de errores de conexión o inesperados
     } catch (error) {
@@ -56,7 +54,7 @@ export async function registrarUsuario(data) {
                 nombre: data.nombre,
                 apellido: data.apellido,
                 documento: {
-                    tipoD: data.tipoDoc,
+                    tipo: data.tipoDoc,
                     numeroD: data.numeroDoc,
                 },
 
@@ -69,18 +67,13 @@ export async function registrarUsuario(data) {
             }),
         });
 
-        // Convierte la respuesta a JSON
-        const json = await res.json();
-
-        // Validación de respuesta HTTP
+        // Validación de respuesta HTTP (sin leer el body todavía)
         if (!res.ok) {
-            throw {
-                message: json.error || "Error al registrar",
-                errores: json.errores || null,
-            };
+            const mensaje = await extraerMensajeError(res, "Error al registrar");
+            throw { message: mensaje };
         }
 
-        return json;
+        return await res.json();
 
     } catch (error) {
         if (error.message) throw error;
@@ -108,14 +101,12 @@ export async function recuperarPassword(data) {
             }),
         });
 
-        const json = await res.json();
-        
-        // Validación de respuesta HTTP
+        // Validación de respuesta HTTP (sin leer el body todavía)
         if (!res.ok) {
-            throw { message: json.error || "Error al recuperar contraseña" };
+            throw { message: await extraerMensajeError(res, "Error al recuperar contraseña") };
         }
-        
-        return json;
+
+        return await res.json();
 
     } catch (error) {
         if (error.message) throw error;
@@ -140,13 +131,11 @@ export async function solicitarRecuperacion(correo) {
             body: JSON.stringify({ correo }),
         });
 
-        const json = await res.json();
-
         if (!res.ok) {
-            throw { message: json.error || "Error al solicitar la recuperación" };
+            throw { message: await extraerMensajeError(res, "Error al solicitar la recuperación") };
         }
 
-        return json;
+        return await res.json();
 
     } catch (error) {
         if (error.message) throw error;
@@ -171,13 +160,11 @@ export async function restablecerPassword(data) {
             }),
         });
 
-        const json = await res.json();
-
         if (!res.ok) {
-            throw { message: json.error || "Error al restablecer la contraseña" };
+            throw { message: await extraerMensajeError(res, "Error al restablecer la contraseña") };
         }
 
-        return json;
+        return await res.json();
 
     } catch (error) {
         if (error.message) throw error;

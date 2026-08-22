@@ -1,0 +1,91 @@
+/* ════════════════════════════════════════════════════════════
+   BOTONES COMPARTIDOS
+   ════════════════════════════════════════════════════════════
+   Antes había ~23 clases de botón sueltas (una por pantalla),
+   algunas incluso "prestadas" por accidente de otra página
+   (ej: UsuariosH usaba .btn-edit/.btn-delete definidos en
+   ReservasD.css, sin darse cuenta, solo porque Vite empaqueta
+   todo el CSS junto).
+
+   Esto define 3 variantes con las que se arma cualquier botón
+   de acción: primario (acción principal), secundario (acción
+   neutra) y peligro (eliminar/cancelar). Se combinan con
+   .btn-gb-sm si el botón va dentro de una celda de tabla.
+
+   Migración incremental: no reemplaza TODOS los botones del
+   proyecto de una vez, solo los que se van tocando.
+   ════════════════════════════════════════════════════════════ */
+
+.btn-gb {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  line-height: 1.3;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.btn-gb:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Primario: crear, guardar, nueva reserva... */
+.btn-gb-primary {
+  background: var(--gb-primary);
+  color: #fff;
+}
+.btn-gb-primary:hover:not(:disabled) {
+  background: var(--gb-primary-hover);
+}
+
+/* Secundario: editar, ver detalle... (outline de marca, se rellena en hover) */
+.btn-gb-secondary {
+  background: transparent;
+  border-color: var(--gb-primary);
+  color: var(--gb-primary);
+}
+.btn-gb-secondary:hover:not(:disabled) {
+  background: var(--gb-primary);
+  color: #fff;
+}
+
+/* Peligro: eliminar, cancelar */
+.btn-gb-danger {
+  background: transparent;
+  border-color: var(--gb-danger);
+  color: var(--gb-danger);
+}
+.btn-gb-danger:hover:not(:disabled) {
+  background: var(--gb-danger);
+  color: #fff;
+}
+
+/* Neutral: utilidades que no son la acción principal ni destructivas
+   (marcar como leído, navegación secundaria entre secciones) */
+.btn-gb-neutral {
+  background: var(--gb-neutral);
+  color: #fff;
+}
+.btn-gb-neutral:hover:not(:disabled) {
+  background: var(--gb-neutral-hover);
+}
+
+/* Compacto, para celdas de tabla */
+.btn-gb-sm {
+  padding: 5px 14px;
+  font-size: 0.8rem;
+  border-radius: 6px;
+}
+
+/* Grande, para CTAs destacados (hero, landing) */
+.btn-gb-lg {
+  padding: 12px 30px;
+  font-size: 1rem;
+}

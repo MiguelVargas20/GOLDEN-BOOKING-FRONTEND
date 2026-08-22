@@ -1,5 +1,7 @@
 import { FaUpload } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import "../styles/ReservasD/ReservasD.css";
+import "../styles/BotonesCompartidos.css";
 
 /**
  * Componente Editar
@@ -57,14 +59,14 @@ function Editar() {
                         {/* Botones de control con redirección a la vista general */}
                         <div className="botones">
                             <button
-                                className="btn-editar aceptar-editar"
+                                className="btn-gb btn-gb-primary"
                                 onClick={() => navigate("/reservas-deportivas")}
                             >
                                 Aceptar                 
                             </button>
 
                             <button
-                                className="btn-editar cancelar-editar"
+                                className="btn-gb btn-gb-danger"
                                 onClick={() => navigate("/reservas-deportivas")}
                             >
                                 Cancelar

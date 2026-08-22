@@ -148,11 +148,11 @@ export default function GestionHabitacionesD() {
 
     const getBadgeEstado = (estado) => {
         const map = {
-            disponible:    { bg: "#e6f4ea", color: "#2e7d32", label: "✓ Disponible" },
-            ocupada:       { bg: "#fce8e6", color: "#c62828", label: "✗ Ocupada" },
-            mantenimiento: { bg: "#fff3e0", color: "#e65100", label: "⚙ Mantenimiento" },
+            disponible:    { bg: "var(--gb-status-success-bg)", color: "var(--gb-status-success-text)", label: "✓ Disponible" },
+            ocupada:       { bg: "var(--gb-status-danger-bg)", color: "var(--gb-status-danger-text)", label: "✗ Ocupada" },
+            mantenimiento: { bg: "var(--gb-status-warning-bg)", color: "var(--gb-status-warning-text)", label: "⚙ Mantenimiento" },
         };
-        return map[estado?.toLowerCase()] || { bg: "#f1f5f9", color: "#64748b", label: estado };
+        return map[estado?.toLowerCase()] || { bg: "#f1f5f9", color: "var(--gb-text-muted)", label: estado };
     };
 
     return (
@@ -161,26 +161,26 @@ export default function GestionHabitacionesD() {
             {/* ── Header ───────────────────────────────────── */}
             <div className="d-flex justify-content-between align-items-center mb-4">
                 <div>
-                    <h2 style={{ fontFamily: '"Bungee", sans-serif', fontWeight: 400, color: "#1a1a2e", fontSize: "2.2rem", marginBottom: "0.25rem" }}>
-                        Gestión de <span style={{ color: "#f38d1e" }}>Habitaciones</span>
+                    <h2 style={{ fontFamily: '"Bungee", sans-serif', fontWeight: 400, color: "var(--gb-item-title)", fontSize: "2.2rem", marginBottom: "0.25rem" }}>
+                        Gestión de <span style={{ color: "var(--gb-primary)" }}>Habitaciones</span>
                     </h2>
-                    <p style={{ color: "#64748b", fontSize: "0.85rem", margin: 0 }}>
+                    <p style={{ color: "var(--gb-text-muted)", fontSize: "0.85rem", margin: 0 }}>
                         ADMINISTRACIÓN — GOLDEN BOOKING
                     </p>
                 </div>
                 <Button
                     onClick={() => navigate("/crear-habitacion")}
-                    style={{ background: "#f38d1e", border: "none", borderRadius: "10px", fontWeight: 700, padding: "0.6rem 1.4rem" }}
+                    style={{ background: "var(--gb-primary)", border: "none", borderRadius: "10px", fontWeight: 700, padding: "0.6rem 1.4rem" }}
                 >
                     + Crear Habitación
                 </Button>
             </div>
 
             {/* ── Tabla ────────────────────────────────────── */}
-            <div style={{ background: "#fff", borderRadius: "20px", padding: "2rem", border: "1px solid #e2e8f0", boxShadow: "0 4px 16px rgba(0,0,0,.06)" }}>
+            <div style={{ background: "var(--gb-surface)", borderRadius: "20px", padding: "2rem", border: "1px solid #e2e8f0", boxShadow: "0 4px 16px rgba(0,0,0,.06)" }}>
                 {loading ? (
                     <div className="d-flex justify-content-center py-5">
-                        <Spinner style={{ color: "#f38d1e" }} />
+                        <Spinner style={{ color: "var(--gb-primary)" }} />
                     </div>
                 ) : habitaciones.length === 0 ? (
                     <div className="text-center py-5 text-muted">
@@ -190,7 +190,7 @@ export default function GestionHabitacionesD() {
                 ) : (
                     <Table hover responsive style={{ fontSize: "0.875rem" }}>
                         <thead>
-                            <tr style={{ background: "#1a1a2e", color: "#fff", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "1px" }}>
+                            <tr style={{ background: "var(--gb-neutral)", color: "var(--gb-item-title)", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "1px" }}>
                                 <th style={{ padding: "1rem 1.25rem", border: "none", borderRadius: "10px 0 0 10px" }}>Número</th>
                                 <th style={{ padding: "1rem 1.25rem", border: "none" }}>Tipo</th>
                                 <th style={{ padding: "1rem 1.25rem", border: "none" }}>Precio / noche</th>
@@ -204,17 +204,17 @@ export default function GestionHabitacionesD() {
                                 const estadoStyle = getBadgeEstado(hab.estadoHabitacion);
                                 return (
                                     <tr key={hab.id}>
-                                        <td style={{ padding: "1rem 1.25rem", verticalAlign: "middle", fontWeight: 700, color: "#1a1a2e" }}>
+                                        <td style={{ padding: "1rem 1.25rem", verticalAlign: "middle", fontWeight: 700, color: "var(--gb-item-title)" }}>
                                             {hab.numeroHabitacion}
                                         </td>
-                                        <td style={{ padding: "1rem 1.25rem", verticalAlign: "middle", color: "#64748b" }}>
+                                        <td style={{ padding: "1rem 1.25rem", verticalAlign: "middle", color: "var(--gb-text-muted)" }}>
                                             {hab.datosTipoHabitacion?.nombreTipoHabitacion || "—"}
                                         </td>
-                                        <td style={{ padding: "1rem 1.25rem", verticalAlign: "middle", fontWeight: 600, color: "#f38d1e" }}>
+                                        <td style={{ padding: "1rem 1.25rem", verticalAlign: "middle", fontWeight: 600, color: "var(--gb-primary)" }}>
                                             ${hab.precioNoche?.toLocaleString("es-CO")}
                                         </td>
                                         <td style={{ padding: "1rem 1.25rem", verticalAlign: "middle" }}>
-                                            <Badge style={{ background: "#fff3e0", color: "#f38d1e", fontWeight: 700, padding: "4px 12px", borderRadius: "20px" }}>
+                                            <Badge style={{ background: "var(--gb-icon-bg)", color: "var(--gb-primary)", fontWeight: 700, padding: "4px 12px", borderRadius: "20px" }}>
                                                 👥 {hab.datosTipoHabitacion?.capacidadMaxima || "—"}
                                             </Badge>
                                         </td>
@@ -252,14 +252,14 @@ export default function GestionHabitacionesD() {
                 {/* Controles de paginación */}
                 {totalPaginas > 1 && (
                     <div className="d-flex justify-content-between align-items-center mt-3">
-                        <span style={{ fontSize: "0.8rem", color: "#94a3b8" }}>
+                        <span style={{ fontSize: "0.8rem", color: "var(--gb-text-muted)" }}>
                             Página {paginaActual + 1} de {totalPaginas} — {totalElementos} habitaciones
                         </span>
                         <div className="d-flex gap-2">
                             <button
                                 onClick={() => cargarDatos(paginaActual - 1)}
                                 disabled={paginaActual === 0}
-                                style={{ background: "none", border: "1.5px solid #e2e8f0", borderRadius: "8px", padding: "4px 12px", cursor: "pointer", color: "#64748b" }}
+                                style={{ background: "none", border: "1.5px solid #e2e8f0", borderRadius: "8px", padding: "4px 12px", cursor: "pointer", color: "var(--gb-text-muted)" }}
                             >
                                 ← Anterior
                             </button>
@@ -283,7 +283,7 @@ export default function GestionHabitacionesD() {
                             <button
                                 onClick={() => cargarDatos(paginaActual + 1)}
                                 disabled={paginaActual === totalPaginas - 1}
-                                style={{ background: "none", border: "1.5px solid #e2e8f0", borderRadius: "8px", padding: "4px 12px", cursor: "pointer", color: "#64748b" }}
+                                style={{ background: "none", border: "1.5px solid #e2e8f0", borderRadius: "8px", padding: "4px 12px", cursor: "pointer", color: "var(--gb-text-muted)" }}
                             >
                                 Siguiente →
                             </button>
@@ -293,7 +293,7 @@ export default function GestionHabitacionesD() {
 
                 {/* Texto alternativo cuando solo hay 1 página disponible */}
                 {totalPaginas <= 1 && habitaciones.length > 0 && (
-                    <p style={{ fontSize: "0.8rem", color: "#94a3b8", textAlign: "right", margin: "1rem 0 0" }}>
+                    <p style={{ fontSize: "0.8rem", color: "var(--gb-text-muted)", textAlign: "right", margin: "1rem 0 0" }}>
                         {totalElementos} habitación{totalElementos !== 1 ? "es" : ""} registrada{totalElementos !== 1 ? "s" : ""}
                     </p>
                 )}
@@ -302,14 +302,14 @@ export default function GestionHabitacionesD() {
             {/* ── Modal Editar ─────────────────────────────── */}
             <Modal show={showModal} onHide={() => setShowModal(false)} centered size="lg">
                 <Modal.Header closeButton style={{ borderBottom: "1px solid #e2e8f0" }}>
-                    <Modal.Title style={{ fontWeight: 700, color: "#1a1a2e" }}>
-                        Editar Habitación <span style={{ color: "#f38d1e" }}>{habEditando?.numeroHabitacion}</span>
+                    <Modal.Title style={{ fontWeight: 700, color: "var(--gb-item-title)" }}>
+                        Editar Habitación <span style={{ color: "var(--gb-primary)" }}>{habEditando?.numeroHabitacion}</span>
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body style={{ padding: "2rem" }}>
                     <Row className="g-3">
                         <Col md={6}>
-                            <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "#475569", marginBottom: "6px", display: "block" }}>Número de Habitación</label>
+                            <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "var(--gb-text-primary)", marginBottom: "6px", display: "block" }}>Número de Habitación</label>
                             <Form.Control
                                 value={form.numeroHabitacion}
                                 onChange={e => setForm({ ...form, numeroHabitacion: e.target.value })}
@@ -317,7 +317,7 @@ export default function GestionHabitacionesD() {
                             />
                         </Col>
                         <Col md={6}>
-                            <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "#475569", marginBottom: "6px", display: "block" }}>Tipo de Habitación</label>
+                            <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "var(--gb-text-primary)", marginBottom: "6px", display: "block" }}>Tipo de Habitación</label>
                             <Form.Select
                                 value={form.idTipo}
                                 onChange={e => setForm({ ...form, idTipo: e.target.value })}
@@ -329,7 +329,7 @@ export default function GestionHabitacionesD() {
                             </Form.Select>
                         </Col>
                         <Col md={6}>
-                            <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "#475569", marginBottom: "6px", display: "block" }}>Precio por Noche</label>
+                            <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "var(--gb-text-primary)", marginBottom: "6px", display: "block" }}>Precio por Noche</label>
                             <Form.Control
                                 type="number"
                                 value={form.precioNoche}
@@ -338,7 +338,7 @@ export default function GestionHabitacionesD() {
                             />
                         </Col>
                         <Col md={6}>
-                            <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "#475569", marginBottom: "6px", display: "block" }}>Estado</label>
+                            <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "var(--gb-text-primary)", marginBottom: "6px", display: "block" }}>Estado</label>
                             <Form.Select
                                 value={form.estadoHabitacion}
                                 onChange={e => setForm({ ...form, estadoHabitacion: e.target.value })}
@@ -350,7 +350,7 @@ export default function GestionHabitacionesD() {
                             </Form.Select>
                         </Col>
                         <Col md={12}>
-                            <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "#475569", marginBottom: "6px", display: "block" }}>Descripción</label>
+                            <label style={{ fontSize: "0.82rem", fontWeight: 600, color: "var(--gb-text-primary)", marginBottom: "6px", display: "block" }}>Descripción</label>
                             <Form.Control
                                 as="textarea"
                                 rows={3}
@@ -368,7 +368,7 @@ export default function GestionHabitacionesD() {
                     <Button
                         onClick={handleGuardar}
                         disabled={loadingGuardar}
-                        style={{ background: "#f38d1e", border: "none", borderRadius: "10px", fontWeight: 700 }}
+                        style={{ background: "var(--gb-primary)", border: "none", borderRadius: "10px", fontWeight: 700 }}
                     >
                         {loadingGuardar ? <><Spinner size="sm" className="me-2" />Guardando...</> : "Guardar Cambios"}
                     </Button>

@@ -10,6 +10,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
   border-bottom: 2px solid #f68b1e;
   padding-bottom: 14px;
   margin-bottom: 24px;

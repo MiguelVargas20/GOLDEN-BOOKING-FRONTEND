@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { FaPlus, FaTrash } from "react-icons/fa";
 import { listarReservasDeporte, cancelarReservaDeporte } from "../../api/ReservaDeporteApi";
 import "../../styles/ReservasD/GestionarReservas.css";
+import "../../styles/BotonesCompartidos.css";
 import Swal from "sweetalert2";
 
 const TAMANIO_PAGINA = 8;
@@ -99,7 +100,7 @@ function GestionarReservas() {
           value={busqueda}
           onChange={(e) => setBusqueda(e.target.value)}
         />
-        <button className="add-btn-reservas" onClick={() => navigate("/reservas-deportivas")}>
+        <button className="btn-gb btn-gb-primary" onClick={() => navigate("/reservas-deportivas")}>
           <FaPlus /> NUEVA
         </button>
       </div>
@@ -151,7 +152,7 @@ function GestionarReservas() {
                   </td>
                   <td>
                     <button
-                      className="btn-cancelar-outline"
+                      className="btn-gb btn-gb-danger btn-gb-sm"
                       onClick={() => handleCancelar(r.idD, r.tCancha)}
                       disabled={r.estado === "CANCELADA"}
                     >
@@ -167,11 +168,11 @@ function GestionarReservas() {
 
       {/* Paginación */}
       {totalPaginas > 1 && (
-        <div className="d-flex justify-content-between align-items-center mt-3 px-3">
+        <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-3 px-3">
           <span style={{ fontSize: "0.85rem", color: "#64748b" }}>
             Página {paginaActual + 1} de {totalPaginas} — {totalElementos} reservas
           </span>
-          <div className="d-flex gap-2">
+          <div className="d-flex flex-wrap gap-2">
             <button
               className="btn btn-outline-secondary btn-sm"
               onClick={() => obtenerDatos(paginaActual - 1)}

@@ -1,41 +1,14 @@
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
     background: #ffffff;
 }
 
-.navbar {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 15px 40px;
-    border-top: 2px solid #e0e0e0;
-}
+/* NOTA: se eliminó un bloque de reglas .navbar / .Header / .logo / .admin .h4
+   que no se usaba en ningún JSX de esta página, pero que sí se estaba
+   aplicando por accidente a la Navbar real de toda la app (react-bootstrap
+   le pone la clase "navbar" a cualquier <Navbar>, y este CSS se empaqueta
+   globalmente). El estilo real de la navbar vive en Navbar.module.css. */
 
-.Header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-right: 60px;
-}
-
-.admin .h4 {
-    justify-content: space-between;
-    font-weight: bold;
-}
-
-.logo {
-    font-weight: bold;
-    color: #c89d00;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    height: 70%;
-    width: 15%;
-    margin-left: 21px;
-    color: #c89d00;
-
-}
 /* --- Estilos Globales y Tipografía --- */
 .bungee-regular {
     font-family: "Bungee", sans-serif;
@@ -108,13 +81,6 @@ body {
 }
 
 /* --- Botones --- */
-.btn-orange {
-    background-color: #f38d1e !important;
-    border: none !important;
-    padding: 12px 30px !important;
-    font-weight: 600 !important;
-}
-
 .btn-outline-glass {
     background-color: rgba(255, 255, 255, 0.2) !important;
     border: 1px solid rgba(255, 255, 255, 0.5) !important;
@@ -186,4 +152,63 @@ body {
 .premium-tag,
 .hero-subtitle {
     color: #ffffff !important;
+}
+
+/* --- Responsive: Hero / Carrusel ---
+   Sin esto, el título (3.5rem) + subtítulo + botones se centran
+   verticalmente dentro de una imagen de 500px de alto envuelta en
+   .hero-carousel-wrapper, que tiene overflow: hidden. En pantallas
+   angostas el título envuelve a más líneas de las que caben y el
+   contenido (sobre todo los botones, más abajo) queda cortado. */
+@media (max-width: 768px) {
+    .hero-img {
+        height: 420px;
+    }
+
+    .hero-title {
+        font-size: 2rem;
+        max-width: 90%;
+    }
+
+    .hero-subtitle {
+        font-size: 0.95rem;
+        margin: 12px 0;
+    }
+
+    .hero-buttons {
+        flex-wrap: wrap;
+    }
+
+    .hero-buttons .btn-gb-lg,
+    .hero-buttons .btn-outline-glass {
+        padding: 10px 18px !important;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-img {
+        height: 380px;
+    }
+
+    .hero-title {
+        font-size: 1.5rem;
+    }
+
+    .hero-caption-custom {
+        left: 6% !important;
+    }
+}
+
+/* --- Responsive: header de "Instalaciones" ---
+   .instalaciones-header pone el título y el link "Ver todos" en la
+   misma fila con justify-content-between. En pantallas angostas
+   (<480px) el título en Bungee + el link no caben en una sola línea
+   y se cortaban contra el borde del contenedor. */
+@media (max-width: 480px) {
+    .instalaciones-header {
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: flex-start !important;
+    }
 }

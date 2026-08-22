@@ -8,17 +8,24 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
   margin-bottom: 24px;
 }
 
 .title-users {
-  font-size: 2.5rem; /* Corregido de coma a punto */
+  font-size: 2.5rem;
   font-weight: 700;
   color: #2d3748;
   margin: 0;
   letter-spacing: -0.5px;
   text-transform: uppercase;
-  margin-right: 13rem;
+}
+
+@media (max-width: 576px) {
+  .title-users {
+    font-size: 1.8rem;
+  }
 }
 
 .search-input {
@@ -33,21 +40,6 @@
   border-color: #f68b1e;
   box-shadow: 0 0 0 3px rgba(246, 139, 30, 0.1);
   outline: none;
-}
-
-.add-btn-users {
-  background: #f68b1e !important;
-  color: white !important;
-  border: none !important;
-  padding: 8px 22px !important;
-  border-radius: 8px !important;
-  font-weight: 700 !important;
-  font-size: 0.9rem !important;
-  transition: background 0.2s !important;
-}
-
-.add-btn-users:hover {
-  background: #e67e22 !important;
 }
 
 /* ── Tabla ───────────────────────────────── */

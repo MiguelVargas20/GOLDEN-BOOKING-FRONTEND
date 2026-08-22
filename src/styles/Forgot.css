@@ -57,6 +57,7 @@
     font-size: 16px;
     outline: none;
     transition: border 0.3s;
+    color: #333; 
 }
 
 .form-forgot input:focus {
@@ -73,25 +74,6 @@
 }
 
 /* BOTÓN ACTUALIZAR (Dorado) */
-.btn-send-forgot {
-    width: 200px;
-    height: 50px;
-    background: linear-gradient(to bottom, #f5e200, #e1892c);
-    color: black;
-    font-weight: bold;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    transition: transform 0.2s;
-}
-
-.btn-send-forgot:hover {
-    transform: translateY(-2px);
-    filter: brightness(1.1);
-}
-
 /* BOTÓN VOLVER (Link discreto) */
 .back-login-btn {
     background: none;

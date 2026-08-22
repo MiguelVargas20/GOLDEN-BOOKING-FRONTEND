@@ -7,12 +7,19 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import { listarHabitaciones } from "../api/HabitacionApi";
 import { crearReservaHotel, obtenerFechasOcupadas } from "../api/ReservaHotelApi"; // 🆕 obtenerFechasOcupadas
-import { haySolapamiento } from "../utils/fechasHotel"; // 🆕
+import { haySolapamiento, toLocalDateString } from "../utils/fechasHotel"; // 🆕
 import { useAuth } from "../context/AuthContext";
 import { useRequierePerfilCompleto } from "../hooks/useRequirePerfilCompleto";
 import LoadingSpinner from "../components/LoadingSpinner";
 import Swal from "sweetalert2";
+import DatePicker, { registerLocale } from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import "../styles/DatePickerCompartido.css";
+import { es } from "date-fns/locale";
 import "../styles/reservasH.css";
+import "../styles/BotonesCompartidos.css";
+
+registerLocale("es", es);
 
 const PLACEHOLDER =
     "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&q=80";
@@ -148,7 +155,7 @@ export default function ReservasH() {
         const confirmacion = await Swal.fire({
             title: "¿Confirmar reserva?",
             html: `
-                <div style="text-align:left;padding:0 1rem; font-family: sans-serif;">
+                <div style="text-align:left;padding:0 1rem; font-family: 'Poppins', sans-serif;">
                     <p><strong>Habitación:</strong> ${hab.numeroHabitacion}</p>
                     <p><strong>Check-in:</strong> ${new Date(habFechas.checkIn).toLocaleDateString()}</p>
                     <p><strong>Check-out:</strong> ${new Date(habFechas.checkOut).toLocaleDateString()}</p>
@@ -225,7 +232,7 @@ export default function ReservasH() {
                     {isAdmin() && (
                         <>
                             <button
-                                className="btn-reserva-sm crear"
+                                className="btn-gb btn-gb-primary btn-gb-sm"
                                 onClick={() => navigate("/crear-habitacion")}
                             >
                                 <IoAddCircleOutline /> Crear
@@ -333,21 +340,35 @@ export default function ReservasH() {
                                         <div className="date-picker-row-v2">
                                             <div className="date-input-group-v2">
                                                 <label>Check-in</label>
-                                                <input
-                                                    type="date"
-                                                    value={habFechas.checkIn}
-                                                    min={new Date().toISOString().split("T")[0]}
-                                                    onChange={(e) => setFechaHab(hab.id, "checkIn", e.target.value)}
-                                                />
+                                                <div className="date-input-wrapper">
+                                                    <BiCalendarAlt className="calendar-icon" />
+                                                    <DatePicker
+                                                        selected={habFechas.checkIn ? new Date(habFechas.checkIn) : null}
+                                                        onChange={(date) => setFechaHab(hab.id, "checkIn", date ? toLocalDateString(date) : "")}
+                                                        dateFormat="dd/MM/yyyy"
+                                                        locale="es"
+                                                        className="form-control custom-date-input"
+                                                        placeholderText="dd/mm/aaaa"
+                                                        minDate={new Date()}
+                                                        portalId="datepicker-portal"
+                                                    />
+                                                </div>
                                             </div>
                                             <div className="date-input-group-v2">
                                                 <label>Check-out</label>
-                                                <input
-                                                    type="date"
-                                                    value={habFechas.checkOut}
-                                                    min={habFechas.checkIn || new Date().toISOString().split("T")[0]}
-                                                    onChange={(e) => setFechaHab(hab.id, "checkOut", e.target.value)}
-                                                />
+                                                <div className="date-input-wrapper">
+                                                    <BiCalendarAlt className="calendar-icon" />
+                                                    <DatePicker
+                                                        selected={habFechas.checkOut ? new Date(habFechas.checkOut) : null}
+                                                        onChange={(date) => setFechaHab(hab.id, "checkOut", date ? toLocalDateString(date) : "")}
+                                                        dateFormat="dd/MM/yyyy"
+                                                        locale="es"
+                                                        className="form-control custom-date-input"
+                                                        placeholderText="dd/mm/aaaa"
+                                                        minDate={habFechas.checkIn ? new Date(habFechas.checkIn) : new Date()}
+                                                        portalId="datepicker-portal"
+                                                    />
+                                                </div>
                                             </div>
                                         </div>
 
@@ -363,11 +384,11 @@ export default function ReservasH() {
                                                 <small>{noches > 0 ? ` (${noches}n)` : " /noche"}</small>
                                             </span>
                                             <div className="botones-v2">
-                                                <button className="btn-detail-sm" onClick={() => navigate(`/detalle/${hab.id}`)}>
+                                                <button className="btn-gb btn-gb-secondary btn-gb-sm" onClick={() => navigate(`/detalle/${hab.id}`)}>
                                                     Detalle
                                                 </button>
                                                 <button
-                                                    className="btn-reservar-sm"
+                                                    className="btn-gb btn-gb-primary btn-gb-sm"
                                                     onClick={() => handleReservar(hab)}
                                                     disabled={!disponible || reservando === hab.id}
                                                 >
