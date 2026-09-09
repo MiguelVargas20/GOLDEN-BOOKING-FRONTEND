@@ -43,6 +43,19 @@ export const listarMisReservasDeporte = async () => {
   return data; // ya viene filtrado y seguro desde el backend
 };
 
+// Horarios ya ocupados de TODAS las canchas (GET) — para ADMIN o CLIENTE
+// Endpoint nuevo: antes el calendario de disponibilidad llamaba a
+// listarReservasDeporte() (admin-only) y, para un CLIENTE, la llamada
+// fallaba en silencio dejando el calendario siempre "vacío".
+export const obtenerFechasOcupadasDeporte = async () => {
+  const response = await fetch(`${API_URL}/ocupadas`, {
+    headers: authHeaders()
+  });
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.error || "No se pudieron cargar los horarios ocupados");
+  return data;
+};
+
 // Cancelar reserva (PATCH)
 export const cancelarReservaDeporte = async (id) => {
   const response = await fetch(`${API_URL}/${id}/cancelar`, {

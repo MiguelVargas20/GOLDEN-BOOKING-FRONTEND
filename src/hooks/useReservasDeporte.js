@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
-import { listarReservasDeporte } from "../api/ReservaDeporteApi";
+import { obtenerFechasOcupadasDeporte } from "../api/ReservaDeporteApi";
 
 const WS_URL = import.meta.env.VITE_API_URL;
 
@@ -11,29 +11,24 @@ export function useReservasDeporte() {
     const clientRef                               = useRef(null);
 
     // ── Carga inicial de reservas existentes (Memorizada con useCallback) ──
+    // FIX: antes llamaba a listarReservasDeporte() (GET /api/reservas/deporte),
+    // que en el backend es admin-only. Para un CLIENTE normal esa llamada
+    // devolvía 403, el catch de abajo se tragaba el error, y el calendario
+    // de disponibilidad arrancaba siempre vacío: el cliente solo se enteraba
+    // de un conflicto si otra persona reservaba mientras tenía la página
+    // abierta (vía WebSocket), nunca de las reservas que ya existían antes.
+    // Ahora usa GET /api/reservas/deporte/ocupadas, accesible para ADMIN o
+    // CLIENTE y sin datos del dueño, que además ya viene en el formato que
+    // este hook necesita (sin adivinar la forma de la respuesta).
     const cargarReservasExistentes = useCallback(async () => {
         try {
-            const respuesta = await listarReservasDeporte();
-            console.log("Datos recibidos de listarReservasDeporte():", respuesta);
+            const ocupadas = await obtenerFechasOcupadasDeporte();
 
-            let listaReservas = [];
-            if (Array.isArray(respuesta)) {
-                listaReservas = respuesta;
-            } else if (respuesta && Array.isArray(respuesta.contenido)) {
-                listaReservas = respuesta.contenido;
-            } else if (respuesta && Array.isArray(respuesta.data)) {
-                listaReservas = respuesta.data;
-            } else if (respuesta && Array.isArray(respuesta.content)) {
-                listaReservas = respuesta.content;
-            } else {
-                console.warn("La respuesta de la API no contiene un formato de lista válido.");
-            }
-
-            const ocupados = listaReservas.map(r => ({
+            const ocupados = ocupadas.map(r => ({
                 espacioId:  r.tipoCancha,
-                fecha:      r.fechaReserva?.split('T')[0],
-                horaInicio: r.fechaReserva,
-                horaFin:    r.fechaFinReserva,
+                fecha:      r.inicio?.split('T')[0],
+                horaInicio: r.inicio,
+                horaFin:    r.fin,
                 estado:     "OCUPADO",
                 mensaje:    `La cancha ${r.tipoCancha} ya está reservada.`
             }));
@@ -52,14 +47,12 @@ export function useReservasDeporte() {
 
             onConnect: () => {
                 setConectado(true);
-                console.log("WebSocket conectado");
 
                 // Llamamos de forma segura a la carga inicial
                 cargarReservasExistentes();
 
                 client.subscribe("/topic/reservas-deporte", (message) => {
                     const evento = JSON.parse(message.body);
-                    console.log("Evento recibido:", evento);
 
                     setEspaciosOcupados((prev) => {
                         if (evento.estado === "DISPONIBLE") {
@@ -80,7 +73,6 @@ export function useReservasDeporte() {
 
             onDisconnect: () => {
                 setConectado(false);
-                console.log("WebSocket desconectado");
             },
 
             onStompError: (frame) => {

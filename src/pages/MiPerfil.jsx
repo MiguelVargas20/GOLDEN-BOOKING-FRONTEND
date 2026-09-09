@@ -6,6 +6,7 @@ import { actualizarMiPerfil } from "../api/UserApi";
 import Swal from "sweetalert2";
 import LoadingSpinner from "../components/LoadingSpinner";
 import userImg from "../assets/edit-user.png";
+import { authHeaders } from "../api/apiUtils";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -28,9 +29,15 @@ export default function MiPerfil() {
     useEffect(() => {
         const cargarPerfil = async () => {
             try {
-                const token = localStorage.getItem("token");
+                // FIX: antes leía localStorage.getItem("token") a secas. Si el
+                // usuario no marcó "Recordarme", el token vive en sessionStorage
+                // y esta lectura siempre daba null → el fetch mandaba
+                // "Authorization: Bearer null" y el perfil nunca cargaba (siempre
+                // caía al catch de abajo), aunque guardar cambios sí funcionaba
+                // porque actualizarMiPerfil() (en UserApi.js) ya usa authHeaders()
+                // correctamente. authHeaders() revisa ambos storages.
                 const res = await fetch(`${API_URL}/api/usuarios/perfil/${user.id}`, {
-                    headers: { Authorization: `Bearer ${token}` }
+                    headers: authHeaders()
                 });
                 if (!res.ok) throw new Error("No se pudo cargar el perfil");
                 const data = await res.json();

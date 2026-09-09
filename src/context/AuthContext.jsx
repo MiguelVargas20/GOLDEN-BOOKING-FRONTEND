@@ -177,7 +177,16 @@ export const AuthProvider = ({ children }) => {
         const logout = async () => {
             limpiarTimers();
             try {
-                const savedToken = localStorage.getItem("token"); 
+                // FIX: antes leía localStorage.getItem("token") a secas. Si el usuario
+                // no marcó "Recordarme", la sesión vive en sessionStorage y esa lectura
+                // siempre daba null — el "if" nunca entraba, nunca se llamaba a
+                // /auth/logout, y ni el access token quedaba en la blacklist del
+                // servidor ni la cookie httpOnly de refresh token se revocaba ahí.
+                // El usuario veía la sesión "cerrada" en el navegador, pero el refresh
+                // token seguía vivo en el backend. Usamos el token que ya tenemos en
+                // el estado del contexto, que es correcto sin importar en qué storage
+                // se guardó.
+                const savedToken = token;
 
                 if (savedToken) {
                     await fetch(`${import.meta.env.VITE_API_URL}/auth/logout`, {

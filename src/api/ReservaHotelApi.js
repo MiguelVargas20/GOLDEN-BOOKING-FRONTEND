@@ -1,8 +1,4 @@
-// ═══════════════════════════════════════════════════════════
-// ── Configuración Global y Autenticación ───────────────────
-// (centralizadas en apiUtils.js — ver ese archivo)
-// ═══════════════════════════════════════════════════════════
-import { authHeaders } from "./apiUtils";
+import { authHeaders, extraerMensajeError } from "./apiUtils";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -10,17 +6,6 @@ const API_URL = import.meta.env.VITE_API_URL;
 // Ahí el body siempre viene como { error: "..." } o, en validaciones,
 // { errores: { campo: "mensaje" } }. Si no logramos parsear nada,
 // devolvemos un texto genérico como último recurso.
-const extraerMensajeError = async (res, fallback) => {
-  try {
-    const data = await res.json();
-    if (data?.error) return data.error;
-    if (data?.errores) return Object.values(data.errores).join(" | ");
-    if (data?.message) return data.message;
-  } catch {
-    // el body no era JSON (ej. 401 sin body, error de red, etc.)
-  }
-  return `${fallback} (HTTP ${res.status})`;
-};
 
 // ═══════════════════════════════════════════════════════════
 // ── Reservas Hotel ─────────────────────────────────────────
