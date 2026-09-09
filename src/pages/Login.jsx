@@ -16,6 +16,7 @@ export default function Login() {
   const { login } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [serverError, setServerError] = useState("");
+  const [recordarme, setRecordarme] = useState(false);
 
   const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
 
@@ -28,7 +29,7 @@ export default function Login() {
   const onSubmit = async (data) => {
     setServerError("");
     try {
-      await login(data);
+      await login(data, recordarme);
       navigate("/home");
     } catch (err) {
       setServerError(err.message || "Credenciales inválidas");
@@ -49,29 +50,33 @@ export default function Login() {
 
           <form className="form" onSubmit={handleSubmit(onSubmit)}>
             <div className="input-group">
-              <input
-                type="text"
-                placeholder="Ingrese su usuario"
-                {...register("username")}
-              />
-              {errors.username && <span className="error-text">{errors.username.message}</span>}
-            </div>
+          <label htmlFor="username" className="visually-hidden">Usuario</label>
+            <input
+              id="username"
+              type="text"
+              placeholder="Ingrese su usuario"
+              {...register("username")}
+            />
+            {errors.username && <span className="error-text">{errors.username.message}</span>}
+          </div>
 
-            <div className="input-group">
-              <input
-                type={showPassword ? "text" : "password"}
-                placeholder="Ingrese su contraseña"
-                {...register("password")}
-              />
-              {errors.password && <span className="error-text">{errors.password.message}</span>}
-              <span className="password-toggle-icon" onClick={togglePasswordVisibility} style={{ cursor: "pointer" }}>
-                {showPassword ? <FaEyeSlash /> : <IoEyeSharp />}
-              </span>
-            </div>
+          <div className="input-group">
+            <label htmlFor="password" className="visually-hidden">Contraseña</label>
+            <input
+              id="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="Ingrese su contraseña"
+              {...register("password")}
+            />
+            {errors.password && <span className="error-text">{errors.password.message}</span>}
+            <span className="password-toggle-icon" onClick={togglePasswordVisibility} style={{ cursor: "pointer" }}>
+              {showPassword ? <FaEyeSlash /> : <IoEyeSharp />}
+            </span>
+        </div>
 
             <div className="options">
               <label className="check">
-                <input type="checkbox" />
+               <input type="checkbox" checked={recordarme} onChange={(e) => setRecordarme(e.target.checked)} /> 
                 <span className="check">Recordarme</span>
               </label>
               <a href="Forgot" className="forgot-link">¿Olvidaste tu contraseña?</a>

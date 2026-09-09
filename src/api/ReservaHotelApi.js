@@ -1,15 +1,10 @@
 // ═══════════════════════════════════════════════════════════
 // ── Configuración Global y Autenticación ───────────────────
+// (centralizadas en apiUtils.js — ver ese archivo)
 // ═══════════════════════════════════════════════════════════
+import { authHeaders } from "./apiUtils";
 
 const API_URL = import.meta.env.VITE_API_URL;
-
-const getToken = () => localStorage.getItem("token");
-
-const authHeaders = () => ({
-  "Content-Type": "application/json",
-  Authorization: `Bearer ${getToken()}`,
-});
 
 // Extrae el mensaje real que manda el GlobalExceptionHandler del backend.
 // Ahí el body siempre viene como { error: "..." } o, en validaciones,

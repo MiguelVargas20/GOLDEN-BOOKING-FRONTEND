@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useRef } from "react";
 import Swal from "sweetalert2";
-import { loginUsuario, registrarUsuario } from "../services/authService";
+import { loginUsuario, registrarUsuario, refrescarToken } from "../services/authService";
 
 const AuthContext = createContext();
 
@@ -15,8 +15,33 @@ const tokenEsValido = (token) => {
     }
 };
 
+// ── Dónde vive la sesión ─────────────────────────────────────
+// Si el usuario marcó "Recordarme": localStorage (sobrevive a cerrar el navegador).
+// Si no la marcó: sessionStorage (se borra al cerrar la pestaña/navegador).
+// Solo UNO de los dos tiene datos a la vez — nunca ambos.
+const obtenerStorageActivo = () => {
+    return localStorage.getItem("token") ? localStorage : sessionStorage;
+};
+
+const guardarSesion = (token, userData, recordarme) => {
+    const storage = recordarme ? localStorage : sessionStorage;
+    const otroStorage = recordarme ? sessionStorage : localStorage;
+    otroStorage.removeItem("token");
+    otroStorage.removeItem("user");
+    storage.setItem("token", token);
+    storage.setItem("user", JSON.stringify(userData));
+};
+
+const limpiarSesion = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("user");
+};
+
 export const AuthProvider = ({ children }) => {
     const timersRef = useRef([]);
+    const recordarmeRef = useRef(false);
 
     const limpiarTimers = () => {
         timersRef.current.forEach(clearTimeout);
@@ -36,19 +61,30 @@ export const AuthProvider = ({ children }) => {
 
             const tiempoAviso = tiempoRestante - 5 * 60 * 1000;
             if (tiempoAviso > 0) {
-                const t1 = setTimeout(() => {
-                    Swal.fire({
-                        title: '⏰ Sesión por expirar',
-                        text: 'Tu sesión expira en 5 minutes. Guarda tu trabajo.',
-                        icon: 'warning',
-                        toast: true,
-                        position: 'top-end',
-                        showConfirmButton: true,
-                        confirmButtonText: 'Entendido',
-                        confirmButtonColor: '#f38d1e',
-                        timer: 60000, 
-                        timerProgressBar: true,
-                    });
+                const t1 = setTimeout(async () => {
+                    try {
+                        // Intento silencioso: si el refresh token (cookie httpOnly)
+                        // sigue vigente, renovamos el JWT sin molestar al usuario.
+                        const respuesta = await refrescarToken();
+                        const storage = recordarmeRef.current ? localStorage : sessionStorage;
+                        storage.setItem("token", respuesta.token);
+                        setToken(respuesta.token);
+                        programarAlertasExpiracion(respuesta.token);
+                    } catch {
+                        // El refresh token también expiró (o no existe) — ahí sí avisamos.
+                        Swal.fire({
+                            title: '⏰ Sesión por expirar',
+                            text: 'Tu sesión expira en 5 minutes. Guarda tu trabajo.',
+                            icon: 'warning',
+                            toast: true,
+                            position: 'top-end',
+                            showConfirmButton: true,
+                            confirmButtonText: 'Entendido',
+                            confirmButtonColor: '#f38d1e',
+                            timer: 60000,
+                            timerProgressBar: true,
+                        });
+                    }
                 }, tiempoAviso);
                 timersRef.current.push(t1);
             }
@@ -72,27 +108,29 @@ export const AuthProvider = ({ children }) => {
     };
 
     const [token, setToken] = useState(() => {
-        const savedToken = localStorage.getItem("token");
+        const storage = obtenerStorageActivo();
+        const savedToken = storage.getItem("token");
         if (savedToken && !tokenEsValido(savedToken)) {
-            localStorage.removeItem("token");
-            localStorage.removeItem("user");
+            limpiarSesion();
             return null;
         }
         if (savedToken) {
+            recordarmeRef.current = storage === localStorage;
             setTimeout(() => programarAlertasExpiracion(savedToken), 0);
         }
         return savedToken || null;
     });
 
-    const [user, setUser] = useState(() => {
-        const savedToken = localStorage.getItem("token");
+        const [user, setUser] = useState(() => {
+        const storage = obtenerStorageActivo();
+        const savedToken = storage.getItem("token");
         if (!tokenEsValido(savedToken)) return null;
-        
-        const savedUser = localStorage.getItem("user");
+
+        const savedUser = storage.getItem("user");
         return savedUser ? JSON.parse(savedUser) : null;
     });
 
-    const login = async (data) => {
+    const login = async (data, recordarme = false) => {
         const response = await loginUsuario(data);
         let numeroDocumento = null;
         let tipoDocumento = null;
@@ -105,8 +143,7 @@ export const AuthProvider = ({ children }) => {
                 }
             );
             if (perfilRes.ok) {
-                const perfil = await perfilRes.json();
-                console.log("PERFIL CRUDO DEL BACKEND:", perfil);
+                const perfil = await perfilRes.json(); 
                 numeroDocumento = perfil.documento?.numeroD || null;
                 tipoDocumento = perfil.documento?.tipoD || null;
             } else {
@@ -127,9 +164,9 @@ export const AuthProvider = ({ children }) => {
             }
         };
 
-        localStorage.setItem("token", response.token);
-        localStorage.setItem("user", JSON.stringify(userData));
-        
+        recordarmeRef.current = recordarme;
+        guardarSesion(response.token, userData, recordarme);
+
         setToken(response.token);
         setUser(userData);
         programarAlertasExpiracion(response.token);
@@ -137,28 +174,27 @@ export const AuthProvider = ({ children }) => {
         return response;
     };
 
-    const logout = async () => {
-        limpiarTimers();
-        
-        try {
-            const savedToken = localStorage.getItem("token"); 
+        const logout = async () => {
+            limpiarTimers();
+            try {
+                const savedToken = localStorage.getItem("token"); 
 
-            if (savedToken) {
-                await fetch(`${import.meta.env.VITE_API_URL}/auth/logout`, {
-                    method: "POST",
-                    headers: { Authorization: `Bearer ${savedToken}` }
-                });
+                if (savedToken) {
+                    await fetch(`${import.meta.env.VITE_API_URL}/auth/logout`, {
+                        method: "POST",
+                        credentials: "include",
+                        headers: { Authorization: `Bearer ${savedToken}` }
+                    });
+                }
+            } catch {
+                console.warn("El logout en el servidor falló, procediendo con limpieza local.");
+            } 
+            finally {
+                limpiarSesion();
+                setToken(null);
+                setUser(null);
             }
-        } catch {
-            console.warn("El logout en el servidor falló, procediendo con limpieza local.");
-        } 
-        finally {
-            localStorage.removeItem("token"); 
-            localStorage.removeItem("user");  
-            setToken(null);
-            setUser(null);
-        }
-    };
+        };
 
     const registro = async (data) => {
         return await registrarUsuario(data);

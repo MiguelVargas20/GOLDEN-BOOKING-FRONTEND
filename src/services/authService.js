@@ -13,6 +13,7 @@ export async function loginUsuario(data) {
       // Realiza la solicitud de inicio de sesión al backend
         const res = await fetch(`${BASE_URL}/auth/login`, {
             method: "POST",
+            credentials: "include",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
                 username: data.username,
@@ -170,4 +171,23 @@ export async function restablecerPassword(data) {
         if (error.message) throw error;
         throw { message: "Error de conexión con el servidor" };
     }
+}
+/**
+ * Pide un access token (JWT) nuevo usando el refresh token guardado
+ * en la cookie httpOnly — el navegador la envía solo, nunca la tocamos
+ * desde JS. Se usa cuando el JWT actual expiró.
+ * @returns {Promise<Object>} Respuesta con el nuevo "token".
+ * @throws {Object} Si el refresh token no existe o ya expiró (hay que loguear de nuevo).
+ */
+export async function refrescarToken() {
+    const res = await fetch(`${BASE_URL}/auth/refresh`, {
+        method: "POST",
+        credentials: "include",
+    });
+
+    if (!res.ok) {
+        throw { message: await extraerMensajeError(res, "No se pudo renovar la sesión") };
+    }
+
+    return await res.json();
 }

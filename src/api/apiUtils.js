@@ -7,7 +7,10 @@
 
 export const API_URL = import.meta.env.VITE_API_URL;
 
-export const getToken = () => localStorage.getItem("token");
+// Busca el token en localStorage primero (sesión "recordada"); si no está
+// ahí, en sessionStorage (sesión de esta pestaña/navegador únicamente).
+// Debe reflejar la misma lógica que obtenerStorageActivo() en AuthContext.jsx.
+export const getToken = () => localStorage.getItem("token") || sessionStorage.getItem("token");
 
 export const authHeaders = () => ({
   "Content-Type": "application/json",

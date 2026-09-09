@@ -1,15 +1,12 @@
+import { authHeaders } from "./apiUtils";
+
 const API_URL = `${import.meta.env.VITE_API_URL}/api/reservas/deporte`;
 
 // Crear reserva (POST)
 export const crearReservaDeporte = async (data) => {
-  const token = localStorage.getItem("token");
-
   const response = await fetch(API_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "Authorization": token ? `Bearer ${token}` : ""
-    },
+    headers: authHeaders(),
     body: JSON.stringify(data),
   });
 
@@ -26,10 +23,10 @@ export const crearReservaDeporte = async (data) => {
 
 // Listar todas las reservas (GET) — para ADMIN
 export const listarReservasDeporte = async (page = 0, size = 10) => {
-  const token = localStorage.getItem("token");
   const response = await fetch(`${API_URL}?page=${page}&size=${size}`, {
-    headers: { Authorization: token ? `Bearer ${token}` : "" }
+    headers: authHeaders()
   });
+
   const responseJson = await response.json();
   if (!response.ok) throw new Error("No se pudieron cargar las reservas");
   return responseJson;
@@ -38,9 +35,8 @@ export const listarReservasDeporte = async (page = 0, size = 10) => {
 // Listar reservas del usuario logueado (GET) — para CLIENTE
 // ANTES: pedía 100 reservas de todos y filtraba en el navegador
 export const listarMisReservasDeporte = async () => {
-  const token = localStorage.getItem("token");
   const response = await fetch(`${API_URL}/mis-reservas`, {
-    headers: { Authorization: token ? `Bearer ${token}` : "" }
+    headers: authHeaders()
   });
   const data = await response.json();
   if (!response.ok) throw new Error(data.error || "Error al cargar reservas");
@@ -49,15 +45,10 @@ export const listarMisReservasDeporte = async () => {
 
 // Cancelar reserva (PATCH)
 export const cancelarReservaDeporte = async (id) => {
-  const token = localStorage.getItem("token");
-
   const response = await fetch(`${API_URL}/${id}/cancelar`, {
     method: "PATCH",
-    headers: {
-      Authorization: token ? `Bearer ${token}` : ""
-    }
+    headers: authHeaders()
   });
-
   if (!response.ok) {
     // Intentar leer el mensaje de error del back
     try {
