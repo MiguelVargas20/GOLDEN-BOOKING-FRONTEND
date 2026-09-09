@@ -117,13 +117,23 @@ export default function App() {
                             <Route path="reservar-espacio" element={<ReservarEspacioD />} />
                             
                             {/* Panel administrativo para aprobar, cancelar o ver todas las canchas */}
-                            <Route path="gestionar" element={<GestionarReservas />} />
+                            {/* FIX hallazgo #14: esta ruta y las 2 siguientes (crear/editar) no tenían
+                                soloAdmin={true}, a diferencia de /usuarios, /mensajes, /crear-habitacion
+                                y /gestionar-habitaciones que sí lo llevan. Cualquier CLIENTE autenticado
+                                que tecleara la URL directamente veía el panel de gestión deportiva. */}
+                            <Route path="gestionar" element={
+                                <RutaProtegida soloAdmin={true}><GestionarReservas /></RutaProtegida>
+                            } />
                             
                             {/* Formulario de creación de nuevos espacios/canchas */}
-                            <Route path="crear" element={<Crear />} />
+                            <Route path="crear" element={
+                                <RutaProtegida soloAdmin={true}><Crear /></RutaProtegida>
+                            } />
                             
                             {/* Formulario de modificación de parámetros de espacios deportivos */}
-                            <Route path="editar" element={<Editar />} />
+                            <Route path="editar" element={
+                                <RutaProtegida soloAdmin={true}><Editar /></RutaProtegida>
+                            } />
                         </Route>
 
                         {/* -----------------------------------------------------
