@@ -12,6 +12,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import "../styles/DatePickerCompartido.css";
 import { es } from "date-fns/locale";
 import "../styles/DetalleHabitacion.css";
+import { useRequierePerfilCompleto } from "../hooks/useRequirePerfilCompleto";
 
 registerLocale("es", es);
 
@@ -21,6 +22,7 @@ export default function DetalleHabitacion() {
     const { id } = useParams();
     const navigate = useNavigate();
     const { user } = useAuth();
+    const { verificarPerfil } = useRequierePerfilCompleto();
 
     const [habitacion, setHabitacion] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -91,21 +93,8 @@ export default function DetalleHabitacion() {
             });
             return;
         }
-
-        const docUsuario = user?.numeroDocumento;
-        if (!docUsuario) {
-            const r = await Swal.fire({
-                title: "Perfil incompleto",
-                text: "No se encontró tu número de documento. Actualiza tu perfil antes de reservar.",
-                icon: "error",
-                confirmButtonColor: "#f38d1e",
-                showCancelButton: true,
-                confirmButtonText: "Completar perfil",
-                cancelButtonText: "Cerrar",
-            });
-            if (r.isConfirmed) navigate("/mi-perfil");
-            return;
-        }
+        const docUsuario = verificarPerfil(user);
+        if (!docUsuario) return;
 
         const { noches, total } = calcularNochesYTotal();
 

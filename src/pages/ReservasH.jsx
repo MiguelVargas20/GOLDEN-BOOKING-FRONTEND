@@ -292,12 +292,9 @@ export default function ReservasH() {
                     habitacionesFiltradas.map((hab) => {
                         const habFechas = getFechasHab(hab.id);
 
-                        // 🆕 "disponible" ahora significa "no está en mantenimiento",
-                        // no "libre en este instante" — eso se valida por fecha.
-                        const enMantenimiento =
-                            hab.estadoHabitacion?.toLowerCase() === "mantenimiento" ||
-                            hab.estado?.toLowerCase() === "mantenimiento";
-                        const disponible = !enMantenimiento;
+                        const disponible =
+                            hab.estadoHabitacion?.toLowerCase() === "disponible" ||
+                            hab.estado?.toLowerCase() === "disponible";
 
                         const { noches, total } = calcularNochesYTotal(hab);
                         const ocupadas = rangosOcupadosPorHabitacion[hab.id] || [];

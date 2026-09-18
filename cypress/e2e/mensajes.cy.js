@@ -1,22 +1,26 @@
+import { ROUTES } from "../support/routes";
+
 // Endpoints reales involucrados en este flujo (referencia rápida del swagger):
-//   POST /auth/login                  -> cy.login()
+//   POST /auth/login                   -> cy.login()
 //   GET  /api/contacto/no-leidos/count -> badge de notificaciones en Navbar
-//   POST /api/contacto                -> enviarMensaje() en Contactos.jsx
-//   GET  /api/contacto/mios           -> AdminMensajes.jsx (bandeja)
+//   POST /api/contacto                 -> enviarMensaje() en Contactos.jsx
+//   GET  /api/contacto/mios            -> AdminMensajes.jsx (bandeja)
 
 describe("Flujo de mensajería - Admin", () => {
-  it("inicia sesión, envía un mensaje de contacto y lo ve en la bandeja de admin", () => {
-    // 1. Login -> POST /auth/login
-    cy.login("miguel1", "Miguelito123*");
+  const baseUrl = () => Cypress.config("baseUrl");
 
-    // 2. Sesión iniciada en Home, como ADMIN
-    cy.url().should("include", "/home");
-    cy.contains("Miguel Vargas").should("be.visible");
+  it("inicia sesión, envía un mensaje de contacto y lo ve en la bandeja de admin", () => {
+    // 1. Login -> POST /auth/login (localhost:5173/login)
+    cy.login("admin", "MiClaveSegura123!");
+
+    // 2. Sesión iniciada en Home, como ADMIN (localhost:5173/home)
+    cy.url().should("eq", `${baseUrl()}${ROUTES.home}`);
+    cy.contains("Admin Golden").should("be.visible");
     cy.contains("ADMIN").should("be.visible");
 
-    // 3. Ir a Contactanos
+    // 3. Ir a Contactanos (localhost:5173/contactos)
     cy.contains("Contactanos").click();
-    cy.url().should("include", "/contactos");
+    cy.url().should("eq", `${baseUrl()}${ROUTES.contactos}`);
     cy.contains("Ver Mensajes (Admin)").should("be.visible");
 
     // 4. Completar y enviar el mensaje -> POST /api/contacto
@@ -32,8 +36,9 @@ describe("Flujo de mensajería - Admin", () => {
     cy.contains("¡Mensaje enviado!").should("be.visible");
 
     // 5. Ir a la bandeja de mensajes (Admin) -> GET /api/contacto/mios
+    //    (localhost:5173/mensajes)
     cy.contains("Ver Mensajes (Admin)").click();
-    cy.url().should("include", "/mensajes");
+    cy.url().should("eq", `${baseUrl()}${ROUTES.mensajes}`);
     cy.contains("BANDEJA DE").should("be.visible");
     cy.contains("MENSAJES").should("be.visible");
 

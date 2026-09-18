@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Row, Col, Form, Button, Alert, Spinner } from "react-bootstrap";
-import { crearHabitacion, listarTiposHabitacion } from "../api/habitacionApi";
+import { crearHabitacion, listarTiposHabitacion } from "../api/HabitacionApi";
 import "../styles/HabitacionD.css";
 
 const ESTADOS = [
-  { value: "disponible", label: "✓ Disponible", color: "var(--gb-status-success-text)" },
-  { value: "ocupada", label: "✗ Ocupada", color: "var(--gb-status-danger-text)" },
-  { value: "mantenimiento", label: "⚙ Mantenimiento", color: "var(--gb-status-warning-text)" },
+  { value: "DISPONIBLE", label: "Disponible", color: "var(--gb-status-success-text)" },
+  { value: "OCUPADA", label: "✗ Ocupada", color: "var(--gb-status-danger-text)" },
+  { value: "MANTENIMIENTO", label: "⚙ Mantenimiento", color: "var(--gb-status-warning-text)" },
 ];
 
 export default function HabitacionD() {
@@ -21,7 +21,7 @@ export default function HabitacionD() {
   const [numeroHabitacion, setNumeroHabitacion] = useState("");
   const [idTipo, setIdTipo] = useState("");
   const [precioNoche, setPrecioNoche] = useState("");
-  const [estadoHabitacion, setEstadoHabitacion] = useState("disponible");
+  const [estadoHabitacion, setEstadoHabitacion] = useState("DISPONIBLE");
   const [descripcion, setDescripcion] = useState("");
 
   // ── Feedback ──────────────────────────────────────────────
@@ -62,11 +62,16 @@ export default function HabitacionD() {
     setLoading(true);
     try {
       const body = {
-        numeroHabitacion: numeroHabitacion.trim(),
-        datosTipoHabitacion: tipoSeleccionado,
-        precioNoche: parseFloat(precioNoche),
-        estadoHabitacion: estadoHabitacion,
-        descripcion: descripcion.trim() || null,
+          numeroHabitacion: numeroHabitacion.trim(),
+          datosTipoHabitacion: {
+              id: tipoSeleccionado.id,
+              nomTipo: tipoSeleccionado.nombreTipoHabitacion,
+              desc: tipoSeleccionado.descripcion,
+              cap: tipoSeleccionado.capacidadMaxima,
+          },
+          precioNoche: parseFloat(precioNoche),
+          estadoHabitacion: estadoHabitacion,
+          descripcion: descripcion.trim() || null,
       };
 
       await crearHabitacion(body);
@@ -131,15 +136,15 @@ export default function HabitacionD() {
                   borderRadius: "20px",
                   marginTop: "10px",
                   background:
-                    estadoHabitacion === "disponible"
+                    estadoHabitacion === "DISPONIBLE"
                       ? "#e6f4ea"
-                      : estadoHabitacion === "ocupada"
+                      : estadoHabitacion === "OCUPADA"
                         ? "#fce8e6"
                         : "#fff3e0",
-                  color:
-                    estadoHabitacion === "disponible"
+                color:
+                    estadoHabitacion === "DISPONIBLE"
                       ? "#2e7d32"
-                      : estadoHabitacion === "ocupada"
+                      : estadoHabitacion === "OCUPADA"
                         ? "#c62828"
                         : "#e65100",
                 }}
