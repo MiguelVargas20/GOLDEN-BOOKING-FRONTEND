@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import React from 'react';
 import { Navbar, Nav, Container, Button, NavDropdown } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
-import logo from '../assets/LOGO.PNG';
+import logo from '../assets/LOGO.png';
 import styles from '../styles/Navbar.module.css';
 import { useTheme } from '../context/Themecontext.jsx';
 import { BsSun, BsMoonStarsFill, BsBoxArrowRight, BsPersonCircle } from 'react-icons/bs';

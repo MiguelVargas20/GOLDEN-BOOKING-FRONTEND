@@ -16,8 +16,9 @@ import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "../styles/DatePickerCompartido.css";
 import { es } from "date-fns/locale";
-import "../styles/reservasH.css";
+import "../styles/ReservasH.css";
 import "../styles/BotonesCompartidos.css";
+import { escapeHtml } from "../utils/escapeHtml";
 
 registerLocale("es", es);
 
@@ -156,7 +157,7 @@ export default function ReservasH() {
             title: "¿Confirmar reserva?",
             html: `
                 <div style="text-align:left;padding:0 1rem; font-family: 'Poppins', sans-serif;">
-                    <p><strong>Habitación:</strong> ${hab.numeroHabitacion}</p>
+                    <p><strong>Habitación:</strong> ${escapeHtml(hab.numeroHabitacion)}</p>
                     <p><strong>Check-in:</strong> ${new Date(habFechas.checkIn).toLocaleDateString()}</p>
                     <p><strong>Check-out:</strong> ${new Date(habFechas.checkOut).toLocaleDateString()}</p>
                     <p><strong>Noches:</strong> ${noches}</p>

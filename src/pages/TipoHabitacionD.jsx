@@ -6,7 +6,8 @@ import {
   crearTipoHabitacion,
   actualizarTipoHabitacion,
   eliminarTipoHabitacion,
-} from "../api/habitacionApi";
+} from "../api/HabitacionApi";
+import { escapeHtml } from "../utils/escapeHtml";
 
 /**
  * TIPO HABITACIÓN D — vista de administración
@@ -127,7 +128,7 @@ export default function TipoHabitacionD() {
       const resultado = await Swal.fire({
           title: '¿Eliminar tipo de habitación?',
           html: `
-              <p><strong>${nombre}</strong> será eliminado permanentemente.</p>
+              <p><strong>${escapeHtml(nombre)}</strong> será eliminado permanentemente.</p>
               <p style="color:#e53e3e;margin-top:8px;font-size:0.9rem">
                   Las habitaciones asociadas a este tipo podrían verse afectadas.
               </p>

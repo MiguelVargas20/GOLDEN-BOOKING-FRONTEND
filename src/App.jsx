@@ -27,7 +27,7 @@ import Crear from './components/Crear.jsx';
 import Editar from './components/Editar.jsx';
 
 // Módulo: Hospedaje / Habitaciones (Clientes / Admin)
-import ReservasH from './pages/reservasH.jsx';
+import ReservasH from './pages/ReservasH.jsx';
 import HabitacionD from './pages/HabitacionD.jsx';
 import TipoHabitacionD from './pages/TipoHabitacionD.jsx';
 import GestionHabitacionesD from './pages/GestionHabitacionesD.jsx';
@@ -152,7 +152,7 @@ export default function App() {
                         <Route path="/tipo-habitacion" element={<TipoHabitacionD />} />
                         
                         {/* Panel de administración de habitaciones (Disponibilidad, Precios, Estados) */}
-                        <Route path="/detalle/:id" element={<DetalleHabitacion />} />|
+                        <Route path="/detalle/:id" element={<DetalleHabitacion />} />
 
                         {/* Panel de administración de habitaciones (Disponibilidad, Precios, Estados) */}
                         <Route path="/mis-reservas-hotel" element={<MisReservasHotel />} />

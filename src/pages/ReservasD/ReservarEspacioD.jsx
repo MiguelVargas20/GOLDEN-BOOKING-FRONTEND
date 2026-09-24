@@ -11,6 +11,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import "../../styles/DatePickerCompartido.css";
 import { es } from 'date-fns/locale'; 
 import { useRequierePerfilCompleto } from "../../hooks/useRequirePerfilCompleto.js";
+import { escapeHtml } from "../../utils/escapeHtml";
 
 registerLocale("es", es); 
 
@@ -100,7 +101,7 @@ function ReservarEspacioD() {
             title: '¿Confirmar reserva?',
             html: `
                 <div style="text-align: left; padding: 0 1rem;">
-                    <p><strong>Espacio:</strong> ${text}</p>
+                    <p><strong>Espacio:</strong> ${escapeHtml(text)}</p>
                     <p><strong>Entrada:</strong> ${new Date(formData.fInicioReserva).toLocaleString()}</p>
                     <p><strong>Salida:</strong> ${new Date(formData.fFinReserva).toLocaleString()}</p>
                 </div>
@@ -204,6 +205,9 @@ function ReservarEspacioD() {
                                             className="form-control custom-date-input"
                                             placeholderText="dd/mm/aaaa --:--"
                                             minDate={new Date()}
+                                            // minDate solo bloquea días: sin esto se podía elegir
+                                            // una hora de HOY que ya pasó (el back ahora la rechaza).
+                                            filterTime={(hora) => hora > new Date()}
                                         />
                                     </div>
                                 </Col>
@@ -221,6 +225,11 @@ function ReservarEspacioD() {
                                             className="form-control custom-date-input"
                                             placeholderText="dd/mm/aaaa --:--"
                                             minDate={formData.fInicioReserva ? new Date(formData.fInicioReserva) : new Date()}
+                                            // La salida debe ser al menos 1 hora después de la entrada
+                                            // (mínimo que exige el backend).
+                                            filterTime={(hora) => formData.fInicioReserva
+                                                ? hora.getTime() >= new Date(formData.fInicioReserva).getTime() + 60 * 60 * 1000
+                                                : hora > new Date()}
                                         />
                                     </div>
                                 </Col>
