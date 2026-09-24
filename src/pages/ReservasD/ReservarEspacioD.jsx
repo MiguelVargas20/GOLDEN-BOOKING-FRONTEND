@@ -11,6 +11,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import "../../styles/DatePickerCompartido.css";
 import { es } from 'date-fns/locale'; 
 import { useRequierePerfilCompleto } from "../../hooks/useRequirePerfilCompleto.js";
+import { escapeHtml } from "../../utils/escapeHtml";
 
 registerLocale("es", es); 
 
@@ -100,7 +101,7 @@ function ReservarEspacioD() {
             title: '¿Confirmar reserva?',
             html: `
                 <div style="text-align: left; padding: 0 1rem;">
-                    <p><strong>Espacio:</strong> ${text}</p>
+                    <p><strong>Espacio:</strong> ${escapeHtml(text)}</p>
                     <p><strong>Entrada:</strong> ${new Date(formData.fInicioReserva).toLocaleString()}</p>
                     <p><strong>Salida:</strong> ${new Date(formData.fFinReserva).toLocaleString()}</p>
                 </div>

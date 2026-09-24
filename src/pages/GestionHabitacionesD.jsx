@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Table, Badge, Spinner, Container, Modal, Form, Row, Col, Button } from "react-bootstrap";
-import { listarHabitaciones, actualizarHabitacion, eliminarHabitacion, listarTiposHabitacion } from "../api/habitacionApi";
+import { listarHabitaciones, actualizarHabitacion, eliminarHabitacion, listarTiposHabitacion } from "../api/HabitacionApi";
 import Swal from "sweetalert2";
+import { escapeHtml } from "../utils/escapeHtml";
 
 const ESTADOS = ["disponible", "ocupada", "mantenimiento"];
 
@@ -109,7 +110,7 @@ export default function GestionHabitacionesD() {
         const resultado = await Swal.fire({
             title: '¿Eliminar habitación?',
             html: `
-                <p>La habitación <strong>${numero}</strong> será eliminada permanentemente.</p>
+                <p>La habitación <strong>${escapeHtml(numero)}</strong> será eliminada permanentemente.</p>
                 <p style="color:#e53e3e;margin-top:8px;font-size:0.9rem">
                     Esta acción no se puede deshacer.
                 </p>

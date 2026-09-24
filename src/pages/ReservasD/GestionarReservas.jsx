@@ -5,6 +5,7 @@ import { listarReservasDeporte, cancelarReservaDeporte } from "../../api/Reserva
 import "../../styles/ReservasD/GestionarReservas.css";
 import "../../styles/BotonesCompartidos.css";
 import Swal from "sweetalert2";
+import { escapeHtml } from "../../utils/escapeHtml";
 
 const TAMANIO_PAGINA = 8;
 
@@ -51,7 +52,7 @@ function GestionarReservas() {
   const handleCancelar = async (id, cancha) => {
     const resultado = await Swal.fire({
       title: "¿Cancelar reserva?",
-      html: `<p>La reserva de <strong>${cancha}</strong> será cancelada.</p>`,
+      html: `<p>La reserva de <strong>${escapeHtml(cancha)}</strong> será cancelada.</p>`,
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Sí, cancelar",

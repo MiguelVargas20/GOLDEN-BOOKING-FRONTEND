@@ -4,6 +4,7 @@ import { listarMisReservasHotel, cancelarReservaHotel } from "../api/ReservaHote
 import Swal from "sweetalert2";
 import { Spinner } from "react-bootstrap";
 import LoadingSpinner from "../components/LoadingSpinner";
+import { escapeHtml } from "../utils/escapeHtml";
 
 
 export default function MisReservasHotel() {
@@ -26,7 +27,7 @@ const obtenerReservas = async () => {
     const handleCancelar = async (id, numeroHab) => {
         const resultado = await Swal.fire({
             title: "¿Cancelar reserva?",
-            html: `<p>La reserva de la habitación <strong>${numeroHab}</strong> será cancelada.</p>`,
+            html: `<p>La reserva de la habitación <strong>${escapeHtml(numeroHab)}</strong> será cancelada.</p>`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonText: "Sí, cancelar",

@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { loginSchema } from "../schemas/loginschema";
+import { loginSchema } from "../schemas/LoginSchema";
 import { useAuth } from "../context/AuthContext";
 
 export default function Login() {

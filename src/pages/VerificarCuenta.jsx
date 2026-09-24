@@ -23,7 +23,7 @@ export default function VerificarCuenta() {
 
             try {
                 const respuesta = await fetch(
-                    `http://localhost:8080/auth/verificar-cuenta?token=${token}`,
+                    `${import.meta.env.VITE_API_URL}/auth/verificar-cuenta?token=${encodeURIComponent(token)}`,
                     { method: "GET" }
                 );
 

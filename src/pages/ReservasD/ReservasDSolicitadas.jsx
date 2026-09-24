@@ -3,6 +3,7 @@ import { useAuth } from '../../context/AuthContext';
 import { listarMisReservasDeporte, cancelarReservaDeporte } from '../../api/ReservaDeporteApi';
 import '../../styles/ReservasD/MisReservas.css';
 import Swal from 'sweetalert2';
+import { escapeHtml } from "../../utils/escapeHtml";
 
 function ReservasDSolicitadas() {
     const { user } = useAuth();
@@ -31,7 +32,7 @@ function ReservasDSolicitadas() {
     const resultado = await Swal.fire({
         title: '¿Cancelar reserva?',
         html: `
-            <p><strong>Cancha:</strong> ${cancha}</p>
+            <p><strong>Cancha:</strong> ${escapeHtml(cancha)}</p>
             <p><strong>Fecha:</strong> ${new Date(fechaInicio).toLocaleString()}</p>
             <p style="color:#e53e3e;margin-top:8px">Esta acción no se puede deshacer.</p>
         `,

@@ -13,6 +13,7 @@ import "../styles/DatePickerCompartido.css";
 import { es } from "date-fns/locale";
 import "../styles/DetalleHabitacion.css";
 import { useRequierePerfilCompleto } from "../hooks/useRequirePerfilCompleto";
+import { escapeHtml } from "../utils/escapeHtml";
 
 registerLocale("es", es);
 
@@ -102,7 +103,7 @@ export default function DetalleHabitacion() {
             title: "¿Confirmar reserva?",
             html: `
                 <div style="text-align:left;padding:0 1rem">
-                    <p><strong>Habitación:</strong> ${habitacion.numeroHabitacion}</p>
+                    <p><strong>Habitación:</strong> ${escapeHtml(habitacion.numeroHabitacion)}</p>
                     <p><strong>Check-in:</strong> ${new Date(checkIn).toLocaleDateString()}</p>
                     <p><strong>Check-out:</strong> ${new Date(checkOut).toLocaleDateString()}</p>
                     <p><strong>Noches:</strong> ${noches}</p>
