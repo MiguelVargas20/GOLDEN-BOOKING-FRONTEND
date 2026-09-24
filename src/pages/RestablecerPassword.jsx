@@ -25,8 +25,9 @@ export default function RestablecerPassword() {
             setError("El enlace no es válido. Solicita uno nuevo.");
             return;
         }
-        if (nuevaPassword.length < 6) {
-            setError("La contraseña debe tener mínimo 6 caracteres");
+        // Mismo mínimo que el registro y que valida el backend (8).
+        if (nuevaPassword.length < 8) {
+            setError("La contraseña debe tener mínimo 8 caracteres");
             return;
         }
         if (nuevaPassword !== confirmar) {
