@@ -5,7 +5,7 @@ import { BiCalendarAlt, BiGroup, BiMoney } from "react-icons/bi";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
-import { listarHabitaciones } from "../api/HabitacionApi";
+import { listarTodasLasHabitaciones } from "../api/HabitacionApi";
 import { crearReservaHotel, obtenerFechasOcupadas } from "../api/ReservaHotelApi"; // 🆕 obtenerFechasOcupadas
 import { haySolapamiento, toLocalDateString } from "../utils/fechasHotel"; // 🆕
 import { useAuth } from "../../../shared/context/AuthContext";
@@ -46,12 +46,8 @@ export default function ReservasH() {
         const cargar = async () => {
             setLoading(true);
             try {
-                const data = await listarHabitaciones();
-
-                let listaValida = [];
-                if (Array.isArray(data)) listaValida = data;
-                else if (data && Array.isArray(data.content)) listaValida = data.content;
-                else if (data && Array.isArray(data.contenido)) listaValida = data.contenido;
+                // Trae TODAS las habitaciones (antes solo llegaban las primeras 10)
+                const listaValida = await listarTodasLasHabitaciones();
 
                 setHabitaciones(listaValida);
 

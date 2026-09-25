@@ -11,16 +11,41 @@ const API_URL = import.meta.env.VITE_API_URL;
 // ═══════════════════════════════════════════════════════════
 
 /**
- * Obtiene la lista completa de habitaciones (Sin paginación para evitar errores con .map()).
- * @returns {Promise<Array>} Lista de habitaciones.
+ * Obtiene UNA página de habitaciones.
+ *
+ * Antes esta función no recibía parámetros: la gestión de habitaciones le
+ * pasaba (pagina, tamaño) pero se ignoraban, así que el backend siempre
+ * devolvía la página 0 con 10 elementos y los botones de paginación del
+ * admin no hacían nada.
+ *
+ * @param {number} page - Número de página (empieza en 0).
+ * @param {number} size - Elementos por página (el backend acepta máximo 100).
+ * @returns {Promise<{contenido: Array, paginaActual: number, totalPaginas: number, totalElementos: number}>}
  */
-export const listarHabitaciones = async () => {
-  const res = await fetch(`${API_URL}/api/habitaciones`, {
+export const listarHabitaciones = async (page = 0, size = 10) => {
+  const res = await fetch(`${API_URL}/api/habitaciones?page=${page}&size=${size}`, {
     headers: authHeaders(),
   });
   const data = await res.json();
-  if (!res.ok) throw new Error("Error al cargar habitaciones");
+  if (!res.ok) throw new Error(data.error || "Error al cargar habitaciones");
   return data;
+};
+
+/**
+ * Obtiene TODAS las habitaciones recorriendo las páginas del backend.
+ * La usa el catálogo de clientes: antes llamaba a listarHabitaciones() sin
+ * parámetros y solo mostraba las primeras 10 habitaciones.
+ * @returns {Promise<Array>} Lista completa de habitaciones.
+ */
+export const listarTodasLasHabitaciones = async () => {
+  const TAMANIO = 100; // máximo que acepta el backend por página
+  const primera = await listarHabitaciones(0, TAMANIO);
+  let todas = [...(primera.contenido || [])];
+  for (let pagina = 1; pagina < (primera.totalPaginas || 1); pagina++) {
+    const siguiente = await listarHabitaciones(pagina, TAMANIO);
+    todas = todas.concat(siguiente.contenido || []);
+  }
+  return todas;
 };
 
 /**
