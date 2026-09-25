@@ -26,4 +26,12 @@ export default defineConfig([
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
     },
   },
+  // Tests e2e de Cypress: sin esto ESLint marcaba cy, Cypress, describe e it
+  // como "no definidos" (más de 100 errores falsos).
+  {
+    files: ['cypress/**/*.js'],
+    languageOptions: {
+      globals: { ...globals.browser, ...globals.mocha, cy: 'readonly', Cypress: 'readonly' },
+    },
+  },
 ])

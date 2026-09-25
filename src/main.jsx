@@ -6,12 +6,12 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 // 2. Tus estilos globales después (para que puedan sobrescribir a Bootstrap)
 import './index.css';
-import './styles/theme.css';
+import './shared/styles/theme.css';
 
-import './styles/dark-mode-overrides.css';   // ← nuevo, va último
+import './shared/styles/dark-mode-overrides.css';   // ← nuevo, va último
 
 import App from './App.jsx';
-import { AuthProvider } from './context/AuthContext.jsx';
+import { AuthProvider } from './shared/context/AuthContext.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

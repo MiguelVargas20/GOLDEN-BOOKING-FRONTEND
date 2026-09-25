@@ -2,55 +2,53 @@
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
 
 // 2. CONTEXTOS Y COMPONENTES DE CONTROL
-import { ThemeProvider } from './context/Themecontext';
-import Layout from './layout/layout.jsx';
-import RutaProtegida from './components/RutaProteccion.jsx';
+import { ThemeProvider } from './shared/context/ThemeContext';
+import Layout from './shared/layout/Layout.jsx';
+import RutaProtegida from './shared/components/RutaProteccion.jsx';
 
 // 3. VISTAS / PÁGINAS DEL SISTEMA
 
 // Módulo: Autenticación (Públicas)
-import Login from './pages/Login.jsx';
-import Register from './pages/Register.jsx';
-import Forgot from './pages/Forgot.jsx';
+import Login from './modules/auth/pages/Login.jsx';
+import Register from './modules/auth/pages/Register.jsx';
+import Forgot from './modules/auth/pages/Forgot.jsx';
 
 // Módulo: General / Dashboard (Privadas)
-import Home from './pages/Home.jsx';
-import Contactos from './pages/Contactos.jsx';
+import Home from './modules/home/pages/Home.jsx';
+import Contactos from './modules/mensajes/pages/Contactos.jsx';
 
 // Módulo: Reservas Deportivas (Clientes / Admin)
-import ReservasD from './pages/ReservasD/ReservasD.jsx';
-import ReservasDCatalogo from './pages/ReservasD/ReservasDCatalogo.jsx';
-import ReservarEspacioD from './pages/ReservasD/ReservarEspacioD.jsx';
-import ReservasDSolicitadas from './pages/ReservasD/ReservasDSolicitadas.jsx';
-import GestionarReservas from './pages/ReservasD/GestionarReservas.jsx';
-import Crear from './components/Crear.jsx';
-import Editar from './components/Editar.jsx';
+import ReservasD from './modules/reservasDeportivas/pages/ReservasD.jsx';
+import ReservasDCatalogo from './modules/reservasDeportivas/pages/ReservasDCatalogo.jsx';
+import ReservarEspacioD from './modules/reservasDeportivas/pages/ReservarEspacioD.jsx';
+import ReservasDSolicitadas from './modules/reservasDeportivas/pages/ReservasDSolicitadas.jsx';
+import GestionarReservas from './modules/reservasDeportivas/pages/GestionarReservas.jsx';
 
 // Módulo: Hospedaje / Habitaciones (Clientes / Admin)
-import ReservasH from './pages/ReservasH.jsx';
-import HabitacionD from './pages/HabitacionD.jsx';
-import TipoHabitacionD from './pages/TipoHabitacionD.jsx';
-import GestionHabitacionesD from './pages/GestionHabitacionesD.jsx';
-import DetalleHabitacion from "./pages/DetalleHabitacion";
-import MisReservasHotel from './pages/MisReservasHotel.jsx';
+import ReservasH from './modules/reservasHoteleras/pages/ReservasH.jsx';
+import HabitacionD from './modules/reservasHoteleras/pages/HabitacionD.jsx';
+import TipoHabitacionD from './modules/reservasHoteleras/pages/TipoHabitacionD.jsx';
+import GestionHabitacionesD from './modules/reservasHoteleras/pages/GestionHabitacionesD.jsx';
+import DetalleHabitacion from "./modules/reservasHoteleras/pages/DetalleHabitacion";
+import MisReservasHotel from './modules/reservasHoteleras/pages/MisReservasHotel.jsx';
 
 // Módulo: Gestión de Usuarios (Exclusivo ADMIN)
-import UsuariosH from './pages/UsuariosH.jsx';
-import UsuariosE from './pages/UsuariosE.jsx';
-import UsuariosC from './pages/UsuariosC.jsx';
-import MiPerfil from './pages/MiPerfil.jsx';
+import UsuariosH from './modules/usuarios/pages/UsuariosH.jsx';
+import UsuariosE from './modules/usuarios/pages/UsuariosE.jsx';
+import UsuariosC from './modules/usuarios/pages/UsuariosC.jsx';
+import MiPerfil from './modules/usuarios/pages/MiPerfil.jsx';
 
 // Módulo: Mensajes (Exclusivo ADMIN)
-import  AdminMensajes  from "./components/AdminMensajes.jsx";
+import  AdminMensajes  from "./modules/mensajes/pages/AdminMensajes.jsx";
 
 // Módulo: Mensajes (Usuario normal — ve sus propios mensajes y respuestas del admin)
-import MisMensajes from './pages/MisMensajes.jsx';
+import MisMensajes from './modules/mensajes/pages/MisMensajes.jsx';
 
 // Módulo: Verificación de cuenta (Público)
-import VerificarCuenta from './pages/VerificarCuenta.jsx';
+import VerificarCuenta from './modules/auth/pages/VerificarCuenta.jsx';
 
 // Módulo: Restablecimiento de contraseña (Público)
-import RestablecerPassword from './pages/RestablecerPassword.jsx';
+import RestablecerPassword from './modules/auth/pages/RestablecerPassword.jsx';
 
 
 /**
@@ -124,16 +122,10 @@ export default function App() {
                             <Route path="gestionar" element={
                                 <RutaProtegida soloAdmin={true}><GestionarReservas /></RutaProtegida>
                             } />
-                            
-                            {/* Formulario de creación de nuevos espacios/canchas */}
-                            <Route path="crear" element={
-                                <RutaProtegida soloAdmin={true}><Crear /></RutaProtegida>
-                            } />
-                            
-                            {/* Formulario de modificación de parámetros de espacios deportivos */}
-                            <Route path="editar" element={
-                                <RutaProtegida soloAdmin={true}><Editar /></RutaProtegida>
-                            } />
+
+                            {/* Se quitaron las rutas "crear" y "editar": eran formularios de
+                                maqueta sin ninguna lógica (no guardaban nada) y ninguna pantalla
+                                navegaba hacia ellos. */}
                         </Route>
 
                         {/* -----------------------------------------------------
@@ -145,11 +137,14 @@ export default function App() {
                         {/* Panel principal de reservas del restaurante de la sede */}
                         <Route path="/reservas-restaurante" element={<ReservasD />} />
 
-                        {/* Vista general o detalle técnico de habitaciones */}
-                        <Route path="/habitacionD" element={<HabitacionD />} />
-                        
-                        {/* Configuración y listado de tipos de habitación (Deluxe, Suite, etc.) */}
-                        <Route path="/tipo-habitacion" element={<TipoHabitacionD />} />
+                        {/* Se quitó "/habitacionD": era la misma pantalla de "/crear-habitacion"
+                            pero SIN protección de admin, y ninguna pantalla la enlazaba. */}
+
+                        {/* Configuración y listado de tipos de habitación (Deluxe, Suite, etc.).
+                            Solo ADMIN: crea/edita/elimina tipos (el backend ya lo exigía). */}
+                        <Route path="/tipo-habitacion" element={
+                            <RutaProtegida soloAdmin={true}><TipoHabitacionD /></RutaProtegida>
+                        } />
                         
                         {/* Panel de administración de habitaciones (Disponibilidad, Precios, Estados) */}
                         <Route path="/detalle/:id" element={<DetalleHabitacion />} />
