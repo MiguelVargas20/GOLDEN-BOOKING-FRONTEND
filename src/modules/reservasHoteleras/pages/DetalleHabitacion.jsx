@@ -100,7 +100,7 @@ export default function DetalleHabitacion() {
         const { noches, total } = calcularNochesYTotal();
 
         const confirmacion = await Swal.fire({
-            title: "¿Confirmar reserva?",
+            title: "¿Enviar solicitud de reserva?",
             html: `
                 <div style="text-align:left;padding:0 1rem">
                     <p><strong>Habitación:</strong> ${escapeHtml(habitacion.numeroHabitacion)}</p>
@@ -113,7 +113,7 @@ export default function DetalleHabitacion() {
             `,
             icon: "question",
             showCancelButton: true,
-            confirmButtonText: "Sí, reservar",
+            confirmButtonText: "Sí, enviar solicitud",
             cancelButtonText: "Revisar",
             confirmButtonColor: "#f38d1e",
             cancelButtonColor: "#6c757d",
@@ -129,11 +129,11 @@ export default function DetalleHabitacion() {
                 fCheckOut: new Date(checkOut).toISOString(),
             });
             await Swal.fire({
-                title: "¡Reserva confirmada!",
-                text: `Tu reserva para la habitación ${habitacion.numeroHabitacion} fue creada exitosamente.`,
+                // La reserva queda PENDIENTE hasta que el admin la apruebe
+                title: "¡Solicitud enviada!",
+                text: `Tu reserva de la habitación ${habitacion.numeroHabitacion} quedó pendiente de aprobación. Te avisaremos por correo cuando sea confirmada.`,
                 icon: "success",
-                timer: 2500,
-                showConfirmButton: false,
+                confirmButtonColor: "#f38d1e",
             });
             navigate("/mis-reservas-hotel");
         } catch (err) {

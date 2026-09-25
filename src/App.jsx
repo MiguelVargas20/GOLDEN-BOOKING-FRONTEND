@@ -23,6 +23,7 @@ import ReservasDCatalogo from './modules/reservasDeportivas/pages/ReservasDCatal
 import ReservarEspacioD from './modules/reservasDeportivas/pages/ReservarEspacioD.jsx';
 import ReservasDSolicitadas from './modules/reservasDeportivas/pages/ReservasDSolicitadas.jsx';
 import GestionarReservas from './modules/reservasDeportivas/pages/GestionarReservas.jsx';
+import GestionEspacios from './modules/reservasDeportivas/pages/GestionEspacios.jsx';
 
 // Módulo: Hospedaje / Habitaciones (Clientes / Admin)
 import ReservasH from './modules/reservasHoteleras/pages/ReservasH.jsx';
@@ -31,6 +32,7 @@ import TipoHabitacionD from './modules/reservasHoteleras/pages/TipoHabitacionD.j
 import GestionHabitacionesD from './modules/reservasHoteleras/pages/GestionHabitacionesD.jsx';
 import DetalleHabitacion from "./modules/reservasHoteleras/pages/DetalleHabitacion";
 import MisReservasHotel from './modules/reservasHoteleras/pages/MisReservasHotel.jsx';
+import GestionarReservasHotel from './modules/reservasHoteleras/pages/GestionarReservasHotel.jsx';
 
 // Módulo: Gestión de Usuarios (Exclusivo ADMIN)
 import UsuariosH from './modules/usuarios/pages/UsuariosH.jsx';
@@ -123,19 +125,24 @@ export default function App() {
                                 <RutaProtegida soloAdmin={true}><GestionarReservas /></RutaProtegida>
                             } />
 
+                            {/* Administración de espacios deportivos (crear, editar, imagen, estado) */}
+                            <Route path="espacios" element={
+                                <RutaProtegida soloAdmin={true}><GestionEspacios /></RutaProtegida>
+                            } />
+
                             {/* Se quitaron las rutas "crear" y "editar": eran formularios de
                                 maqueta sin ninguna lógica (no guardaban nada) y ninguna pantalla
                                 navegaba hacia ellos. */}
                         </Route>
 
                         {/* -----------------------------------------------------
-                            SUB-SISTEMA: HOSPEDAJE Y RESTAURANTE
+                            SUB-SISTEMA: HOSPEDAJE
                             ----------------------------------------------------- */}
                         {/* Panel principal de reservas hoteleras para clientes */}
                         <Route path="/reservas-hospedaje" element={<ReservasH />} />
                         
-                        {/* Panel principal de reservas del restaurante de la sede */}
-                        <Route path="/reservas-restaurante" element={<ReservasD />} />
+                        {/* Se quitó "/reservas-restaurante": mostraba la página de reservas
+                            deportivas (el módulo de restaurante no existe todavía). */}
 
                         {/* Se quitó "/habitacionD": era la misma pantalla de "/crear-habitacion"
                             pero SIN protección de admin, y ninguna pantalla la enlazaba. */}
@@ -151,6 +158,11 @@ export default function App() {
 
                         {/* Panel de administración de habitaciones (Disponibilidad, Precios, Estados) */}
                         <Route path="/mis-reservas-hotel" element={<MisReservasHotel />} />
+
+                        {/* Gestión de reservas hoteleras: aprobar / cancelar con motivo */}
+                        <Route path="/reservas-hoteleras/gestionar" element={
+                            <RutaProtegida soloAdmin={true}><GestionarReservasHotel /></RutaProtegida>
+                        } />
 
                         {/* =========================================================
                             RUTAS PROTEGIDAS CON PRIVILEGIOS DE ADMINISTRADOR

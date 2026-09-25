@@ -27,13 +27,40 @@ export const crearReservaHotel = async (reserva) => {
 /**
  * Cancela una reserva de hotel existente mediante su ID (PATCH).
  */
-export const cancelarReservaHotel = async (id) => {
+export const cancelarReservaHotel = async (id, motivo = null) => {
   const res = await apiFetch(`${API_URL}/api/reservas/hotel/${id}/cancelar`, {
     method: "PATCH",
     headers: authHeaders(),
+    body: JSON.stringify({ motivo }),
   });
   if (!res.ok) throw new Error(await extraerMensajeError(res, "Error al cancelar reserva"));
   return true;
+};
+
+/**
+ * Listar todas las reservas de hotel (ADMIN), paginado y opcionalmente
+ * filtrado por estado. Cada reserva trae nombreCliente y correoCliente.
+ */
+export const listarReservasHotelAdmin = async (page = 0, size = 10, estado = null) => {
+  const params = new URLSearchParams({ page, size });
+  if (estado) params.append("estado", estado);
+  const res = await apiFetch(`${API_URL}/api/reservas/hotel?${params}`, { headers: authHeaders() });
+  if (!res.ok) throw new Error(await extraerMensajeError(res, "No se pudieron cargar las reservas"));
+  return res.json();
+};
+
+/** Cantidad de reservas por estado (ADMIN). */
+export const obtenerResumenHotel = async () => {
+  const res = await apiFetch(`${API_URL}/api/reservas/hotel/resumen`, { headers: authHeaders() });
+  if (!res.ok) throw new Error(await extraerMensajeError(res, "No se pudo cargar el resumen"));
+  return res.json();
+};
+
+/** Aprobar reserva PENDIENTE (ADMIN). El cliente recibe un correo de confirmación. */
+export const confirmarReservaHotel = async (id) => {
+  const res = await apiFetch(`${API_URL}/api/reservas/hotel/${id}/confirmar`, { method: "PATCH", headers: authHeaders() });
+  if (!res.ok) throw new Error(await extraerMensajeError(res, "No se pudo aprobar la reserva"));
+  return res.json();
 };
 
 /**

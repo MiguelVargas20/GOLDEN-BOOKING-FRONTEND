@@ -150,7 +150,7 @@ export default function ReservasH() {
         const { noches, total } = calcularNochesYTotal(hab);
 
         const confirmacion = await Swal.fire({
-            title: "¿Confirmar reserva?",
+            title: "¿Enviar solicitud de reserva?",
             html: `
                 <div style="text-align:left;padding:0 1rem; font-family: 'Poppins', sans-serif;">
                     <p><strong>Habitación:</strong> ${escapeHtml(hab.numeroHabitacion)}</p>
@@ -163,7 +163,7 @@ export default function ReservasH() {
             `,
             icon: "question",
             showCancelButton: true,
-            confirmButtonText: "Sí, reservar",
+            confirmButtonText: "Sí, enviar solicitud",
             cancelButtonText: "Revisar",
             confirmButtonColor: "#f38d1e",
             cancelButtonColor: "#6c757d",
@@ -181,11 +181,11 @@ export default function ReservasH() {
             };
             await crearReservaHotel(body);
             await Swal.fire({
-                title: "¡Reserva confirmada!",
-                text: `Tu reserva para la habitación ${hab.numeroHabitacion} fue creada exitosamente.`,
+                // La reserva queda PENDIENTE hasta que el admin la apruebe
+                title: "¡Solicitud enviada!",
+                text: `Tu reserva de la habitación ${hab.numeroHabitacion} quedó pendiente de aprobación. Te avisaremos por correo cuando sea confirmada.`,
                 icon: "success",
-                timer: 2500,
-                showConfirmButton: false,
+                confirmButtonColor: "#f38d1e",
             });
 
             // 🆕 Refrescamos las fechas ocupadas de ESTA habitación, para que

@@ -17,6 +17,12 @@ export const authHeaders = () => ({
   Authorization: `Bearer ${getToken()}`,
 });
 
+// Solo el token, sin Content-Type: para subir archivos con FormData el
+// navegador debe poner él mismo "multipart/form-data; boundary=...".
+export const authHeaderToken = () => ({
+  Authorization: `Bearer ${getToken()}`,
+});
+
 // ── Sesión invalidada por el backend ─────────────────────────
 // El backend responde 401 con uno de estos códigos cuando el token ya no
 // sirve: la cuenta fue desactivada/eliminada por el admin, la sesión expiró o

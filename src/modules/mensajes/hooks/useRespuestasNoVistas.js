@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { contarRespuestasNoVistas } from "../api/ContactoApi";
 import { useAuth } from "../../../shared/context/AuthContext";
 
@@ -12,23 +12,27 @@ const INTERVALO_POLLING_MS = 30000; // Revisa cada 30s si hay respuestas nuevas
  */
 export function useRespuestasNoVistas() {
   const { isAdmin, isAuthenticated } = useAuth();
+  // Booleano en vez de las funciones del contexto (ver useMensajesNoLeidos)
+  const esCliente = isAuthenticated() && !isAdmin();
   const [noVistas, setNoVistas] = useState(0);
 
-  const consultar = useCallback(async () => {
-    if (!isAuthenticated() || isAdmin()) return;
-    try {
-      const data = await contarRespuestasNoVistas();
-      setNoVistas(data.noVistas ?? 0);
-    } catch (err) {
-      console.error("No se pudo consultar respuestas no vistas:", err);
-    }
-  }, [isAdmin, isAuthenticated]);
-
   useEffect(() => {
+    if (!esCliente) return undefined;
+    let activo = true;
+
+    const consultar = async () => {
+      try {
+        const data = await contarRespuestasNoVistas();
+        if (activo) setNoVistas(data.noVistas ?? 0);
+      } catch (err) {
+        console.error("No se pudo consultar respuestas no vistas:", err);
+      }
+    };
+
     consultar();
     const intervalo = setInterval(consultar, INTERVALO_POLLING_MS);
-    return () => clearInterval(intervalo);
-  }, [consultar]);
+    return () => { activo = false; clearInterval(intervalo); };
+  }, [esCliente]);
 
-  return noVistas;
+  return esCliente ? noVistas : 0;
 }

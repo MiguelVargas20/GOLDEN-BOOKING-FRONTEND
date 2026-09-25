@@ -1,0 +1,206 @@
+/* ===========================================================
+   PANEL ADMIN — estilos compartidos por las pantallas de
+   administración (reservas de hotel y deporte, espacios).
+   Usa las variables de theme.css, así funciona en modo oscuro.
+   =========================================================== */
+
+.gb-panel {
+  padding: 28px clamp(16px, 4vw, 40px) 48px;
+  min-height: 100vh;
+  color: var(--gb-text-primary);
+}
+
+.gb-panel-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.gb-panel-titulo {
+  font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin: 0;
+  color: var(--gb-item-title);
+}
+
+.gb-panel-titulo span { color: var(--gb-primary); }
+
+.gb-panel-subtitulo {
+  margin: 4px 0 0;
+  color: var(--gb-text-muted);
+  font-size: 0.92rem;
+}
+
+.gb-panel-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.gb-buscador {
+  border-radius: 999px;
+  border: 1px solid var(--gb-border);
+  background: var(--gb-surface);
+  color: var(--gb-text-primary);
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  min-width: 240px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.gb-buscador:focus {
+  outline: none;
+  border-color: var(--gb-primary);
+  box-shadow: 0 0 0 3px rgba(243, 141, 30, 0.15);
+}
+
+/* ── Tarjetas de indicadores (KPIs) ─────────────────────────── */
+.gb-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.gb-kpi {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  column-gap: 12px;
+  align-items: center;
+  text-align: left;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--gb-border);
+  background: var(--gb-surface);
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+}
+
+.gb-kpi:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06); }
+.gb-kpi.activa { border-color: var(--gb-primary); box-shadow: 0 0 0 2px rgba(243, 141, 30, 0.25); }
+
+.gb-kpi-icono {
+  grid-row: span 2;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  font-size: 1.2rem;
+}
+
+.gb-kpi-valor { font-size: 1.5rem; font-weight: 800; color: var(--gb-item-title); line-height: 1.1; }
+.gb-kpi-titulo { font-size: 0.8rem; color: var(--gb-text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; }
+
+.gb-kpi-todas .gb-kpi-icono      { background: var(--gb-icon-bg); color: var(--gb-primary); }
+.gb-kpi-pendiente .gb-kpi-icono  { background: var(--gb-status-warning-bg); color: var(--gb-status-warning-text); }
+.gb-kpi-confirmada .gb-kpi-icono { background: var(--gb-status-success-bg); color: var(--gb-status-success-text); }
+.gb-kpi-cancelada .gb-kpi-icono  { background: var(--gb-status-danger-bg); color: var(--gb-status-danger-text); }
+.gb-kpi-finalizada .gb-kpi-icono { background: var(--gb-surface-hover); color: var(--gb-text-muted); }
+
+/* ── Tabla ─────────────────────────────────────────────────── */
+.gb-tabla-contenedor {
+  border: 1px solid var(--gb-border);
+  border-radius: 14px;
+  overflow-x: auto;
+  background: var(--gb-surface);
+}
+
+.gb-tabla {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  min-width: 860px;
+}
+
+.gb-tabla thead th {
+  text-align: left;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--gb-text-muted);
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--gb-border);
+  background: var(--gb-surface-hover);
+  white-space: nowrap;
+}
+
+.gb-tabla tbody td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--gb-border);
+  vertical-align: middle;
+  color: var(--gb-text-primary);
+}
+
+.gb-tabla tbody tr:last-child td { border-bottom: none; }
+.gb-tabla tbody tr:hover { background: var(--gb-surface-hover); }
+
+.gb-celda-principal { font-weight: 700; color: var(--gb-item-title); }
+.gb-celda-secundaria { display: block; font-size: 0.78rem; color: var(--gb-text-muted); }
+.gb-celda-motivo { display: block; font-size: 0.75rem; color: var(--gb-status-danger-text); margin-top: 4px; max-width: 260px; }
+
+.gb-tabla-vacia { text-align: center; padding: 40px 12px !important; color: var(--gb-text-muted); }
+
+.gb-acciones-fila { display: flex; gap: 6px; flex-wrap: wrap; }
+
+.gb-btn-aprobar {
+  background: #38a169;
+  color: #fff;
+}
+.gb-btn-aprobar:hover:not(:disabled) { background: #2f855a; }
+
+/* ── Estado (badge) ────────────────────────────────────────── */
+.gb-estado {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.gb-estado-pendiente  { background: var(--gb-status-warning-bg); color: var(--gb-status-warning-text); }
+.gb-estado-confirmada { background: var(--gb-status-success-bg); color: var(--gb-status-success-text); }
+.gb-estado-cancelada  { background: var(--gb-status-danger-bg); color: var(--gb-status-danger-text); }
+.gb-estado-finalizada { background: var(--gb-surface-hover); color: var(--gb-text-muted); border: 1px solid var(--gb-border); }
+
+/* ── Paginador ─────────────────────────────────────────────── */
+.gb-paginador {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+}
+.gb-paginador-info { font-size: 0.85rem; color: var(--gb-text-muted); margin: 12px 0 0; }
+.gb-paginador .gb-paginador-info { margin: 0; }
+.gb-paginador-botones { display: flex; flex-wrap: wrap; gap: 6px; }
+.gb-paginador-botones button {
+  border: 1px solid var(--gb-border);
+  background: var(--gb-surface);
+  color: var(--gb-text-primary);
+  border-radius: 8px;
+  padding: 4px 10px;
+  font-size: 0.85rem;
+}
+.gb-paginador-botones button.activa { background: var(--gb-primary); border-color: var(--gb-primary); color: #fff; font-weight: 700; }
+.gb-paginador-botones button:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* ── Detalle dentro de SweetAlert ──────────────────────────── */
+.gb-swal-detalle { text-align: left; display: grid; gap: 6px; margin: 4px 0 8px; }
+.gb-swal-detalle div { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px dashed #e2e8f0; padding-bottom: 4px; }
+.gb-swal-detalle span { color: #718096; }
+.gb-swal-nota { font-size: 0.85rem; color: #718096; margin-top: 10px; }
+
+@media (max-width: 576px) {
+  .gb-buscador { min-width: 0; width: 100%; }
+  .gb-panel-acciones { width: 100%; }
+}

@@ -5,97 +5,75 @@ import { obtenerFechasOcupadasDeporte } from "../api/ReservaDeporteApi";
 
 const WS_URL = import.meta.env.VITE_API_URL;
 
+/**
+ * Horarios ocupados de los espacios deportivos, en vivo.
+ *
+ * - Carga inicial: GET /api/reservas/deporte/ocupadas (reservas no canceladas
+ *   que aún no terminan).
+ * - En vivo: WebSocket /topic/reservas-deporte avisa cuando alguien reserva
+ *   ("OCUPADO") o cancela ("DISPONIBLE").
+ *
+ * Cada horario ocupado es { espacioId, inicio: Date, fin: Date }.
+ * Antes se comparaba la hora de inicio como TEXTO exacto ("10:00" vs
+ * "10:00:00" no coincidían) y por nombre de cancha: una reserva de 10 a 12 no
+ * bloqueaba un intento de 11 a 13. Ahora se detecta cualquier cruce de rangos
+ * y por el id real del espacio.
+ */
 export function useReservasDeporte() {
-    const [espaciosOcupados, setEspaciosOcupados] = useState([]);
-    const [conectado, setConectado]               = useState(false);
-    const clientRef                               = useRef(null);
+  const [ocupados, setOcupados] = useState([]);
+  const [conectado, setConectado] = useState(false);
+  const clientRef = useRef(null);
 
-    // ── Carga inicial de reservas existentes (Memorizada con useCallback) ──
-    // FIX: antes llamaba a listarReservasDeporte() (GET /api/reservas/deporte),
-    // que en el backend es admin-only. Para un CLIENTE normal esa llamada
-    // devolvía 403, el catch de abajo se tragaba el error, y el calendario
-    // de disponibilidad arrancaba siempre vacío: el cliente solo se enteraba
-    // de un conflicto si otra persona reservaba mientras tenía la página
-    // abierta (vía WebSocket), nunca de las reservas que ya existían antes.
-    // Ahora usa GET /api/reservas/deporte/ocupadas, accesible para ADMIN o
-    // CLIENTE y sin datos del dueño, que además ya viene en el formato que
-    // este hook necesita (sin adivinar la forma de la respuesta).
-    const cargarReservasExistentes = useCallback(async () => {
-        try {
-            const ocupadas = await obtenerFechasOcupadasDeporte();
+  const cargarOcupados = useCallback(async () => {
+    try {
+      const lista = await obtenerFechasOcupadasDeporte();
+      setOcupados(lista.map((r) => ({ espacioId: r.espacioId, inicio: new Date(r.inicio), fin: new Date(r.fin) })));
+    } catch (err) {
+      console.warn("No se pudieron cargar los horarios ocupados:", err.message);
+    }
+  }, []);
 
-            const ocupados = ocupadas.map(r => ({
-                espacioId:  r.tipoCancha,
-                fecha:      r.inicio?.split('T')[0],
-                horaInicio: r.inicio,
-                horaFin:    r.fin,
-                estado:     "OCUPADO",
-                mensaje:    `La cancha ${r.tipoCancha} ya está reservada.`
-            }));
+  useEffect(() => {
+    const client = new Client({
+      webSocketFactory: () => new SockJS(`${WS_URL}/ws`),
+      reconnectDelay: 5000,
+      onConnect: () => {
+        setConectado(true);
+        cargarOcupados();
+        client.subscribe("/topic/reservas-deporte", (message) => {
+          const evento = JSON.parse(message.body);
+          const rango = { espacioId: evento.espacioId, inicio: new Date(evento.horaInicio), fin: new Date(evento.horaFin) };
+          const mismo = (o) => o.espacioId === rango.espacioId && o.inicio.getTime() === rango.inicio.getTime();
 
-            setEspaciosOcupados(ocupados);
-        } catch (err) {
-            console.warn("No se pudieron cargar reservas existentes:", err.message);
-        }
-    }, []);
-
-    // ── Manejo de WebSockets ───────────────────────────────────
-    useEffect(() => {
-        const client = new Client({
-            webSocketFactory: () => new SockJS(`${WS_URL}/ws`),
-            reconnectDelay: 5000,
-
-            onConnect: () => {
-                setConectado(true);
-
-                // Llamamos de forma segura a la carga inicial
-                cargarReservasExistentes();
-
-                client.subscribe("/topic/reservas-deporte", (message) => {
-                    const evento = JSON.parse(message.body);
-
-                    setEspaciosOcupados((prev) => {
-                        if (evento.estado === "DISPONIBLE") {
-                            return prev.filter(
-                                (e) => !(e.espacioId === evento.espacioId &&
-                                         e.horaInicio === evento.horaInicio)
-                            );
-                        }
-
-                        const yaExiste = prev.some(
-                            (e) => e.espacioId === evento.espacioId &&
-                                   e.horaInicio === evento.horaInicio
-                        );
-                        return yaExiste ? prev : [...prev, evento];
-                    });
-                });
-            },
-
-            onDisconnect: () => {
-                setConectado(false);
-            },
-
-            onStompError: (frame) => {
-                console.error("Error STOMP:", frame);
-            }
+          setOcupados((prev) => {
+            if (evento.estado === "DISPONIBLE") return prev.filter((o) => !mismo(o));
+            return prev.some(mismo) ? prev : [...prev, rango];
+          });
         });
+      },
+      onDisconnect: () => setConectado(false),
+      onWebSocketClose: () => setConectado(false),
+      onStompError: (frame) => console.error("Error STOMP:", frame),
+    });
 
-        client.activate();
-        clientRef.current = client;
+    client.activate();
+    clientRef.current = client;
+    return () => clientRef.current?.deactivate();
+  }, [cargarOcupados]);
 
-        return () => {
-            if (clientRef.current) {
-                clientRef.current.deactivate();
-            }
-        };
-    }, [cargarReservasExistentes]); // Dependencia limpia y segura
+  /** ¿El rango [inicio, fin) se cruza con alguna reserva de ese espacio? */
+  const estaOcupado = useCallback((espacioId, inicio, fin) => {
+    if (!espacioId || !inicio || !fin) return false;
+    return ocupados.some((o) => o.espacioId === espacioId && inicio < o.fin && fin > o.inicio);
+  }, [ocupados]);
 
-    // ── Función de verificación (Blindada con useCallback) ──
-    const estaOcupado = useCallback((espacioId, horaInicio) => {
-        return espaciosOcupados.some(
-            (e) => e.espacioId === espacioId && e.horaInicio === horaInicio
-        );
-    }, [espaciosOcupados]);
+  /** Reservas de ese espacio en ese día (para mostrarlas al elegir horario). */
+  const ocupadosDelDia = useCallback((espacioId, dia) => {
+    if (!espacioId || !dia) return [];
+    return ocupados
+      .filter((o) => o.espacioId === espacioId && o.inicio.toDateString() === dia.toDateString())
+      .sort((a, b) => a.inicio - b.inicio);
+  }, [ocupados]);
 
-    return { espaciosOcupados, estaOcupado, conectado };
+  return { estaOcupado, ocupadosDelDia, conectado };
 }

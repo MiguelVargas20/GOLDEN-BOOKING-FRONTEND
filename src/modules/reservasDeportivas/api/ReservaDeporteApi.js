@@ -19,15 +19,30 @@ export const crearReservaDeporte = async (data) => {
   return response.json();
 };
 
-// Listar todas las reservas (GET) — para ADMIN
-export const listarReservasDeporte = async (page = 0, size = 10) => {
-  const response = await apiFetch(`${API_URL}?page=${page}&size=${size}`, {
-    headers: authHeaders()
-  });
+/**
+ * Listar todas las reservas (ADMIN), paginado y opcionalmente filtrado por
+ * estado. Cada reserva trae nombreCliente y correoCliente.
+ */
+export const listarReservasDeporte = async (page = 0, size = 10, estado = null) => {
+  const params = new URLSearchParams({ page, size });
+  if (estado) params.append("estado", estado);
+  const response = await apiFetch(`${API_URL}?${params}`, { headers: authHeaders() });
+  if (!response.ok) throw new Error(await extraerMensajeError(response, "No se pudieron cargar las reservas"));
+  return response.json();
+};
 
-  const responseJson = await response.json();
-  if (!response.ok) throw new Error("No se pudieron cargar las reservas");
-  return responseJson;
+/** Cantidad de reservas por estado (ADMIN): { PENDIENTE, CONFIRMADA, CANCELADA, FINALIZADA }. */
+export const obtenerResumenDeporte = async () => {
+  const response = await apiFetch(`${API_URL}/resumen`, { headers: authHeaders() });
+  if (!response.ok) throw new Error(await extraerMensajeError(response, "No se pudo cargar el resumen"));
+  return response.json();
+};
+
+/** Aprobar reserva PENDIENTE (ADMIN). El cliente recibe un correo de confirmación. */
+export const confirmarReservaDeporte = async (id) => {
+  const response = await apiFetch(`${API_URL}/${id}/confirmar`, { method: "PATCH", headers: authHeaders() });
+  if (!response.ok) throw new Error(await extraerMensajeError(response, "No se pudo aprobar la reserva"));
+  return response.json();
 };
 
 // Listar reservas del usuario logueado (GET) — para CLIENTE
@@ -54,11 +69,15 @@ export const obtenerFechasOcupadasDeporte = async () => {
   return data;
 };
 
-// Cancelar reserva (PATCH)
-export const cancelarReservaDeporte = async (id) => {
+/**
+ * Cancelar reserva. El admin debe enviar un motivo (se le envía al cliente);
+ * para el cliente es opcional.
+ */
+export const cancelarReservaDeporte = async (id, motivo = null) => {
   const response = await apiFetch(`${API_URL}/${id}/cancelar`, {
     method: "PATCH",
-    headers: authHeaders()
+    headers: authHeaders(),
+    body: JSON.stringify({ motivo }),
   });
   // Antes el throw quedaba DENTRO del try, así que el catch lo atrapaba y
   // siempre se mostraba el mensaje genérico (nunca "No se puede cancelar con

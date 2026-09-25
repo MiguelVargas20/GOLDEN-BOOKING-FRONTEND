@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { contarMensajesNoLeidos } from "../api/ContactoApi";
 import { useAuth } from "../../../shared/context/AuthContext";
 
@@ -11,23 +11,29 @@ const INTERVALO_POLLING_MS = 30000; // Revisa cada 30s si hay mensajes nuevos
  */
 export function useMensajesNoLeidos() {
   const { isAdmin, isAuthenticated } = useAuth();
+  // Se depende de un booleano y no de las funciones del contexto: esas se
+  // recrean en cada render, y antes eso reiniciaba el efecto (y hacía una
+  // consulta nueva) en CADA render en vez de cada 30 segundos.
+  const esAdmin = isAuthenticated() && isAdmin();
   const [noLeidos, setNoLeidos] = useState(0);
 
-  const consultar = useCallback(async () => {
-    if (!isAuthenticated() || !isAdmin()) return;
-    try {
-      const data = await contarMensajesNoLeidos();
-      setNoLeidos(data.noLeidos ?? 0);
-    } catch (err) {
-      console.error("No se pudo consultar mensajes no leídos:", err);
-    }
-  }, [isAdmin, isAuthenticated]);
-
   useEffect(() => {
+    if (!esAdmin) return undefined;
+    let activo = true;
+
+    const consultar = async () => {
+      try {
+        const data = await contarMensajesNoLeidos();
+        if (activo) setNoLeidos(data.noLeidos ?? 0);
+      } catch (err) {
+        console.error("No se pudo consultar mensajes no leídos:", err);
+      }
+    };
+
     consultar();
     const intervalo = setInterval(consultar, INTERVALO_POLLING_MS);
-    return () => clearInterval(intervalo);
-  }, [consultar]);
+    return () => { activo = false; clearInterval(intervalo); };
+  }, [esAdmin]);
 
-  return noLeidos;
+  return esAdmin ? noLeidos : 0;
 }

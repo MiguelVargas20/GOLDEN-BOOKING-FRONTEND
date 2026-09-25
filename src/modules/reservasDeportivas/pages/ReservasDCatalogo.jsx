@@ -1,105 +1,123 @@
-import React from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Row, Col, Card } from 'react-bootstrap';
-
-// Imagenes para cards de instalaciones
-import imgFutbol from '../../../assets/futbol.png';
-import imgBasket from '../../../assets/basketball.png';
-import imgTennis from '../../../assets/imgTennis.png';
-import imgNatacion from '../../../assets/natacion.png';
-import imgGolf from '../../../assets/golf.jpg';
-import imgVoleybol from '../../../assets/imgVoleybol.png';
-import imgPingPong from '../../../assets/imgPingPong.png'; 
-import imgPatinaje from '../../../assets/imgPatinaje.png';
-import imgHockey from '../../../assets/imgHockey.png';
-import imgCiclismo from '../../../assets/imgCiclismo.png';
-
-import { BsCalendar4 } from "react-icons/bs";
-import { BsArrowCounterclockwise } from "react-icons/bs";
-
-// Función para verificar si el usuario es ADMIN
+import { Spinner } from "react-bootstrap";
+import { BsCalendar4, BsArrowCounterclockwise, BsGrid, BsClock, BsPeople, BsCashCoin } from "react-icons/bs";
 import { useAuth } from "../../../shared/context/AuthContext";
+import { listarEspacios } from "../api/EspacioDeportivoApi";
+import { imagenEspacio } from "../utils/imagenEspacio";
+import { pesos } from "../../../shared/utils/formato";
+import "../../../shared/styles/PanelAdmin.css";
+import "../styles/GestionEspacios.css";
 
+/** "06:00:00" → "06:00" */
+const hhmm = (valor) => (valor ? valor.slice(0, 5) : "");
+
+/**
+ * Catálogo de espacios deportivos. Antes eran 10 tarjetas fijas en el código;
+ * ahora vienen del backend y el admin los administra. Los que están en
+ * mantenimiento se muestran, pero no se pueden reservar.
+ */
 function ReservasDCatalogo() {
-    const navigate = useNavigate();
-    const { isAdmin } = useAuth();
+  const navigate = useNavigate();
+  const { isAdmin } = useAuth();
+  const [espacios, setEspacios] = useState([]);
+  const [cargando, setCargando] = useState(true);
+  const [error, setError] = useState(null);
+  const [deporte, setDeporte] = useState("TODOS");
 
-    // Función para manejar el click en "Reservar" y navegar a la página de reserva
-    const add = (img, text) => {
-        navigate("/reservas-deportivas/reservar-espacio", {
-            state: {
-                ruta: img,
-                text: text,
-            },
-        });
-    };
+  useEffect(() => {
+    listarEspacios()
+      // El admin recibe también los INACTIVOS: en el catálogo no se muestran
+      .then((lista) => setEspacios(lista.filter((e) => e.estado !== "INACTIVO")))
+      .catch((err) => setError(err.message))
+      .finally(() => setCargando(false));
+  }, []);
 
-    const facilities = [
-        { id: 1, title: 'Fútbol', desc: 'Canchas Profesionales', img: imgFutbol },
-        { id: 2, title: 'Basketball', desc: 'Múltiples Canchas', img: imgBasket },
-        { id: 3, title: 'Tennis', desc: 'Categorias por Nivel', img: imgTennis },
-        { id: 4, title: 'Natación', desc: 'Olimpicas Recreación', img: imgNatacion },
-        { id: 5, title: 'Golf', desc: 'Campo Abierto', img: imgGolf },
-        { id: 6, title: 'Voleybol', desc: 'Campo Abierto', img: imgVoleybol },
-        { id: 7, title: 'Ping Pong', desc: 'Campo Abierto', img: imgPingPong },
-        { id: 8, title: 'Patinaje', desc: 'Campo Abierto', img: imgPatinaje },
-        { id: 9, title: 'Hockey', desc: 'Campo Abierto', img: imgHockey },
-        { id: 10, title: 'Ciclismo', desc: 'Campo Abierto', img: imgCiclismo },
-    ];
+  const deportes = useMemo(() => [...new Set(espacios.map((e) => e.deporte))].sort(), [espacios]);
+  const visibles = deporte === "TODOS" ? espacios : espacios.filter((e) => e.deporte === deporte);
 
-    return (
-        <div className="reservas-container">
-            {/* Contenedor Grid que alinea botones y título en la misma fila */}
-            <div className="botones-reservas">
-                
-                {/* 1. LADO IZQUIERDO: Gestionar (Solo si es Admin) */}
-                {isAdmin() ? (
-                    <button
-                        className="btn-reserva gestionar d-flex align-items-center justify-content-center"
-                        onClick={() => navigate("/reservas-deportivas/gestionar")}
-                    >
-                        <BsCalendar4 className="me-2 fs-5" /> Gestionar Reservas
-                    </button>
-                ) : (
-                    <div /> /* Div vacío para que el título no se mueva de su sitio si no eres admin */
-                )}
+  const reservar = (espacio) => {
+    if (espacio.estado !== "ACTIVO") return;
+    navigate("/reservas-deportivas/reservar-espacio", { state: { espacio } });
+  };
 
-                {/* 2. CENTRO: Título alineado */}
-                <h1 className="titulo-reservas">
-                    RESERVAS DE <span>ESPACIOS</span>
-                </h1>
-
-                {/* 3. LADO DERECHO: Mis Reservas */}
-                <button
-                    className="btn-reserva mis d-flex align-items-center justify-content-center"
-                    onClick={() => navigate("/reservas-deportivas/mis-reservas")}
-                >
-                    <BsArrowCounterclockwise className="me-2 fs-5" />Mis Reservas
-                </button>
-            </div>
-
-            {/* Cuadrícula de instalaciones */}
-            <Row xs={1} sm={2} lg={5} className="g-3">
-                {facilities.map((item) => (
-                    <Col key={item.id}>
-                        <Card 
-                            className="h-100 facility-card border-0 shadow-sm"
-                            onClick={() => add(item.img, item.title)}
-                            style={{ cursor: 'pointer' }}
-                        >
-                            <div className="img-container">
-                                <Card.Img variant="top" src={item.img} className="facility-img" />
-                            </div>
-                            <Card.Body className="px-3 py-3">
-                                <Card.Title className="h6 fw-bold mb-1">{item.title}</Card.Title>
-                                <Card.Text className="text-muted small">{item.desc}</Card.Text>
-                            </Card.Body>
-                        </Card>
-                    </Col>
-                ))}
-            </Row>
+  return (
+    <div className="gb-panel">
+      <div className="gb-panel-header">
+        <div>
+          <h1 className="gb-panel-titulo">Reservas <span>deportivas</span></h1>
+          <p className="gb-panel-subtitulo">Elige un espacio y reserva tu horario. Tu solicitud quedará pendiente hasta que sea aprobada.</p>
         </div>
-    );
+        <div className="gb-panel-acciones">
+          {isAdmin() && (
+            <>
+              <button type="button" className="btn-gb btn-gb-neutral btn-gb-sm" onClick={() => navigate("/reservas-deportivas/gestionar")}>
+                <BsCalendar4 /> Gestionar reservas
+              </button>
+              <button type="button" className="btn-gb btn-gb-neutral btn-gb-sm" onClick={() => navigate("/reservas-deportivas/espacios")}>
+                <BsGrid /> Espacios
+              </button>
+            </>
+          )}
+          <button type="button" className="btn-gb btn-gb-primary btn-gb-sm" onClick={() => navigate("/reservas-deportivas/mis-reservas")}>
+            <BsArrowCounterclockwise /> Mis reservas
+          </button>
+        </div>
+      </div>
+
+      {deportes.length > 1 && (
+        <div className="gb-chips">
+          {["TODOS", ...deportes].map((d) => (
+            <button key={d} type="button" className={`gb-chip ${deporte === d ? "activo" : ""}`} onClick={() => setDeporte(d)}>
+              {d === "TODOS" ? "Todos" : d}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {error && <div className="alert alert-danger">{error}</div>}
+
+      {cargando ? (
+        <div className="text-center py-5"><Spinner animation="border" style={{ color: "#f38d1e" }} /></div>
+      ) : visibles.length === 0 ? (
+        <div className="gb-vacio"><p>No hay espacios disponibles por ahora.</p></div>
+      ) : (
+        <div className="ge-grid">
+          {visibles.map((e) => {
+            const disponible = e.estado === "ACTIVO";
+            return (
+              <article
+                key={e.id}
+                className={`ge-card ${disponible ? "clickable" : "atenuada no-disponible"}`}
+                onClick={() => reservar(e)}
+                role={disponible ? "button" : undefined}
+                tabIndex={disponible ? 0 : undefined}
+                onKeyDown={(ev) => { if (disponible && (ev.key === "Enter" || ev.key === " ")) reservar(e); }}
+              >
+                <div className="ge-imagen">
+                  <img src={imagenEspacio(e)} alt={e.nombre} loading="lazy" />
+                  {!disponible && <span className="ge-estado ge-estado-mantenimiento">En mantenimiento</span>}
+                </div>
+                <div className="ge-cuerpo">
+                  <span className="ge-deporte">{e.deporte}</span>
+                  <h3 className="ge-nombre">{e.nombre}</h3>
+                  {e.descripcion && <p className="ge-descripcion">{e.descripcion}</p>}
+                  <ul className="ge-datos">
+                    <li><BsCashCoin /> {pesos(e.tarifaHora)} / hora</li>
+                    <li><BsPeople /> Hasta {e.capacidad} personas</li>
+                    <li><BsClock /> {hhmm(e.horaApertura)} – {hhmm(e.horaCierre)}</li>
+                  </ul>
+                  <span className={`btn-gb btn-gb-sm w-100 ge-cta ${disponible ? "btn-gb-primary" : "btn-gb-secondary"}`}>
+                    {disponible ? "Reservar" : "No disponible"}
+                  </span>
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default ReservasDCatalogo;

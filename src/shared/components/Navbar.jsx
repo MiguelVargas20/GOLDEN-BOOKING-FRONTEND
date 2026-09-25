@@ -6,7 +6,8 @@ import logo from '../../assets/LOGO.png';
 import styles from '../styles/Navbar.module.css';
 import { useTheme } from '../context/ThemeContext.jsx';
 import { BsSun, BsMoonStarsFill, BsBoxArrowRight, BsPersonCircle } from 'react-icons/bs';
-import { MdSportsTennis, MdHotel, MdRestaurant } from 'react-icons/md';
+import { MdSportsTennis, MdKingBed, MdAddBox, MdCategory } from 'react-icons/md';
+import { BsCalendarCheck, BsClockHistory, BsGrid, BsSearch } from 'react-icons/bs';
 import { useAuth } from '../context/AuthContext.jsx';
 import Swal from 'sweetalert2';
 
@@ -15,6 +16,8 @@ import { useMensajesNoLeidos } from "../../modules/mensajes/hooks/useMensajesNoL
 // 🆕 Notificaciones para el USUARIO NORMAL (respuestas del admin que no ha visto)
 import { useRespuestasNoVistas } from "../../modules/mensajes/hooks/useRespuestasNoVistas";
 import { BiBell } from "react-icons/bi";
+// Reservas pendientes de aprobación (contador para el ADMIN)
+import { useReservasPendientes } from "../hooks/useReservasPendientes";
 
 /**
  * Componente ComponentNavbar
@@ -32,15 +35,17 @@ export default function ComponentNavbar() {
     // Estado para el menú hamburguesa (móvil)
     const [navExpanded, setNavExpanded] = useState(false);
 
-    // Estado controlado del dropdown "Servicios". Antes quedaba 100% en manos
+    // Estado controlado de los dropdowns. Antes quedaba 100% en manos
     // del comportamiento default de react-bootstrap (solo cierra con click
     // afuera / Escape / click en un item), así que si cambiabas de ventana o
     // pestaña, react-bootstrap nunca se enteraba y el dropdown quedaba abierto
     // al volver. Se fuerza el cierre explícitamente al perder el foco.
-    const [servicesOpen, setServicesOpen] = useState(false);
+    // Ahora hay varios menús desplegables: se guarda cuál está abierto (o null).
+    const [menuAbierto, setMenuAbierto] = useState(null);
+    const pendientes = useReservasPendientes();
 
     useEffect(() => {
-        const cerrarDropdown = () => setServicesOpen(false);
+        const cerrarDropdown = () => setMenuAbierto(null);
         document.addEventListener('visibilitychange', cerrarDropdown);
         window.addEventListener('blur', cerrarDropdown);
         return () => {
@@ -48,6 +53,9 @@ export default function ComponentNavbar() {
             window.removeEventListener('blur', cerrarDropdown);
         };
     }, []);
+
+    // Cierra el desplegable y el menú móvil al elegir una opción
+    const cerrarMenus = () => { setMenuAbierto(null); setNavExpanded(false); };
 
     // Función auxiliar para navegar y cerrar el menú móvil a la vez de forma limpia
     const handleNavigate = (path) => {
@@ -111,53 +119,57 @@ export default function ComponentNavbar() {
                                     Inicio
                                 </Nav.Link>
 
-                                {/* CONTROL TOTAL DEL DROPDOWN */}
+                                {/* ── Reservas deportivas ── */}
                                 <NavDropdown
-                                    title="Servicios"
-                                    id="services-dropdown"
-                                    show={servicesOpen}
-                                    onToggle={(isOpen) => setServicesOpen(isOpen)}
+                                    title={<TituloMenu texto="Reservas Deportivas" pendientes={pendientes.deporte} />}
+                                    id="menu-deportes"
+                                    show={menuAbierto === "deportes"}
+                                    onToggle={(abierto) => setMenuAbierto(abierto ? "deportes" : null)}
                                     className={`${styles.navLink} ${styles.servicesDropdown}`}
                                 >
-                                    <NavDropdown.Item 
-                                        as={Link} 
-                                        to="/reservas-deportivas" 
-                                        className={styles.dropdownItemCustom}
-                                        onClick={() => { setServicesOpen(false); setNavExpanded(false); }}
-                                    >
-                                        <div className={styles.iconBox}><MdSportsTennis /></div>
-                                        <div>
-                                            <span className={styles.itemTitle}>Reservas Deportivas</span>
-                                            <small className={styles.itemText}>Pádel, Tenis y Gimnasio.</small>
-                                        </div>
-                                    </NavDropdown.Item>
-
-                                    <NavDropdown.Item 
-                                        as={Link} 
-                                        to="/reservas-hospedaje" 
-                                        className={styles.dropdownItemCustom}
-                                        onClick={() => { setServicesOpen(false); setNavExpanded(false); }}
-                                    >
-                                        <div className={styles.iconBox}><MdHotel /></div>
-                                        <div>
-                                            <span className={styles.itemTitle}>Reservas Hoteleras</span>
-                                            <small className={styles.itemText}>Suites de lujo.</small>
-                                        </div>
-                                    </NavDropdown.Item>
-
-                                    <NavDropdown.Item 
-                                        as={Link} 
-                                        to="/reservas-restaurante" 
-                                        className={styles.dropdownItemCustom}
-                                        onClick={() => { setServicesOpen(false); setNavExpanded(false); }}
-                                    >
-                                        <div className={styles.iconBox}><MdRestaurant /></div>
-                                        <div>
-                                            <span className={styles.itemTitle}>Restaurante</span>
-                                            <small className={styles.itemText}>Experiencia gastronomica.</small>
-                                        </div>
-                                    </NavDropdown.Item>
+                                    <ItemMenu to="/reservas-deportivas" icono={<MdSportsTennis />} titulo="Espacios deportivos" texto="Explora y reserva canchas." onElegir={cerrarMenus} />
+                                    <ItemMenu to="/reservas-deportivas/mis-reservas" icono={<BsClockHistory />} titulo="Mis reservas" texto="Estado de tus reservas." onElegir={cerrarMenus} />
+                                    {isAdmin() && (
+                                        <>
+                                            <NavDropdown.Divider />
+                                            <ItemMenu to="/reservas-deportivas/gestionar" icono={<BsCalendarCheck />} titulo="Gestionar reservas" texto="Aprobar o cancelar solicitudes." badge={pendientes.deporte} onElegir={cerrarMenus} />
+                                            <ItemMenu to="/reservas-deportivas/espacios" icono={<BsGrid />} titulo="Administrar espacios" texto="Crear, editar e imágenes." onElegir={cerrarMenus} />
+                                        </>
+                                    )}
                                 </NavDropdown>
+
+                                {/* ── Reservas hoteleras ── */}
+                                <NavDropdown
+                                    title={<TituloMenu texto="Reservas Hoteleras" pendientes={pendientes.hotel} />}
+                                    id="menu-hotel"
+                                    show={menuAbierto === "hotel"}
+                                    onToggle={(abierto) => setMenuAbierto(abierto ? "hotel" : null)}
+                                    className={`${styles.navLink} ${styles.servicesDropdown}`}
+                                >
+                                    <ItemMenu to="/reservas-hospedaje" icono={<BsSearch />} titulo="Reservar habitación" texto="Disponibilidad y precios." onElegir={cerrarMenus} />
+                                    <ItemMenu to="/mis-reservas-hotel" icono={<BsClockHistory />} titulo="Mis reservas" texto="Estado de tus estadías." onElegir={cerrarMenus} />
+                                    {isAdmin() && (
+                                        <>
+                                            <NavDropdown.Divider />
+                                            <ItemMenu to="/reservas-hoteleras/gestionar" icono={<BsCalendarCheck />} titulo="Gestionar reservas" texto="Aprobar o cancelar solicitudes." badge={pendientes.hotel} onElegir={cerrarMenus} />
+                                        </>
+                                    )}
+                                </NavDropdown>
+
+                                {/* ── Habitaciones (administración, independiente de las reservas) ── */}
+                                {isAdmin() && (
+                                    <NavDropdown
+                                        title="Habitaciones"
+                                        id="menu-habitaciones"
+                                        show={menuAbierto === "habitaciones"}
+                                        onToggle={(abierto) => setMenuAbierto(abierto ? "habitaciones" : null)}
+                                        className={`${styles.navLink} ${styles.servicesDropdown}`}
+                                    >
+                                        <ItemMenu to="/gestionar-habitaciones" icono={<MdKingBed />} titulo="Gestionar habitaciones" texto="Precios, estados y edición." onElegir={cerrarMenus} />
+                                        <ItemMenu to="/crear-habitacion" icono={<MdAddBox />} titulo="Crear habitación" texto="Agregar al catálogo." onElegir={cerrarMenus} />
+                                        <ItemMenu to="/tipo-habitacion" icono={<MdCategory />} titulo="Tipos de habitación" texto="Suite, doble, sencilla..." onElegir={cerrarMenus} />
+                                    </NavDropdown>
+                                )}
 
                                 <Nav.Link as={Link} to="/contactos" onClick={() => setNavExpanded(false)} className={styles.navLink}>
                                     Contactanos
@@ -265,5 +277,35 @@ export default function ComponentNavbar() {
                 </div>
             </Container>
         </Navbar>
+    );
+}
+
+/** Título de un menú desplegable con contador de pendientes (solo si hay). */
+function TituloMenu({ texto, pendientes }) {
+    return (
+        <span className="d-inline-flex align-items-center gap-1">
+            {texto}
+            {pendientes > 0 && (
+                <span className={styles.pendienteBadge} title={`${pendientes} reservas pendientes de aprobación`}>
+                    {pendientes > 9 ? "9+" : pendientes}
+                </span>
+            )}
+        </span>
+    );
+}
+
+/** Opción de un menú desplegable con ícono, título, descripción y contador opcional. */
+function ItemMenu({ to, icono, titulo, texto, badge, onElegir }) {
+    return (
+        <NavDropdown.Item as={Link} to={to} className={styles.dropdownItemCustom} onClick={onElegir}>
+            <div className={styles.iconBox}>{icono}</div>
+            <div className="flex-grow-1">
+                <span className={styles.itemTitle}>
+                    {titulo}
+                    {badge > 0 && <span className={styles.pendienteBadge}>{badge > 9 ? "9+" : badge}</span>}
+                </span>
+                <small className={styles.itemText}>{texto}</small>
+            </div>
+        </NavDropdown.Item>
     );
 }
