@@ -1,10 +1,11 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { BsCheckLg, BsXLg, BsArrowClockwise } from "react-icons/bs";
 import ResumenEstados from "./ResumenEstados";
 import EstadoReservaBadge from "./EstadoReservaBadge";
 import Paginador from "./Paginador";
 import { aprobarReserva, cancelarReserva } from "./dialogosReserva";
+import { EVENTO_RESERVAS_CAMBIARON } from "../../hooks/eventosReservas";
 import "../../styles/PanelAdmin.css";
 import "../../styles/BotonesCompartidos.css";
 
@@ -70,6 +71,17 @@ export default function PanelReservasAdmin({
   }, [listar, resumen, filtro]);
 
   useEffect(() => { cargar(0); }, [cargar]);
+
+  // Aviso en vivo (un cliente creó o canceló una reserva): recargar la página
+  // actual. Los eventos sin detalle vienen de las acciones de esta misma
+  // pantalla, que ya recargan por su cuenta.
+  const paginaRef = useRef(0);
+  useEffect(() => { paginaRef.current = pagina; }, [pagina]);
+  useEffect(() => {
+    const alAviso = (e) => { if (e.detail) cargar(paginaRef.current); };
+    window.addEventListener(EVENTO_RESERVAS_CAMBIARON, alAviso);
+    return () => window.removeEventListener(EVENTO_RESERVAS_CAMBIARON, alAviso);
+  }, [cargar]);
 
   const filtrar = (estado) => {
     setBusqueda("");

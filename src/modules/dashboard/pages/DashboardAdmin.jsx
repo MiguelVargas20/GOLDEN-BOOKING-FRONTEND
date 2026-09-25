@@ -16,6 +16,7 @@ import MapaHabitaciones from "../components/MapaHabitaciones";
 import AgendaHoy from "../components/AgendaHoy";
 import ListaPendientes from "../components/ListaPendientes";
 import EspaciosTop from "../components/EspaciosTop";
+import { EVENTO_RESERVAS_CAMBIARON } from "../../../shared/hooks/eventosReservas";
 import "../../../shared/styles/PanelAdmin.css";
 import "../styles/Dashboard.css";
 
@@ -60,7 +61,13 @@ export default function DashboardAdmin() {
     const intervalo = setInterval(() => {
       if (document.visibilityState === "visible") cargar();
     }, INTERVALO_REFRESCO_MS);
-    return () => { clearTimeout(primera); clearInterval(intervalo); };
+    // Aviso en vivo (nueva reserva / cancelación) → recargar al instante
+    window.addEventListener(EVENTO_RESERVAS_CAMBIARON, cargar);
+    return () => {
+      clearTimeout(primera);
+      clearInterval(intervalo);
+      window.removeEventListener(EVENTO_RESERVAS_CAMBIARON, cargar);
+    };
   }, [cargar]);
 
   // ── Acciones sobre pendientes ─────────────────────────────
@@ -73,18 +80,17 @@ export default function DashboardAdmin() {
 
   const aprobar = async (p) => {
     setProcesando(p.idReserva);
-    const ok = await aprobarReserva(detalles(p), () =>
+    // al aprobar/cancelar, el evento "reservas cambiaron" recarga el panel
+    await aprobarReserva(detalles(p), () =>
       p.tipo === "DEPORTE" ? confirmarReservaDeporte(p.idReserva) : confirmarReservaHotel(p.idReserva));
     setProcesando(null);
-    if (ok) cargar();
   };
 
   const cancelar = async (p) => {
     setProcesando(p.idReserva);
-    const ok = await cancelarReserva(detalles(p), (motivo) =>
+    await cancelarReserva(detalles(p), (motivo) =>
       p.tipo === "DEPORTE" ? cancelarReservaDeporte(p.idReserva, motivo) : cancelarReservaHotel(p.idReserva, motivo), true);
     setProcesando(null);
-    if (ok) cargar();
   };
 
   if (!datos) {

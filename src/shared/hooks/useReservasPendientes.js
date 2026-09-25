@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { obtenerResumenDeporte } from "../../modules/reservasDeportivas/api/ReservaDeporteApi";
 import { obtenerResumenHotel } from "../../modules/reservasHoteleras/api/ReservaHotelApi";
+import { EVENTO_RESERVAS_CAMBIARON } from "./eventosReservas";
 
 const INTERVALO_POLLING_MS = 60000; // cada minuto
 
@@ -33,7 +34,13 @@ export function useReservasPendientes() {
 
     consultar();
     const intervalo = setInterval(consultar, INTERVALO_POLLING_MS);
-    return () => { activo = false; clearInterval(intervalo); };
+    // Al instante cuando llega un aviso en vivo o se aprueba/cancela una reserva
+    window.addEventListener(EVENTO_RESERVAS_CAMBIARON, consultar);
+    return () => {
+      activo = false;
+      clearInterval(intervalo);
+      window.removeEventListener(EVENTO_RESERVAS_CAMBIARON, consultar);
+    };
   }, [esAdmin]);
 
   return esAdmin ? pendientes : { deporte: 0, hotel: 0 };

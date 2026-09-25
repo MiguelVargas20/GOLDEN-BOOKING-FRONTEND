@@ -1,5 +1,6 @@
 import Swal from "sweetalert2";
 import { escapeHtml } from "../../utils/escapeHtml";
+import { avisarReservasCambiaron } from "../../hooks/eventosReservas";
 
 // Diálogos de aprobación / cancelación compartidos por los paneles de reservas
 // de hotel y deporte (y por "Mis reservas" del cliente).
@@ -39,6 +40,7 @@ export async function aprobarReserva(detalles, accion) {
     },
   });
   if (isConfirmed) {
+    avisarReservasCambiaron(); // contadores de la Navbar y dashboard al día
     await Swal.fire({ title: "Reserva aprobada", icon: "success", timer: 1800, showConfirmButton: false });
   }
   return isConfirmed;
@@ -84,6 +86,7 @@ export async function cancelarReserva(detalles, accion, esAdmin) {
     },
   });
   if (isConfirmed) {
+    avisarReservasCambiaron(); // contadores de la Navbar y dashboard al día
     await Swal.fire({ title: "Reserva cancelada", icon: "success", timer: 1800, showConfirmButton: false });
   }
   return isConfirmed;

@@ -1,6 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Footer from '../components/Footer'; 
 import Navbar from "../components/Navbar";
+import { useAvisosAdmin } from "../hooks/useAvisosAdmin";
 import "./Layout.css";
 
 /**
@@ -10,6 +11,9 @@ import "./Layout.css";
  * el contenedor dinámico de rutas hijas (<Outlet />) y el pie de página.
  */
 export default function Layout() {
+    // Avisos en vivo de reservas para el admin (no hace nada para clientes)
+    useAvisosAdmin();
+
     return (
         <div className="contenedor">
             <div className="Navbar">
