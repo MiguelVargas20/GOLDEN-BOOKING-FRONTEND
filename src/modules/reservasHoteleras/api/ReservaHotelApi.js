@@ -1,4 +1,4 @@
-import { authHeaders, extraerMensajeError } from "../../../shared/api/apiUtils";
+import { authHeaders, extraerMensajeError, apiFetch } from "../../../shared/api/apiUtils";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -15,7 +15,7 @@ const API_URL = import.meta.env.VITE_API_URL;
  * Registra una nueva reserva de hotel en el sistema.
  */
 export const crearReservaHotel = async (reserva) => {
-  const res = await fetch(`${API_URL}/api/reservas/hotel`, {
+  const res = await apiFetch(`${API_URL}/api/reservas/hotel`, {
     method: "POST",
     headers: authHeaders(),
     body: JSON.stringify(reserva),
@@ -28,7 +28,7 @@ export const crearReservaHotel = async (reserva) => {
  * Cancela una reserva de hotel existente mediante su ID (PATCH).
  */
 export const cancelarReservaHotel = async (id) => {
-  const res = await fetch(`${API_URL}/api/reservas/hotel/${id}/cancelar`, {
+  const res = await apiFetch(`${API_URL}/api/reservas/hotel/${id}/cancelar`, {
     method: "PATCH",
     headers: authHeaders(),
   });
@@ -40,7 +40,7 @@ export const cancelarReservaHotel = async (id) => {
  * Lista las reservas hoteleras de un usuario específico (CLIENTE).
  */
 export const listarMisReservasHotel = async () => {
-  const res = await fetch(`${API_URL}/api/reservas/hotel/mis-reservas`, {
+  const res = await apiFetch(`${API_URL}/api/reservas/hotel/mis-reservas`, {
     headers: authHeaders(),
   });
   if (!res.ok) throw new Error(await extraerMensajeError(res, "Error al cargar tus reservas"));
@@ -54,7 +54,7 @@ export const listarMisReservasHotel = async () => {
  * usuario intente reservar.
  */
 export const obtenerFechasOcupadas = async (idHabitacion) => {
-  const res = await fetch(`${API_URL}/api/reservas/hotel/habitacion/${idHabitacion}/ocupadas`, {
+  const res = await apiFetch(`${API_URL}/api/reservas/hotel/habitacion/${idHabitacion}/ocupadas`, {
     headers: authHeaders(),
   });
   if (!res.ok) throw new Error(await extraerMensajeError(res, "Error al consultar disponibilidad"));

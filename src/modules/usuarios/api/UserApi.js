@@ -1,10 +1,10 @@
-import { authHeaders } from "../../../shared/api/apiUtils";
+import { authHeaders, apiFetch } from "../../../shared/api/apiUtils";
 
 const API_URL = `${import.meta.env.VITE_API_URL}/api/usuarios`;
 
 // Listar todos los usuarios (ADMIN)
 export const listarUsuarios = async (page = 0, size = 10) => {
-  const response = await fetch(`${API_URL}?page=${page}&size=${size}`, {
+  const response = await apiFetch(`${API_URL}?page=${page}&size=${size}`, {
     headers: authHeaders()
   });
   const data = await response.json();
@@ -14,7 +14,7 @@ export const listarUsuarios = async (page = 0, size = 10) => {
 
 // Actualizar usuario (ADMIN)
 export const actualizarUsuario = async (id, data) => {
-  const response = await fetch(`${API_URL}/${id}`, {
+  const response = await apiFetch(`${API_URL}/${id}`, {
     method: "PUT",
     headers: authHeaders(),
     body: JSON.stringify(data)
@@ -26,7 +26,7 @@ export const actualizarUsuario = async (id, data) => {
 
 // Eliminar usuario (ADMIN)
 export const eliminarUsuario = async (id) => {
-  const response = await fetch(`${API_URL}/${id}`, {
+  const response = await apiFetch(`${API_URL}/${id}`, {
     method: "DELETE",
     headers: authHeaders()
   });
@@ -36,7 +36,7 @@ export const eliminarUsuario = async (id) => {
 
 // Actualizar perfil propio (CLIENTE o ADMIN)
 export const actualizarMiPerfil = async (id, datos) => {
-  const res = await fetch(`${API_URL}/perfil/${id}`, {
+  const res = await apiFetch(`${API_URL}/perfil/${id}`, {
     method: "PATCH",
     headers: authHeaders(),
     body: JSON.stringify(datos)

@@ -1,6 +1,7 @@
-import { createContext, useContext, useState, useRef } from "react";
+import { createContext, useContext, useState, useRef, useEffect } from "react";
 import Swal from "sweetalert2";
 import { loginUsuario, registrarUsuario, refrescarToken } from "../../modules/auth/api/authService";
+import { EVENTO_SESION_INVALIDA } from "../api/apiUtils";
 
 const AuthContext = createContext();
 
@@ -204,6 +205,34 @@ export const AuthProvider = ({ children }) => {
                 setUser(null);
             }
         };
+
+    // ── Sesión invalidada por el backend ─────────────────────
+    // apiFetch (apiUtils.js) dispara este evento cuando el backend responde 401
+    // porque la cuenta fue desactivada/eliminada por el admin o la sesión ya
+    // no es válida. Se avisa al usuario y se cierra la sesión; RutaProteccion
+    // lo lleva al login. Antes el usuario se quedaba en la app viendo errores
+    // en cada pantalla sin entender por qué.
+    const logoutRef = useRef(logout);
+    logoutRef.current = logout;
+    const avisandoRef = useRef(false); // evita varios avisos si fallan varias peticiones a la vez
+
+    useEffect(() => {
+        const manejarSesionInvalida = async (evento) => {
+            if (avisandoRef.current) return;
+            avisandoRef.current = true;
+            await logoutRef.current();
+            await Swal.fire({
+                title: "Sesión finalizada",
+                text: evento.detail?.mensaje || "Tu sesión ya no es válida. Inicia sesión de nuevo.",
+                icon: "info",
+                confirmButtonText: "Entendido",
+                confirmButtonColor: "#f38d1e",
+            });
+            avisandoRef.current = false;
+        };
+        window.addEventListener(EVENTO_SESION_INVALIDA, manejarSesionInvalida);
+        return () => window.removeEventListener(EVENTO_SESION_INVALIDA, manejarSesionInvalida);
+    }, []);
 
     const registro = async (data) => {
         return await registrarUsuario(data);

@@ -1,4 +1,4 @@
-import { API_URL, authHeaders, extraerMensajeError } from "../../../shared/api/apiUtils";
+import { API_URL, authHeaders, extraerMensajeError, apiFetch } from "../../../shared/api/apiUtils";
 
 const BASE_URL = `${API_URL}/api/contacto`;
 
@@ -11,7 +11,7 @@ const BASE_URL = `${API_URL}/api/contacto`;
  * @param {Object} data - { nombre, correo, contenido }
  */
 export const enviarMensaje = async (data) => {
-  const res = await fetch(BASE_URL, {
+  const res = await apiFetch(BASE_URL, {
     method: "POST",
     headers: authHeaders(),
     body: JSON.stringify(data),
@@ -34,7 +34,7 @@ export const listarMensajes = async (page = 0, size = 10, nombre = "") => {
   const params = new URLSearchParams({ page, size });
   if (nombre.trim()) params.append("nombre", nombre.trim());
 
-  const res = await fetch(`${BASE_URL}?${params.toString()}`, {
+  const res = await apiFetch(`${BASE_URL}?${params.toString()}`, {
     headers: authHeaders(),
   });
   if (!res.ok) throw new Error(await extraerMensajeError(res, "No se pudieron cargar los mensajes"));
@@ -45,7 +45,7 @@ export const listarMensajes = async (page = 0, size = 10, nombre = "") => {
  * Marca un mensaje como leído (ADMIN).
  */
 export const marcarMensajeLeido = async (id) => {
-  const res = await fetch(`${BASE_URL}/${id}/leido`, {
+  const res = await apiFetch(`${BASE_URL}/${id}/leido`, {
     method: "PATCH",
     headers: authHeaders(),
   });
@@ -58,7 +58,7 @@ export const marcarMensajeLeido = async (id) => {
  * Usado por el badge/banner del Navbar.
  */
 export const contarMensajesNoLeidos = async () => {
-  const res = await fetch(`${BASE_URL}/no-leidos/count`, {
+  const res = await apiFetch(`${BASE_URL}/no-leidos/count`, {
     headers: authHeaders(),
   });
   if (!res.ok) throw new Error(await extraerMensajeError(res, "No se pudo consultar mensajes nuevos"));
@@ -69,7 +69,7 @@ export const contarMensajesNoLeidos = async () => {
  * Envía la respuesta del administrador a un mensaje puntual.
  */
 export const responderMensaje = async (id, respuesta) => {
-  const res = await fetch(`${BASE_URL}/${id}/responder`, {
+  const res = await apiFetch(`${BASE_URL}/${id}/responder`, {
     method: "PATCH",
     headers: authHeaders(),
     body: JSON.stringify({ respuesta }),
@@ -87,7 +87,7 @@ export const responderMensaje = async (id, respuesta) => {
  */
 export const obtenerMisMensajes = async (pagina = 0, size = 10) => {
   const params = new URLSearchParams({ page: pagina, size });
-  const res = await fetch(`${BASE_URL}/mios?${params.toString()}`, {
+  const res = await apiFetch(`${BASE_URL}/mios?${params.toString()}`, {
     headers: authHeaders(),
   });
   if (!res.ok) throw new Error(await extraerMensajeError(res, "No se pudieron cargar tus mensajes."));
@@ -99,7 +99,7 @@ export const obtenerMisMensajes = async (pagina = 0, size = 10) => {
  * Usado por la campanita de notificaciones.
  */
 export const contarRespuestasNoVistas = async () => {
-  const res = await fetch(`${BASE_URL}/mios/no-vistas/count`, {
+  const res = await apiFetch(`${BASE_URL}/mios/no-vistas/count`, {
     headers: authHeaders(),
   });
   if (!res.ok) throw new Error(await extraerMensajeError(res, "No se pudo obtener el contador."));
@@ -110,7 +110,7 @@ export const contarRespuestasNoVistas = async () => {
  * Marca como vista la respuesta enviada por el administrador a un mensaje.
  */
 export const marcarRespuestaVista = async (id) => {
-  const res = await fetch(`${BASE_URL}/${id}/respuesta-vista`, {
+  const res = await apiFetch(`${BASE_URL}/${id}/respuesta-vista`, {
     method: "PATCH",
     headers: authHeaders(),
   });

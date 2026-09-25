@@ -23,9 +23,11 @@ export async function loginUsuario(data) {
 
         // Validación de respuesta HTTP (sin leer el body todavía)
         if (!res.ok) {
-            const mensaje = await extraerMensajeError(res, "Error al iniciar sesión");
-            const esCredencialInvalida = mensaje.includes("Bad credentials");
-            throw { message: esCredencialInvalida ? "Usuario o contraseña incorrectos" : mensaje };
+            // El backend ya responde 401 con "Usuario o contraseña incorrectos."
+            // (antes era un 400 con el texto técnico "Bad credentials" que había
+            // que detectar aquí), 403 si la cuenta no está verificada y 429 si
+            // hay demasiados intentos. Su mensaje se muestra tal cual.
+            throw { message: await extraerMensajeError(res, "Error al iniciar sesión") };
         }
 
         return await res.json();

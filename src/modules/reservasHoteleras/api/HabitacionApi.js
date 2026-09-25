@@ -2,7 +2,7 @@
 // ── Configuración Global y Autenticación ───────────────────
 // (centralizadas en apiUtils.js — ver ese archivo)
 // ═══════════════════════════════════════════════════════════
-import { authHeaders } from "../../../shared/api/apiUtils";
+import { authHeaders, apiFetch } from "../../../shared/api/apiUtils";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -23,7 +23,7 @@ const API_URL = import.meta.env.VITE_API_URL;
  * @returns {Promise<{contenido: Array, paginaActual: number, totalPaginas: number, totalElementos: number}>}
  */
 export const listarHabitaciones = async (page = 0, size = 10) => {
-  const res = await fetch(`${API_URL}/api/habitaciones?page=${page}&size=${size}`, {
+  const res = await apiFetch(`${API_URL}/api/habitaciones?page=${page}&size=${size}`, {
     headers: authHeaders(),
   });
   const data = await res.json();
@@ -54,7 +54,7 @@ export const listarTodasLasHabitaciones = async () => {
  * @returns {Promise<Object>} Datos de la habitación solicitada.
  */
 export const obtenerHabitacionPorId = async (id) => {
-  const res = await fetch(`${API_URL}/api/habitaciones/${id}`, {
+  const res = await apiFetch(`${API_URL}/api/habitaciones/${id}`, {
     headers: authHeaders(),
   });
   const data = await res.json();
@@ -68,7 +68,7 @@ export const obtenerHabitacionPorId = async (id) => {
  * @returns {Promise<Object>} La habitación creada por el servidor.
  */
 export const crearHabitacion = async (dto) => {
-  const res = await fetch(`${API_URL}/api/habitaciones`, {
+  const res = await apiFetch(`${API_URL}/api/habitaciones`, {
     method: "POST",
     headers: authHeaders(),
     body: JSON.stringify(dto),
@@ -85,7 +85,7 @@ export const crearHabitacion = async (dto) => {
  * @returns {Promise<Object>} La habitación actualizada.
  */
 export const actualizarHabitacion = async (id, dto) => {
-  const res = await fetch(`${API_URL}/api/habitaciones/${id}`, {
+  const res = await apiFetch(`${API_URL}/api/habitaciones/${id}`, {
     method: "PUT",
     headers: authHeaders(),
     body: JSON.stringify(dto),
@@ -101,7 +101,7 @@ export const actualizarHabitacion = async (id, dto) => {
  * @returns {Promise<boolean>} Retorna true si se eliminó con éxito.
  */
 export const eliminarHabitacion = async (id) => {
-  const res = await fetch(`${API_URL}/api/habitaciones/${id}`, {
+  const res = await apiFetch(`${API_URL}/api/habitaciones/${id}`, {
     method: "DELETE",
     headers: authHeaders(),
   });
@@ -118,7 +118,7 @@ export const eliminarHabitacion = async (id) => {
  * @returns {Promise<Array>}
  */
 export const listarTiposHabitacion = async () => {
-  const res = await fetch(`${API_URL}/api/tipohabitaciones`, {
+  const res = await apiFetch(`${API_URL}/api/tipohabitaciones`, {
     headers: authHeaders(),
   });
   const data = await res.json();
@@ -132,7 +132,7 @@ export const listarTiposHabitacion = async () => {
  * @returns {Promise<Object>}
  */
 export const crearTipoHabitacion = async (dto) => {
-  const res = await fetch(`${API_URL}/api/tipohabitaciones`, {
+  const res = await apiFetch(`${API_URL}/api/tipohabitaciones`, {
     method: "POST",
     headers: authHeaders(),
     body: JSON.stringify(dto),
@@ -149,7 +149,7 @@ export const crearTipoHabitacion = async (dto) => {
  * @returns {Promise<Object>}
  */
 export const actualizarTipoHabitacion = async (id, dto) => {
-  const res = await fetch(`${API_URL}/api/tipohabitaciones/${id}`, {
+  const res = await apiFetch(`${API_URL}/api/tipohabitaciones/${id}`, {
     method: "PUT",
     headers: authHeaders(),
     body: JSON.stringify(dto),
@@ -165,7 +165,7 @@ export const actualizarTipoHabitacion = async (id, dto) => {
  * @returns {Promise<boolean>}
  */
 export const eliminarTipoHabitacion = async (id) => {
-  const res = await fetch(`${API_URL}/api/tipohabitaciones/${id}`, {
+  const res = await apiFetch(`${API_URL}/api/tipohabitaciones/${id}`, {
     method: "DELETE",
     headers: authHeaders(),
   });
