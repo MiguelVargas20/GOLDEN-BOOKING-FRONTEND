@@ -86,7 +86,9 @@ export default function ListaMisReservas({
                         <span className="gb-celda-motivo">
                           {r.canceladaPor === "ADMINISTRADOR"
                             ? `Cancelada por la administración${r.motivoCancelacion ? `: ${r.motivoCancelacion}` : ""}`
-                            : "Cancelada por ti"}
+                            : r.canceladaPor === "SISTEMA"
+                              ? "Venció: no alcanzó a ser aprobada antes de la fecha"
+                              : "Cancelada por ti"}
                         </span>
                       )}
                     </td>

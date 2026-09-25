@@ -141,7 +141,10 @@ export default function PanelReservasAdmin({
                   {columnas.map((c) => <td key={c.titulo}>{c.render(r)}</td>)}
                   <td>
                     <EstadoReservaBadge estado={r.estado} />
-                    {r.estado === "CANCELADA" && r.motivoCancelacion && (
+                    {r.estado === "CANCELADA" && r.canceladaPor === "SISTEMA" && (
+                      <span className="gb-celda-secundaria" title={r.motivoCancelacion}>Vencida: no se aprobó a tiempo</span>
+                    )}
+                    {r.estado === "CANCELADA" && r.canceladaPor !== "SISTEMA" && r.motivoCancelacion && (
                       <span className="gb-celda-motivo" title={r.motivoCancelacion}>
                         {r.canceladaPor === "CLIENTE" ? "Cliente: " : "Motivo: "}{r.motivoCancelacion}
                       </span>
