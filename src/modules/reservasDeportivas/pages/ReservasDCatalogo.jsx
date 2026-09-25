@@ -4,7 +4,7 @@ import { Spinner } from "react-bootstrap";
 import { BsCalendar4, BsArrowCounterclockwise, BsGrid, BsClock, BsPeople, BsCashCoin } from "react-icons/bs";
 import { useAuth } from "../../../shared/context/AuthContext";
 import { listarEspacios } from "../api/EspacioDeportivoApi";
-import { imagenEspacio } from "../utils/imagenEspacio";
+import { imagenEspacio, usarImagenDeRespaldo } from "../utils/imagenEspacio";
 import { pesos } from "../../../shared/utils/formato";
 import "../../../shared/styles/PanelAdmin.css";
 import "../styles/GestionEspacios.css";
@@ -95,7 +95,7 @@ function ReservasDCatalogo() {
                 onKeyDown={(ev) => { if (disponible && (ev.key === "Enter" || ev.key === " ")) reservar(e); }}
               >
                 <div className="ge-imagen">
-                  <img src={imagenEspacio(e)} alt={e.nombre} loading="lazy" />
+                  <img src={imagenEspacio(e)} alt={e.nombre} loading="lazy" onError={usarImagenDeRespaldo(e)} />
                   {!disponible && <span className="ge-estado ge-estado-mantenimiento">En mantenimiento</span>}
                 </div>
                 <div className="ge-cuerpo">

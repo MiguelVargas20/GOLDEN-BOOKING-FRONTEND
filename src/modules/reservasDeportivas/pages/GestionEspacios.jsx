@@ -9,7 +9,7 @@ import {
   listarEspacios, crearEspacio, actualizarEspacio, cambiarEstadoEspacio,
   eliminarEspacio, subirImagenEspacio, eliminarImagenEspacio,
 } from "../api/EspacioDeportivoApi";
-import { imagenEspacio, DEPORTES_SUGERIDOS } from "../utils/imagenEspacio";
+import { imagenEspacio, usarImagenDeRespaldo, validarImagen, DEPORTES_SUGERIDOS } from "../utils/imagenEspacio";
 import { pesos } from "../../../shared/utils/formato";
 import { escapeHtml } from "../../../shared/utils/escapeHtml";
 import "../../../shared/styles/PanelAdmin.css";
@@ -22,8 +22,6 @@ const ESTADOS = {
   INACTIVO: { etiqueta: "Inactivo", clase: "inactivo", ayuda: "Oculto para los clientes." },
 };
 
-const TAMANIO_MAXIMO_IMAGEN = 5 * 1024 * 1024; // igual que el backend
-const TIPOS_IMAGEN = ["image/jpeg", "image/png", "image/webp"];
 
 const FORM_VACIO = {
   nombre: "", deporte: "", descripcion: "", capacidad: "", tarifaHora: "",
@@ -108,16 +106,14 @@ export default function GestionEspacios() {
 
   const cambiarCampo = (campo) => (e) => setForm({ ...form, [campo]: e.target.value });
 
-  const elegirArchivo = (e) => {
+  const elegirArchivo = async (e) => {
     const elegido = e.target.files?.[0];
     e.target.value = ""; // permite volver a elegir el mismo archivo
     if (!elegido) return;
-    if (!TIPOS_IMAGEN.includes(elegido.type)) {
-      Swal.fire({ title: "Formato no permitido", text: "Sube una imagen JPG, PNG o WEBP.", icon: "warning", confirmButtonColor: "#f38d1e" });
-      return;
-    }
-    if (elegido.size > TAMANIO_MAXIMO_IMAGEN) {
-      Swal.fire({ title: "Imagen muy pesada", text: "El tamaño máximo es 5 MB.", icon: "warning", confirmButtonColor: "#f38d1e" });
+    // Formato, peso y dimensiones (mismas reglas que el backend)
+    const error = await validarImagen(elegido);
+    if (error) {
+      Swal.fire({ title: "Imagen no válida", text: error, icon: "warning", confirmButtonColor: "#f38d1e" });
       return;
     }
     setArchivo(elegido);
@@ -266,7 +262,7 @@ export default function GestionEspacios() {
           {visibles.map((e) => (
             <article key={e.id} className={`ge-card ${e.estado !== "ACTIVO" ? "atenuada" : ""}`}>
               <div className="ge-imagen">
-                <img src={imagenEspacio(e)} alt={e.nombre} loading="lazy" />
+                <img src={imagenEspacio(e)} alt={e.nombre} loading="lazy" onError={usarImagenDeRespaldo(e)} />
                 <span className={`ge-estado ge-estado-${ESTADOS[e.estado]?.clase}`}>{ESTADOS[e.estado]?.etiqueta}</span>
                 <Dropdown className="ge-menu" align="end">
                   <Dropdown.Toggle as="button" className="ge-menu-boton" aria-label="Más acciones">
@@ -314,7 +310,7 @@ export default function GestionEspacios() {
             <Row className="g-4">
               <Col md={5}>
                 <div className="ge-modal-imagen">
-                  <img src={imagenModal} alt="Vista previa" />
+                  <img key={imagenModal} src={imagenModal} alt="Vista previa" onError={usarImagenDeRespaldo({ deporte: form.deporte })} />
                 </div>
                 <label className="btn-gb btn-gb-secondary btn-gb-sm w-100 mt-2 ge-subir">
                   <BsImage /> {archivo || editando?.imagenUrl ? "Cambiar imagen" : "Subir imagen"}
@@ -331,7 +327,8 @@ export default function GestionEspacios() {
                   </button>
                 )}
                 <small className="text-muted d-block mt-1">
-                  JPG, PNG o WEBP, máximo 5 MB. Si no subes una, se usa la imagen del deporte.
+                  JPG, PNG o WEBP · máximo 5 MB · mínimo 400×300 px (recomendado 1200×800, horizontal).
+                  Si no subes una, se usa la imagen del deporte.
                 </small>
               </Col>
 

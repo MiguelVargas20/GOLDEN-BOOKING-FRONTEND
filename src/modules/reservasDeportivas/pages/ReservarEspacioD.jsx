@@ -16,7 +16,7 @@ import { crearReservaDeporte } from "../api/ReservaDeporteApi.js";
 import { useAuth } from "../../../shared/context/AuthContext";
 import { useReservasDeporte } from "../hooks/useReservasDeporte";
 import { useRequierePerfilCompleto } from "../../../shared/hooks/useRequirePerfilCompleto.js";
-import { imagenEspacio } from "../utils/imagenEspacio";
+import { imagenEspacio, usarImagenDeRespaldo } from "../utils/imagenEspacio";
 import { pesos, hora } from "../../../shared/utils/formato";
 import { escapeHtml } from "../../../shared/utils/escapeHtml";
 import { toLocalISOString, inicioValido, finValido, finSugerido, precioEstimado as calcularPrecio } from "../utils/horarioEspacio";
@@ -127,7 +127,7 @@ function ReservarEspacioD() {
       <div className="re-layout">
         {/* Información del espacio */}
         <aside className="re-espacio">
-          <div className="re-imagen"><img src={imagenEspacio(espacio)} alt={espacio.nombre} /></div>
+          <div className="re-imagen"><img src={imagenEspacio(espacio)} alt={espacio.nombre} onError={usarImagenDeRespaldo(espacio)} /></div>
           <div className="re-espacio-info">
             <span className="ge-deporte">{espacio.deporte}</span>
             <h1 className="re-nombre">{espacio.nombre}</h1>
