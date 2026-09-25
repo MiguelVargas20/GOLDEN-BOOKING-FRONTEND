@@ -12,6 +12,21 @@ export const listarUsuarios = async (page = 0, size = 10) => {
   return data;
 };
 
+// Buscar un usuario por su número de documento (ADMIN).
+// Lo usa la pantalla de recepción para reservar a nombre de un cliente.
+export const obtenerUsuarioPorDocumento = async (documento) => {
+  const response = await apiFetch(`${API_URL}/doc/${encodeURIComponent(documento)}`, {
+    headers: authHeaders()
+  });
+  const data = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(response.status === 404
+      ? "No hay ningún cliente registrado con ese documento."
+      : data.error || "No se pudo buscar el cliente.");
+  }
+  return data;
+};
+
 // Actualizar usuario (ADMIN)
 export const actualizarUsuario = async (id, data) => {
   const response = await apiFetch(`${API_URL}/${id}`, {

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { BsBuilding } from "react-icons/bs";
+import { BsBuilding, BsPersonPlus } from "react-icons/bs";
 import PanelReservasAdmin from "../../../shared/components/reservas/PanelReservasAdmin";
 import {
   listarReservasHotelAdmin,
@@ -47,7 +47,12 @@ export default function GestionarReservasHotel() {
     { titulo: "Total", render: (r) => <span className="gb-celda-principal">{pesos(r.pTotal)}</span> },
     {
       titulo: "Solicitada",
-      render: (r) => <span className="gb-celda-secundaria">{fechaHora(r.fechaSolicitud)}</span>,
+      render: (r) => (
+        <>
+          <span className="gb-celda-secundaria">{fechaHora(r.fechaSolicitud)}</span>
+          {r.registradaPorAdministrador && <span className="gb-etiqueta-recepcion">Registrada en recepción</span>}
+        </>
+      ),
     },
   ];
 
@@ -70,9 +75,14 @@ export default function GestionarReservasHotel() {
       })}
       textoBusqueda={(r) => [r.nombreCliente, r.correoCliente, r.docUsuario, r.numeroHabitacion, r.tHabitacion].join(" ")}
       accionesExtra={
-        <button type="button" className="btn-gb btn-gb-neutral btn-gb-sm" onClick={() => navigate("/gestionar-habitaciones")}>
-          <BsBuilding /> Habitaciones
-        </button>
+        <>
+          <button type="button" className="btn-gb btn-gb-primary btn-gb-sm" onClick={() => navigate("/recepcion/nueva-reserva?tipo=hotel")}>
+            <BsPersonPlus /> Reservar para un cliente
+          </button>
+          <button type="button" className="btn-gb btn-gb-neutral btn-gb-sm" onClick={() => navigate("/gestionar-habitaciones")}>
+            <BsBuilding /> Habitaciones
+          </button>
+        </>
       }
     />
   );

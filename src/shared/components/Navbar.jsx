@@ -7,7 +7,7 @@ import styles from '../styles/Navbar.module.css';
 import { useTheme } from '../context/ThemeContext.jsx';
 import { BsSun, BsMoonStarsFill, BsBoxArrowRight, BsPersonCircle } from 'react-icons/bs';
 import { MdSportsTennis, MdKingBed, MdAddBox, MdCategory } from 'react-icons/md';
-import { BsCalendarCheck, BsClockHistory, BsGrid, BsSearch } from 'react-icons/bs';
+import { BsCalendarCheck, BsClockHistory, BsGrid, BsSearch, BsPersonPlus } from 'react-icons/bs';
 import { useAuth } from '../context/AuthContext.jsx';
 import Swal from 'sweetalert2';
 
@@ -133,6 +133,7 @@ export default function ComponentNavbar() {
                                         <>
                                             <NavDropdown.Divider />
                                             <ItemMenu to="/reservas-deportivas/gestionar" icono={<BsCalendarCheck />} titulo="Gestionar reservas" texto="Aprobar o cancelar solicitudes." badge={pendientes.deporte} onElegir={cerrarMenus} />
+                                            <ItemMenu to="/recepcion/nueva-reserva?tipo=deporte" icono={<BsPersonPlus />} titulo="Reservar para un cliente" texto="Registro en recepción." onElegir={cerrarMenus} />
                                             <ItemMenu to="/reservas-deportivas/espacios" icono={<BsGrid />} titulo="Administrar espacios" texto="Crear, editar e imágenes." onElegir={cerrarMenus} />
                                         </>
                                     )}
@@ -152,6 +153,7 @@ export default function ComponentNavbar() {
                                         <>
                                             <NavDropdown.Divider />
                                             <ItemMenu to="/reservas-hoteleras/gestionar" icono={<BsCalendarCheck />} titulo="Gestionar reservas" texto="Aprobar o cancelar solicitudes." badge={pendientes.hotel} onElegir={cerrarMenus} />
+                                            <ItemMenu to="/recepcion/nueva-reserva?tipo=hotel" icono={<BsPersonPlus />} titulo="Reservar para un cliente" texto="Registro en recepción." onElegir={cerrarMenus} />
                                         </>
                                     )}
                                 </NavDropdown>

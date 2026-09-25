@@ -1,0 +1,60 @@
+/* ── Recepción: reservar a nombre de un cliente ─────────────── */
+
+.re-volver-recepcion {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: none; background: none; color: var(--gb-text-muted); font-weight: 600; padding: 0; margin-bottom: 14px;
+}
+.re-volver-recepcion:hover { color: var(--gb-primary); }
+
+.nr-pasos {
+  display: grid;
+  grid-template-columns: minmax(260px, 1fr) minmax(320px, 1.6fr) minmax(260px, 1fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.nr-paso {
+  background: var(--gb-surface);
+  border: 1px solid var(--gb-border);
+  border-radius: 18px;
+  padding: 20px;
+  color: var(--gb-text-primary);
+  transition: opacity 0.2s;
+}
+.nr-paso.bloqueado { opacity: 0.45; pointer-events: none; }
+
+.nr-paso-titulo {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 1.05rem; font-weight: 800; margin: 0 0 16px; color: var(--gb-item-title);
+}
+.nr-paso-titulo span {
+  display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%;
+  background: var(--gb-primary); color: #fff; font-size: 0.85rem;
+}
+
+.nr-busqueda { display: flex; gap: 8px; }
+.nr-busqueda .btn-gb { white-space: nowrap; }
+
+.nr-cliente {
+  display: flex; gap: 12px; align-items: flex-start; margin-top: 16px; padding: 14px;
+  border-radius: 12px; background: var(--gb-status-success-bg); color: var(--gb-status-success-text);
+}
+.nr-cliente.inactivo { background: var(--gb-status-danger-bg); color: var(--gb-status-danger-text); }
+.nr-cliente-icono { font-size: 1.8rem; flex-shrink: 0; }
+.nr-cliente strong { display: block; font-size: 1rem; }
+.nr-cliente span { display: block; font-size: 0.82rem; }
+.nr-alerta { font-weight: 700; margin-top: 4px; }
+
+.nr-tipos { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+.nr-tipo {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 10px; border-radius: 12px; font-weight: 700;
+  border: 1.5px solid var(--gb-border); background: var(--gb-surface); color: var(--gb-text-primary);
+}
+.nr-tipo.activo { border-color: var(--gb-primary); background: var(--gb-icon-bg); color: var(--gb-primary); }
+
+.nr-ayuda { font-size: 0.82rem; color: var(--gb-text-muted); margin: 0 0 14px; }
+
+@media (max-width: 1100px) {
+  .nr-pasos { grid-template-columns: 1fr; }
+}

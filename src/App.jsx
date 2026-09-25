@@ -34,6 +34,9 @@ import DetalleHabitacion from "./modules/reservasHoteleras/pages/DetalleHabitaci
 import MisReservasHotel from './modules/reservasHoteleras/pages/MisReservasHotel.jsx';
 import GestionarReservasHotel from './modules/reservasHoteleras/pages/GestionarReservasHotel.jsx';
 
+// Módulo: Recepción (ADMIN reserva a nombre de un cliente)
+import NuevaReservaCliente from './modules/recepcion/pages/NuevaReservaCliente.jsx';
+
 // Módulo: Gestión de Usuarios (Exclusivo ADMIN)
 import UsuariosH from './modules/usuarios/pages/UsuariosH.jsx';
 import UsuariosE from './modules/usuarios/pages/UsuariosE.jsx';
@@ -162,6 +165,11 @@ export default function App() {
                         {/* Gestión de reservas hoteleras: aprobar / cancelar con motivo */}
                         <Route path="/reservas-hoteleras/gestionar" element={
                             <RutaProtegida soloAdmin={true}><GestionarReservasHotel /></RutaProtegida>
+                        } />
+
+                        {/* Recepción: registrar una reserva (deportiva u hotelera) a nombre de un cliente */}
+                        <Route path="/recepcion/nueva-reserva" element={
+                            <RutaProtegida soloAdmin={true}><NuevaReservaCliente /></RutaProtegida>
                         } />
 
                         {/* =========================================================

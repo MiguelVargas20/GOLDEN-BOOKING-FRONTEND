@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { useLocation, useNavigate, Navigate } from "react-router-dom";
 import { Form, Row, Col, Alert } from "react-bootstrap";
 import Swal from "sweetalert2";
@@ -19,26 +19,9 @@ import { useRequierePerfilCompleto } from "../../../shared/hooks/useRequirePerfi
 import { imagenEspacio } from "../utils/imagenEspacio";
 import { pesos, hora } from "../../../shared/utils/formato";
 import { escapeHtml } from "../../../shared/utils/escapeHtml";
+import { toLocalISOString, inicioValido, finValido, finSugerido, precioEstimado as calcularPrecio } from "../utils/horarioEspacio";
 
 registerLocale("es", es);
-
-const UNA_HORA_MS = 60 * 60 * 1000;
-
-/**
- * Convierte un Date a "YYYY-MM-DDTHH:mm:ss" con la hora LOCAL del navegador
- * (toISOString() convertiría a UTC y correría la hora).
- */
-function toLocalISOString(date) {
-  const pad = (n) => String(n).padStart(2, "0");
-  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
-}
-
-/** "HH:mm[:ss]" → minutos desde medianoche. */
-const aMinutos = (hhmm) => {
-  const [h, m] = (hhmm || "00:00").split(":").map(Number);
-  return h * 60 + m;
-};
-const minutosDe = (fecha) => fecha.getHours() * 60 + fecha.getMinutes();
 
 /**
  * Reserva de un espacio deportivo. Recibe el espacio elegido en el catálogo
@@ -58,35 +41,23 @@ function ReservarEspacioD() {
   const [rqrEntrenador, setRqrEntrenador] = useState(false);
   const [enviando, setEnviando] = useState(false);
 
-  const apertura = aMinutos(espacio?.horaApertura);
-  const cierre = aMinutos(espacio?.horaCierre);
-
   const ocupado = estaOcupado(espacio?.id, inicio, fin);
   const reservasDelDia = ocupadosDelDia(espacio?.id, inicio);
 
-  const precioEstimado = useMemo(() => {
-    if (!inicio || !fin || fin <= inicio) return null;
-    return Math.round(((fin - inicio) / UNA_HORA_MS) * (espacio?.tarifaHora || 0));
-  }, [inicio, fin, espacio]);
+  const precioEstimado = calcularPrecio(espacio, inicio, fin);
 
   // Entró directo por URL sin elegir espacio: volver al catálogo
   if (!espacio) return <Navigate to="/reservas-deportivas" replace />;
 
-  // Horas permitidas: dentro del horario del espacio y no en el pasado
-  const horaInicioValida = (h) => h > new Date() && minutosDe(h) >= apertura && minutosDe(h) + 60 <= cierre;
-  // Salida: mismo día, al menos 1 hora después de la entrada y antes del cierre
-  const finValidaPara = (entrada, h) => Boolean(entrada)
-    && h.toDateString() === entrada.toDateString()
-    && h.getTime() >= entrada.getTime() + UNA_HORA_MS
-    && minutosDe(h) <= cierre;
-  const horaFinValida = (h) => finValidaPara(inicio, h);
+  // Horas permitidas (mismas reglas que valida el backend)
+  const horaInicioValida = (h) => inicioValido(espacio, h);
+  const horaFinValida = (h) => finValido(espacio, inicio, h);
 
   const elegirInicio = (fecha) => {
     setInicio(fecha);
     // Si la salida ya no es válida con la nueva entrada, se sugiere 1 hora después
-    if (fecha && (!fin || !finValidaPara(fecha, fin))) {
-      const sugerida = new Date(fecha.getTime() + UNA_HORA_MS);
-      setFin(minutosDe(sugerida) <= cierre && sugerida.toDateString() === fecha.toDateString() ? sugerida : null);
+    if (fecha && (!fin || !finValido(espacio, fecha, fin))) {
+      setFin(finSugerido(espacio, fecha));
     }
   };
 

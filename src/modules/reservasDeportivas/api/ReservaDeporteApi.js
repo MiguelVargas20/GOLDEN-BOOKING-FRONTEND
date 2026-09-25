@@ -2,9 +2,12 @@ import { authHeaders, extraerMensajeError, apiFetch } from "../../../shared/api/
 
 const API_URL = `${import.meta.env.VITE_API_URL}/api/reservas/deporte`;
 
-// Crear reserva (POST)
-export const crearReservaDeporte = async (data) => {
-  const response = await apiFetch(API_URL, {
+/**
+ * Crear reserva. Queda PENDIENTE hasta que el admin la apruebe.
+ * @param {boolean} confirmar - solo ADMIN (recepción): registrarla ya CONFIRMADA.
+ */
+export const crearReservaDeporte = async (data, confirmar = false) => {
+  const response = await apiFetch(confirmar ? `${API_URL}?confirmar=true` : API_URL, {
     method: "POST",
     headers: authHeaders(),
     body: JSON.stringify(data),

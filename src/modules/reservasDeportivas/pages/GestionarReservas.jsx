@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { BsGrid } from "react-icons/bs";
+import { BsGrid, BsPersonPlus } from "react-icons/bs";
 import PanelReservasAdmin from "../../../shared/components/reservas/PanelReservasAdmin";
 import {
   listarReservasDeporte,
@@ -51,7 +51,12 @@ export default function GestionarReservas() {
     { titulo: "Total", render: (r) => <span className="gb-celda-principal">{pesos(r.pr)}</span> },
     {
       titulo: "Solicitada",
-      render: (r) => <span className="gb-celda-secundaria">{fechaHora(r.fechaSolicitud)}</span>,
+      render: (r) => (
+        <>
+          <span className="gb-celda-secundaria">{fechaHora(r.fechaSolicitud)}</span>
+          {r.registradaPorAdministrador && <span className="gb-etiqueta-recepcion">Registrada en recepción</span>}
+        </>
+      ),
     },
   ];
 
@@ -74,9 +79,14 @@ export default function GestionarReservas() {
       })}
       textoBusqueda={(r) => [r.nombreCliente, r.correoCliente, r.docUsuario, r.tCancha].join(" ")}
       accionesExtra={
-        <button type="button" className="btn-gb btn-gb-neutral btn-gb-sm" onClick={() => navigate("/reservas-deportivas/espacios")}>
-          <BsGrid /> Espacios
-        </button>
+        <>
+          <button type="button" className="btn-gb btn-gb-primary btn-gb-sm" onClick={() => navigate("/recepcion/nueva-reserva?tipo=deporte")}>
+            <BsPersonPlus /> Reservar para un cliente
+          </button>
+          <button type="button" className="btn-gb btn-gb-neutral btn-gb-sm" onClick={() => navigate("/reservas-deportivas/espacios")}>
+            <BsGrid /> Espacios
+          </button>
+        </>
       }
     />
   );

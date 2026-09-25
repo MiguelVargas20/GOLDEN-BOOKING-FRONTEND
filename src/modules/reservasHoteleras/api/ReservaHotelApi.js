@@ -14,8 +14,9 @@ const API_URL = import.meta.env.VITE_API_URL;
 /**
  * Registra una nueva reserva de hotel en el sistema.
  */
-export const crearReservaHotel = async (reserva) => {
-  const res = await apiFetch(`${API_URL}/api/reservas/hotel`, {
+export const crearReservaHotel = async (reserva, confirmar = false) => {
+  // confirmar: solo ADMIN (recepción) — registrar la reserva ya CONFIRMADA
+  const res = await apiFetch(`${API_URL}/api/reservas/hotel${confirmar ? "?confirmar=true" : ""}`, {
     method: "POST",
     headers: authHeaders(),
     body: JSON.stringify(reserva),

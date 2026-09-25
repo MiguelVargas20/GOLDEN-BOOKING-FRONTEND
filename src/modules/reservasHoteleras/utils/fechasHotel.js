@@ -24,12 +24,6 @@ export const haySolapamiento = (checkIn, checkOut, rangosOcupados) => {
 };
 
 /**
- * Genera el set de días (formato "YYYY-MM-DD") que caen DENTRO de algún
- * rango ocupado, útil para pintar/deshabilitar celdas en un datepicker
- * nativo tipo <input type="date">, que no soporta rangos directamente
- * pero sí podemos usar esto para validar on-change.
- */
-/**
  * Convierte un objeto Date a un string "YYYY-MM-DD" usando la fecha LOCAL
  * del navegador. A propósito NO usamos date.toISOString().split("T")[0]:
  * toISOString() primero convierte la fecha a UTC, y como el DatePicker nos
