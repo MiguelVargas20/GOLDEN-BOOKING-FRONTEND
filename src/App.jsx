@@ -37,6 +37,9 @@ import GestionarReservasHotel from './modules/reservasHoteleras/pages/GestionarR
 // Módulo: Recepción (ADMIN reserva a nombre de un cliente)
 import NuevaReservaCliente from './modules/recepcion/pages/NuevaReservaCliente.jsx';
 
+// Panel de control del administrador
+import DashboardAdmin from './modules/dashboard/pages/DashboardAdmin.jsx';
+
 // Módulo: Gestión de Usuarios (Exclusivo ADMIN)
 import UsuariosH from './modules/usuarios/pages/UsuariosH.jsx';
 import UsuariosE from './modules/usuarios/pages/UsuariosE.jsx';
@@ -177,6 +180,11 @@ export default function App() {
                             (Filtro estricto por rol 'ROL_ADMIN')
                             ========================================================= */}
                         
+                        {/* --- PANEL DE CONTROL (indicadores del día, pendientes, habitaciones) --- */}
+                        <Route path="/dashboard" element={
+                            <RutaProtegida soloAdmin={true}><DashboardAdmin /></RutaProtegida>
+                        } />
+
                         {/* --- MÓDULO CONTROL DE USUARIOS --- */}
                         {/* Tabla principal de control, visualización y auditoría de usuarios */}
                         <Route path="/usuarios" element={

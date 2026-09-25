@@ -98,7 +98,7 @@ export default function ComponentNavbar() {
             className={`${styles.customNavbar} shadow-sm py-2`}
         >
             <Container fluid className="px-md-5">
-                        <div className="row w-100 align-items-center m-0 flex-nowrap">
+                        <div className="row w-100 align-items-center m-0 flex-wrap flex-lg-nowrap">
                             
                         {/* 1. COLUMNA IZQUIERDA: Logo (col-auto toma solo el espacio de la imagen) */}
                         <div className="col-auto d-flex justify-content-start align-items-center p-0">
@@ -107,71 +107,72 @@ export default function ComponentNavbar() {
                             </Navbar.Brand>
                         </div>
 
-                        {/* 2. COLUMNA CENTRAL: Menú de navegación (col toma todo el espacio sobrante) */}
-                        <div className="col p-0 d-flex justify-content-center">
-                            <div className="d-lg-none">
-                                <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                            </div>
-                        
-                        <Navbar.Collapse id="basic-navbar-nav">
+                        {/* 2. Botón hamburguesa (solo móvil/tablet) */}
+                        <div className="col d-lg-none p-0 d-flex justify-content-center">
+                            <Navbar.Toggle aria-controls="basic-navbar-nav" />
+                        </div>
+
+                        {/* Menú de navegación: en escritorio va al centro; en móvil se
+                            despliega a todo el ancho debajo de la barra (order-last). */}
+                        <Navbar.Collapse id="basic-navbar-nav" className="col-12 col-lg-auto flex-lg-grow-1 order-last order-lg-0 p-0">
                             <Nav className="mx-auto align-items-center justify-content-center w-100">
                                 <Nav.Link as={Link} to="/home" onClick={() => setNavExpanded(false)} className={styles.navLink}>
                                     Inicio
                                 </Nav.Link>
 
-                                {/* ── Reservas deportivas ── */}
-                                <NavDropdown
-                                    title={<TituloMenu texto="Reservas Deportivas" pendientes={pendientes.deporte} />}
-                                    id="menu-deportes"
-                                    show={menuAbierto === "deportes"}
-                                    onToggle={(abierto) => setMenuAbierto(abierto ? "deportes" : null)}
-                                    className={`${styles.navLink} ${styles.servicesDropdown}`}
-                                >
-                                    <ItemMenu to="/reservas-deportivas" icono={<MdSportsTennis />} titulo="Espacios deportivos" texto="Explora y reserva canchas." onElegir={cerrarMenus} />
-                                    <ItemMenu to="/reservas-deportivas/mis-reservas" icono={<BsClockHistory />} titulo="Mis reservas" texto="Estado de tus reservas." onElegir={cerrarMenus} />
-                                    {isAdmin() && (
-                                        <>
-                                            <NavDropdown.Divider />
-                                            <ItemMenu to="/reservas-deportivas/gestionar" icono={<BsCalendarCheck />} titulo="Gestionar reservas" texto="Aprobar o cancelar solicitudes." badge={pendientes.deporte} onElegir={cerrarMenus} />
-                                            <ItemMenu to="/recepcion/nueva-reserva?tipo=deporte" icono={<BsPersonPlus />} titulo="Reservar para un cliente" texto="Registro en recepción." onElegir={cerrarMenus} />
-                                            <ItemMenu to="/reservas-deportivas/espacios" icono={<BsGrid />} titulo="Administrar espacios" texto="Crear, editar e imágenes." onElegir={cerrarMenus} />
-                                        </>
-                                    )}
-                                </NavDropdown>
-
-                                {/* ── Reservas hoteleras ── */}
-                                <NavDropdown
-                                    title={<TituloMenu texto="Reservas Hoteleras" pendientes={pendientes.hotel} />}
-                                    id="menu-hotel"
-                                    show={menuAbierto === "hotel"}
-                                    onToggle={(abierto) => setMenuAbierto(abierto ? "hotel" : null)}
-                                    className={`${styles.navLink} ${styles.servicesDropdown}`}
-                                >
-                                    <ItemMenu to="/reservas-hospedaje" icono={<BsSearch />} titulo="Reservar habitación" texto="Disponibilidad y precios." onElegir={cerrarMenus} />
-                                    <ItemMenu to="/mis-reservas-hotel" icono={<BsClockHistory />} titulo="Mis reservas" texto="Estado de tus estadías." onElegir={cerrarMenus} />
-                                    {isAdmin() && (
-                                        <>
-                                            <NavDropdown.Divider />
-                                            <ItemMenu to="/reservas-hoteleras/gestionar" icono={<BsCalendarCheck />} titulo="Gestionar reservas" texto="Aprobar o cancelar solicitudes." badge={pendientes.hotel} onElegir={cerrarMenus} />
-                                            <ItemMenu to="/recepcion/nueva-reserva?tipo=hotel" icono={<BsPersonPlus />} titulo="Reservar para un cliente" texto="Registro en recepción." onElegir={cerrarMenus} />
-                                        </>
-                                    )}
-                                </NavDropdown>
-
-                                {/* ── Habitaciones (administración, independiente de las reservas) ── */}
                                 {isAdmin() && (
-                                    <NavDropdown
-                                        title="Habitaciones"
-                                        id="menu-habitaciones"
-                                        show={menuAbierto === "habitaciones"}
-                                        onToggle={(abierto) => setMenuAbierto(abierto ? "habitaciones" : null)}
-                                        className={`${styles.navLink} ${styles.servicesDropdown}`}
-                                    >
-                                        <ItemMenu to="/gestionar-habitaciones" icono={<MdKingBed />} titulo="Gestionar habitaciones" texto="Precios, estados y edición." onElegir={cerrarMenus} />
-                                        <ItemMenu to="/crear-habitacion" icono={<MdAddBox />} titulo="Crear habitación" texto="Agregar al catálogo." onElegir={cerrarMenus} />
-                                        <ItemMenu to="/tipo-habitacion" icono={<MdCategory />} titulo="Tipos de habitación" texto="Suite, doble, sencilla..." onElegir={cerrarMenus} />
-                                    </NavDropdown>
+                                    <Nav.Link as={Link} to="/dashboard" onClick={() => setNavExpanded(false)} className={styles.navLink}>
+                                        Dashboard
+                                    </Nav.Link>
                                 )}
+
+                                {/* ── Servicios: un solo menú con las secciones de reservas y habitaciones ── */}
+                                <NavDropdown
+                                    title={<TituloMenu texto="Servicios" pendientes={pendientes.deporte + pendientes.hotel} />}
+                                    id="menu-servicios"
+                                    show={menuAbierto === "servicios"}
+                                    onToggle={(abierto) => setMenuAbierto(abierto ? "servicios" : null)}
+                                    className={`${styles.navLink} ${styles.servicesDropdown}`}
+                                >
+                                    <div className={`${styles.megaMenu} ${isAdmin() ? styles.megaMenuTres : ""}`}>
+                                        {/* Reservas deportivas */}
+                                        <section className={styles.megaSeccion}>
+                                            <NavDropdown.Header className={styles.megaTitulo}>Reservas deportivas</NavDropdown.Header>
+                                            <ItemMenu to="/reservas-deportivas" icono={<MdSportsTennis />} titulo="Espacios deportivos" texto="Explora y reserva canchas." onElegir={cerrarMenus} />
+                                            <ItemMenu to="/reservas-deportivas/mis-reservas" icono={<BsClockHistory />} titulo="Mis reservas" texto="Estado de tus reservas." onElegir={cerrarMenus} />
+                                            {isAdmin() && (
+                                                <>
+                                                    <ItemMenu to="/reservas-deportivas/gestionar" icono={<BsCalendarCheck />} titulo="Gestionar reservas" texto="Aprobar o cancelar solicitudes." badge={pendientes.deporte} onElegir={cerrarMenus} />
+                                                    <ItemMenu to="/recepcion/nueva-reserva?tipo=deporte" icono={<BsPersonPlus />} titulo="Reservar para un cliente" texto="Registro en recepción." onElegir={cerrarMenus} />
+                                                    <ItemMenu to="/reservas-deportivas/espacios" icono={<BsGrid />} titulo="Administrar espacios" texto="Crear, editar e imágenes." onElegir={cerrarMenus} />
+                                                </>
+                                            )}
+                                        </section>
+
+                                        {/* Reservas hoteleras */}
+                                        <section className={styles.megaSeccion}>
+                                            <NavDropdown.Header className={styles.megaTitulo}>Reservas hoteleras</NavDropdown.Header>
+                                            <ItemMenu to="/reservas-hospedaje" icono={<BsSearch />} titulo="Reservar habitación" texto="Disponibilidad y precios." onElegir={cerrarMenus} />
+                                            <ItemMenu to="/mis-reservas-hotel" icono={<BsClockHistory />} titulo="Mis reservas" texto="Estado de tus estadías." onElegir={cerrarMenus} />
+                                            {isAdmin() && (
+                                                <>
+                                                    <ItemMenu to="/reservas-hoteleras/gestionar" icono={<BsCalendarCheck />} titulo="Gestionar reservas" texto="Aprobar o cancelar solicitudes." badge={pendientes.hotel} onElegir={cerrarMenus} />
+                                                    <ItemMenu to="/recepcion/nueva-reserva?tipo=hotel" icono={<BsPersonPlus />} titulo="Reservar para un cliente" texto="Registro en recepción." onElegir={cerrarMenus} />
+                                                </>
+                                            )}
+                                        </section>
+
+                                        {/* Habitaciones (administración, independiente de las reservas) */}
+                                        {isAdmin() && (
+                                            <section className={styles.megaSeccion}>
+                                                <NavDropdown.Header className={styles.megaTitulo}>Habitaciones</NavDropdown.Header>
+                                                <ItemMenu to="/gestionar-habitaciones" icono={<MdKingBed />} titulo="Gestionar habitaciones" texto="Precios, estados y edición." onElegir={cerrarMenus} />
+                                                <ItemMenu to="/crear-habitacion" icono={<MdAddBox />} titulo="Crear habitación" texto="Agregar al catálogo." onElegir={cerrarMenus} />
+                                                <ItemMenu to="/tipo-habitacion" icono={<MdCategory />} titulo="Tipos de habitación" texto="Suite, doble, sencilla..." onElegir={cerrarMenus} />
+                                            </section>
+                                        )}
+                                    </div>
+                                </NavDropdown>
 
                                 <Nav.Link as={Link} to="/contactos" onClick={() => setNavExpanded(false)} className={styles.navLink}>
                                     Contactanos
@@ -184,7 +185,6 @@ export default function ComponentNavbar() {
                                 )}
                             </Nav>
                         </Navbar.Collapse>
-                    </div>
 
                     {/* 3. COLUMNA DERECHA: Acciones globales */}
                     <div className="col-auto d-flex justify-content-end align-items-center gap-2 p-0">

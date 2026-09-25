@@ -153,6 +153,80 @@
     min-width: 280px;
 }
 
+/* ── Menú "Servicios": secciones en columnas (escritorio) ── */
+.megaMenu {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(230px, 1fr));
+    gap: 4px 16px;
+}
+
+.megaMenuTres {
+    grid-template-columns: repeat(3, minmax(230px, 1fr));
+}
+
+/* En escritorio el menú se centra bajo "Servicios" y no se sale de la pantalla */
+@media (min-width: 992px) {
+    .servicesDropdown :global(.dropdown-menu) {
+        left: 50% !important;
+        transform: translateX(-50%);
+        max-width: calc(100vw - 32px);
+    }
+}
+
+.megaSeccion {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.megaSeccion + .megaSeccion {
+    border-left: 1px solid var(--gb-border, #e2e8f0);
+    padding-left: 16px;
+}
+
+.megaTitulo {
+    font-size: 0.7rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--gb-primary, #f38d1e) !important;
+    padding: 4px 12px 8px !important;
+    font-family: 'Poppins', sans-serif !important;
+}
+
+/* Móvil / tablet: el menú fluye dentro de la barra desplegada y las secciones se apilan */
+@media (max-width: 991.98px) {
+    .servicesDropdown {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .servicesDropdown :global(.dropdown-menu) {
+        position: static !important;
+        transform: none !important;
+        width: 100%;
+        min-width: 0;
+        margin-top: 6px;
+        box-shadow: none !important;
+        text-align: left;
+    }
+
+    .megaMenu,
+    .megaMenuTres {
+        grid-template-columns: 1fr;
+    }
+
+    .megaSeccion + .megaSeccion {
+        border-left: none;
+        padding-left: 0;
+        border-top: 1px solid var(--gb-border, #e2e8f0);
+        padding-top: 8px;
+        margin-top: 4px;
+    }
+}
+
 .dropdownItemCustom {
     display: flex !important;
     align-items: center;

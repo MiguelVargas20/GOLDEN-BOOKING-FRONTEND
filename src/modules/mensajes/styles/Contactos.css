@@ -8,7 +8,8 @@
     border-radius: 12px;
 }
 
-h1{
+/* Antes era "h1 { ... }" global y centraba los títulos de TODAS las páginas */
+.title-contacts {
   text-align: center;
 }
 
