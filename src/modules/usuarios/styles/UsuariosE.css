@@ -139,3 +139,25 @@
 .editar-page-body .row {
   margin-bottom: 8px;
 }
+/* ── Secciones del formulario completo ── */
+.editar-seccion {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--gb-primary, #f38d1e);
+  margin: 8px 0 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--gb-border, #e2e8f0);
+}
+
+.editar-aviso {
+  color: var(--gb-status-warning-text, #e65100) !important;
+  font-weight: 600;
+}
+
+.editar-nota {
+  font-size: 0.8rem;
+  color: var(--gb-text-muted, #718096);
+  margin-top: 6px;
+}

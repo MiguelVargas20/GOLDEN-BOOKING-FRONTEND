@@ -124,6 +124,7 @@ export default function UsuariosH() {
             <th>NOMBRE</th>
             <th>APELLIDO</th>
             <th>CORREO</th>
+            <th>ROL</th>
             <th>ESTADO</th>
             <th>GESTIONAR</th>
           </tr>
@@ -131,7 +132,7 @@ export default function UsuariosH() {
         <tbody>
           {usuariosFiltrados.length === 0 ? (
             <tr>
-              <td colSpan={6} className="text-center">No hay usuarios registrados</td>
+              <td colSpan={7} className="text-center">No hay usuarios registrados</td>
             </tr>
           ) : (
             usuariosFiltrados.map((u) => (
@@ -140,6 +141,7 @@ export default function UsuariosH() {
                 <td>{u.nombre}</td>
                 <td>{u.apellido}</td>
                 <td>{u.email}</td>
+                <td>{u.roles?.includes("ROL_ADMIN") ? "Administrador" : "Cliente"}</td>
                 <td>
                   <span className={`user-status ${u.estado?.toLowerCase()}`}>
                     {u.estado}

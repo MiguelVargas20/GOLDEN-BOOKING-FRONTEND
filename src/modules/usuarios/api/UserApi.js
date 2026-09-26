@@ -1,4 +1,4 @@
-import { authHeaders, apiFetch } from "../../../shared/api/apiUtils";
+import { authHeaders, apiFetch, extraerMensajeError } from "../../../shared/api/apiUtils";
 
 const API_URL = `${import.meta.env.VITE_API_URL}/api/usuarios`;
 
@@ -34,9 +34,9 @@ export const actualizarUsuario = async (id, data) => {
     headers: authHeaders(),
     body: JSON.stringify(data)
   });
-  const json = await response.json();
-  if (!response.ok) throw new Error(json.error || "Error al actualizar");
-  return json;
+  // extraerMensajeError también lee los errores de validación campo por campo
+  if (!response.ok) throw new Error(await extraerMensajeError(response, "No se pudo actualizar el usuario"));
+  return response.json();
 };
 
 // Eliminar usuario (ADMIN)
