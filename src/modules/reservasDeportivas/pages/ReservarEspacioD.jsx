@@ -1,13 +1,8 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useLocation, useNavigate, Navigate } from "react-router-dom";
-import { Form, Row, Col, Alert } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import Swal from "sweetalert2";
-import DatePicker, { registerLocale } from "react-datepicker";
-import { es } from "date-fns/locale";
-import { BiCalendarAlt } from "react-icons/bi";
-import { BsClock, BsPeople, BsCashCoin, BsArrowLeft } from "react-icons/bs";
-import "react-datepicker/dist/react-datepicker.css";
-import "../../../shared/styles/DatePickerCompartido.css";
+import { BsClock, BsPeople, BsCashCoin, BsArrowLeft, BsCheck2, BsAward } from "react-icons/bs";
 import "../../../shared/styles/PanelAdmin.css";
 import "../../../shared/styles/BotonesCompartidos.css";
 import "../styles/GestionEspacios.css";
@@ -17,16 +12,25 @@ import { useAuth } from "../../../shared/context/AuthContext";
 import { useReservasDeporte } from "../hooks/useReservasDeporte";
 import { useRequierePerfilCompleto } from "../../../shared/hooks/useRequirePerfilCompleto.js";
 import { imagenEspacio, usarImagenDeRespaldo } from "../utils/imagenEspacio";
-import { pesos, hora } from "../../../shared/utils/formato";
+import { pesos } from "../../../shared/utils/formato";
 import { escapeHtml } from "../../../shared/utils/escapeHtml";
-import { toLocalISOString, inicioValido, finValido, finSugerido, precioEstimado as calcularPrecio } from "../utils/horarioEspacio";
+import { aFecha, aTextoFecha } from "../../../shared/utils/fechas";
+import { toLocalISOString } from "../utils/horarioEspacio";
+import CampoFecha from "../../../shared/components/fechas/CampoFecha";
+import SelectorHorario from "../../../shared/components/fechas/SelectorHorario";
+import { aHora, aMinutos } from "../../../shared/utils/horas";
+import EditorMiembros from "../../../shared/components/reservas/EditorMiembros";
+import { limpiarMiembros, validarMiembros } from "../../../shared/utils/miembros";
 import Opiniones from "../../calificaciones/components/Opiniones";
+import { useMiMembresia, NOMBRE_MEMBRESIA } from "../../membresias/hooks/useMiMembresia";
 
-registerLocale("es", es);
+const HOY = aTextoFecha(new Date());
+const sumarDias = (dias) => { const d = new Date(); d.setDate(d.getDate() + dias); return aTextoFecha(d); };
 
 /**
- * Reserva de un espacio deportivo. Recibe el espacio elegido en el catálogo
- * (state.espacio) y respeta su horario de apertura/cierre y su tarifa.
+ * Reserva de un espacio deportivo: día (calendario), hora de entrada y
+ * duración con botones, implementos sugeridos para ese espacio y acompañantes.
+ * Si el cliente es socio se muestra su descuento.
  */
 function ReservarEspacioD() {
   const { state } = useLocation();
@@ -34,32 +38,39 @@ function ReservarEspacioD() {
   const { user, isAdmin } = useAuth();
   const { verificarPerfil } = useRequierePerfilCompleto();
   const { estaOcupado, ocupadosDelDia, conectado } = useReservasDeporte();
+  const membresia = useMiMembresia();
 
   const espacio = state?.espacio;
-  const [inicio, setInicio] = useState(null);
-  const [fin, setFin] = useState(null);
-  const [implAlquilados, setImplAlquilados] = useState("");
+  const [dia, setDia] = useState("");
+  const [hora, setHora] = useState("");
+  const [duracion, setDuracion] = useState(60);
+  const [implementos, setImplementos] = useState([]);
+  const [otroImplemento, setOtroImplemento] = useState("");
   const [rqrEntrenador, setRqrEntrenador] = useState(false);
+  const [miembros, setMiembros] = useState([]);
   const [enviando, setEnviando] = useState(false);
 
+  const inicio = dia && hora ? new Date(`${dia}T${hora}:00`) : null;
+  const fin = inicio ? new Date(`${dia}T${aHora(aMinutos(hora) + duracion)}:00`) : null;
+  const ocupados = useMemo(() => (dia ? ocupadosDelDia(espacio?.id, aFecha(dia)) : []), [dia, espacio?.id, ocupadosDelDia]);
   const ocupado = estaOcupado(espacio?.id, inicio, fin);
-  const reservasDelDia = ocupadosDelDia(espacio?.id, inicio);
 
-  const precioEstimado = calcularPrecio(espacio, inicio, fin);
-
-  // Entró directo por URL sin elegir espacio: volver al catálogo
   if (!espacio) return <Navigate to="/reservas-deportivas" replace />;
 
-  // Horas permitidas (mismas reglas que valida el backend)
-  const horaInicioValida = (h) => inicioValido(espacio, h);
-  const horaFinValida = (h) => finValido(espacio, inicio, h);
+  const descuento = membresia?.descuento || 0;
+  const bruto = inicio ? Math.round((duracion / 60) * espacio.tarifaHora) : null;
+  const total = bruto !== null ? Math.round(bruto * (1 - descuento / 100)) : null;
+  const maxDia = membresia ? sumarDias(membresia.diasAnticipacion) : undefined;
+  const cupos = Math.max(0, (espacio.capacidad || 1) - 1);
+  const sugeridos = espacio.implementos || [];
 
-  const elegirInicio = (fecha) => {
-    setInicio(fecha);
-    // Si la salida ya no es válida con la nueva entrada, se sugiere 1 hora después
-    if (fecha && (!fin || !finValido(espacio, fecha, fin))) {
-      setFin(finSugerido(espacio, fecha));
-    }
+  const alternarImplemento = (nombre) =>
+    setImplementos((lista) => (lista.includes(nombre) ? lista.filter((x) => x !== nombre) : [...lista, nombre]));
+  const textoImplementos = [...implementos, otroImplemento.trim()].filter(Boolean).join(", ");
+
+  const elegirDia = (nuevo) => {
+    setDia(nuevo);
+    setHora("");
   };
 
   const handleSubmit = async (e) => {
@@ -67,12 +78,17 @@ function ReservarEspacioD() {
     const docUsuario = verificarPerfil(user);
     if (!docUsuario) return;
 
-    if (!inicio || !fin) {
-      Swal.fire({ title: "Elige tu horario", text: "Selecciona la hora de entrada y de salida.", icon: "warning", confirmButtonColor: "#f38d1e" });
+    if (!inicio) {
+      Swal.fire({ title: "Elige tu horario", text: "Selecciona el día y la hora de entrada.", icon: "warning", confirmButtonColor: "#f38d1e" });
       return;
     }
     if (ocupado) {
       Swal.fire({ title: "Horario no disponible", text: "Ese horario se cruza con otra reserva. Elige otro.", icon: "error", confirmButtonColor: "#f38d1e" });
+      return;
+    }
+    const problema = validarMiembros(miembros, docUsuario);
+    if (problema) {
+      Swal.fire({ title: "Revisa los acompañantes", text: problema, icon: "warning", confirmButtonColor: "#f38d1e" });
       return;
     }
 
@@ -82,8 +98,10 @@ function ReservarEspacioD() {
         <div class="gb-swal-detalle">
           <div><span>Espacio</span><strong>${escapeHtml(espacio.nombre)}</strong></div>
           <div><span>Fecha</span><strong>${inicio.toLocaleDateString("es-CO")}</strong></div>
-          <div><span>Horario</span><strong>${hora(inicio)} – ${hora(fin)}</strong></div>
-          <div><span>Total estimado</span><strong>${pesos(precioEstimado)}</strong></div>
+          <div><span>Horario</span><strong>${hora} – ${aHora(aMinutos(hora) + duracion)}</strong></div>
+          ${textoImplementos ? `<div><span>Implementos</span><strong>${escapeHtml(textoImplementos)}</strong></div>` : ""}
+          <div><span>Personas</span><strong>${miembros.length + 1}</strong></div>
+          <div><span>Total estimado</span><strong>${pesos(total)}${descuento ? ` (−${descuento} %)` : ""}</strong></div>
         </div>
         <p class="gb-swal-nota">Tu reserva quedará <strong>pendiente</strong> hasta que la administración la apruebe. Te avisaremos por correo.</p>`,
       icon: "question",
@@ -102,8 +120,9 @@ function ReservarEspacioD() {
         docUsuario,
         fInicioReserva: toLocalISOString(inicio),
         fFinReserva: toLocalISOString(fin),
-        implAlquilados,
+        implAlquilados: textoImplementos,
         rqrEntrenador,
+        miembros: limpiarMiembros(miembros),
       });
       await Swal.fire({
         title: "¡Solicitud enviada!",
@@ -126,7 +145,6 @@ function ReservarEspacioD() {
       </button>
 
       <div className="re-layout">
-        {/* Información del espacio */}
         <aside className="re-espacio">
           <div className="re-imagen"><img src={imagenEspacio(espacio)} alt={espacio.nombre} onError={usarImagenDeRespaldo(espacio)} /></div>
           <div className="re-espacio-info">
@@ -138,101 +156,59 @@ function ReservarEspacioD() {
               <li><BsPeople /> Hasta {espacio.capacidad} personas</li>
               <li><BsClock /> Horario: {espacio.horaApertura?.slice(0, 5)} – {espacio.horaCierre?.slice(0, 5)}</li>
             </ul>
+            {descuento > 0 && (
+              <span className="re-socio"><BsAward /> {NOMBRE_MEMBRESIA[membresia.membresia]}: {descuento} % de descuento</span>
+            )}
             <span className={`re-vivo ${conectado ? "on" : ""}`}>{conectado ? "● Disponibilidad en vivo" : "○ Conectando..."}</span>
           </div>
         </aside>
 
-        {/* Formulario */}
         <Form className="re-form" onSubmit={handleSubmit}>
           <h2 className="re-form-titulo">Elige tu horario</h2>
 
-          <Row>
-            <Col sm={6} className="mb-3">
-              <Form.Label className="fw-bold">Entrada</Form.Label>
-              <div className="date-input-wrapper">
-                <BiCalendarAlt className="calendar-icon" />
-                <DatePicker
-                  selected={inicio}
-                  onChange={elegirInicio}
-                  showTimeSelect
-                  timeIntervals={30}
-                  dateFormat="Pp"
-                  locale="es"
-                  className="form-control custom-date-input"
-                  placeholderText="dd/mm/aaaa --:--"
-                  minDate={new Date()}
-                  filterTime={horaInicioValida}
-                />
-              </div>
-            </Col>
-            <Col sm={6} className="mb-3">
-              <Form.Label className="fw-bold">Salida</Form.Label>
-              <div className="date-input-wrapper">
-                <BiCalendarAlt className="calendar-icon" />
-                <DatePicker
-                  selected={fin}
-                  onChange={setFin}
-                  showTimeSelect
-                  timeIntervals={30}
-                  dateFormat="Pp"
-                  locale="es"
-                  className="form-control custom-date-input"
-                  placeholderText={inicio ? "dd/mm/aaaa --:--" : "Primero elige la entrada"}
-                  disabled={!inicio}
-                  minDate={inicio || new Date()}
-                  maxDate={inicio || undefined}
-                  filterTime={horaFinValida}
-                />
-              </div>
-            </Col>
-          </Row>
+          <div className="re-paso">
+            <Form.Label htmlFor="re-dia" className="fw-bold">Día</Form.Label>
+            <CampoFecha id="re-dia" valor={dia} onCambio={elegirDia} min={HOY} max={maxDia} placeholder="¿Qué día quieres jugar?" />
+            {maxDia && <span className="gb-ayuda">Puedes reservar con hasta {membresia.diasAnticipacion} días de anticipación.</span>}
+          </div>
 
-          {inicio && reservasDelDia.length > 0 && (
-            <div className="re-ocupados">
-              <strong>Horarios ya reservados ese día:</strong>
-              <div>{reservasDelDia.map((o) => (
-                <span key={o.inicio.getTime()} className="re-ocupado">{hora(o.inicio)} – {hora(o.fin)}</span>
-              ))}</div>
+          <div className="re-paso">
+            <SelectorHorario espacio={espacio} dia={dia} ocupados={ocupados} hora={hora} duracion={duracion}
+              onCambio={({ hora: h, duracion: d }) => { setHora(h); setDuracion(d); }} />
+          </div>
+
+          <div className="re-paso">
+            <span className="fw-bold d-block mb-2">Implementos</span>
+            <div className="re-implementos" role="group" aria-label="Implementos">
+              {sugeridos.map((nombre) => (
+                <button key={nombre} type="button" aria-pressed={implementos.includes(nombre)}
+                  className={`gb-chip ${implementos.includes(nombre) ? "activo" : ""}`} onClick={() => alternarImplemento(nombre)}>
+                  {implementos.includes(nombre) && <BsCheck2 />} {nombre}
+                </button>
+              ))}
             </div>
-          )}
+            <Form.Control className="mt-2" maxLength={80} placeholder="¿Otro? Escríbelo aquí (opcional)"
+              value={otroImplemento} onChange={(e) => setOtroImplemento(e.target.value)} />
+          </div>
 
-          {ocupado && (
-            <Alert variant="danger" className="fw-bold">
-              Ese horario se cruza con otra reserva. Elige otro horario.
-            </Alert>
-          )}
+          <div className="re-paso">
+            <span className="fw-bold d-block mb-2">Acompañantes</span>
+            <EditorMiembros miembros={miembros} onCambio={setMiembros} maximo={cupos} />
+          </div>
 
-          <Form.Group className="mb-3">
-            <Form.Label className="fw-bold">Implementos adicionales</Form.Label>
-            <Form.Control
-              maxLength={200}
-              placeholder="Ej.: balones, raquetas, petos..."
-              value={implAlquilados}
-              onChange={(e) => setImplAlquilados(e.target.value)}
-            />
-          </Form.Group>
-
-          <Form.Check
-            type="switch"
-            id="rqr-entrenador"
-            label="¿Requiere un entrenador profesional?"
-            className="mb-4 fw-bold"
-            checked={rqrEntrenador}
-            onChange={(e) => setRqrEntrenador(e.target.checked)}
-          />
+          <Form.Check type="switch" id="rqr-entrenador" label="¿Requiere un entrenador profesional?" className="mb-3 fw-bold"
+            checked={rqrEntrenador} onChange={(e) => setRqrEntrenador(e.target.checked)} />
 
           <div className="re-total">
-            <span>Total estimado</span>
-            <strong>{precioEstimado !== null ? pesos(precioEstimado) : "—"}</strong>
+            <span>Total estimado{descuento ? ` (−${descuento} % socio)` : ""}</span>
+            <strong>{total !== null ? pesos(total) : "—"}</strong>
           </div>
 
           <div className="d-flex gap-3 mt-3">
             <button type="submit" className="btn-gb btn-gb-primary w-100" disabled={enviando || ocupado}>
               {enviando ? "Enviando..." : ocupado ? "Horario no disponible" : "Solicitar reserva"}
             </button>
-            <button type="button" className="btn-gb btn-gb-secondary w-100" onClick={() => navigate(-1)}>
-              Cancelar
-            </button>
+            <button type="button" className="btn-gb btn-gb-secondary w-100" onClick={() => navigate(-1)}>Cancelar</button>
           </div>
           <p className="re-nota">La reserva queda pendiente hasta que la administración la apruebe.</p>
         </Form>

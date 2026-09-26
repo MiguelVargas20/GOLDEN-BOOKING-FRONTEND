@@ -10,6 +10,7 @@ const ACCIONES = {
   FINALIZADA: { texto: "Finalizada", clase: "finalizada" },
   VENCIDA: { texto: "Venció sin aprobarse", clase: "cancelada" },
   CALIFICADA: { texto: "Calificada", clase: "calificada" },
+  ACOMPANANTES: { texto: "Acompañantes actualizados", clase: "reprogramada" },
 };
 const ROLES = { ADMINISTRADOR: "administración", CLIENTE: "cliente", SISTEMA: "automático" };
 

@@ -25,7 +25,7 @@ const ESTADOS = {
 
 const FORM_VACIO = {
   nombre: "", deporte: "", descripcion: "", capacidad: "", tarifaHora: "",
-  horaApertura: "06:00", horaCierre: "22:00", estado: "ACTIVO",
+  horaApertura: "06:00", horaCierre: "22:00", estado: "ACTIVO", implementos: "",
 };
 
 /** "06:00:00" o "06:00" → "06:00" (el input type=time usa HH:mm). */
@@ -98,6 +98,7 @@ export default function GestionEspacios() {
       horaApertura: hhmm(espacio.horaApertura),
       horaCierre: hhmm(espacio.horaCierre),
       estado: espacio.estado || "ACTIVO",
+      implementos: (espacio.implementos || []).join(", "),
     });
     setArchivo(null);
     setVistaPrevia(null);
@@ -132,6 +133,8 @@ export default function GestionEspacios() {
       ...form,
       capacidad: Number(form.capacidad),
       tarifaHora: Number(form.tarifaHora),
+      // "Balón, Petos" → ["Balón", "Petos"]; vacío = los sugeridos según el deporte
+      implementos: form.implementos.split(",").map((t) => t.trim()).filter(Boolean),
     };
 
     setGuardando(true);
@@ -379,6 +382,12 @@ export default function GestionEspacios() {
                     </Form.Group>
                   </Col>
                 </Row>
+                <Form.Group className="mb-3">
+                  <Form.Label htmlFor="ge-implementos">Implementos que se ofrecen</Form.Label>
+                  <Form.Control id="ge-implementos" maxLength={400} value={form.implementos} onChange={cambiarCampo("implementos")}
+                    placeholder="Ej.: Balón, Petos, Conos" />
+                  <small className="text-muted">Sepáralos con comas. El cliente los elige al reservar; si lo dejas vacío se sugieren según el deporte.</small>
+                </Form.Group>
                 <Form.Group>
                   <Form.Label>Estado</Form.Label>
                   <Form.Select value={form.estado} onChange={cambiarCampo("estado")}>

@@ -31,8 +31,8 @@ describe("Recepción: reservar a nombre de un cliente", () => {
     cy.contains("Laura Pérez").should("be.visible");
 
     cy.get("select").select("h1");
-    cy.get("input[placeholder='dd/mm/aaaa']").first().type(`${aDMY(entrada)}{enter}`);
-    cy.get("input[placeholder='dd/mm/aaaa']").last().type(`${aDMY(salida)}{enter}`);
+    cy.get("#nr-checkin").type(`${aDMY(entrada)}{enter}`);
+    cy.get("#nr-checkout").type(`${aDMY(salida)}{enter}`);
     cy.get("#nr-confirmar").check();
     cy.contains("button", "Registrar reserva").click();
     cy.dialogoDice("¿Registrar la reserva?");

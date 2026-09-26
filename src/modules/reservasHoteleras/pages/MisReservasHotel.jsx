@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { BsPlusLg } from "react-icons/bs";
 import ListaMisReservas from "../../../shared/components/reservas/ListaMisReservas";
-import { listarMisReservasHotel, cancelarReservaHotel, reprogramarReservaHotel } from "../api/ReservaHotelApi";
+import { listarMisReservasHotel, cancelarReservaHotel, reprogramarReservaHotel , actualizarMiembrosHotel } from "../api/ReservaHotelApi";
 import { fecha, pesos } from "../../../shared/utils/formato";
 
 /** "Mis reservas" hoteleras del cliente. */
@@ -38,9 +38,10 @@ export default function MisReservasHotel() {
       cargar={listarMisReservasHotel}
       cancelar={cancelarReservaHotel}
       reprogramar={reprogramarReservaHotel}
+      actualizarMiembros={actualizarMiembrosHotel}
       datosReprogramacion={(r) => ({
         tipo: "HOTEL", id: r.idH, lugar: `Habitación ${r.numeroHabitacion}`,
-        inicio: r.fCheckIn, fin: r.fCheckOut, precioNoche: r.pNoche,
+        inicio: r.fCheckIn, fin: r.fCheckOut, precioNoche: r.pNoche, descuento: r.descuento,
       })}
       obtenerId={(r) => r.idH}
       columnas={columnas}

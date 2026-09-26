@@ -33,6 +33,14 @@ export function useReservasDeporte() {
     }
   }, []);
 
+  // Los horarios ocupados se cargan al abrir la pantalla, sin esperar al
+  // WebSocket: si el canal en vivo no conecta (proxy, HTTPS → HTTP), antes el
+  // cliente nunca veía las horas ocupadas.
+  useEffect(() => {
+    const primera = setTimeout(cargarOcupados, 0);
+    return () => clearTimeout(primera);
+  }, [cargarOcupados]);
+
   useEffect(() => {
     const client = new Client({
       webSocketFactory: () => new SockJS(`${WS_URL}/ws`),

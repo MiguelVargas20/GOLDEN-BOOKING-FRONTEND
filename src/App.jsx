@@ -50,6 +50,13 @@ import MiPerfil from './modules/usuarios/pages/MiPerfil.jsx';
 import CalendarioOcupacion from './modules/calendario/pages/CalendarioOcupacion.jsx';
 import Reportes from './modules/reportes/pages/Reportes.jsx';
 
+// Módulo: Consumos (cargos a la reserva o a la cuenta de socio), eventos y socios
+import GestionCargos from './modules/cargos/pages/GestionCargos.jsx';
+import MiCuenta from './modules/cargos/pages/MiCuenta.jsx';
+import EventosCliente from './modules/eventos/pages/EventosCliente.jsx';
+import GestionEventos from './modules/eventos/pages/GestionEventos.jsx';
+import PanelSocios from './modules/membresias/pages/PanelSocios.jsx';
+
 // Módulo: Mensajes (Exclusivo ADMIN)
 import  AdminMensajes  from "./modules/mensajes/pages/AdminMensajes.jsx";
 
@@ -117,6 +124,10 @@ export default function App() {
 
                         {/* Historial de mensajes que el usuario en sesión envió, con respuestas del admin */}
                         <Route path="/mis-mensajes" element={<MisMensajes />} />
+
+                        {/* Eventos publicados del club y consumos del cliente (lo cargado a sus reservas o cuenta de socio) */}
+                        <Route path="/eventos" element={<EventosCliente />} />
+                        <Route path="/mi-cuenta" element={<MiCuenta />} />
 
                         {/* -----------------------------------------------------
                             SUB-SISTEMA: RESERVAS DEPORTIVAS (Pádel, Tenis, etc.)
@@ -226,6 +237,17 @@ export default function App() {
                         } />
                         <Route path="/reportes" element={
                             <RutaProtegida soloAdmin={true}><Reportes /></RutaProtegida>
+                        } />
+
+                        {/* Consumos y cuentas, eventos del club y programa de socios */}
+                        <Route path="/cargos" element={
+                            <RutaProtegida soloAdmin={true}><GestionCargos /></RutaProtegida>
+                        } />
+                        <Route path="/eventos/gestionar" element={
+                            <RutaProtegida soloAdmin={true}><GestionEventos /></RutaProtegida>
+                        } />
+                        <Route path="/socios" element={
+                            <RutaProtegida soloAdmin={true}><PanelSocios /></RutaProtegida>
                         } />
 
                     </Route>

@@ -13,6 +13,13 @@ export const imagenHabitacion = (habitacion) =>
   habitacion?.imagenUrl ? `${API_URL}${habitacion.imagenUrl}` : IMAGEN_HABITACION_POR_DEFECTO;
 
 // Respaldo local (sin internet ni servicios externos): una cama sobre fondo suave
+/** Todas las imágenes de la galería (hasta 5) como URL absolutas; si no hay, la imagen por defecto. */
+export const imagenesHabitacion = (habitacion) => {
+  const lista = (habitacion?.imagenes || []).map((img) => ({ id: img.id, url: `${API_URL}${img.url}` }));
+  if (lista.length) return lista;
+  return [{ id: "defecto", url: imagenHabitacion(habitacion) }];
+};
+
 const IMAGEN_LOCAL = `data:image/svg+xml;utf8,${encodeURIComponent(`
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 250">
   <rect width="400" height="250" fill="#fef3e6"/>

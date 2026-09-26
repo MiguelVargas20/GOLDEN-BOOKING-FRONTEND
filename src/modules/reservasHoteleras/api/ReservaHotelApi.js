@@ -102,3 +102,14 @@ export const reprogramarReservaHotel = async (id, checkIn, checkOut) => {
   if (!res.ok) throw new Error(await extraerMensajeError(res, "No se pudo reprogramar la reserva"));
   return res.json();
 };
+
+/** Reemplaza los acompañantes (huéspedes) de la reserva. */
+export const actualizarMiembrosHotel = async (id, miembros) => {
+  const res = await apiFetch(`${API_URL}/api/reservas/hotel/${id}/miembros`, {
+    method: "PATCH",
+    headers: authHeaders(),
+    body: JSON.stringify({ miembros }),
+  });
+  if (!res.ok) throw new Error(await extraerMensajeError(res, "No se pudieron guardar los acompañantes"));
+  return res.json();
+};

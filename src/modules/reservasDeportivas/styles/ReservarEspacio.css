@@ -51,3 +51,13 @@
   .re-layout { grid-template-columns: 1fr; }
   .re-espacio { position: static; }
 }
+
+/* Pasos del formulario (día, horario, implementos, acompañantes) */
+.re-paso { padding: 14px 0; border-bottom: 1px dashed var(--gb-border); display: grid; gap: 6px; }
+.re-paso:first-of-type { padding-top: 0; }
+.re-implementos { display: flex; flex-wrap: wrap; gap: 8px; }
+.re-implementos .gb-chip { display: inline-flex; align-items: center; gap: 4px; }
+.re-socio {
+  display: inline-flex; align-items: center; gap: 6px; margin: 4px 0 8px; padding: 4px 10px; border-radius: 999px;
+  background: var(--gb-icon-bg); color: var(--gb-primary); font-weight: 700; font-size: 0.8rem;
+}

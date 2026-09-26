@@ -191,3 +191,27 @@ export const eliminarImagenHabitacion = async (id) => {
   if (!res.ok) throw new Error(await extraerMensajeError(res, "No se pudo quitar la imagen"));
   return res.json();
 };
+
+// ═══════════════════════════════════════════════════════════
+// Galería (hasta 5 imágenes; la primera es la portada)
+// ═══════════════════════════════════════════════════════════
+
+export const agregarImagenHabitacion = async (id, archivo) => {
+  const datos = new FormData();
+  datos.append("archivo", archivo);
+  const res = await apiFetch(`${API_URL}/api/habitaciones/${id}/imagenes`, { method: "POST", headers: authHeaderToken(), body: datos });
+  if (!res.ok) throw new Error(await extraerMensajeError(res, "No se pudo subir la imagen"));
+  return res.json();
+};
+
+export const quitarImagenGaleria = async (id, imagenId) => {
+  const res = await apiFetch(`${API_URL}/api/habitaciones/${id}/imagenes/${imagenId}`, { method: "DELETE", headers: authHeaders() });
+  if (!res.ok) throw new Error(await extraerMensajeError(res, "No se pudo quitar la imagen"));
+  return res.json();
+};
+
+export const elegirPortadaHabitacion = async (id, imagenId) => {
+  const res = await apiFetch(`${API_URL}/api/habitaciones/${id}/imagenes/${imagenId}/portada`, { method: "PATCH", headers: authHeaders() });
+  if (!res.ok) throw new Error(await extraerMensajeError(res, "No se pudo cambiar la portada"));
+  return res.json();
+};

@@ -34,7 +34,9 @@ npm run build
 | `/reservas-deportivas/mis-reservas` | Todos | Mis reservas deportivas: cancelar, cambiar la fecha y calificar las finalizadas |
 | `/habitaciones`, `/habitaciones/:id` | Todos | Catálogo y detalle de habitaciones, reserva por noches |
 | `/reservas-hoteleras/mis-reservas` | Todos | Mis reservas hoteleras: cancelar, cambiar la fecha y calificar las finalizadas |
-| `/mi-perfil`, `/mis-mensajes`, `/contactos` | Todos | Perfil, mensajes y contacto |
+| `/mi-perfil`, `/mis-mensajes`, `/contactos` | Todos | Perfil (con la tarjeta **Mi membresía**), mensajes y contacto |
+| `/eventos` | Cliente | Agenda de eventos del club (baile, recreación, festivales...) |
+| `/mi-cuenta` | Cliente | Consumos cargados a sus reservas o a su cuenta de socio |
 | `/reservas-deportivas/gestionar`, `/reservas-hoteleras/gestionar` | Admin | Aprobar, cancelar (con motivo) o reprogramar solicitudes y ver el historial de cada reserva |
 | `/calendario` | Admin | Calendario semanal de ocupación por habitación y espacio |
 | `/reportes` | Admin | Reservas e ingresos por rango de fechas, descargables en Excel y PDF |
@@ -43,8 +45,19 @@ npm run build
 | `/habitaciones/gestionar`, `/habitaciones/crear`, `/habitaciones/tipos` | Admin | Administrar habitaciones, imágenes y tipos |
 | `/usuarios`, `/usuarios-crear`, `/usuarios-edit` | Admin | Administrar usuarios y roles |
 | `/mensajes` | Admin | Bandeja de mensajes de contacto |
+| `/cargos` | Admin | Consumos y cuentas: cargar a la reserva activa o a la cuenta de socio y cobrar al check-out o a fin de mes |
+| `/eventos/gestionar` | Admin | Crear, editar, publicar y eliminar eventos (con imagen) |
+| `/socios` | Admin | Programa de socios: reservas para sugerir, beneficios de Ocasional y Miembro, asignar categoría |
 
-El cliente tiene una **campana de notificaciones** (reserva aprobada, cancelada, reprogramada, vencida o lista para calificar) y los catálogos muestran el **promedio de estrellas** de cada espacio y habitación.
+El cliente tiene una **campana de notificaciones** (reserva aprobada, cancelada, reprogramada, vencida o lista para calificar, nuevo evento, consumo cargado, cambio de membresía) y los catálogos muestran el **promedio de estrellas** de cada espacio y habitación.
+
+Otras funciones:
+- **Calendario único** (`CampoFecha`) y **selector de horas por botones** (`SelectorHorario`) en todas las pantallas de reserva y en *Cambiar fecha*.
+- **Acompañantes** en cada reserva (nombre + CC, TI, CE, PA o RC), visibles y editables en el detalle de la reserva.
+- **Implementos sugeridos** según el deporte del espacio, seleccionables con un clic.
+- **Galería de hasta 5 fotos** por habitación, en carrusel para el cliente.
+- **Próximos eventos** arriba en la portada del cliente, con la insignia *Nuevo*.
+- **Socios**: descuento y días de anticipación según la categoría (Ocasional o Miembro).
 
 ## Pruebas de extremo a extremo (Cypress)
 Las pruebas están en `cypress/e2e` y **simulan el backend** con `cy.intercept`, así que no hace falta tener el servidor ni MongoDB: solo el frontend.
@@ -60,7 +73,7 @@ npm run cypress      # o abre Cypress para verlas paso a paso
 | `01-login` | Validaciones, credenciales incorrectas, ingreso del admin, rutas protegidas, recuperar contraseña |
 | `02-registro` | Validaciones, contraseñas distintas, registro completo, error del servidor |
 | `03-navbar` | Menú del admin y del cliente, campana de respuestas, cerrar sesión |
-| `04-reserva-deportiva-cliente` | Catálogo, filtro, reservar con horario, hora local, error 409, cancelar |
+| `04-reserva-deportiva-cliente` | Catálogo, filtro, calendario y botones de hora, implementos sugeridos, hora local, error 409, cancelar |
 | `05-reservas-deportivas-admin` | Aprobar, cancelar con motivo, filtros, búsqueda; crear/editar espacios y cambiar estado |
 | `06-reserva-hotel-cliente` | Catálogo, orden por precio, reservar desde el detalle, fechas cruzadas, motivo de cancelación |
 | `07-reservas-hotel-admin` | Listado, aprobar, cancelar con motivo, ir a recepción |
@@ -76,6 +89,11 @@ npm run cypress      # o abre Cypress para verlas paso a paso
 | `17-calificaciones` | Calificar finalizada, ya calificada, solo finalizadas, promedio en catálogo, opiniones |
 | `18-calendario` | Noches por habitación, horarios por espacio, semana siguiente, cliente sin acceso |
 | `19-reportes` | Mes actual, rango elegido, rangos rápidos, descarga Excel/PDF, error del servidor |
+| `20-acompanantes` | Acompañantes al reservar (CC y TI), titular rechazado, editar en el detalle, descuento de socio |
+| `21-galeria-habitacion` | Carrusel del cliente, agregar foto, elegir portada, quitar, máximo 5 |
+| `22-consumos` | Cargar a la estadía o a la cuenta de socio, consumos rápidos, cobrar al check-out, Mi cuenta |
+| `23-eventos` | Sección en el Inicio, insignia Nuevo, filtro por categoría, crear, validar horario, eliminar |
+| `24-socios` | Sugeridos y filtros, guardar reglas, asignar categoría, tarjeta Mi membresía |
 
 Los datos simulados están en `cypress/support/datos.js` y los comandos propios (`visitarComo`, `simularApiBase`, `confirmarDialogo`) en `cypress/support/commands.js`.
 

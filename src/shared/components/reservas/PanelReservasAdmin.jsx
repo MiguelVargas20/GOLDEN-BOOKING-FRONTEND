@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import Swal from "sweetalert2";
-import { BsCheckLg, BsXLg, BsArrowClockwise, BsCalendar2Week, BsClockHistory } from "react-icons/bs";
+import { BsCheckLg, BsXLg, BsArrowClockwise, BsCalendar2Week, BsClockHistory, BsEye } from "react-icons/bs";
 import ResumenEstados from "./ResumenEstados";
 import EstadoReservaBadge from "./EstadoReservaBadge";
 import Paginador from "./Paginador";
 import ModalReprogramar from "./ModalReprogramar";
+import ModalDetalleReserva from "./ModalDetalleReserva";
 import { aprobarReserva, cancelarReserva } from "./dialogosReserva";
 import { verHistorial } from "./historialReserva";
 import { EVENTO_RESERVAS_CAMBIARON, avisarReservasCambiaron } from "../../hooks/eventosReservas";
@@ -39,7 +40,7 @@ const ESTADOS_VALIDOS = ["PENDIENTE", "CONFIRMADA", "CANCELADA", "FINALIZADA"];
  */
 export default function PanelReservasAdmin({
   titulo, resaltado, subtitulo,
-  listar, resumen, confirmar, cancelar, reprogramar, datosReprogramacion,
+  listar, resumen, confirmar, cancelar, reprogramar, datosReprogramacion, actualizarMiembros,
   obtenerId, columnas, detalles, textoBusqueda,
   accionesExtra,
 }) {
@@ -56,6 +57,7 @@ export default function PanelReservasAdmin({
   const [error, setError] = useState(null);
   const [busqueda, setBusqueda] = useState("");
   const [reprogramando, setReprogramando] = useState(null);
+  const [viendo, setViendo] = useState(null);
 
   const cargar = useCallback(async (paginaSolicitada = 0) => {
     setCargando(true);
@@ -182,6 +184,10 @@ export default function PanelReservasAdmin({
                   </td>
                   <td>
                     <div className="gb-acciones-fila">
+                      <button type="button" className="btn-gb btn-gb-secondary btn-gb-sm" title="Ver detalle"
+                        aria-label="Ver detalle" onClick={() => setViendo(r)}>
+                        <BsEye />
+                      </button>
                       {r.estado === "PENDIENTE" && (
                         <button type="button" className="btn-gb btn-gb-sm gb-btn-aprobar" onClick={() => handleAprobar(r)}>
                           <BsCheckLg /> Aprobar
@@ -219,6 +225,15 @@ export default function PanelReservasAdmin({
         onCambiar={cargar}
       />
 
+      {viendo && (
+        <ModalDetalleReserva titulo="Detalle de la reserva" reserva={viendo} filas={detalles(viendo)}
+          docTitular={viendo.docUsuario} onCerrar={() => setViendo(null)}
+          onGuardarMiembros={actualizarMiembros ? async (miembros) => {
+            const actualizada = await actualizarMiembros(obtenerId(viendo), miembros);
+            setViendo({ ...viendo, ...actualizada });
+            cargar(pagina);
+          } : undefined} />
+      )}
       {reprogramando && (
         <ModalReprogramar reserva={reprogramando} onCerrar={() => setReprogramando(null)} onGuardar={guardarReprogramacion} />
       )}

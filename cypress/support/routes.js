@@ -23,4 +23,9 @@ export const ROUTES = {
   recepcion: "/recepcion/nueva-reserva",
   calendario: "/calendario",
   reportes: "/reportes",
+  consumos: "/cargos",
+  miCuenta: "/mi-cuenta",
+  eventos: "/eventos",
+  gestionarEventos: "/eventos/gestionar",
+  socios: "/socios",
 };

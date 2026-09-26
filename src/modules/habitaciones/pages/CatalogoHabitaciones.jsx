@@ -14,10 +14,7 @@ import { imagenHabitacion, usarImagenDeRespaldoHabitacion } from "../utils/image
 import { useRequierePerfilCompleto } from "../../../shared/hooks/useRequirePerfilCompleto";
 import LoadingSpinner from "../../../shared/components/LoadingSpinner";
 import Swal from "sweetalert2";
-import DatePicker, { registerLocale } from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import "../../../shared/styles/DatePickerCompartido.css";
-import { es } from "date-fns/locale";
+import CampoFecha from "../../../shared/components/fechas/CampoFecha";
 import "../../../shared/styles/PanelAdmin.css";
 import "../../../shared/styles/Catalogo.css";
 import "../../../shared/styles/BotonesCompartidos.css";
@@ -25,7 +22,6 @@ import "../styles/CatalogoHabitaciones.css";
 import { escapeHtml } from "../../../shared/utils/escapeHtml";
 import { fecha, pesos } from "../../../shared/utils/formato";
 
-registerLocale("es", es);
 
 export default function CatalogoHabitaciones() {
     const navigate = useNavigate();
@@ -293,23 +289,14 @@ export default function CatalogoHabitaciones() {
                                         <div className="ch-fechas">
                                             <label>
                                                 <span>Check-in</span>
-                                                <DatePicker
-                                                    selected={habFechas.checkIn ? aFecha(habFechas.checkIn) : null}
-                                                    onChange={(date) => setFechaHab(hab.id, "checkIn", date ? toLocalDateString(date) : "")}
-                                                    dateFormat="dd/MM/yyyy" locale="es" className="form-control"
-                                                    placeholderText="dd/mm/aaaa" minDate={new Date()} portalId="datepicker-portal"
-                                                />
+                                                <CampoFecha portal valor={habFechas.checkIn} placeholder="Llegada" min={toLocalDateString(new Date())}
+                                                    onCambio={(d) => setFechaHab(hab.id, "checkIn", d)} />
                                             </label>
                                             <label>
                                                 <span>Check-out</span>
-                                                <DatePicker
-                                                    selected={habFechas.checkOut ? aFecha(habFechas.checkOut) : null}
-                                                    onChange={(date) => setFechaHab(hab.id, "checkOut", date ? toLocalDateString(date) : "")}
-                                                    dateFormat="dd/MM/yyyy" locale="es" className="form-control"
-                                                    placeholderText="dd/mm/aaaa"
-                                                    minDate={habFechas.checkIn ? aFecha(habFechas.checkIn) : new Date()}
-                                                    portalId="datepicker-portal"
-                                                />
+                                                <CampoFecha portal valor={habFechas.checkOut} placeholder="Salida"
+                                                    min={habFechas.checkIn ? toLocalDateString(new Date(aFecha(habFechas.checkIn).getTime() + 86400000)) : toLocalDateString(new Date())}
+                                                    onCambio={(d) => setFechaHab(hab.id, "checkOut", d)} />
                                             </label>
                                         </div>
                                     )}

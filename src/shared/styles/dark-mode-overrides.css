@@ -22,22 +22,4 @@
     background-color: var(--gb-surface) !important;
 }
 
-/* ── Calendarios (react-datepicker) ── */
-[data-bs-theme='dark'] .react-datepicker {
-    background-color: var(--gb-surface) !important;
-    border-color: var(--gb-border) !important;
-}
-
-[data-bs-theme='dark'] .react-datepicker__day {
-    color: var(--gb-text-primary) !important;
-}
-
-[data-bs-theme='dark'] .react-datepicker__time-container {
-    border-left-color: var(--gb-border) !important;
-}
-
-[data-bs-theme='dark'] .custom-date-input {
-    background-color: var(--gb-surface-hover) !important;
-    border-color: var(--gb-border) !important;
-    color: var(--gb-text-primary) !important;
-}
+/* Los calendarios (react-datepicker) usan los tokens del tema en DatePickerCompartido.css */

@@ -101,3 +101,14 @@ export const reprogramarReservaDeporte = async (id, inicio, fin) => {
   if (!response.ok) throw new Error(await extraerMensajeError(response, "No se pudo reprogramar la reserva"));
   return response.json();
 };
+
+/** Reemplaza los acompañantes de la reserva. */
+export const actualizarMiembrosDeporte = async (id, miembros) => {
+  const response = await apiFetch(`${API_URL}/${id}/miembros`, {
+    method: "PATCH",
+    headers: authHeaders(),
+    body: JSON.stringify({ miembros }),
+  });
+  if (!response.ok) throw new Error(await extraerMensajeError(response, "No se pudieron guardar los acompañantes"));
+  return response.json();
+};

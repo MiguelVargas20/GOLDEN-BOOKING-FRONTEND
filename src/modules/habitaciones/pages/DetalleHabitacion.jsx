@@ -8,12 +8,13 @@ import { haySolapamiento, toLocalDateString } from "../../reservasHoteleras/util
 import { aFecha, aInicioDelDiaLocal, nochesEntre } from "../../../shared/utils/fechas";
 import { useAuth } from "../../../shared/context/AuthContext";
 import { datosTipo } from "../utils/tipoHabitacion";
-import { imagenHabitacion, usarImagenDeRespaldoHabitacion } from "../utils/imagenHabitacion";
+import { imagenesHabitacion, usarImagenDeRespaldoHabitacion } from "../utils/imagenHabitacion";
 import Swal from "sweetalert2";
-import DatePicker, { registerLocale } from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import "../../../shared/styles/DatePickerCompartido.css";
-import { es } from "date-fns/locale";
+import { Carousel } from "react-bootstrap";
+import CampoFecha from "../../../shared/components/fechas/CampoFecha";
+import EditorMiembros from "../../../shared/components/reservas/EditorMiembros";
+import { limpiarMiembros, validarMiembros } from "../../../shared/utils/miembros";
+import { useMiMembresia } from "../../membresias/hooks/useMiMembresia";
 import "../../../shared/styles/PanelAdmin.css";
 import "../../../shared/styles/BotonesCompartidos.css";
 import "../styles/DetalleHabitacion.css";
@@ -21,8 +22,6 @@ import { useRequierePerfilCompleto } from "../../../shared/hooks/useRequirePerfi
 import { escapeHtml } from "../../../shared/utils/escapeHtml";
 import { fecha, pesos } from "../../../shared/utils/formato";
 import Opiniones from "../../calificaciones/components/Opiniones";
-
-registerLocale("es", es);
 
 export default function DetalleHabitacion() {
     const { id } = useParams();
@@ -39,6 +38,8 @@ export default function DetalleHabitacion() {
     const [reservando, setReservando] = useState(false);
 
     const [rangosOcupados, setRangosOcupados] = useState([]); // 🆕
+    const [miembros, setMiembros] = useState([]);
+    const membresia = useMiMembresia();
 
     useEffect(() => {
         const cargar = async () => {
@@ -72,7 +73,8 @@ export default function DetalleHabitacion() {
         if (!checkIn || !checkOut || !habitacion) return { noches: 0, total: 0 };
         const noches = nochesEntre(checkIn, checkOut);
         if (noches <= 0) return { noches: 0, total: 0 };
-        return { noches, total: noches * (habitacion.precioNoche || 0) };
+        const descuento = membresia?.descuento || 0;
+        return { noches, total: Math.round(noches * (habitacion.precioNoche || 0) * (1 - descuento / 100)) };
     };
 
     const handleReservar = async () => {
@@ -99,6 +101,11 @@ export default function DetalleHabitacion() {
         }
         const docUsuario = verificarPerfil(user);
         if (!docUsuario) return;
+        const problema = validarMiembros(miembros, docUsuario);
+        if (problema) {
+            Swal.fire({ title: "Revisa los acompañantes", text: problema, icon: "warning", confirmButtonColor: "#f38d1e" });
+            return;
+        }
 
         const { noches, total } = calcularNochesYTotal();
 
@@ -109,6 +116,7 @@ export default function DetalleHabitacion() {
                     <div><span>Check-in</span><strong>${fecha(checkIn)} · 3:00 p. m.</strong></div>
                     <div><span>Check-out</span><strong>${fecha(checkOut)} · 12:00 m.</strong></div>
                     <div><span>Noches</span><strong>${noches}</strong></div>
+                    <div><span>Huéspedes</span><strong>${miembros.length + 1}</strong></div>
                     <div><span>Total</span><strong>${pesos(total)}</strong></div>
                 </div>
                 <p class="gb-swal-nota">Quedará pendiente hasta que la administración la apruebe.</p>`,
@@ -128,6 +136,7 @@ export default function DetalleHabitacion() {
                 idHabitacion: habitacion.id,
                 fCheckIn: aInicioDelDiaLocal(checkIn),
                 fCheckOut: aInicioDelDiaLocal(checkOut),
+                miembros: limpiarMiembros(miembros),
             });
             await Swal.fire({
                 // La reserva queda PENDIENTE hasta que el admin la apruebe
@@ -186,7 +195,19 @@ export default function DetalleHabitacion() {
             <Row className="g-4">
                 <Col lg={7}>
                     <div className="dh-imagen">
-                        <img src={imagenHabitacion(habitacion)} onError={usarImagenDeRespaldoHabitacion} alt={`Habitación ${habitacion.numeroHabitacion}`} />
+                        {imagenesHabitacion(habitacion).length > 1 ? (
+                            <Carousel interval={5000} className="dh-carrusel" aria-label="Fotos de la habitación">
+                                {imagenesHabitacion(habitacion).map((img, i) => (
+                                    <Carousel.Item key={img.id}>
+                                        <img src={img.url} onError={usarImagenDeRespaldoHabitacion}
+                                            alt={`Habitación ${habitacion.numeroHabitacion}, foto ${i + 1}`} />
+                                    </Carousel.Item>
+                                ))}
+                            </Carousel>
+                        ) : (
+                            <img src={imagenesHabitacion(habitacion)[0].url} onError={usarImagenDeRespaldoHabitacion}
+                                alt={`Habitación ${habitacion.numeroHabitacion}`} />
+                        )}
                         <span className={`ge-estado ${disponible ? "ge-estado-activo" : "ge-estado-mantenimiento"}`}>
                             {disponible ? "Disponible" : habitacion.estadoHabitacion === "OCUPADA" ? "Ocupada" : "Mantenimiento"}
                         </span>
@@ -217,25 +238,27 @@ export default function DetalleHabitacion() {
                                 <Row className="g-2 mb-3">
                                     <Col xs={6}>
                                         <label className="form-label" htmlFor="dh-checkin">Check-in</label>
-                                        <DatePicker id="dh-checkin"
-                                            selected={checkIn ? aFecha(checkIn) : null}
-                                            onChange={(date) => setCheckIn(date ? toLocalDateString(date) : "")}
-                                            dateFormat="dd/MM/yyyy" locale="es" className="form-control"
-                                            placeholderText="dd/mm/aaaa" minDate={new Date()} portalId="datepicker-portal" />
+                                        <CampoFecha id="dh-checkin" valor={checkIn} min={toLocalDateString(new Date())}
+                                            max={membresia ? toLocalDateString(new Date(Date.now() + membresia.diasAnticipacion * 86400000)) : undefined}
+                                            placeholder="Llegada"
+                                            onCambio={(d) => { setCheckIn(d); if (d && checkOut && checkOut <= d) setCheckOut(""); }} />
                                     </Col>
                                     <Col xs={6}>
                                         <label className="form-label" htmlFor="dh-checkout">Check-out</label>
-                                        <DatePicker id="dh-checkout"
-                                            selected={checkOut ? aFecha(checkOut) : null}
-                                            onChange={(date) => setCheckOut(date ? toLocalDateString(date) : "")}
-                                            dateFormat="dd/MM/yyyy" locale="es" className="form-control"
-                                            placeholderText="dd/mm/aaaa" minDate={checkIn ? aFecha(checkIn) : new Date()}
-                                            portalId="datepicker-portal" />
+                                        <CampoFecha id="dh-checkout" valor={checkOut} placeholder="Salida"
+                                            min={checkIn ? toLocalDateString(new Date(aFecha(checkIn).getTime() + 86400000)) : toLocalDateString(new Date())}
+                                            onCambio={setCheckOut} />
                                     </Col>
                                 </Row>
 
+                                <div className="mb-3">
+                                    <span className="form-label d-block">Acompañantes</span>
+                                    <EditorMiembros miembros={miembros} onCambio={setMiembros}
+                                        maximo={tipo.capacidad ? Math.max(0, tipo.capacidad - 1) : undefined} />
+                                </div>
+
                                 <div className="dh-total">
-                                    <span>{noches > 0 ? `${noches} ${noches === 1 ? "noche" : "noches"}` : "Precio por noche"}</span>
+                                    <span>{noches > 0 ? `${noches} ${noches === 1 ? "noche" : "noches"}` : "Precio por noche"}{membresia?.descuento ? ` · −${membresia.descuento} % socio` : ""}</span>
                                     <strong>{pesos(noches > 0 ? total : habitacion.precioNoche)}</strong>
                                 </div>
 

@@ -5,12 +5,11 @@ import Swal from "sweetalert2";
 import { BsPencil, BsTrash, BsPlusLg, BsTags } from "react-icons/bs";
 import {
   listarHabitaciones, actualizarHabitacion, eliminarHabitacion, listarTiposHabitacion,
-  subirImagenHabitacion, eliminarImagenHabitacion,
 } from "../api/HabitacionApi";
 import { escapeHtml } from "../../../shared/utils/escapeHtml";
 import { pesos } from "../../../shared/utils/formato";
 import Paginador from "../../../shared/components/reservas/Paginador";
-import SelectorImagen from "../../../shared/components/SelectorImagen";
+import GaleriaHabitacion from "../components/GaleriaHabitacion";
 import { datosTipo } from "../utils/tipoHabitacion";
 import { imagenHabitacion, usarImagenDeRespaldoHabitacion } from "../utils/imagenHabitacion";
 import "../../../shared/styles/PanelAdmin.css";
@@ -40,7 +39,6 @@ export default function GestionHabitaciones() {
   // Modal de edición
   const [editando, setEditando] = useState(null);
   const [form, setForm] = useState(FORM_VACIO);
-  const [imagenNueva, setImagenNueva] = useState(null);
   const [guardando, setGuardando] = useState(false);
 
   const cargar = useCallback(async (numero = 0) => {
@@ -61,7 +59,6 @@ export default function GestionHabitaciones() {
 
   const abrirEdicion = (hab) => {
     setEditando(hab);
-    setImagenNueva(null);
     setForm({
       numeroHabitacion: hab.numeroHabitacion || "",
       precioNoche: hab.precioNoche ?? "",
@@ -96,7 +93,6 @@ export default function GestionHabitaciones() {
         estadoHabitacion: form.estadoHabitacion,
         descripcion: form.descripcion.trim() || null,
       });
-      if (imagenNueva) await subirImagenHabitacion(editando.id, imagenNueva);
       setEditando(null);
       await Swal.fire({ title: "Habitación actualizada", icon: "success", timer: 1500, showConfirmButton: false });
       cargar(pagina.actual);
@@ -107,20 +103,10 @@ export default function GestionHabitaciones() {
     }
   };
 
-  const quitarImagen = async () => {
-    const { isConfirmed } = await Swal.fire({
-      title: "¿Quitar la imagen?", text: "La habitación volverá a mostrar la imagen por defecto.",
-      icon: "question", showCancelButton: true, confirmButtonText: "Sí, quitar", cancelButtonText: "Volver",
-      confirmButtonColor: "#e53e3e",
-    });
-    if (!isConfirmed) return;
-    try {
-      const actualizada = await eliminarImagenHabitacion(editando.id);
-      setEditando(actualizada);
-      setHabitaciones((lista) => lista.map((h) => (h.id === actualizada.id ? actualizada : h)));
-    } catch (err) {
-      Swal.fire({ title: "Error", text: err.message, icon: "error", confirmButtonColor: "#f38d1e" });
-    }
+  // La galería guarda al instante: se refleja en el modal y en la tabla
+  const actualizarGaleria = (actualizada) => {
+    setEditando(actualizada);
+    setHabitaciones((lista) => lista.map((h) => (h.id === actualizada.id ? actualizada : h)));
   };
 
   const eliminar = async (hab) => {
@@ -251,14 +237,8 @@ export default function GestionHabitaciones() {
                 </Row>
               </Col>
               <Col md={5}>
-                <Form.Label>Imagen</Form.Label>
-                <SelectorImagen
-                  key={editando?.id}
-                  imagenActual={editando?.imagenUrl ? imagenHabitacion(editando) : null}
-                  onCambio={setImagenNueva}
-                  onQuitar={quitarImagen}
-                  deshabilitado={guardando}
-                />
+                <Form.Label>Fotos</Form.Label>
+                {editando && <GaleriaHabitacion habitacion={editando} onCambio={actualizarGaleria} />}
               </Col>
             </Row>
           </Modal.Body>

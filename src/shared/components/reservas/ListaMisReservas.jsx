@@ -1,9 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import { Spinner } from "react-bootstrap";
 import Swal from "sweetalert2";
-import { BsCalendar2Week, BsStar } from "react-icons/bs";
+import { BsCalendar2Week, BsStar, BsEye } from "react-icons/bs";
 import EstadoReservaBadge from "./EstadoReservaBadge";
 import ModalReprogramar from "./ModalReprogramar";
+import ModalDetalleReserva from "./ModalDetalleReserva";
+import { useAuth } from "../../context/AuthContext";
 import { cancelarReserva } from "./dialogosReserva";
 import { avisarReservasCambiaron } from "../../hooks/eventosReservas";
 import ModalCalificar from "../../../modules/calificaciones/components/ModalCalificar";
@@ -30,9 +32,11 @@ const MENSAJE_ESTADO = {
  * @param {Function} datosReprogramacion(reserva) - { tipo, id, lugar, inicio, fin, espacioId?, precioNoche? }
  */
 export default function ListaMisReservas({
-  titulo, resaltado, categoria, cargar, cancelar, reprogramar, datosReprogramacion,
+  titulo, resaltado, categoria, cargar, cancelar, reprogramar, datosReprogramacion, actualizarMiembros,
   obtenerId, columnas, detalles, textoVacio, accionesExtra,
 }) {
+  const { user } = useAuth();
+  const [viendo, setViendo] = useState(null);
   const [reservas, setReservas] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
@@ -133,6 +137,11 @@ export default function ListaMisReservas({
                       )}
                     </td>
                     <td>
+                      <div className="gb-acciones-fila">
+                        <button type="button" className="btn-gb btn-gb-secondary btn-gb-sm" onClick={() => setViendo(r)}
+                          aria-label="Ver detalle" title="Ver detalle">
+                          <BsEye />
+                        </button>
                       {cancelable ? (
                         <div className="gb-acciones-fila">
                           {reprogramar && (
@@ -153,9 +162,8 @@ export default function ListaMisReservas({
                               <BsStar /> Calificar
                             </button>
                           )
-                      ) : (
-                        <span className="gb-celda-secundaria">—</span>
-                      )}
+                      ) : null}
+                      </div>
                     </td>
                   </tr>
                 );
@@ -167,6 +175,15 @@ export default function ListaMisReservas({
 
       {reprogramando && (
         <ModalReprogramar reserva={reprogramando} onCerrar={() => setReprogramando(null)} onGuardar={guardarReprogramacion} />
+      )}
+      {viendo && (
+        <ModalDetalleReserva titulo="Detalle de la reserva" reserva={viendo} filas={detalles(viendo)}
+          docTitular={user?.documento?.numero} onCerrar={() => setViendo(null)}
+          onGuardarMiembros={actualizarMiembros ? async (miembros) => {
+            const actualizada = await actualizarMiembros(obtenerId(viendo), miembros);
+            setViendo(actualizada);
+            obtener();
+          } : undefined} />
       )}
       {calificando && (
         <ModalCalificar lugar={datosReprogramacion ? datosReprogramacion(calificando).lugar : ""}

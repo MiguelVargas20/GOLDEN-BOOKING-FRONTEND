@@ -184,3 +184,47 @@ export const reporte = (desde, hasta) => ({
       inicio: `${desde}T16:00:00`, fin: `${desde}T17:00:00`, estado: "PENDIENTE", total: 40000, registradaEnRecepcion: false },
   ],
 });
+
+// ── Socios, consumos y eventos ──────────────────────────────
+const BENEFICIOS = {
+  ocasional: { descuento: 5, diasAnticipacion: 120, otrosBeneficios: "Reserva con más anticipación." },
+  miembro: { descuento: 10, diasAnticipacion: 365, otrosBeneficios: "Cuenta de socio para pagar a fin de mes." },
+};
+
+/** Lo que devuelve /api/membresias/mia (por defecto: cliente sin membresía). */
+export const miMembresia = (extra = {}) => ({
+  membresia: "NINGUNA", descuento: 0, diasAnticipacion: 60, otrosBeneficios: null,
+  reservas: 3, reservasParaSugerir: 5, ...BENEFICIOS, ...extra,
+});
+
+export const configMembresia = () => ({ id: "config", reservasParaSugerir: 5, diasAnticipacionGeneral: 60, ...BENEFICIOS });
+
+export const socios = [
+  { idUsuario: "c1", nombre: "Laura Pérez", documento: "52123456", email: "laura@correo.com", membresia: "NINGUNA", fechaMembresia: null, reservas: 6, sugerido: true },
+  { idUsuario: "c2", nombre: "Pedro Gómez", documento: "80123456", email: "pedro@correo.com", membresia: "MIEMBRO", fechaMembresia: `${enDias(-30)}T10:00:00`, reservas: 12, sugerido: false },
+  { idUsuario: "c3", nombre: "Marta Ruiz", documento: "41234567", email: "marta@correo.com", membresia: "NINGUNA", fechaMembresia: null, reservas: 1, sugerido: false },
+];
+
+export const cargo = (extra = {}) => ({
+  id: "cg1", docUsuario: "52123456", nombreCliente: "Laura Pérez", concepto: "Agua", categoria: "RESTAURANTE",
+  cantidad: 2, valorUnitario: 4000, total: 8000, destino: "RESERVA_HOTEL", idReserva: "rh1",
+  descripcionDestino: "Habitación 101 · 20 oct → 22 oct", estado: "PENDIENTE", fecha: `${enDias(0)}T12:00:00`,
+  registradoPor: "admin", fechaPago: null, ...extra,
+});
+
+export const cuentaCliente = (cargos = [cargo()], extra = {}) => ({
+  docUsuario: "52123456", nombreCliente: "Laura Pérez", membresia: "MIEMBRO",
+  totalPendiente: cargos.filter((c) => c.estado === "PENDIENTE").reduce((s, c) => s + c.total, 0),
+  destinos: [
+    { destino: "RESERVA_HOTEL", idReserva: "rh1", descripcion: "Habitación 101 · 20 oct → 22 oct" },
+    { destino: "CUENTA_SOCIO", idReserva: null, descripcion: "Cuenta de socio (pago a fin de mes)" },
+  ],
+  cargos, ...extra,
+});
+
+export const evento = (extra = {}) => ({
+  id: "ev1", titulo: "Noche de salsa", descripcion: "Orquesta en vivo y clase gratis.", categoria: "BAILE",
+  fechaInicio: `${enDias(7)}T19:00:00`, fechaFin: `${enDias(7)}T23:00:00`, lugar: "Salón principal",
+  cupo: 120, precio: 0, publicado: true, imagenUrl: null, nuevo: true, fechaCreacion: `${enDias(0)}T08:00:00`,
+  ...extra,
+});

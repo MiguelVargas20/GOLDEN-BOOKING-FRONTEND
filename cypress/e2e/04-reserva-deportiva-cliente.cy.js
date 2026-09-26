@@ -1,18 +1,29 @@
 import { ROUTES } from "../support/routes.js";
 import { espacios, reservaDeporte } from "../support/datos.js";
 
-/** Elige en el calendario el día 15 del mes siguiente a las 10:00. */
+/** "15/MM/yyyy" del mes siguiente (siempre futuro y dentro de la anticipación). */
+const dia15MesSiguiente = () => {
+  const d = new Date();
+  d.setDate(1);
+  d.setMonth(d.getMonth() + 1);
+  return `15/${String(d.getMonth() + 1).padStart(2, "0")}/${d.getFullYear()}`;
+};
+
+/** Elige el día 15 del mes siguiente en el calendario, a las 10:00, por 1 hora. */
 const elegirEntrada = () => {
-  cy.get("input[placeholder='dd/mm/aaaa --:--']").first().click();
-  cy.get(".react-datepicker__navigation--next").click();
-  cy.get(".react-datepicker__day--015:not(.react-datepicker__day--outside-month)").click();
-  cy.get(".react-datepicker__time-list-item").contains(/^10:00$/).click();
+  cy.get("#re-dia").click();
+  cy.get(".gb-calendario").should("be.visible");
+  cy.get("#re-dia").type(`${dia15MesSiguiente()}{enter}`);
+  cy.get("[data-hora='10:00']").click();
+  cy.get("[data-duracion='60']").click();
 };
 
 describe("Reserva deportiva (cliente)", () => {
   beforeEach(() => {
     cy.simularApiBase("cliente");
-    cy.intercept("GET", "**/api/espacios-deportivos", { body: espacios }).as("espacios");
+    cy.intercept("GET", "**/api/espacios-deportivos", {
+      body: espacios.map((e) => (e.id === "e1" ? { ...e, implementos: ["Raquetas", "Pelotas"] } : e)),
+    }).as("espacios");
   });
 
   it("muestra el catálogo y no deja reservar un espacio en mantenimiento", () => {
@@ -41,7 +52,9 @@ describe("Reserva deportiva (cliente)", () => {
 
     elegirEntrada();
     cy.get(".re-total strong").should("contain", "40.000");
-    cy.get("input[placeholder='Ej.: balones, raquetas, petos...']").type("Raquetas");
+    // Implementos sugeridos del espacio: se eligen con un clic
+    cy.contains(".re-implementos .gb-chip", "Pelotas").should("be.visible");
+    cy.contains(".re-implementos .gb-chip", "Raquetas").click().should("have.attr", "aria-pressed", "true");
     cy.contains("button", "Solicitar reserva").click();
 
     cy.dialogoDice("¿Enviar solicitud de reserva?");

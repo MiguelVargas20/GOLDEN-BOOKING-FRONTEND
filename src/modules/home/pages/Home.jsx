@@ -7,6 +7,7 @@ import Card from 'react-bootstrap/Card';
 
 //Importar renderizado paginas (Resrvas Home)
 import { Link } from "react-router-dom";
+import ProximosEventos from "../../eventos/components/ProximosEventos";
 
 //Imagenes para carrusel inicial
 import CarruselImg1 from '../../../assets/aaaa.jpg'
@@ -94,6 +95,9 @@ export default function Home() {
                     </div>
                 </Container>
             </section>
+
+            {/* Próximos eventos del club (solo aparece si hay publicados) */}
+            <ProximosEventos />
 
             {/* SECCIÓN 2: GRID DE INSTALACIONES
                 Muestra las opciones de reserva de forma rápida.

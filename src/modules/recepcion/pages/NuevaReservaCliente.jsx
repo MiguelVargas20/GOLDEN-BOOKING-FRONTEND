@@ -2,14 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Form, Row, Col, Spinner, Alert } from "react-bootstrap";
 import Swal from "sweetalert2";
-import DatePicker, { registerLocale } from "react-datepicker";
-import { es } from "date-fns/locale";
-import { BiCalendarAlt } from "react-icons/bi";
 import {
-  BsSearch, BsPersonCheck, BsPersonX, BsTrophy, BsBuilding, BsCheck2Circle, BsArrowLeft,
+  BsSearch, BsPersonCheck, BsPersonX, BsTrophy, BsBuilding, BsCheck2Circle, BsArrowLeft, BsCheck2,
 } from "react-icons/bs";
-import "react-datepicker/dist/react-datepicker.css";
-import "../../../shared/styles/DatePickerCompartido.css";
+import CampoFecha from "../../../shared/components/fechas/CampoFecha";
+import SelectorHorario from "../../../shared/components/fechas/SelectorHorario";
+import EditorMiembros from "../../../shared/components/reservas/EditorMiembros";
+import { limpiarMiembros, validarMiembros } from "../../../shared/utils/miembros";
+import { aHora, aMinutos } from "../../../shared/utils/horas";
 import "../../../shared/styles/PanelAdmin.css";
 import "../../../shared/styles/BotonesCompartidos.css";
 import "../../reservasDeportivas/styles/ReservarEspacio.css"; // .re-ocupados, .re-total
@@ -19,18 +19,14 @@ import { obtenerUsuarioPorDocumento } from "../../usuarios/api/UserApi";
 import { listarEspacios } from "../../reservasDeportivas/api/EspacioDeportivoApi";
 import { crearReservaDeporte } from "../../reservasDeportivas/api/ReservaDeporteApi";
 import { useReservasDeporte } from "../../reservasDeportivas/hooks/useReservasDeporte";
-import {
-  toLocalISOString, inicioValido, finValido, finSugerido, precioEstimado,
-} from "../../reservasDeportivas/utils/horarioEspacio";
+import { toLocalISOString, precioEstimado } from "../../reservasDeportivas/utils/horarioEspacio";
 import { listarTodasLasHabitaciones } from "../../habitaciones/api/HabitacionApi";
 import { datosTipo } from "../../habitaciones/utils/tipoHabitacion";
 import { crearReservaHotel, obtenerFechasOcupadas } from "../../reservasHoteleras/api/ReservaHotelApi";
 import { haySolapamiento } from "../../reservasHoteleras/utils/fechasHotel";
-import { aFecha, aInicioDelDiaLocal } from "../../../shared/utils/fechas";
+import { aFecha, aInicioDelDiaLocal, aTextoFecha } from "../../../shared/utils/fechas";
 import { pesos, hora, fecha } from "../../../shared/utils/formato";
 import { escapeHtml } from "../../../shared/utils/escapeHtml";
-
-registerLocale("es", es);
 
 const UN_DIA_MS = 24 * 60 * 60 * 1000;
 
@@ -60,9 +56,12 @@ export default function NuevaReservaCliente() {
   // Deportiva
   const [espacios, setEspacios] = useState([]);
   const [espacioId, setEspacioId] = useState("");
-  const [inicio, setInicio] = useState(null);
-  const [fin, setFin] = useState(null);
+  const [dia, setDia] = useState("");
+  const [horaSel, setHoraSel] = useState("");
+  const [duracion, setDuracion] = useState(60);
+  const [implementos, setImplementos] = useState([]);
   const [implAlquilados, setImplAlquilados] = useState("");
+  const [miembros, setMiembros] = useState([]);
   const [rqrEntrenador, setRqrEntrenador] = useState(false);
   const { estaOcupado, ocupadosDelDia } = useReservasDeporte();
 
@@ -98,11 +97,12 @@ export default function NuevaReservaCliente() {
   }, [habitacionId]);
 
   const espacio = espacios.find((e) => e.id === espacioId);
+  const inicio = dia && horaSel ? new Date(`${dia}T${horaSel}:00`) : null;
+  const fin = inicio ? new Date(`${dia}T${aHora(aMinutos(horaSel) + duracion)}:00`) : null;
   const habitacion = habitaciones.find((h) => h.id === habitacionId);
 
   // ── Cálculos ────────────────────────────────────────────
   const ocupadoDeporte = estaOcupado(espacioId, inicio, fin);
-  const reservasDelDia = ocupadosDelDia(espacioId, inicio);
   const totalDeporte = precioEstimado(espacio, inicio, fin);
 
   const noches = checkIn && checkOut ? Math.round((inicioDelDia(checkOut) - inicioDelDia(checkIn)) / UN_DIA_MS) : 0;
@@ -134,8 +134,8 @@ export default function NuevaReservaCliente() {
 
   const elegirEspacio = (id) => {
     setEspacioId(id);
-    setInicio(null);
-    setFin(null);
+    setHoraSel("");
+    setImplementos([]);
   };
 
   const elegirHabitacion = (id) => {
@@ -143,11 +143,6 @@ export default function NuevaReservaCliente() {
     setOcupadasHabitacion([]);
     setCheckIn(null);
     setCheckOut(null);
-  };
-
-  const elegirInicio = (valor) => {
-    setInicio(valor);
-    if (valor && (!fin || !finValido(espacio, valor, fin))) setFin(finSugerido(espacio, valor));
   };
 
   const elegirCheckIn = (valor) => {
@@ -162,6 +157,11 @@ export default function NuevaReservaCliente() {
   const puedeEnviar = clienteActivo && detalleListo && !enviando;
 
   const registrar = async () => {
+    const problema = validarMiembros(miembros, cliente.documento?.numeroD);
+    if (problema) {
+      Swal.fire({ title: "Revisa los acompañantes", text: problema, icon: "warning", confirmButtonColor: "#f38d1e" });
+      return;
+    }
     const nombre = `${cliente.nombre} ${cliente.apellido}`;
     const filas = tipo === "deporte"
       ? { Cliente: nombre, Espacio: espacio.nombre, Fecha: `${fecha(inicio)} · ${hora(inicio)} – ${hora(fin)}`, Total: pesos(totalDeporte) }
@@ -191,8 +191,9 @@ export default function NuevaReservaCliente() {
           docUsuario: cliente.documento.numeroD,
           fInicioReserva: toLocalISOString(inicio),
           fFinReserva: toLocalISOString(fin),
-          implAlquilados,
+          implAlquilados: [...implementos, implAlquilados.trim()].filter(Boolean).join(", "),
           rqrEntrenador,
+          miembros: limpiarMiembros(miembros),
         }, confirmarYa);
       } else {
         await crearReservaHotel({
@@ -201,6 +202,7 @@ export default function NuevaReservaCliente() {
           // Mismo formato que la reserva del cliente (ReservasH / DetalleHabitacion)
           fCheckIn: aInicioDelDiaLocal(checkIn),
           fCheckOut: aInicioDelDiaLocal(checkOut),
+          miembros: limpiarMiembros(miembros),
         }, confirmarYa);
       }
       await Swal.fire({
@@ -288,56 +290,43 @@ export default function NuevaReservaCliente() {
                 </Form.Select>
               </Form.Group>
 
-              <Row>
-                <Col sm={6} className="mb-3">
-                  <Form.Label className="fw-bold">Entrada</Form.Label>
-                  <div className="date-input-wrapper">
-                    <BiCalendarAlt className="calendar-icon" />
-                    <DatePicker
-                      selected={inicio} onChange={elegirInicio} showTimeSelect timeIntervals={30}
-                      dateFormat="Pp" locale="es" className="form-control custom-date-input"
-                      placeholderText={espacio ? "dd/mm/aaaa --:--" : "Primero elige el espacio"}
-                      disabled={!espacio} minDate={new Date()}
-                      filterTime={(h) => inicioValido(espacio, h)}
-                    />
-                  </div>
-                </Col>
-                <Col sm={6} className="mb-3">
-                  <Form.Label className="fw-bold">Salida</Form.Label>
-                  <div className="date-input-wrapper">
-                    <BiCalendarAlt className="calendar-icon" />
-                    <DatePicker
-                      selected={fin} onChange={setFin} showTimeSelect timeIntervals={30}
-                      dateFormat="Pp" locale="es" className="form-control custom-date-input"
-                      placeholderText={inicio ? "dd/mm/aaaa --:--" : "Primero elige la entrada"}
-                      disabled={!inicio} minDate={inicio || new Date()} maxDate={inicio || undefined}
-                      filterTime={(h) => finValido(espacio, inicio, h)}
-                    />
-                  </div>
-                </Col>
-              </Row>
-
-              {inicio && reservasDelDia.length > 0 && (
-                <div className="re-ocupados">
-                  <strong>Horarios ya reservados ese día:</strong>
-                  <div>{reservasDelDia.map((o) => (
-                    <span key={o.inicio.getTime()} className="re-ocupado">{hora(o.inicio)} – {hora(o.fin)}</span>
-                  ))}</div>
+              <div className="mb-3">
+                <Form.Label htmlFor="nr-dia" className="fw-bold">Día</Form.Label>
+                <CampoFecha id="nr-dia" valor={dia} min={aTextoFecha(new Date())} disabled={!espacio}
+                  placeholder={espacio ? "Elige el día" : "Primero elige el espacio"}
+                  onCambio={(d) => { setDia(d); setHoraSel(""); }} />
+              </div>
+              {espacio && (
+                <div className="mb-3">
+                  <SelectorHorario espacio={espacio} dia={dia} ocupados={dia ? ocupadosDelDia(espacioId, aFecha(dia)) : []}
+                    hora={horaSel} duracion={duracion} onCambio={({ hora: h, duracion: d }) => { setHoraSel(h); setDuracion(d); }} />
                 </div>
               )}
               {ocupadoDeporte && <Alert variant="danger">Ese horario se cruza con otra reserva.</Alert>}
 
-              <Row>
-                <Col sm={8} className="mb-3">
-                  <Form.Label className="fw-bold">Implementos adicionales</Form.Label>
-                  <Form.Control maxLength={200} value={implAlquilados} onChange={(e) => setImplAlquilados(e.target.value)}
-                    placeholder="Ej.: balones, raquetas..." />
-                </Col>
-                <Col sm={4} className="mb-3 d-flex align-items-end">
-                  <Form.Check type="switch" id="nr-entrenador" label="Con entrenador"
-                    checked={rqrEntrenador} onChange={(e) => setRqrEntrenador(e.target.checked)} />
-                </Col>
-              </Row>
+              {espacio && (
+                <div className="mb-3">
+                  <span className="fw-bold d-block mb-2">Implementos</span>
+                  <div className="re-implementos">
+                    {(espacio.implementos || []).map((n) => (
+                      <button key={n} type="button" aria-pressed={implementos.includes(n)}
+                        className={`gb-chip ${implementos.includes(n) ? "activo" : ""}`}
+                        onClick={() => setImplementos((l) => (l.includes(n) ? l.filter((x) => x !== n) : [...l, n]))}>
+                        {implementos.includes(n) && <BsCheck2 />} {n}
+                      </button>
+                    ))}
+                  </div>
+                  <Form.Control className="mt-2" maxLength={80} value={implAlquilados} placeholder="¿Otro? (opcional)"
+                    onChange={(e) => setImplAlquilados(e.target.value)} />
+                </div>
+              )}
+              <Form.Check type="switch" id="nr-entrenador" label="Con entrenador" className="mb-3"
+                checked={rqrEntrenador} onChange={(e) => setRqrEntrenador(e.target.checked)} />
+              <div className="mb-3">
+                <span className="fw-bold d-block mb-2">Acompañantes</span>
+                <EditorMiembros miembros={miembros} onCambio={setMiembros}
+                  maximo={espacio ? Math.max(0, (espacio.capacidad || 1) - 1) : undefined} deshabilitado={!espacio} />
+              </div>
             </>
           ) : (
             <>
@@ -355,31 +344,24 @@ export default function NuevaReservaCliente() {
 
               <Row>
                 <Col sm={6} className="mb-3">
-                  <Form.Label className="fw-bold">Check-in</Form.Label>
-                  <div className="date-input-wrapper">
-                    <BiCalendarAlt className="calendar-icon" />
-                    <DatePicker
-                      selected={checkIn} onChange={elegirCheckIn} dateFormat="dd/MM/yyyy" locale="es"
-                      className="form-control custom-date-input"
-                      placeholderText={habitacion ? "dd/mm/aaaa" : "Primero elige la habitación"}
-                      disabled={!habitacion} minDate={new Date()} excludeDateIntervals={diasBloqueados}
-                    />
-                  </div>
+                  <Form.Label htmlFor="nr-checkin" className="fw-bold">Check-in</Form.Label>
+                  <CampoFecha id="nr-checkin" valor={checkIn ? aTextoFecha(checkIn) : ""} disabled={!habitacion}
+                    placeholder={habitacion ? "Llegada" : "Primero elige la habitación"} min={aTextoFecha(new Date())}
+                    excluir={diasBloqueados} onCambio={(d) => elegirCheckIn(d ? aFecha(d) : null)} />
                 </Col>
                 <Col sm={6} className="mb-3">
-                  <Form.Label className="fw-bold">Check-out</Form.Label>
-                  <div className="date-input-wrapper">
-                    <BiCalendarAlt className="calendar-icon" />
-                    <DatePicker
-                      selected={checkOut} onChange={setCheckOut} dateFormat="dd/MM/yyyy" locale="es"
-                      className="form-control custom-date-input"
-                      placeholderText={checkIn ? "dd/mm/aaaa" : "Primero elige el check-in"}
-                      disabled={!checkIn}
-                      minDate={checkIn ? new Date(checkIn.getTime() + UN_DIA_MS) : new Date()}
-                    />
-                  </div>
+                  <Form.Label htmlFor="nr-checkout" className="fw-bold">Check-out</Form.Label>
+                  <CampoFecha id="nr-checkout" valor={checkOut ? aTextoFecha(checkOut) : ""} disabled={!checkIn}
+                    placeholder={checkIn ? "Salida" : "Primero elige el check-in"}
+                    min={checkIn ? aTextoFecha(new Date(checkIn.getTime() + UN_DIA_MS)) : aTextoFecha(new Date())}
+                    onCambio={(d) => setCheckOut(d ? aFecha(d) : null)} />
                 </Col>
               </Row>
+              <div className="mb-3">
+                <span className="fw-bold d-block mb-2">Acompañantes</span>
+                <EditorMiembros miembros={miembros} onCambio={setMiembros} deshabilitado={!habitacion}
+                  maximo={habitacion && datosTipo(habitacion).capacidad ? Math.max(0, datosTipo(habitacion).capacidad - 1) : undefined} />
+              </div>
               {ocupadoHotel && <Alert variant="danger">La habitación ya está reservada en parte de esas fechas.</Alert>}
             </>
           )}

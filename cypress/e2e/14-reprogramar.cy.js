@@ -1,5 +1,5 @@
 import { ROUTES } from "../support/routes.js";
-import { enDias, espacios, pagina, reservaDeporte, reservaHotel } from "../support/datos.js";
+import { aDMY, enDias, espacios, pagina, reservaDeporte, reservaHotel } from "../support/datos.js";
 
 describe("Reprogramar una reserva (cambiar la fecha sin cancelarla)", () => {
   beforeEach(() => {
@@ -17,9 +17,12 @@ describe("Reprogramar una reserva (cambiar la fecha sin cancelarla)", () => {
     cy.contains("tr", "Cancha de Tenis 1").contains("button", "Cambiar fecha").click();
 
     cy.get(".modal").should("contain", "Cambiar fecha").and("contain", "Cancha de Tenis 1");
-    cy.get("#rp-dia").clear().type(nuevoDia);
-    cy.get("#rp-hora").select("15:00");
-    cy.get("#rp-duracion").select("120");
+    // Mismo calendario que al reservar: se despliega al hacer clic
+    cy.get("#rp-dia").click();
+    cy.get(".gb-calendario").should("be.visible");
+    cy.get("#rp-dia").clear().type(`${aDMY(nuevoDia)}{enter}`);
+    cy.get(".modal [data-hora='15:00']").click();
+    cy.get(".modal [data-duracion='120']").click();
     cy.get(".rp-total").should("contain", "80.000"); // 2 h a 40.000
     cy.contains("button", "Guardar nueva fecha").click();
 
@@ -36,8 +39,8 @@ describe("Reprogramar una reserva (cambiar la fecha sin cancelarla)", () => {
     cy.intercept("PATCH", "**/api/reservas/hotel/rh1/reprogramar", { body: reservaHotel() }).as("reprogramar");
     cy.visitarComo("cliente", ROUTES.misReservasHotel);
     cy.contains("tr", "N.º 101").contains("button", "Cambiar fecha").click();
-    cy.get("#rp-checkin").clear().type(entrada);
-    cy.get("#rp-checkout").clear().type(salida);
+    cy.get("#rp-checkin").clear().type(`${aDMY(entrada)}{enter}`);
+    cy.get("#rp-checkout").clear().type(`${aDMY(salida)}{enter}`);
     cy.get(".rp-total").should("contain", "3 noches").and("contain", "540.000");
     cy.contains("button", "Guardar nueva fecha").click();
     cy.wait("@reprogramar").its("request.body").should("deep.equal", {
@@ -53,8 +56,8 @@ describe("Reprogramar una reserva (cambiar la fecha sin cancelarla)", () => {
     });
     cy.visitarComo("cliente", ROUTES.misReservasHotel);
     cy.contains("button", "Cambiar fecha").click();
-    cy.get("#rp-checkin").clear().type(enDias(30));
-    cy.get("#rp-checkout").clear().type(enDias(31));
+    cy.get("#rp-checkin").clear().type(`${aDMY(enDias(30))}{enter}`);
+    cy.get("#rp-checkout").clear().type(`${aDMY(enDias(31))}{enter}`);
     cy.contains("button", "Guardar nueva fecha").click();
     cy.get(".modal .alert-danger").should("contain", "Esta habitación ya está reservada para esas fechas.");
   });
@@ -72,7 +75,7 @@ describe("Reprogramar una reserva (cambiar la fecha sin cancelarla)", () => {
     cy.visitarComo("admin", ROUTES.gestionarReservasHotel);
     cy.contains("tr", "Laura Pérez").find("button[aria-label='Cambiar fecha']").click();
     cy.get(".modal").should("contain", "Habitación 101 · Laura Pérez");
-    cy.get("#rp-checkout").clear().type(enDias(23));
+    cy.get("#rp-checkout").clear().type(`${aDMY(enDias(23))}{enter}`);
     cy.contains("button", "Guardar nueva fecha").click();
     cy.wait("@reprogramar");
     cy.dialogoDice("Fecha actualizada");

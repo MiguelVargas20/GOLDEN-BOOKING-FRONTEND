@@ -7,7 +7,7 @@ import styles from '../styles/Navbar.module.css';
 import { useTheme } from '../context/ThemeContext.jsx';
 import { BsSun, BsMoonStarsFill, BsBoxArrowRight, BsPersonCircle } from 'react-icons/bs';
 import { MdSportsTennis, MdKingBed, MdAddBox, MdCategory } from 'react-icons/md';
-import { BsCalendarCheck, BsClockHistory, BsGrid, BsSearch, BsPersonPlus, BsCalendar3Week, BsFileEarmarkBarGraph } from 'react-icons/bs';
+import { BsCalendarCheck, BsClockHistory, BsGrid, BsSearch, BsPersonPlus, BsCalendar3Week, BsFileEarmarkBarGraph, BsReceipt, BsAward, BsCalendarEvent, BsWallet2 } from 'react-icons/bs';
 import { useAuth } from '../context/AuthContext.jsx';
 import Swal from 'sweetalert2';
 
@@ -185,6 +185,9 @@ export default function ComponentNavbar() {
                                                     <ItemMenu to="/reportes" icono={<BsFileEarmarkBarGraph />} titulo="Reportes" texto="Reservas e ingresos en Excel o PDF." onElegir={cerrarMenus} />
                                                 </>
                                             )}
+                                            {!isAdmin() && (
+                                                <ItemMenu to="/mi-cuenta" icono={<BsWallet2 />} titulo="Mi cuenta" texto="Consumos cargados a tus reservas." onElegir={cerrarMenus} />
+                                            )}
                                         </section>
 
                                         {/* Habitaciones: todo lo de las habitaciones (catálogo para todos, gestión para el admin) */}
@@ -196,11 +199,21 @@ export default function ComponentNavbar() {
                                                     <ItemMenu to="/habitaciones/gestionar" icono={<MdKingBed />} titulo="Gestionar habitaciones" texto="Precios, estados y edición." onElegir={cerrarMenus} />
                                                     <ItemMenu to="/habitaciones/crear" icono={<MdAddBox />} titulo="Crear habitación" texto="Agregar al catálogo." onElegir={cerrarMenus} />
                                                     <ItemMenu to="/habitaciones/tipos" icono={<MdCategory />} titulo="Tipos de habitación" texto="Suite, doble, sencilla..." onElegir={cerrarMenus} />
+                                                    <NavDropdown.Header className={styles.megaTitulo}>Club</NavDropdown.Header>
+                                                    <ItemMenu to="/cargos" icono={<BsReceipt />} titulo="Consumos y cuentas" texto="Cargar a la reserva o cuenta de socio." onElegir={cerrarMenus} />
+                                                    <ItemMenu to="/eventos/gestionar" icono={<BsCalendarEvent />} titulo="Eventos" texto="Baile, recreación, festivales..." onElegir={cerrarMenus} />
+                                                    <ItemMenu to="/socios" icono={<BsAward />} titulo="Miembros y socios" texto="Categorías, beneficios y sugeridos." onElegir={cerrarMenus} />
                                                 </>
                                             )}
                                         </section>
                                     </div>
                                 </NavDropdown>
+
+                                {!isAdmin() && (
+                                    <Nav.Link as={Link} to="/eventos" onClick={() => setNavExpanded(false)} className={styles.navLink}>
+                                        Eventos
+                                    </Nav.Link>
+                                )}
 
                                 <Nav.Link as={Link} to="/contactos" onClick={() => setNavExpanded(false)} className={styles.navLink}>
                                     Contactanos

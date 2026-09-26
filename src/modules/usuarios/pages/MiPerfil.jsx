@@ -10,6 +10,7 @@ import { aTextoFecha } from "../../../shared/utils/fechas";
 import { fecha } from "../../../shared/utils/formato";
 import "../../../shared/styles/PanelAdmin.css";
 import "../../../shared/styles/BotonesCompartidos.css";
+import TarjetaMiMembresia from "../../membresias/components/TarjetaMiMembresia";
 import "../styles/MiPerfil.css";
 
 const HOY = aTextoFecha(new Date());
@@ -127,6 +128,7 @@ export default function MiPerfil() {
             </dl>
             <span className="gb-ayuda">¿Tu documento está mal? Escríbenos desde Contáctanos y un administrador lo corrige.</span>
           </div>
+          {!esAdmin && <TarjetaMiMembresia />}
         </Col>
 
         <Col lg={8}>

@@ -1,10 +1,13 @@
 import { Dropdown } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { BiBell } from "react-icons/bi";
-import { BsCheckCircle, BsXCircle, BsCalendar2Week, BsHourglassBottom, BsStar, BsChatDots } from "react-icons/bs";
+import { BsCheckCircle, BsXCircle, BsCalendar2Week, BsHourglassBottom, BsStar, BsChatDots, BsAward, BsReceipt, BsCalendarEvent } from "react-icons/bs";
 import { useNotificaciones } from "../hooks/useNotificaciones";
 import { fechaHora } from "../../../shared/utils/formato";
 import "../styles/Campana.css";
+
+/** Avisos que no son de una reserva: a dónde lleva cada uno. */
+const DESTINOS = { MEMBRESIA: "/mi-perfil", CARGO: "/mi-cuenta", EVENTO: "/eventos" };
 
 const ICONOS = {
   RESERVA_APROBADA: <BsCheckCircle className="cn-icono ok" />,
@@ -12,6 +15,9 @@ const ICONOS = {
   RESERVA_REPROGRAMADA: <BsCalendar2Week className="cn-icono info" />,
   RESERVA_VENCIDA: <BsHourglassBottom className="cn-icono gris" />,
   CALIFICAR: <BsStar className="cn-icono estrella" />,
+  MEMBRESIA: <BsAward className="cn-icono estrella" />,
+  CARGO: <BsReceipt className="cn-icono info" />,
+  EVENTO: <BsCalendarEvent className="cn-icono ok" />,
 };
 
 /**
@@ -31,7 +37,7 @@ export default function CampanaCliente({ respuestasNoVistas = 0, abierto, onTogg
   const abrir = (n) => {
     marcarLeida(n);
     onToggle(false);
-    navigate(n.categoria === "DEPORTE" ? "/reservas-deportivas/mis-reservas" : "/reservas-hoteleras/mis-reservas");
+    navigate(DESTINOS[n.tipo] || (n.categoria === "DEPORTE" ? "/reservas-deportivas/mis-reservas" : "/reservas-hoteleras/mis-reservas"));
   };
 
   return (

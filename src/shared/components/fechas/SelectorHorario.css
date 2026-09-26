@@ -1,0 +1,24 @@
+/* Selector de horario con botones (reservas deportivas) */
+.sh { display: grid; gap: 6px; }
+.sh-titulo { font-weight: 700; font-size: 0.9rem; color: var(--gb-text-primary); }
+.sh-ayuda { margin: 0; padding: 12px 14px; border-radius: 10px; background: var(--gb-surface-hover); color: var(--gb-text-muted); font-size: 0.9rem; }
+.sh-franja { display: grid; gap: 6px; margin-top: 4px; }
+.sh-franja-nombre { display: inline-flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 600; color: var(--gb-text-muted); text-transform: uppercase; letter-spacing: 0.4px; }
+.sh-grilla { display: grid; grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: 6px; }
+.sh-duraciones { grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); }
+.sh-hora {
+  border: 1px solid var(--gb-border); background: var(--gb-surface); color: var(--gb-text-primary);
+  border-radius: 10px; padding: 8px 4px; font-size: 0.88rem; font-weight: 600; cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
+}
+.sh-hora:hover:not(:disabled) { border-color: var(--gb-primary); color: var(--gb-primary); }
+.sh-hora:active:not(:disabled) { transform: scale(0.97); }
+.sh-hora.activa { background: var(--gb-primary); border-color: var(--gb-primary); color: #fff; }
+.sh-hora:disabled { cursor: not-allowed; opacity: 0.4; text-decoration: line-through; }
+.sh-hora.ocupada:disabled { opacity: 1; background: var(--gb-status-danger-bg, #fde8e8); color: var(--gb-status-danger-text, #c53030); border-color: transparent; }
+.sh-hora:focus-visible { outline: 2px solid var(--gb-primary); outline-offset: 2px; }
+.sh-resumen { margin: 6px 0 0; font-size: 0.9rem; color: var(--gb-text-muted); text-transform: capitalize; }
+.sh-resumen strong { color: var(--gb-primary); }
+.sh-leyenda { display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--gb-text-muted); margin-top: 4px; }
+.sh-hora.muestra { display: inline-block; width: 14px; height: 14px; padding: 0; border-radius: 4px; cursor: default; margin-left: 6px; }
+.sh-hora.muestra.ocupada { background: var(--gb-status-danger-bg, #fde8e8); border-color: transparent; }

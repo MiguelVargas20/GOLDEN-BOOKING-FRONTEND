@@ -1,7 +1,7 @@
 // Comandos propios de Golden Booking para Cypress.
 // Todas las pruebas simulan el backend con cy.intercept: no hace falta tener
 // el servidor ni MongoDB corriendo, solo el frontend (npm run dev).
-import { tokenFalso, SESIONES, perfil } from "./datos.js";
+import { tokenFalso, SESIONES, perfil, miMembresia } from "./datos.js";
 
 /**
  * Respuestas que la app pide en segundo plano en cualquier pantalla
@@ -20,6 +20,9 @@ Cypress.Commands.add("simularApiBase", (rol = "cliente") => {
   cy.intercept("GET", "**/api/calificaciones/resumen*", { body: [] });
   cy.intercept("GET", "**/api/calificaciones/mias", { body: [] });
   cy.intercept("GET", "**/api/calificaciones?*", { body: [] });
+  cy.intercept("GET", "**/api/membresias/mia", { body: miMembresia() });
+  cy.intercept("GET", "**/api/eventos/proximos", { body: [] });
+  cy.intercept("GET", "**/api/cargos/mios", { body: { docUsuario: "52123456", nombreCliente: "Laura Pérez", membresia: "NINGUNA", totalPendiente: 0, destinos: [], cargos: [] } });
 });
 
 /**
