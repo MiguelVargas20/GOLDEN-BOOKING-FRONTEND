@@ -19,25 +19,11 @@
     transition: background-color 0.3s ease;
 }
 
-/* ── Dropdown de Servicios (generado por react-bootstrap NavDropdown) ── */
-.dropdown-menu {
-    background-color: #2f343a !important;
-    border-radius: 8px !important;
-    padding: 10px 0 !important;
-    min-width: 260px;
-    display: flex;
-    flex-direction: column;
-}
-
-.dropdown-item {
-    color: #fff !important;
-    font-size: 20px !important;
-    padding: 0.5rem 1rem !important;
-}
-
-.dropdown-item:hover {
-    background-color: rgba(255, 255, 255, 0.12) !important;
-}
+/* Se quitaron los estilos globales de .dropdown-menu / .dropdown-item: tenían
+   "display: flex", que pisaba el "display: none" de Bootstrap y dejaba el menú
+   Servicios SIEMPRE visible sobre las vistas una vez abierto (solo se iba al
+   recargar). Los menús ahora usan sus propios estilos (Navbar.module.css) o
+   los de Bootstrap. */
 
 .dropdown-toggle.show,
 .dropdown-toggle:active,
