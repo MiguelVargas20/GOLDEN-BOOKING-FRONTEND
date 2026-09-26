@@ -1,22 +1,24 @@
-// ***********************************************
-// Registro central de rutas de Golden Booking
-// baseUrl (http://localhost:5173) vive en cypress.config.js
-// Aquí solo se define el PATH de cada página, para no
-// repetir strings sueltos en cada spec.
-// ***********************************************
-
+// Rutas de Golden Booking usadas en las pruebas (baseUrl en cypress.config.js).
 export const ROUTES = {
   login: "/login",
-  registro: "/registro",
+  registro: "/register",
+  recuperar: "/forgot",
   home: "/home",
+  miPerfil: "/mi-perfil",
   contactos: "/contactos",
+  misMensajes: "/mis-mensajes",
   mensajes: "/mensajes",
-  reservasHospedaje: "/reservas-hospedaje",
-  crearHabitacion: "/crear-habitacion",
-  gestionarHabitaciones: "/gestionar-habitaciones",
-  misReservasHotel: "/mis-reservas-hotel",
+  usuarios: "/usuarios",
+  usuariosCrear: "/usuarios-crear",
   reservasDeportivas: "/reservas-deportivas",
-  reservarEspacioD: "/reservas-deportivas/reservar-espacio",
-  gestionarReservasD: "/reservas-deportivas/gestionar",
   misReservasDeporte: "/reservas-deportivas/mis-reservas",
+  gestionarReservasD: "/reservas-deportivas/gestionar",
+  espacios: "/reservas-deportivas/espacios",
+  habitaciones: "/habitaciones",
+  gestionarHabitaciones: "/habitaciones/gestionar",
+  crearHabitacion: "/habitaciones/crear",
+  tiposHabitacion: "/habitaciones/tipos",
+  misReservasHotel: "/reservas-hoteleras/mis-reservas",
+  gestionarReservasHotel: "/reservas-hoteleras/gestionar",
+  recepcion: "/recepcion/nueva-reserva",
 };

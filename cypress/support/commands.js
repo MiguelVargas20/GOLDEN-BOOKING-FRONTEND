@@ -1,59 +1,42 @@
-// ***********************************************
-// Comandos personalizados de Golden Booking
-// ***********************************************
-import { ROUTES } from "./routes";
+// Comandos propios de Golden Booking para Cypress.
+// Todas las pruebas simulan el backend con cy.intercept: no hace falta tener
+// el servidor ni MongoDB corriendo, solo el frontend (npm run dev).
+import { tokenFalso, SESIONES, perfil } from "./datos.js";
 
-// Visita cualquier ruta registrada y valida que quedó
-// exactamente en baseUrl + ruta (nunca otro dominio/puerto)
-Cypress.Commands.add("visitRoute", (routeKey) => {
-  const path = ROUTES[routeKey];
-  cy.visit(path);
-  cy.url().should("eq", `${Cypress.config("baseUrl")}${path}`);
+/**
+ * Respuestas que la app pide en segundo plano en cualquier pantalla
+ * (contadores de la campana y del menú, perfil). Cada prueba agrega las suyas
+ * después: si se repite una URL, gana la última que se definió.
+ */
+Cypress.Commands.add("simularApiBase", (rol = "cliente") => {
+  cy.intercept("GET", "**/api/usuarios/perfil/*", { body: perfil(rol) }).as("perfil");
+  cy.intercept("GET", "**/api/contacto/no-leidos/count", { body: { noLeidos: 0 } });
+  cy.intercept("GET", "**/api/contacto/mios/no-vistas/count", { body: { noVistas: 0 } });
+  cy.intercept("GET", "**/api/reservas/deporte/resumen", { body: { PENDIENTE: 0 } });
+  cy.intercept("GET", "**/api/reservas/hotel/resumen", { body: { PENDIENTE: 0 } });
+  cy.intercept("GET", "**/api/reservas/deporte/ocupadas", { body: [] });
 });
 
-Cypress.Commands.add("login", (username, password) => {
-  cy.visitRoute("login");
-  cy.get("#username").type(username);
-  cy.get("#password").type(password);
-  cy.get('button[type="submit"]').click();
+/**
+ * Entra directo a una ruta con la sesión ya iniciada (sin pasar por el login).
+ * @param {"admin"|"cliente"} rol
+ * @param {string} ruta
+ */
+Cypress.Commands.add("visitarComo", (rol, ruta) => {
+  cy.visit(ruta, {
+    onBeforeLoad(win) {
+      win.localStorage.setItem("token", tokenFalso(SESIONES[rol].usuario));
+      win.localStorage.setItem("user", JSON.stringify(SESIONES[rol]));
+    },
+  });
 });
 
-// Busca un texto dentro de una tabla paginada, avanzando de
-// página en página con el botón "Siguiente" hasta encontrarlo
-// o hasta que el botón quede deshabilitado (última página).
-Cypress.Commands.add("buscarEnTablaPaginada", (texto) => {
-  const intentar = () => {
-    // 🆕 pequeño respiro: entre que el fetch responde y React termina de
-    // pintar la fila hay una fracción de segundo. Sin esto, a veces leíamos
-    // el body ANTES de que el texto apareciera y caíamos a buscar un botón
-    // "Siguiente" que ni siquiera existe en tablas de una sola página.
-    cy.wait(300);
-    cy.get("body").then(($body) => {
-      if ($body.text().includes(texto)) {
-        cy.contains(texto).should("be.visible");
-        return;
-      }
+/** Pulsa un botón del diálogo (SweetAlert) que está abierto. */
+Cypress.Commands.add("confirmarDialogo", (textoBoton) => {
+  cy.get(".swal2-popup").should("be.visible").contains("button", textoBoton).click();
+});
 
-      // 🆕 Buscamos el botón dentro del $body ya capturado (jQuery puro),
-      // en vez de con cy.contains(), porque cy.contains() falla duro si no
-      // encuentra nada — y "no hay botón" es un resultado válido (tabla de
-      // una sola página), no un error de Cypress.
-      const $btn = $body.find("button:contains('Siguiente')");
-
-      if ($btn.length === 0) {
-        throw new Error(
-          `No se encontró "${texto}" y la tabla no tiene paginación (solo una página).`
-        );
-      }
-      if ($btn.is(":disabled")) {
-        throw new Error(
-          `No se encontró "${texto}" en ninguna página de la tabla.`
-        );
-      }
-      cy.wrap($btn).click();
-      cy.wait(300);
-      intentar();
-    });
-  };
-  intentar();
+/** Verifica el título del diálogo (SweetAlert) que está abierto. */
+Cypress.Commands.add("dialogoDice", (titulo) => {
+  cy.get(".swal2-title").should("be.visible").and("contain", titulo);
 });

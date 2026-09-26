@@ -42,6 +42,33 @@ npm run build
 | `/usuarios`, `/usuarios-crear`, `/usuarios-edit` | Admin | Administrar usuarios y roles |
 | `/mensajes` | Admin | Bandeja de mensajes de contacto |
 
+## Pruebas de extremo a extremo (Cypress)
+Las pruebas están en `cypress/e2e` y **simulan el backend** con `cy.intercept`, así que no hace falta tener el servidor ni MongoDB: solo el frontend.
+
+```bash
+npm run dev          # terminal 1: el frontend en http://localhost:5173
+npm run test:e2e     # terminal 2: corre todas las pruebas sin ventana
+npm run cypress      # o abre Cypress para verlas paso a paso
+```
+
+| Archivo | Flujo que prueba |
+|---|---|
+| `01-login` | Validaciones, credenciales incorrectas, ingreso del admin, rutas protegidas, recuperar contraseña |
+| `02-registro` | Validaciones, contraseñas distintas, registro completo, error del servidor |
+| `03-navbar` | Menú del admin y del cliente, campana de respuestas, cerrar sesión |
+| `04-reserva-deportiva-cliente` | Catálogo, filtro, reservar con horario, hora local, error 409, cancelar |
+| `05-reservas-deportivas-admin` | Aprobar, cancelar con motivo, filtros, búsqueda; crear/editar espacios y cambiar estado |
+| `06-reserva-hotel-cliente` | Catálogo, orden por precio, reservar desde el detalle, fechas cruzadas, motivo de cancelación |
+| `07-reservas-hotel-admin` | Listado, aprobar, cancelar con motivo, ir a recepción |
+| `08-habitaciones-admin` | Crear con imagen, imagen pequeña, validaciones, editar, eliminar; CRUD de tipos |
+| `09-usuarios-admin` | Listado y búsqueda, crear admin, editar (estado y documento), eliminar |
+| `10-perfil` | Ver y guardar el perfil, error del servidor |
+| `11-mensajes` | Enviar mensaje, validaciones, ver respuesta, responder y filtrar en la bandeja |
+| `12-dashboard` | Indicadores, periodo, error y reintento, portada del cliente |
+| `13-recepcion` | Buscar cliente, reservar a su nombre confirmada, cliente inactivo |
+
+Los datos simulados están en `cypress/support/datos.js` y los comandos propios (`visitarComo`, `simularApiBase`, `confirmarDialogo`) en `cypress/support/commands.js`.
+
 ## Estructura del proyecto
 El código está organizado **por módulo** (cada funcionalidad tiene sus propias
 páginas, estilos, llamadas a la API y hooks) y una carpeta `shared/` con lo que

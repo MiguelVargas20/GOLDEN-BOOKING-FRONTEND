@@ -117,7 +117,9 @@ export default function TiposHabitacion() {
         await crearTipoHabitacion(dto);
         setExito("¡Tipo de habitación creado con éxito!");
       }
-      resetForm();
+      // Solo se limpia el formulario: resetForm() también borraría el aviso de éxito
+      setForm(FORM_VACIO);
+      setEditandoId(null);
       cargarTipos();
     } catch (err) {
       setError(err.message || "Error al guardar el tipo de habitación.");
