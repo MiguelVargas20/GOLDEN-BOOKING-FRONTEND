@@ -44,7 +44,7 @@ export default function MisReservasHotel() {
       })}
       textoVacio="No tienes reservas hoteleras aún."
       accionesExtra={
-        <button type="button" className="btn-gb btn-gb-primary btn-gb-sm" onClick={() => navigate("/reservas-hospedaje")}>
+        <button type="button" className="btn-gb btn-gb-primary btn-gb-sm" onClick={() => navigate("/habitaciones")}>
           <BsPlusLg /> Nueva reserva
         </button>
       }

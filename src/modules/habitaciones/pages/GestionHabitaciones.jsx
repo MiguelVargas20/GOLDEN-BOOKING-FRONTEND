@@ -7,7 +7,7 @@ import { escapeHtml } from "../../../shared/utils/escapeHtml";
 
 const ESTADOS = ["disponible", "ocupada", "mantenimiento"];
 
-export default function GestionHabitacionesD() {
+export default function GestionHabitaciones() {
     const navigate = useNavigate();
     const [habitaciones, setHabitaciones] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -170,7 +170,7 @@ export default function GestionHabitacionesD() {
                     </p>
                 </div>
                 <Button
-                    onClick={() => navigate("/crear-habitacion")}
+                    onClick={() => navigate("/habitaciones/crear")}
                     style={{ background: "var(--gb-primary)", border: "none", borderRadius: "10px", fontWeight: 700, padding: "0.6rem 1.4rem" }}
                 >
                     + Crear Habitación

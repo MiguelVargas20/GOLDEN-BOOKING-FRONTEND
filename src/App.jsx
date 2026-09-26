@@ -1,5 +1,5 @@
 // 1. LIBRERÍAS Y ESTILOS GLOBALES
-import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Navigate, useParams } from 'react-router-dom';
 
 // 2. CONTEXTOS Y COMPONENTES DE CONTROL
 import { ThemeProvider } from './shared/context/ThemeContext';
@@ -25,12 +25,14 @@ import ReservasDSolicitadas from './modules/reservasDeportivas/pages/ReservasDSo
 import GestionarReservas from './modules/reservasDeportivas/pages/GestionarReservas.jsx';
 import GestionEspacios from './modules/reservasDeportivas/pages/GestionEspacios.jsx';
 
-// Módulo: Hospedaje / Habitaciones (Clientes / Admin)
-import ReservasH from './modules/reservasHoteleras/pages/ReservasH.jsx';
-import HabitacionD from './modules/reservasHoteleras/pages/HabitacionD.jsx';
-import TipoHabitacionD from './modules/reservasHoteleras/pages/TipoHabitacionD.jsx';
-import GestionHabitacionesD from './modules/reservasHoteleras/pages/GestionHabitacionesD.jsx';
-import DetalleHabitacion from "./modules/reservasHoteleras/pages/DetalleHabitacion";
+// Módulo: Habitaciones (catálogo y detalle para todos; gestión, creación y tipos para ADMIN)
+import CatalogoHabitaciones from './modules/habitaciones/pages/CatalogoHabitaciones.jsx';
+import DetalleHabitacion from './modules/habitaciones/pages/DetalleHabitacion.jsx';
+import GestionHabitaciones from './modules/habitaciones/pages/GestionHabitaciones.jsx';
+import CrearHabitacion from './modules/habitaciones/pages/CrearHabitacion.jsx';
+import TiposHabitacion from './modules/habitaciones/pages/TiposHabitacion.jsx';
+
+// Módulo: Reservas Hoteleras (solo reservas: las del cliente y la gestión del ADMIN)
 import MisReservasHotel from './modules/reservasHoteleras/pages/MisReservasHotel.jsx';
 import GestionarReservasHotel from './modules/reservasHoteleras/pages/GestionarReservasHotel.jsx';
 
@@ -62,6 +64,12 @@ import RestablecerPassword from './modules/auth/pages/RestablecerPassword.jsx';
  * Configura el proveedor de tema, el enrutamiento dinámico de React Router Dom v6
  * y la división de accesos según el estado de autenticación y roles de usuario.
  */
+/** /detalle/:id (ruta anterior) → /habitaciones/:id */
+function RedireccionDetalleHabitacion() {
+    const { id } = useParams();
+    return <Navigate to={`/habitaciones/${id}`} replace />;
+}
+
 export default function App() {
     return (
         <ThemeProvider>
@@ -139,33 +147,39 @@ export default function App() {
                         </Route>
 
                         {/* -----------------------------------------------------
-                            SUB-SISTEMA: HOSPEDAJE
+                            HABITACIONES — todo lo de las habitaciones
                             ----------------------------------------------------- */}
-                        {/* Panel principal de reservas hoteleras para clientes */}
-                        <Route path="/reservas-hospedaje" element={<ReservasH />} />
-                        
-                        {/* Se quitó "/reservas-restaurante": mostraba la página de reservas
-                            deportivas (el módulo de restaurante no existe todavía). */}
-
-                        {/* Se quitó "/habitacionD": era la misma pantalla de "/crear-habitacion"
-                            pero SIN protección de admin, y ninguna pantalla la enlazaba. */}
-
-                        {/* Configuración y listado de tipos de habitación (Deluxe, Suite, etc.).
-                            Solo ADMIN: crea/edita/elimina tipos (el backend ya lo exigía). */}
-                        <Route path="/tipo-habitacion" element={
-                            <RutaProtegida soloAdmin={true}><TipoHabitacionD /></RutaProtegida>
+                        {/* Catálogo: ver disponibilidad y reservar (clientes y admin) */}
+                        <Route path="/habitaciones" element={<CatalogoHabitaciones />} />
+                        {/* Solo ADMIN: administrar, crear y tipos de habitación */}
+                        <Route path="/habitaciones/gestionar" element={
+                            <RutaProtegida soloAdmin={true}><GestionHabitaciones /></RutaProtegida>
                         } />
-                        
-                        {/* Panel de administración de habitaciones (Disponibilidad, Precios, Estados) */}
-                        <Route path="/detalle/:id" element={<DetalleHabitacion />} />
+                        <Route path="/habitaciones/crear" element={
+                            <RutaProtegida soloAdmin={true}><CrearHabitacion /></RutaProtegida>
+                        } />
+                        <Route path="/habitaciones/tipos" element={
+                            <RutaProtegida soloAdmin={true}><TiposHabitacion /></RutaProtegida>
+                        } />
+                        {/* Detalle de una habitación (las rutas fijas de arriba tienen prioridad) */}
+                        <Route path="/habitaciones/:id" element={<DetalleHabitacion />} />
 
-                        {/* Panel de administración de habitaciones (Disponibilidad, Precios, Estados) */}
-                        <Route path="/mis-reservas-hotel" element={<MisReservasHotel />} />
-
+                        {/* -----------------------------------------------------
+                            RESERVAS HOTELERAS — solo las reservas
+                            ----------------------------------------------------- */}
+                        <Route path="/reservas-hoteleras/mis-reservas" element={<MisReservasHotel />} />
                         {/* Gestión de reservas hoteleras: aprobar / cancelar con motivo */}
                         <Route path="/reservas-hoteleras/gestionar" element={
                             <RutaProtegida soloAdmin={true}><GestionarReservasHotel /></RutaProtegida>
                         } />
+
+                        {/* Rutas anteriores: redirigen a las nuevas para no romper enlaces guardados */}
+                        <Route path="/reservas-hospedaje" element={<Navigate to="/habitaciones" replace />} />
+                        <Route path="/tipo-habitacion" element={<Navigate to="/habitaciones/tipos" replace />} />
+                        <Route path="/crear-habitacion" element={<Navigate to="/habitaciones/crear" replace />} />
+                        <Route path="/gestionar-habitaciones" element={<Navigate to="/habitaciones/gestionar" replace />} />
+                        <Route path="/mis-reservas-hotel" element={<Navigate to="/reservas-hoteleras/mis-reservas" replace />} />
+                        <Route path="/detalle/:id" element={<RedireccionDetalleHabitacion />} />
 
                         {/* Recepción: registrar una reserva (deportiva u hotelera) a nombre de un cliente */}
                         <Route path="/recepcion/nueva-reserva" element={
@@ -200,17 +214,6 @@ export default function App() {
                         {/* --- MÓDULO CONTROL DE MENSAJES --- */}
                         <Route path="/mensajes" element={
                             <RutaProtegida soloAdmin={true}><AdminMensajes /></RutaProtegida>
-                        } />
-
-                        {/* --- MÓDULO CONTROL DE INFRAESTRUCTURA HOTELERA --- */}
-                        {/* Formulario exclusivo para registrar nuevas habitaciones al catálogo */}
-                        <Route path="/crear-habitacion" element={
-                            <RutaProtegida soloAdmin={true}><HabitacionD /></RutaProtegida>
-                        } />
-                        
-                        {/* Panel de administración hotelera (Modificar disponibilidad, precios, estados) */}
-                        <Route path="/gestionar-habitaciones" element={
-                            <RutaProtegida soloAdmin={true}><GestionHabitacionesD /></RutaProtegida>
                         } />
 
                     </Route>

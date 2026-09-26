@@ -6,8 +6,8 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import { listarTodasLasHabitaciones } from "../api/HabitacionApi";
-import { crearReservaHotel, obtenerFechasOcupadas } from "../api/ReservaHotelApi"; // 🆕 obtenerFechasOcupadas
-import { haySolapamiento, toLocalDateString } from "../utils/fechasHotel";
+import { crearReservaHotel, obtenerFechasOcupadas } from "../../reservasHoteleras/api/ReservaHotelApi";
+import { haySolapamiento, toLocalDateString } from "../../reservasHoteleras/utils/fechasHotel";
 import { aFecha, aInicioDelDiaLocal, nochesEntre } from "../../../shared/utils/fechas";
 import { useAuth } from "../../../shared/context/AuthContext";
 import { useRequierePerfilCompleto } from "../../../shared/hooks/useRequirePerfilCompleto";
@@ -17,7 +17,7 @@ import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "../../../shared/styles/DatePickerCompartido.css";
 import { es } from "date-fns/locale";
-import "../styles/ReservasH.css";
+import "../styles/CatalogoHabitaciones.css";
 import "../../../shared/styles/BotonesCompartidos.css";
 import { escapeHtml } from "../../../shared/utils/escapeHtml";
 
@@ -26,7 +26,7 @@ registerLocale("es", es);
 const PLACEHOLDER =
     "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&q=80";
 
-export default function ReservasH() {
+export default function CatalogoHabitaciones() {
     const navigate = useNavigate();
     const { user, isAdmin } = useAuth();
     const { verificarPerfil } = useRequierePerfilCompleto();
@@ -197,7 +197,7 @@ export default function ReservasH() {
                 // no crítico: en el peor caso, el usuario recarga y las ve igual
             }
 
-            navigate("/mis-reservas-hotel");
+            navigate("/reservas-hoteleras/mis-reservas");
         } catch (err) {
             // Red de seguridad: si hubo una condición de carrera (dos personas
             // reservando la misma habitación/fecha casi al mismo tiempo), el
@@ -229,13 +229,13 @@ export default function ReservasH() {
                         <>
                             <button
                                 className="btn-gb btn-gb-primary btn-gb-sm"
-                                onClick={() => navigate("/crear-habitacion")}
+                                onClick={() => navigate("/habitaciones/crear")}
                             >
                                 <IoAddCircleOutline /> Crear
                             </button>
                             <button
                                 className="btn-reserva-sm gestionar"
-                                onClick={() => navigate("/gestionar-habitaciones")}
+                                onClick={() => navigate("/habitaciones/gestionar")}
                             >
                                 ⚙️ Gestionar
                             </button>
@@ -244,13 +244,13 @@ export default function ReservasH() {
                 </div>
 
                 <h1 className="titulo-reservas-v2">
-                    RESERVAS <span>HOTELERAS</span>
+                    NUESTRAS <span>HABITACIONES</span>
                 </h1>
 
                 <div className="acciones-derecha">
                     <button
                         className="btn-reserva-sm mis"
-                        onClick={() => navigate("/mis-reservas-hotel")}
+                        onClick={() => navigate("/reservas-hoteleras/mis-reservas")}
                     >
                         📋 Mis Reservas
                     </button>
@@ -377,7 +377,7 @@ export default function ReservasH() {
                                                 <small>{noches > 0 ? ` (${noches}n)` : " /noche"}</small>
                                             </span>
                                             <div className="botones-v2">
-                                                <button className="btn-gb btn-gb-secondary btn-gb-sm" onClick={() => navigate(`/detalle/${hab.id}`)}>
+                                                <button className="btn-gb btn-gb-secondary btn-gb-sm" onClick={() => navigate(`/habitaciones/${hab.id}`)}>
                                                     Detalle
                                                 </button>
                                                 <button

@@ -73,7 +73,7 @@ export default function MapaHabitaciones({ habitaciones }) {
               <div className="db-muted">Huésped: <b>{elegida.huesped}</b> · sale el {fecha(elegida.hasta)}</div>
             )}
           </div>
-          <button type="button" className="btn-gb btn-gb-neutral btn-gb-sm" onClick={() => navigate(`/detalle/${elegida.id}`)}>
+          <button type="button" className="btn-gb btn-gb-neutral btn-gb-sm" onClick={() => navigate(`/habitaciones/${elegida.id}`)}>
             Ver habitación
           </button>
         </div>

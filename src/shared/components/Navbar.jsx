@@ -155,7 +155,7 @@ export default function ComponentNavbar() {
                                     onToggle={(abierto) => setMenuAbierto(abierto ? "servicios" : null)}
                                     className={`${styles.navLink} ${styles.servicesDropdown}`}
                                 >
-                                    <div className={`${styles.megaMenu} ${isAdmin() ? styles.megaMenuTres : ""}`}>
+                                    <div className={`${styles.megaMenu} ${styles.megaMenuTres}`}>
                                         {/* Reservas deportivas */}
                                         <section className={styles.megaSeccion}>
                                             <NavDropdown.Header className={styles.megaTitulo}>Reservas deportivas</NavDropdown.Header>
@@ -170,11 +170,10 @@ export default function ComponentNavbar() {
                                             )}
                                         </section>
 
-                                        {/* Reservas hoteleras */}
+                                        {/* Reservas hoteleras: solo reservas */}
                                         <section className={styles.megaSeccion}>
                                             <NavDropdown.Header className={styles.megaTitulo}>Reservas hoteleras</NavDropdown.Header>
-                                            <ItemMenu to="/reservas-hospedaje" icono={<BsSearch />} titulo="Reservar habitación" texto="Disponibilidad y precios." onElegir={cerrarMenus} />
-                                            <ItemMenu to="/mis-reservas-hotel" icono={<BsClockHistory />} titulo="Mis reservas" texto="Estado de tus estadías." onElegir={cerrarMenus} />
+                                            <ItemMenu to="/reservas-hoteleras/mis-reservas" icono={<BsClockHistory />} titulo="Mis reservas" texto="Estado de tus estadías." onElegir={cerrarMenus} />
                                             {isAdmin() && (
                                                 <>
                                                     <ItemMenu to="/reservas-hoteleras/gestionar" icono={<BsCalendarCheck />} titulo="Gestionar reservas" texto="Aprobar o cancelar solicitudes." badge={pendientes.hotel} onElegir={cerrarMenus} />
@@ -183,15 +182,18 @@ export default function ComponentNavbar() {
                                             )}
                                         </section>
 
-                                        {/* Habitaciones (administración, independiente de las reservas) */}
-                                        {isAdmin() && (
-                                            <section className={styles.megaSeccion}>
-                                                <NavDropdown.Header className={styles.megaTitulo}>Habitaciones</NavDropdown.Header>
-                                                <ItemMenu to="/gestionar-habitaciones" icono={<MdKingBed />} titulo="Gestionar habitaciones" texto="Precios, estados y edición." onElegir={cerrarMenus} />
-                                                <ItemMenu to="/crear-habitacion" icono={<MdAddBox />} titulo="Crear habitación" texto="Agregar al catálogo." onElegir={cerrarMenus} />
-                                                <ItemMenu to="/tipo-habitacion" icono={<MdCategory />} titulo="Tipos de habitación" texto="Suite, doble, sencilla..." onElegir={cerrarMenus} />
-                                            </section>
-                                        )}
+                                        {/* Habitaciones: todo lo de las habitaciones (catálogo para todos, gestión para el admin) */}
+                                        <section className={styles.megaSeccion}>
+                                            <NavDropdown.Header className={styles.megaTitulo}>Habitaciones</NavDropdown.Header>
+                                            <ItemMenu to="/habitaciones" icono={<BsSearch />} titulo="Ver habitaciones" texto="Disponibilidad, precios y reserva." onElegir={cerrarMenus} />
+                                            {isAdmin() && (
+                                                <>
+                                                    <ItemMenu to="/habitaciones/gestionar" icono={<MdKingBed />} titulo="Gestionar habitaciones" texto="Precios, estados y edición." onElegir={cerrarMenus} />
+                                                    <ItemMenu to="/habitaciones/crear" icono={<MdAddBox />} titulo="Crear habitación" texto="Agregar al catálogo." onElegir={cerrarMenus} />
+                                                    <ItemMenu to="/habitaciones/tipos" icono={<MdCategory />} titulo="Tipos de habitación" texto="Suite, doble, sencilla..." onElegir={cerrarMenus} />
+                                                </>
+                                            )}
+                                        </section>
                                     </div>
                                 </NavDropdown>
 

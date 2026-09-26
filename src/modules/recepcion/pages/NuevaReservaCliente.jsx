@@ -22,7 +22,7 @@ import { useReservasDeporte } from "../../reservasDeportivas/hooks/useReservasDe
 import {
   toLocalISOString, inicioValido, finValido, finSugerido, precioEstimado,
 } from "../../reservasDeportivas/utils/horarioEspacio";
-import { listarTodasLasHabitaciones } from "../../reservasHoteleras/api/HabitacionApi";
+import { listarTodasLasHabitaciones } from "../../habitaciones/api/HabitacionApi";
 import { crearReservaHotel, obtenerFechasOcupadas } from "../../reservasHoteleras/api/ReservaHotelApi";
 import { haySolapamiento } from "../../reservasHoteleras/utils/fechasHotel";
 import { aFecha, aInicioDelDiaLocal } from "../../../shared/utils/fechas";

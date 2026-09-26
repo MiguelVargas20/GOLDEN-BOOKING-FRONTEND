@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { BsBuilding, BsPersonPlus } from "react-icons/bs";
+import { BsPersonPlus } from "react-icons/bs";
 import PanelReservasAdmin from "../../../shared/components/reservas/PanelReservasAdmin";
 import {
   listarReservasHotelAdmin,
@@ -75,14 +75,10 @@ export default function GestionarReservasHotel() {
       })}
       textoBusqueda={(r) => [r.nombreCliente, r.correoCliente, r.docUsuario, r.numeroHabitacion, r.tHabitacion].join(" ")}
       accionesExtra={
-        <>
-          <button type="button" className="btn-gb btn-gb-primary btn-gb-sm" onClick={() => navigate("/recepcion/nueva-reserva?tipo=hotel")}>
-            <BsPersonPlus /> Reservar para un cliente
-          </button>
-          <button type="button" className="btn-gb btn-gb-neutral btn-gb-sm" onClick={() => navigate("/gestionar-habitaciones")}>
-            <BsBuilding /> Habitaciones
-          </button>
-        </>
+        // Solo acciones de reservas: la administración de habitaciones vive en Servicios → Habitaciones
+        <button type="button" className="btn-gb btn-gb-primary btn-gb-sm" onClick={() => navigate("/recepcion/nueva-reserva?tipo=hotel")}>
+          <BsPersonPlus /> Reservar para un cliente
+        </button>
       }
     />
   );

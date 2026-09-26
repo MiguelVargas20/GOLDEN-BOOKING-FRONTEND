@@ -3,8 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Spinner, Button, Container, Row, Col, Card } from "react-bootstrap";
 import { BiArrowBack, BiGroup, BiCalendar, BiCalendarAlt } from "react-icons/bi";
 import { obtenerHabitacionPorId } from "../api/HabitacionApi";
-import { crearReservaHotel, obtenerFechasOcupadas } from "../api/ReservaHotelApi"; // 🆕 obtenerFechasOcupadas
-import { haySolapamiento, toLocalDateString } from "../utils/fechasHotel";
+import { crearReservaHotel, obtenerFechasOcupadas } from "../../reservasHoteleras/api/ReservaHotelApi";
+import { haySolapamiento, toLocalDateString } from "../../reservasHoteleras/utils/fechasHotel";
 import { aFecha, aInicioDelDiaLocal, nochesEntre } from "../../../shared/utils/fechas";
 import { useAuth } from "../../../shared/context/AuthContext";
 import Swal from "sweetalert2";
@@ -134,7 +134,7 @@ export default function DetalleHabitacion() {
                 icon: "success",
                 confirmButtonColor: "#f38d1e",
             });
-            navigate("/mis-reservas-hotel");
+            navigate("/reservas-hoteleras/mis-reservas");
         } catch (err) {
             // 🆕 Este catch es tu red de seguridad final: si por una condición
             // de carrera (dos usuarios reservando al mismo tiempo) el backend
@@ -156,7 +156,7 @@ export default function DetalleHabitacion() {
         return (
             <Container className="main-container golden-booking-layout py-5 text-center">
                 <h3 className="mb-3">😕 {error || "Habitación no encontrada."}</h3>
-                <Button className="btn-detail" onClick={() => navigate("/reservas-hospedaje")}>
+                <Button className="btn-detail" onClick={() => navigate("/habitaciones")}>
                     <BiArrowBack /> Volver al catálogo
                 </Button>
             </Container>

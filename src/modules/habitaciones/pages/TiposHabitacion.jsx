@@ -22,7 +22,7 @@ const FORM_VACIO = {
   capacidadMaxima: "",
 };
 
-export default function TipoHabitacionD() {
+export default function TiposHabitacion() {
   // ── Lista de tipos ────────────────────────────────────────
   const [tipos, setTipos] = useState([]);
   const [loadingLista, setLoadingLista] = useState(true);

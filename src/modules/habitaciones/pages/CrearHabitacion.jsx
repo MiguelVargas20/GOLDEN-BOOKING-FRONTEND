@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Row, Col, Form, Button, Alert, Spinner } from "react-bootstrap";
 import { crearHabitacion, listarTiposHabitacion } from "../api/HabitacionApi";
-import "../styles/HabitacionD.css";
+import "../styles/CrearHabitacion.css";
 
 const ESTADOS = [
   { value: "DISPONIBLE", label: "Disponible", color: "var(--gb-status-success-text)" },
@@ -10,7 +10,7 @@ const ESTADOS = [
   { value: "MANTENIMIENTO", label: "⚙ Mantenimiento", color: "var(--gb-status-warning-text)" },
 ];
 
-export default function HabitacionD() {
+export default function CrearHabitacion() {
   const navigate = useNavigate();
 
   // ── Tipos de habitación desde el back ────────────────────
@@ -76,7 +76,7 @@ export default function HabitacionD() {
 
       await crearHabitacion(body);
       setExito("¡Habitación registrada con éxito!");
-      setTimeout(() => navigate("/reservas-hospedaje"), 1500);
+      setTimeout(() => navigate("/habitaciones"), 1500);
     } catch (err) {
       setError(err.message || "Error al registrar la habitación.");
     } finally {
@@ -238,7 +238,7 @@ export default function HabitacionD() {
                         <Button 
                           type="button" 
                           className="btn-add-tipo-room"
-                          onClick={() => navigate("/tipo-habitacion")}
+                          onClick={() => navigate("/habitaciones/tipos")}
                           title="Crear nuevo tipo de habitación"
                         >
                           +
@@ -324,7 +324,7 @@ export default function HabitacionD() {
                   <Button
                     variant="outline-secondary"
                     className="habitacion-cancel-btn"
-                    onClick={() => navigate("/reservas-hospedaje")}
+                    onClick={() => navigate("/habitaciones")}
                     disabled={loading}
                     style={{ borderRadius: "10px", fontWeight: 600 }}
                   >

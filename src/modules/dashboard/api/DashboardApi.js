@@ -11,5 +11,11 @@ export const obtenerDashboard = async (dias = 14) => {
     const mensaje = await extraerMensajeError(res, "No se pudo cargar el panel");
     throw new Error(`${mensaje} (código ${res.status})`);
   }
-  return res.json();
+  const datos = await res.json().catch(() => null);
+  // Si responde algo que no es el panel (backend sin actualizar, proxy...), mejor
+  // un mensaje claro que una pantalla en blanco
+  if (!datos || !datos.indicadores || !Array.isArray(datos.tendencia)) {
+    throw new Error("El servidor respondió algo inesperado. ¿El backend está actualizado a la última versión?");
+  }
+  return datos;
 };
