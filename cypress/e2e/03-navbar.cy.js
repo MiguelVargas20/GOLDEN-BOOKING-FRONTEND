@@ -16,6 +16,27 @@ describe("Menú de navegación", () => {
     cy.get(".dropdown-menu").should("not.be.visible");
   });
 
+  it("el administrador tiene Administración, Club, Mensajes y Usuarios (sin Contáctanos)", () => {
+    cy.simularApiBase("admin");
+    cy.intercept("GET", "**/api/contacto/no-leidos/count", { body: { noLeidos: 4 } });
+    cy.intercept("GET", "**/api/usuarios?*", { body: { contenido: [], paginaActual: 0, totalPaginas: 0, totalElementos: 0 } });
+    cy.visitarComo("admin", ROUTES.usuarios);
+    cy.get("#basic-navbar-nav .navbar-nav").should("contain", "Inicio").and("contain", "Servicios")
+      .and("contain", "Administración").and("contain", "Club").and("contain", "Mensajes").and("contain", "Usuarios");
+    cy.get("#basic-navbar-nav").contains("Contáctanos").should("not.exist");
+    cy.get("#basic-navbar-nav").contains("a", "Mensajes").should("contain", "4");
+
+    cy.get("#menu-administracion").click();
+    cy.get(".dropdown-menu").contains("Calendario de ocupación").should("be.visible");
+    cy.get(".dropdown-menu").contains("Reportes").click();
+    cy.location("pathname").should("eq", ROUTES.reportes);
+
+    cy.get("#menu-club").click();
+    cy.get(".dropdown-menu").contains("Consumos y cuentas").should("be.visible");
+    cy.get(".dropdown-menu").contains("Miembros y socios").click();
+    cy.location("pathname").should("eq", ROUTES.socios);
+  });
+
   it("el cliente no ve las opciones de administración", () => {
     cy.simularApiBase("cliente");
     cy.visitarComo("cliente", ROUTES.contactos);
@@ -26,6 +47,12 @@ describe("Menú de navegación", () => {
     cy.get(".dropdown-menu").contains("Gestionar reservas").should("not.exist");
     cy.get(".dropdown-menu").contains("Mis reservas").first().click();
     cy.location("pathname").should("eq", ROUTES.misReservasDeporte);
+    cy.get("#menu-administracion").should("not.exist");
+    cy.get("#basic-navbar-nav").contains("Mensajes").should("not.exist");
+    cy.get("#basic-navbar-nav").contains("Contáctanos").should("be.visible");
+    cy.get("#menu-club").click();
+    cy.get(".dropdown-menu").contains("Mi cuenta").click();
+    cy.location("pathname").should("eq", ROUTES.miCuenta);
   });
 
   it("la campana del cliente suma las respuestas nuevas y abre Mis mensajes", () => {

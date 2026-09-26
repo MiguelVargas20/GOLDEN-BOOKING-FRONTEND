@@ -7,7 +7,7 @@ import styles from '../styles/Navbar.module.css';
 import { useTheme } from '../context/ThemeContext.jsx';
 import { BsSun, BsMoonStarsFill, BsBoxArrowRight, BsPersonCircle } from 'react-icons/bs';
 import { MdSportsTennis, MdKingBed, MdAddBox, MdCategory } from 'react-icons/md';
-import { BsCalendarCheck, BsClockHistory, BsGrid, BsSearch, BsPersonPlus, BsCalendar3Week, BsFileEarmarkBarGraph, BsReceipt, BsAward, BsCalendarEvent, BsWallet2 } from 'react-icons/bs';
+import { BsCalendarCheck, BsClockHistory, BsGrid, BsSearch, BsPersonPlus, BsCalendar3Week, BsFileEarmarkBarGraph, BsReceipt, BsAward, BsCalendarEvent, BsWallet2, BsSpeedometer2 } from 'react-icons/bs';
 import { useAuth } from '../context/AuthContext.jsx';
 import Swal from 'sweetalert2';
 
@@ -149,7 +149,7 @@ export default function ComponentNavbar() {
                                     Inicio
                                 </Nav.Link>
 
-                                {/* ── Servicios: un solo menú con las secciones de reservas y habitaciones ── */}
+                                {/* ── Servicios: reservas deportivas, reservas hoteleras, espacios y habitaciones ── */}
                                 <NavDropdown
                                     title={<TituloMenu texto="Servicios" pendientes={pendientes.deporte + pendientes.hotel} />}
                                     id="menu-servicios"
@@ -157,22 +157,18 @@ export default function ComponentNavbar() {
                                     onToggle={(abierto) => setMenuAbierto(abierto ? "servicios" : null)}
                                     className={`${styles.navLink} ${styles.servicesDropdown}`}
                                 >
-                                    <div className={`${styles.megaMenu} ${styles.megaMenuTres}`}>
-                                        {/* Reservas deportivas */}
+                                    <div className={`${styles.megaMenu} ${isAdmin() ? styles.megaMenuCuatro : ""}`}>
                                         <section className={styles.megaSeccion}>
                                             <NavDropdown.Header className={styles.megaTitulo}>Reservas deportivas</NavDropdown.Header>
-                                            <ItemMenu to="/reservas-deportivas" icono={<MdSportsTennis />} titulo="Espacios deportivos" texto="Explora y reserva canchas." onElegir={cerrarMenus} />
                                             <ItemMenu to="/reservas-deportivas/mis-reservas" icono={<BsClockHistory />} titulo="Mis reservas" texto="Estado de tus reservas." onElegir={cerrarMenus} />
                                             {isAdmin() && (
                                                 <>
                                                     <ItemMenu to="/reservas-deportivas/gestionar" icono={<BsCalendarCheck />} titulo="Gestionar reservas" texto="Aprobar o cancelar solicitudes." badge={pendientes.deporte} onElegir={cerrarMenus} />
                                                     <ItemMenu to="/recepcion/nueva-reserva?tipo=deporte" icono={<BsPersonPlus />} titulo="Reservar para un cliente" texto="Registro en recepción." onElegir={cerrarMenus} />
-                                                    <ItemMenu to="/reservas-deportivas/espacios" icono={<BsGrid />} titulo="Administrar espacios" texto="Crear, editar e imágenes." onElegir={cerrarMenus} />
                                                 </>
                                             )}
                                         </section>
 
-                                        {/* Reservas hoteleras: solo reservas */}
                                         <section className={styles.megaSeccion}>
                                             <NavDropdown.Header className={styles.megaTitulo}>Reservas hoteleras</NavDropdown.Header>
                                             <ItemMenu to="/reservas-hoteleras/mis-reservas" icono={<BsClockHistory />} titulo="Mis reservas" texto="Estado de tus estadías." onElegir={cerrarMenus} />
@@ -180,48 +176,88 @@ export default function ComponentNavbar() {
                                                 <>
                                                     <ItemMenu to="/reservas-hoteleras/gestionar" icono={<BsCalendarCheck />} titulo="Gestionar reservas" texto="Aprobar o cancelar solicitudes." badge={pendientes.hotel} onElegir={cerrarMenus} />
                                                     <ItemMenu to="/recepcion/nueva-reserva?tipo=hotel" icono={<BsPersonPlus />} titulo="Reservar para un cliente" texto="Registro en recepción." onElegir={cerrarMenus} />
-                                                    <NavDropdown.Header className={styles.megaTitulo}>Administración</NavDropdown.Header>
-                                                    <ItemMenu to="/calendario" icono={<BsCalendar3Week />} titulo="Calendario de ocupación" texto="Semana por espacio y habitación." onElegir={cerrarMenus} />
-                                                    <ItemMenu to="/reportes" icono={<BsFileEarmarkBarGraph />} titulo="Reportes" texto="Reservas e ingresos en Excel o PDF." onElegir={cerrarMenus} />
                                                 </>
-                                            )}
-                                            {!isAdmin() && (
-                                                <ItemMenu to="/mi-cuenta" icono={<BsWallet2 />} titulo="Mi cuenta" texto="Consumos cargados a tus reservas." onElegir={cerrarMenus} />
                                             )}
                                         </section>
 
-                                        {/* Habitaciones: todo lo de las habitaciones (catálogo para todos, gestión para el admin) */}
+                                        <section className={styles.megaSeccion}>
+                                            <NavDropdown.Header className={styles.megaTitulo}>Espacios deportivos</NavDropdown.Header>
+                                            <ItemMenu to="/reservas-deportivas" icono={<MdSportsTennis />} titulo="Explorar espacios" texto="Canchas disponibles y reserva por horas." onElegir={cerrarMenus} />
+                                            {isAdmin() && (
+                                                <ItemMenu to="/reservas-deportivas/espacios" icono={<BsGrid />} titulo="Administrar espacios" texto="Crear, editar, estado, implementos e imagen." onElegir={cerrarMenus} />
+                                            )}
+                                        </section>
+
                                         <section className={styles.megaSeccion}>
                                             <NavDropdown.Header className={styles.megaTitulo}>Habitaciones</NavDropdown.Header>
                                             <ItemMenu to="/habitaciones" icono={<BsSearch />} titulo="Ver habitaciones" texto="Disponibilidad, precios y reserva." onElegir={cerrarMenus} />
                                             {isAdmin() && (
                                                 <>
-                                                    <ItemMenu to="/habitaciones/gestionar" icono={<MdKingBed />} titulo="Gestionar habitaciones" texto="Precios, estados y edición." onElegir={cerrarMenus} />
+                                                    <ItemMenu to="/habitaciones/gestionar" icono={<MdKingBed />} titulo="Gestionar habitaciones" texto="Precios, estados, fotos y edición." onElegir={cerrarMenus} />
                                                     <ItemMenu to="/habitaciones/crear" icono={<MdAddBox />} titulo="Crear habitación" texto="Agregar al catálogo." onElegir={cerrarMenus} />
                                                     <ItemMenu to="/habitaciones/tipos" icono={<MdCategory />} titulo="Tipos de habitación" texto="Suite, doble, sencilla..." onElegir={cerrarMenus} />
-                                                    <NavDropdown.Header className={styles.megaTitulo}>Club</NavDropdown.Header>
-                                                    <ItemMenu to="/cargos" icono={<BsReceipt />} titulo="Consumos y cuentas" texto="Cargar a la reserva o cuenta de socio." onElegir={cerrarMenus} />
-                                                    <ItemMenu to="/eventos/gestionar" icono={<BsCalendarEvent />} titulo="Eventos" texto="Baile, recreación, festivales..." onElegir={cerrarMenus} />
-                                                    <ItemMenu to="/socios" icono={<BsAward />} titulo="Miembros y socios" texto="Categorías, beneficios y sugeridos." onElegir={cerrarMenus} />
                                                 </>
                                             )}
                                         </section>
                                     </div>
                                 </NavDropdown>
 
-                                {!isAdmin() && (
-                                    <Nav.Link as={Link} to="/eventos" onClick={() => setNavExpanded(false)} className={styles.navLink}>
-                                        Eventos
-                                    </Nav.Link>
+                                {/* ── Administración (solo admin): panel, ocupación y reportes ── */}
+                                {isAdmin() && (
+                                    <NavDropdown
+                                        title="Administración"
+                                        id="menu-administracion"
+                                        show={menuAbierto === "administracion"}
+                                        onToggle={(abierto) => setMenuAbierto(abierto ? "administracion" : null)}
+                                        className={`${styles.navLink} ${styles.servicesDropdown}`}
+                                    >
+                                        <section className={styles.megaSeccion}>
+                                            <NavDropdown.Header className={styles.megaTitulo}>Administración</NavDropdown.Header>
+                                            <ItemMenu to="/home" icono={<BsSpeedometer2 />} titulo="Panel de control" texto="Indicadores del día y pendientes." onElegir={cerrarMenus} />
+                                            <ItemMenu to="/calendario" icono={<BsCalendar3Week />} titulo="Calendario de ocupación" texto="Semana por espacio y habitación." onElegir={cerrarMenus} />
+                                            <ItemMenu to="/reportes" icono={<BsFileEarmarkBarGraph />} titulo="Reportes" texto="Reservas e ingresos en Excel o PDF." onElegir={cerrarMenus} />
+                                        </section>
+                                    </NavDropdown>
                                 )}
 
-                                <Nav.Link as={Link} to="/contactos" onClick={() => setNavExpanded(false)} className={styles.navLink}>
-                                    Contactanos
-                                </Nav.Link>
+                                {/* ── Club: eventos, consumos y socios ── */}
+                                <NavDropdown
+                                    title="Club"
+                                    id="menu-club"
+                                    show={menuAbierto === "club"}
+                                    onToggle={(abierto) => setMenuAbierto(abierto ? "club" : null)}
+                                    className={`${styles.navLink} ${styles.servicesDropdown}`}
+                                >
+                                    <section className={styles.megaSeccion}>
+                                        <NavDropdown.Header className={styles.megaTitulo}>Club Valle Dorado</NavDropdown.Header>
+                                        {isAdmin() ? (
+                                            <>
+                                                <ItemMenu to="/eventos/gestionar" icono={<BsCalendarEvent />} titulo="Eventos" texto="Baile, recreación, festivales..." onElegir={cerrarMenus} />
+                                                <ItemMenu to="/cargos" icono={<BsReceipt />} titulo="Consumos y cuentas" texto="Cargar a la reserva o cuenta de socio." onElegir={cerrarMenus} />
+                                                <ItemMenu to="/socios" icono={<BsAward />} titulo="Miembros y socios" texto="Categorías, beneficios y sugeridos." onElegir={cerrarMenus} />
+                                            </>
+                                        ) : (
+                                            <>
+                                                <ItemMenu to="/eventos" icono={<BsCalendarEvent />} titulo="Eventos" texto="Lo que se viene en el club." onElegir={cerrarMenus} />
+                                                <ItemMenu to="/mi-cuenta" icono={<BsWallet2 />} titulo="Mi cuenta" texto="Consumos cargados a tus reservas." onElegir={cerrarMenus} />
+                                                <ItemMenu to="/mi-perfil" icono={<BsAward />} titulo="Mi membresía" texto="Tu categoría de socio y beneficios." onElegir={cerrarMenus} />
+                                            </>
+                                        )}
+                                    </section>
+                                </NavDropdown>
 
-                                {isAdmin() && (
-                                    <Nav.Link as={Link} to="/usuarios" onClick={() => setNavExpanded(false)} className={styles.navLink}>
-                                        Usuarios
+                                {isAdmin() ? (
+                                    <>
+                                        <Nav.Link as={Link} to="/mensajes" onClick={() => setNavExpanded(false)} className={styles.navLink}>
+                                            <TituloMenu texto="Mensajes" pendientes={noLeidos} titulo={`${noLeidos} mensajes sin leer`} />
+                                        </Nav.Link>
+                                        <Nav.Link as={Link} to="/usuarios" onClick={() => setNavExpanded(false)} className={styles.navLink}>
+                                            Usuarios
+                                        </Nav.Link>
+                                    </>
+                                ) : (
+                                    <Nav.Link as={Link} to="/contactos" onClick={() => setNavExpanded(false)} className={styles.navLink}>
+                                        Contáctanos
                                     </Nav.Link>
                                 )}
                             </Nav>
@@ -308,12 +344,12 @@ export default function ComponentNavbar() {
 }
 
 /** Título de un menú desplegable con contador de pendientes (solo si hay). */
-function TituloMenu({ texto, pendientes }) {
+function TituloMenu({ texto, pendientes, titulo }) {
     return (
         <span className="d-inline-flex align-items-center gap-1">
             {texto}
             {pendientes > 0 && (
-                <span className={styles.pendienteBadge} title={`${pendientes} reservas pendientes de aprobación`}>
+                <span className={styles.pendienteBadge} title={titulo || `${pendientes} reservas pendientes de aprobación`}>
                     {pendientes > 9 ? "9+" : pendientes}
                 </span>
             )}
