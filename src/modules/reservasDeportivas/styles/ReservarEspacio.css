@@ -17,8 +17,8 @@
   background: var(--gb-surface); border: 1px solid var(--gb-border); border-radius: 18px; overflow: hidden;
   position: sticky; top: 90px;
 }
-.re-imagen { aspect-ratio: 16 / 11; background: var(--gb-surface-hover); }
-.re-imagen img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.re-imagen { position: relative; aspect-ratio: 16 / 11; overflow: hidden; background: var(--gb-surface-hover); }
+.re-imagen img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 .re-espacio-info { padding: 16px 18px 18px; display: flex; flex-direction: column; gap: 6px; }
 .re-nombre { font-size: 1.35rem; font-weight: 800; margin: 0; color: var(--gb-item-title); }
 .re-descripcion { font-size: 0.9rem; color: var(--gb-text-muted); margin: 0; }
