@@ -26,12 +26,22 @@ npm run build
 ```
 
 ## Rutas principales
-- `/login` — Inicio de sesión
-- `/register` — Registro de usuario
-- `/home` — Página principal (requiere login)
-- `/reservas-deportivas` — Módulo de reservas deportivas
-- `/reservas-hospedaje` — Módulo de reservas hoteleras
-- `/usuarios` — Gestión de usuarios (solo ADMIN)
+| Ruta | Quién | Qué es |
+|---|---|---|
+| `/login`, `/register`, `/forgot` | Todos | Acceso, registro y recuperación de contraseña |
+| `/home` | Todos | **Admin:** panel de control (dashboard). **Cliente:** portada |
+| `/reservas-deportivas` | Todos | Catálogo de espacios deportivos y reserva por horas |
+| `/reservas-deportivas/mis-reservas` | Todos | Mis reservas deportivas |
+| `/habitaciones`, `/habitaciones/:id` | Todos | Catálogo y detalle de habitaciones, reserva por noches |
+| `/reservas-hoteleras/mis-reservas` | Todos | Mis reservas hoteleras |
+| `/mi-perfil`, `/mis-mensajes`, `/contactos` | Todos | Perfil, mensajes y contacto |
+| `/reservas-deportivas/gestionar`, `/reservas-hoteleras/gestionar` | Admin | Aprobar o cancelar solicitudes (con motivo) |
+| `/recepcion/nueva-reserva` | Admin | Registrar una reserva a nombre de un cliente |
+| `/reservas-deportivas/espacios` | Admin | Administrar espacios deportivos e imágenes |
+| `/habitaciones/gestionar`, `/habitaciones/crear`, `/habitaciones/tipos` | Admin | Administrar habitaciones, imágenes y tipos |
+| `/usuarios`, `/usuarios-crear`, `/usuarios-edit` | Admin | Administrar usuarios y roles |
+| `/mensajes` | Admin | Bandeja de mensajes de contacto |
+
 ## Estructura del proyecto
 El código está organizado **por módulo** (cada funcionalidad tiene sus propias
 páginas, estilos, llamadas a la API y hooks) y una carpeta `shared/` con lo que
@@ -44,25 +54,23 @@ src/
 ├── index.css
 ├── assets/                  # Imágenes
 ├── modules/
-│   ├── auth/                # Login, registro, recuperar/restablecer contraseña, verificar cuenta
-│   │   ├── api/  pages/  schemas/  styles/
-│   ├── home/                # Página de inicio
-│   ├── usuarios/            # Gestión de usuarios (ADMIN) y "Mi perfil"
-│   │   ├── api/  pages/  styles/
-│   ├── reservasDeportivas/  # Catálogo, reservar espacio, mis reservas, gestión (ADMIN)
-│   │   ├── api/  hooks/  pages/  styles/
-│   ├── reservasHoteleras/   # Habitaciones, tipos, reservas de hotel
-│   │   ├── api/  pages/  styles/  utils/
-│   └── mensajes/            # Contacto, mis mensajes, bandeja del ADMIN
-│       ├── api/  hooks/  pages/  styles/
+│   ├── auth/                # Login, registro, recuperar/restablecer contraseña, verificar cuenta (LayoutAuth)
+│   ├── home/                # Inicio: portada (cliente) o dashboard (admin)
+│   ├── dashboard/           # Panel de control del admin: indicadores, agenda, pendientes, gráficos
+│   ├── usuarios/            # Gestión de usuarios (admin) y "Mi perfil"
+│   ├── reservasDeportivas/  # Espacios, catálogo, reservar, mis reservas y gestión (admin)
+│   ├── habitaciones/        # Catálogo, detalle, gestión, crear y tipos de habitación
+│   ├── reservasHoteleras/   # Mis reservas y gestión de reservas de hotel (admin)
+│   ├── recepcion/           # Reservar a nombre de un cliente (admin)
+│   └── mensajes/            # Contacto, mis mensajes y bandeja del admin
 └── shared/                  # Lo que usan varios módulos
-    ├── api/                 # apiUtils (URL base, headers, manejo de errores)
-    ├── components/          # Navbar, Footer, RutaProteccion, LoadingSpinner
+    ├── api/                 # apiUtils (URL base, headers, manejo de errores y sesión)
+    ├── components/          # Navbar, Footer, RutaProteccion, SelectorImagen, paneles de reservas
     ├── context/             # AuthContext, ThemeContext
-    ├── hooks/               # useRequirePerfilCompleto
+    ├── hooks/               # Pendientes, avisos en vivo del admin, eventos de reservas
     ├── layout/              # Layout principal (Navbar + contenido + Footer)
-    ├── styles/              # Tema, modo oscuro, botones y datepicker compartidos
-    └── utils/               # escapeHtml
+    ├── styles/              # Tema (claro/oscuro), paneles, catálogos, botones y calendarios
+    └── utils/               # Fechas en hora local, formatos (es-CO), imágenes, escapeHtml
 ```
 
 **Regla:** si algo solo lo usa un módulo, va dentro de ese módulo; si lo usan dos
