@@ -1,10 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { IoAddCircleOutline } from "react-icons/io5";
-import { BiCalendarAlt, BiGroup, BiMoney } from "react-icons/bi";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Form from "react-bootstrap/Form";
+import { BsCashCoin, BsPeople, BsCalendarCheck, BsClockHistory, BsGear } from "react-icons/bs";
+import { Spinner } from "react-bootstrap";
 import { listarTodasLasHabitaciones } from "../api/HabitacionApi";
 import { crearReservaHotel, obtenerFechasOcupadas } from "../../reservasHoteleras/api/ReservaHotelApi";
 import { haySolapamiento, toLocalDateString } from "../../reservasHoteleras/utils/fechasHotel";
@@ -19,9 +16,12 @@ import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "../../../shared/styles/DatePickerCompartido.css";
 import { es } from "date-fns/locale";
-import "../styles/CatalogoHabitaciones.css";
+import "../../../shared/styles/PanelAdmin.css";
+import "../../../shared/styles/Catalogo.css";
 import "../../../shared/styles/BotonesCompartidos.css";
+import "../styles/CatalogoHabitaciones.css";
 import { escapeHtml } from "../../../shared/utils/escapeHtml";
+import { fecha, pesos } from "../../../shared/utils/formato";
 
 registerLocale("es", es);
 
@@ -154,16 +154,14 @@ export default function CatalogoHabitaciones() {
 
         const confirmacion = await Swal.fire({
             title: "¿Enviar solicitud de reserva?",
-            html: `
-                <div style="text-align:left;padding:0 1rem; font-family: 'Poppins', sans-serif;">
-                    <p><strong>Habitación:</strong> ${escapeHtml(hab.numeroHabitacion)}</p>
-                    <p><strong>Check-in:</strong> ${aFecha(habFechas.checkIn).toLocaleDateString()}</p>
-                    <p><strong>Check-out:</strong> ${aFecha(habFechas.checkOut).toLocaleDateString()}</p>
-                    <p><strong>Noches:</strong> ${noches}</p>
-                    <hr>
-                    <p style="font-size:1.2rem;color:#f38d1e"><strong>Total: $${total.toLocaleString("es-CO")}</strong></p>
+            html: `<div class="gb-swal-detalle">
+                    <div><span>Habitación</span><strong>${escapeHtml(hab.numeroHabitacion)}</strong></div>
+                    <div><span>Check-in</span><strong>${fecha(habFechas.checkIn)} · 3:00 p. m.</strong></div>
+                    <div><span>Check-out</span><strong>${fecha(habFechas.checkOut)} · 12:00 m.</strong></div>
+                    <div><span>Noches</span><strong>${noches}</strong></div>
+                    <div><span>Total</span><strong>${pesos(total)}</strong></div>
                 </div>
-            `,
+                <p class="gb-swal-nota">Quedará pendiente hasta que la administración la apruebe.</p>`,
             icon: "question",
             showCancelButton: true,
             confirmButtonText: "Sí, enviar solicitud",
@@ -214,192 +212,117 @@ export default function CatalogoHabitaciones() {
 
     if (loading) return <LoadingSpinner />;
 
-    if (error) return (
-        <div className="container py-5 text-center">
-            <p className="text-danger">{error}</p>
-        </div>
-    );
-
     return (
-        <div className="container-fluid main-container golden-booking-layout py-3">
-
-            <div className="conexion-status-container mx-3 text-end">
-                <span className="conexion-badge en-vivo">🟢 En vivo</span>
-            </div>
-
-            <div className="botones-reservas-v2 mt-2 mb-4 mx-3">
-                <div className="acciones-izquierda">
-                    {isAdmin() && (
-                        <>
-                            <button
-                                className="btn-gb btn-gb-primary btn-gb-sm"
-                                onClick={() => navigate("/habitaciones/crear")}
-                            >
-                                <IoAddCircleOutline /> Crear
-                            </button>
-                            <button
-                                className="btn-reserva-sm gestionar"
-                                onClick={() => navigate("/habitaciones/gestionar")}
-                            >
-                                ⚙️ Gestionar
-                            </button>
-                        </>
-                    )}
+        <div className="gb-panel">
+            <div className="gb-panel-header">
+                <div>
+                    <h1 className="gb-panel-titulo">Nuestras <span>habitaciones</span></h1>
+                    <p className="gb-panel-subtitulo">Elige tus fechas y envía tu solicitud: queda pendiente hasta que sea aprobada.</p>
                 </div>
-
-                <h1 className="titulo-reservas-v2">
-                    NUESTRAS <span>HABITACIONES</span>
-                </h1>
-
-                <div className="acciones-derecha">
-                    <button
-                        className="btn-reserva-sm mis"
-                        onClick={() => navigate("/reservas-hoteleras/mis-reservas")}
-                    >
-                        📋 Mis Reservas
+                <div className="gb-panel-acciones">
+                    {isAdmin() && (
+                        <button type="button" className="btn-gb btn-gb-neutral btn-gb-sm" onClick={() => navigate("/habitaciones/gestionar")}>
+                            <BsGear /> Gestionar
+                        </button>
+                    )}
+                    <button type="button" className="btn-gb btn-gb-primary btn-gb-sm" onClick={() => navigate("/reservas-hoteleras/mis-reservas")}>
+                        <BsClockHistory /> Mis reservas
                     </button>
                 </div>
             </div>
 
-            <div className="mx-3 mb-4 p-3 bg-white rounded shadow-sm border border-light-subtle">
-                <Row className="g-3 align-items-center">
-                    <Col sm={12} md={6}>
-                        <Form.Label className="fw-semibold text-muted small mb-1">Filtrar por tipo:</Form.Label>
-                        <Form.Select className="filter-select-custom" onChange={(e) => setFilterTipo(e.target.value)}>
-                            <option value="Todos">Todos los tipos</option>
-                            {/* Los tipos que existen de verdad (antes eran 3 nombres fijos) */}
-                            {tiposDisponibles.map((t) => <option key={t} value={t}>{t}</option>)}
-                        </Form.Select>
-                    </Col>
-                    <Col sm={12} md={6}>
-                        <Form.Label className="fw-semibold text-muted small mb-1">Ordenar por precio:</Form.Label>
-                        <Form.Select className="filter-select-custom" onChange={(e) => setOrdenPrecio(e.target.value)}>
-                            <option value="normal">Sin orden</option>
-                            <option value="asc">Menor a mayor</option>
-                            <option value="desc">Mayor a menor</option>
-                        </Form.Select>
-                    </Col>
-                </Row>
+            {error && <div className="alert alert-danger">{error}</div>}
+
+            <div className="ch-filtros">
+                <div className="gb-chips" role="group" aria-label="Filtrar por tipo">
+                    {["Todos", ...tiposDisponibles].map((t) => (
+                        <button key={t} type="button" className={`gb-chip ${filterTipo === t ? "activo" : ""}`}
+                            onClick={() => setFilterTipo(t)} aria-pressed={filterTipo === t}>
+                            {t === "Todos" ? "Todos los tipos" : t}
+                        </button>
+                    ))}
+                </div>
+                <select className="form-select ch-orden" value={ordenPrecio} onChange={(e) => setOrdenPrecio(e.target.value)} aria-label="Ordenar por precio">
+                    <option value="normal">Sin orden</option>
+                    <option value="asc">Precio: menor a mayor</option>
+                    <option value="desc">Precio: mayor a menor</option>
+                </select>
             </div>
 
-            <Row className="mx-1">
-                {habitacionesFiltradas.length === 0 ? (
-                    <div className="text-center py-5 text-muted empty-banner">
-                        No se encontraron habitaciones con esos criterios.
-                    </div>
-                ) : (
-                    habitacionesFiltradas.map((hab) => {
+            {habitacionesFiltradas.length === 0 ? (
+                <div className="gb-vacio"><p className="m-0">No hay habitaciones con esos criterios.</p></div>
+            ) : (
+                <div className="ge-grid ch-grid">
+                    {habitacionesFiltradas.map((hab) => {
                         const habFechas = getFechasHab(hab.id);
-
-                        const disponible =
-                            hab.estadoHabitacion?.toLowerCase() === "disponible" ||
-                            hab.estado?.toLowerCase() === "disponible";
-
+                        const disponible = hab.estadoHabitacion === "DISPONIBLE";
                         const { noches, total } = calcularNochesYTotal(hab);
                         const ocupadas = rangosOcupadosPorHabitacion[hab.id] || [];
+                        const tipo = datosTipo(hab);
 
                         return (
-                            <Col xs={12} lg={6} key={hab.id} className="mb-4">
-                                <div className="hotel-card-v2">
-
-                                    <div className="hotel-image-container-v2">
-                                        <img
-                                            src={imagenHabitacion(hab)}
-                                            onError={usarImagenDeRespaldoHabitacion}
-                                            alt={hab.numeroHabitacion}
-                                            className="hotel-image-v2"
-                                        />
-                                    </div>
-
-                                    <div className="hotel-body-v2">
-                                        <div className="hotel-header-v2">
-                                            <h5>
-                                                {hab.numeroHabitacion} ·{" "}
-                                                {datosTipo(hab).nombre || "Habitación"}
-                                            </h5>
-                                            <span className={`status-tag-v2 ${disponible ? "disponible" : "no-disponible"}`}>
-                                                {disponible ? "✓ Disponible" : "✗ Mantenimiento"}
-                                            </span>
-                                        </div>
-
-                                        <div className="details-row-v2">
-                                            <span><BiGroup /> {datosTipo(hab).capacidad ?? "—"} pers.</span>
-                                            <span><BiMoney /> ${hab.precioNoche?.toLocaleString("es-CO")}/noche</span>
-                                        </div>
-
-                                        {/* 🆕 Aviso si esta habitación tiene reservas activas */}
+                            <article key={hab.id} className={`ge-card ${disponible ? "" : "atenuada"}`}>
+                                <div className="ge-imagen">
+                                    <img src={imagenHabitacion(hab)} onError={usarImagenDeRespaldoHabitacion} alt={`Habitación ${hab.numeroHabitacion}`} loading="lazy" />
+                                    <span className={`ge-estado ${disponible ? "ge-estado-activo" : "ge-estado-mantenimiento"}`}>
+                                        {disponible ? "Disponible" : hab.estadoHabitacion === "OCUPADA" ? "Ocupada" : "Mantenimiento"}
+                                    </span>
+                                </div>
+                                <div className="ge-cuerpo">
+                                    <span className="ge-deporte">{tipo.nombre || "Habitación"}</span>
+                                    <h3 className="ge-nombre">Habitación {hab.numeroHabitacion}</h3>
+                                    {hab.descripcion && <p className="ge-descripcion">{hab.descripcion}</p>}
+                                    <ul className="ge-datos">
+                                        <li><BsCashCoin /> {pesos(hab.precioNoche)} / noche</li>
+                                        <li><BsPeople /> Hasta {tipo.capacidad ?? "—"} personas</li>
                                         {ocupadas.length > 0 && (
-                                            <p className="small text-muted mb-0">
-                                                📅 {ocupadas.length} reserva{ocupadas.length !== 1 ? "s" : ""} activa{ocupadas.length !== 1 ? "s" : ""} — evita cruzar esas fechas.
-                                            </p>
+                                            <li><BsCalendarCheck /> {ocupadas.length} {ocupadas.length === 1 ? "fecha reservada" : "fechas reservadas"}: evita cruzarlas</li>
                                         )}
+                                    </ul>
 
-                                        <div className="date-picker-row-v2">
-                                            <div className="date-input-group-v2">
-                                                <label>Check-in</label>
-                                                <div className="date-input-wrapper">
-                                                    <BiCalendarAlt className="calendar-icon" />
-                                                    <DatePicker
-                                                        selected={habFechas.checkIn ? aFecha(habFechas.checkIn) : null}
-                                                        onChange={(date) => setFechaHab(hab.id, "checkIn", date ? toLocalDateString(date) : "")}
-                                                        dateFormat="dd/MM/yyyy"
-                                                        locale="es"
-                                                        className="form-control custom-date-input"
-                                                        placeholderText="dd/mm/aaaa"
-                                                        minDate={new Date()}
-                                                        portalId="datepicker-portal"
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="date-input-group-v2">
-                                                <label>Check-out</label>
-                                                <div className="date-input-wrapper">
-                                                    <BiCalendarAlt className="calendar-icon" />
-                                                    <DatePicker
-                                                        selected={habFechas.checkOut ? aFecha(habFechas.checkOut) : null}
-                                                        onChange={(date) => setFechaHab(hab.id, "checkOut", date ? toLocalDateString(date) : "")}
-                                                        dateFormat="dd/MM/yyyy"
-                                                        locale="es"
-                                                        className="form-control custom-date-input"
-                                                        placeholderText="dd/mm/aaaa"
-                                                        minDate={habFechas.checkIn ? aFecha(habFechas.checkIn) : new Date()}
-                                                        portalId="datepicker-portal"
-                                                    />
-                                                </div>
-                                            </div>
+                                    {disponible && (
+                                        <div className="ch-fechas">
+                                            <label>
+                                                <span>Check-in</span>
+                                                <DatePicker
+                                                    selected={habFechas.checkIn ? aFecha(habFechas.checkIn) : null}
+                                                    onChange={(date) => setFechaHab(hab.id, "checkIn", date ? toLocalDateString(date) : "")}
+                                                    dateFormat="dd/MM/yyyy" locale="es" className="form-control"
+                                                    placeholderText="dd/mm/aaaa" minDate={new Date()} portalId="datepicker-portal"
+                                                />
+                                            </label>
+                                            <label>
+                                                <span>Check-out</span>
+                                                <DatePicker
+                                                    selected={habFechas.checkOut ? aFecha(habFechas.checkOut) : null}
+                                                    onChange={(date) => setFechaHab(hab.id, "checkOut", date ? toLocalDateString(date) : "")}
+                                                    dateFormat="dd/MM/yyyy" locale="es" className="form-control"
+                                                    placeholderText="dd/mm/aaaa"
+                                                    minDate={habFechas.checkIn ? aFecha(habFechas.checkIn) : new Date()}
+                                                    portalId="datepicker-portal"
+                                                />
+                                            </label>
                                         </div>
+                                    )}
+                                    {noches > 0 && (
+                                        <p className="ch-total">{noches} {noches === 1 ? "noche" : "noches"} · <strong>{pesos(total)}</strong></p>
+                                    )}
 
-                                        {noches > 0 && (
-                                            <div className="resumen-total-v2">
-                                                {noches} noche{noches !== 1 ? "s" : ""} = ${total.toLocaleString("es-CO")}
-                                            </div>
-                                        )}
-
-                                        <div className="hotel-footer-v2">
-                                            <span className="precio-v2">
-                                                ${noches > 0 ? total.toLocaleString("es-CO") : (hab.precioNoche?.toLocaleString("es-CO") || "—")}
-                                                <small>{noches > 0 ? ` (${noches}n)` : " /noche"}</small>
-                                            </span>
-                                            <div className="botones-v2">
-                                                <button className="btn-gb btn-gb-secondary btn-gb-sm" onClick={() => navigate(`/habitaciones/${hab.id}`)}>
-                                                    Detalle
-                                                </button>
-                                                <button
-                                                    className="btn-gb btn-gb-primary btn-gb-sm"
-                                                    onClick={() => handleReservar(hab)}
-                                                    disabled={!disponible || reservando === hab.id}
-                                                >
-                                                    {reservando === hab.id ? "Reservando..." : "Reservar"}
-                                                </button>
-                                            </div>
-                                        </div>
+                                    <div className="ch-acciones">
+                                        <button type="button" className="btn-gb btn-gb-secondary btn-gb-sm" onClick={() => navigate(`/habitaciones/${hab.id}`)}>
+                                            Ver detalle
+                                        </button>
+                                        <button type="button" className="btn-gb btn-gb-primary btn-gb-sm" onClick={() => handleReservar(hab)}
+                                            disabled={!disponible || reservando === hab.id}>
+                                            {reservando === hab.id ? <><Spinner size="sm" /> Enviando…</> : disponible ? "Reservar" : "No disponible"}
+                                        </button>
                                     </div>
                                 </div>
-                            </Col>
+                            </article>
                         );
-                    })
-                )}
-            </Row>
+                    })}
+                </div>
+            )}
         </div>
     );
 }

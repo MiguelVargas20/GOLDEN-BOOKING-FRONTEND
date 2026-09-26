@@ -264,3 +264,6 @@
 }
 
 .gb-ayuda { display: block; font-size: 0.75rem; color: var(--gb-text-muted); margin-top: 4px; }
+
+/* Fila que se está editando en una tabla (tipos de habitación, etc.) */
+.gb-tabla tbody tr.th-editando td { background: var(--gb-icon-bg); }

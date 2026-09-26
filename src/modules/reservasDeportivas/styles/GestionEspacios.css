@@ -1,47 +1,6 @@
-/* ── Gestión de espacios deportivos (admin) y catálogo ───────── */
-
-.gb-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
-.gb-chip {
-  display: inline-flex; align-items: center; gap: 8px;
-  border: 1px solid var(--gb-border); background: var(--gb-surface); color: var(--gb-text-primary);
-  border-radius: 999px; padding: 6px 14px; font-size: 0.85rem; font-weight: 600;
-  transition: border-color 0.15s, background 0.15s;
-}
-.gb-chip span {
-  background: var(--gb-surface-hover); border-radius: 999px; padding: 0 8px; font-size: 0.75rem; color: var(--gb-text-muted);
-}
-.gb-chip.activo { border-color: var(--gb-primary); background: var(--gb-icon-bg); color: var(--gb-primary); }
-.gb-chip.activo span { background: var(--gb-primary); color: #fff; }
-
-.gb-vacio {
-  text-align: center; padding: 48px 16px; border: 1px dashed var(--gb-border); border-radius: 14px; color: var(--gb-text-muted);
-}
-
-.ge-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 18px;
-}
-
-.ge-card {
-  display: flex; flex-direction: column;
-  background: var(--gb-surface); border: 1px solid var(--gb-border); border-radius: 16px; overflow: hidden;
-  transition: transform 0.15s, box-shadow 0.15s;
-}
-.ge-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08); }
-.ge-card.atenuada .ge-imagen img { filter: grayscale(0.6); opacity: 0.8; }
-
-.ge-imagen { position: relative; aspect-ratio: 16 / 10; background: var(--gb-surface-hover); }
-.ge-imagen img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-.ge-estado {
-  position: absolute; top: 10px; left: 10px;
-  padding: 4px 10px; border-radius: 999px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-}
-.ge-estado-activo        { background: #e6f4ea; color: #2e7d32; }
-.ge-estado-mantenimiento { background: #fff3e0; color: #e65100; }
-.ge-estado-inactivo      { background: #edf2f7; color: #4a5568; }
+/* ── Administración de espacios deportivos ──────────────────
+   Tarjetas, chips y estado vacío: shared/styles/Catalogo.css */
+@import "../../../shared/styles/Catalogo.css";
 
 .ge-menu { position: absolute; top: 8px; right: 8px; }
 .ge-menu-boton {
@@ -50,20 +9,6 @@
 }
 .ge-menu-boton::after { display: none; }
 
-.ge-cuerpo { display: flex; flex-direction: column; gap: 6px; padding: 14px 16px 16px; flex: 1; }
-.ge-deporte { font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px; color: var(--gb-primary); }
-.ge-nombre { font-size: 1.05rem; font-weight: 800; margin: 0; color: var(--gb-item-title); }
-.ge-descripcion { font-size: 0.85rem; color: var(--gb-text-muted); margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.ge-datos { list-style: none; padding: 0; margin: 6px 0 10px; display: grid; gap: 4px; font-size: 0.85rem; color: var(--gb-text-primary); }
-.ge-datos li { display: flex; align-items: center; gap: 8px; }
-.ge-datos svg { color: var(--gb-primary); flex-shrink: 0; }
-.ge-cuerpo > button { margin-top: auto; }
-
 .ge-modal-imagen { aspect-ratio: 4 / 3; border-radius: 12px; overflow: hidden; background: var(--gb-surface-hover); border: 1px solid var(--gb-border); }
 .ge-modal-imagen img { width: 100%; height: 100%; object-fit: cover; }
 .ge-subir { cursor: pointer; justify-content: center; }
-
-/* Catálogo del cliente */
-.ge-card.clickable { cursor: pointer; }
-.ge-card.no-disponible { cursor: not-allowed; }
-.ge-cta { margin-top: auto; }
