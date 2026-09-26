@@ -58,3 +58,13 @@ export const actualizarMiPerfil = async (id, datos) => {
   if (!res.ok) throw new Error(await extraerMensajeError(res, "Error al actualizar perfil"));
   return res.json();
 };
+// Crear usuario desde el panel (ADMIN): con el rol elegido y ya verificado
+export const crearUsuarioAdmin = async (datos, rol = "ROL_CLIENTE") => {
+  const response = await apiFetch(`${API_URL}?rol=${encodeURIComponent(rol)}`, {
+    method: "POST",
+    headers: authHeaders(),
+    body: JSON.stringify(datos),
+  });
+  if (!response.ok) throw new Error(await extraerMensajeError(response, "No se pudo crear el usuario"));
+  return response.json();
+};

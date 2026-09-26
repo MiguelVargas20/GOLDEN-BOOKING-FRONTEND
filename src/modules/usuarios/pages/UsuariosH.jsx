@@ -1,211 +1,134 @@
-import { useEffect, useState } from "react";
-import { Button, Col, Container, Form, Row, Table } from "react-bootstrap";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import '../styles/UsuariosH.css';
-import '../../../shared/styles/BotonesCompartidos.css';
+import { Spinner } from "react-bootstrap";
+import Swal from "sweetalert2";
+import { BsPencil, BsPersonPlus, BsTrash } from "react-icons/bs";
 import { listarUsuarios, eliminarUsuario } from "../api/UserApi";
-import Swal from 'sweetalert2';
+import Paginador from "../../../shared/components/reservas/Paginador";
+import { escapeHtml } from "../../../shared/utils/escapeHtml";
+import "../../../shared/styles/PanelAdmin.css";
+import "../../../shared/styles/BotonesCompartidos.css";
 
-// Página de gestión de usuarios (solo para ADMIN)
+const TAMANIO_PAGINA = 10;
+
+/** Administración de usuarios (ADMIN): listado, búsqueda, edición y eliminación. */
 export default function UsuariosH() {
   const navigate = useNavigate();
   const [usuarios, setUsuarios] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
   const [busqueda, setBusqueda] = useState("");
+  const [pagina, setPagina] = useState({ actual: 0, total: 0, elementos: 0 });
 
-  // --- NUEVOS ESTADOS DE PAGINACIÓN ---
-  const [paginaActual, setPaginaActual]     = useState(0);
-  const [totalPaginas, setTotalPaginas]     = useState(0);
-  const [totalElementos, setTotalElementos] = useState(0);
-  const TAMANIO_PAGINA = 10;
-
-  // Cargar usuarios al montar el componente (inicia en la página 0)
-  useEffect(() => {
-    obtenerUsuarios(0);
+  const cargar = useCallback(async (numero = 0) => {
+    setCargando(true);
+    try {
+      const datos = await listarUsuarios(numero, TAMANIO_PAGINA);
+      setUsuarios(datos.contenido || []);
+      setPagina({ actual: datos.paginaActual ?? 0, total: datos.totalPaginas ?? 0, elementos: datos.totalElementos ?? 0 });
+      setError(null);
+    } catch (err) {
+      setError(err.message || "No se pudieron cargar los usuarios.");
+    } finally {
+      setCargando(false);
+    }
   }, []);
 
-  // --- FUNCIÓN ACTUALIZADA CON PAGINACIÓN ---
-  const obtenerUsuarios = async (pagina = 0) => {
-    try {
-      const data = await listarUsuarios(pagina, TAMANIO_PAGINA);
-      setUsuarios(data.contenido);
-      setPaginaActual(data.paginaActual);
-      setTotalPaginas(data.totalPaginas);
-      setTotalElementos(data.totalElementos);
-    } catch {
-      setError("No se pudieron cargar los usuarios");
-    } finally {
-      setLoading(false);
-    }
-  };
+  useEffect(() => { cargar(0); }, [cargar]);
 
-  // Función para eliminar un usuario
-  const handleEliminar = async (id, nombre, apellido) => {
-    const resultado = await Swal.fire({
-      title: '¿Eliminar usuario?',
-      text: `Esta acción eliminará permanentemente a ${nombre} ${apellido} y no se puede deshacer.`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Sí, eliminar',
-      cancelButtonText: 'Cancelar',
-      confirmButtonColor: '#e53e3e',
-      cancelButtonColor: '#6c757d',
+  const eliminar = async (u) => {
+    const { isConfirmed } = await Swal.fire({
+      title: "¿Eliminar usuario?",
+      html: `Se eliminará permanentemente a <strong>${escapeHtml(`${u.nombre} ${u.apellido}`)}</strong>. Esta acción no se puede deshacer.`,
+      icon: "warning", showCancelButton: true, confirmButtonText: "Sí, eliminar", cancelButtonText: "Cancelar",
+      confirmButtonColor: "#e53e3e", cancelButtonColor: "#6c757d",
     });
-
-    if (resultado.isConfirmed) {
-      try {
-        await eliminarUsuario(id);
-        await Swal.fire({
-          title: '¡Eliminado!',
-          text: `${nombre} ${apellido} fue eliminado correctamente.`,
-          icon: 'success',
-          timer: 2000,
-          showConfirmButton: false,
-        });
-        const nuevaPagina = usuarios.length === 1 && paginaActual > 0 
-            ? paginaActual - 1 
-            : paginaActual;
-        obtenerUsuarios(nuevaPagina);
-      } catch {
-        Swal.fire({
-          title: 'Error',
-          text: 'No se pudo eliminar el usuario.',
-          icon: 'error',
-          confirmButtonColor: '#e53e3e',
-        });
-      }
+    if (!isConfirmed) return;
+    try {
+      await eliminarUsuario(u.id);
+      await Swal.fire({ title: "Usuario eliminado", icon: "success", timer: 1500, showConfirmButton: false });
+      cargar(usuarios.length === 1 && pagina.actual > 0 ? pagina.actual - 1 : pagina.actual);
+    } catch (err) {
+      Swal.fire({ title: "Error", text: err.message || "No se pudo eliminar el usuario.", icon: "error", confirmButtonColor: "#f38d1e" });
     }
   };
 
-  // Filtrar por documento, nombre o email
-  const usuariosFiltrados = usuarios.filter(u =>
-    u.nombre?.toLowerCase().includes(busqueda.toLowerCase()) ||
-    u.apellido?.toLowerCase().includes(busqueda.toLowerCase()) ||
-    u.email?.toLowerCase().includes(busqueda.toLowerCase()) ||
-    u.documento?.numeroD?.includes(busqueda)
-  );
-
-  if (loading) return <div className="p-4">Cargando usuarios...</div>;
-  if (error) return <div className="alert alert-danger m-4">{error}</div>;
+  // Búsqueda dentro de la página actual (nombre, apellido, correo o documento)
+  const termino = busqueda.trim().toLowerCase();
+  const visibles = termino
+    ? usuarios.filter((u) => [u.nombre, u.apellido, u.email, u.documento?.numeroD]
+        .some((v) => v?.toLowerCase().includes(termino)))
+    : usuarios;
 
   return (
-    <Container fluid className="users-wrapper">
-      <Row className="align-items-center justify-content-between mb-4 header-usuarios">
-        <Col md={3}>
-          <Form.Control
-            type="text"
-            placeholder="Buscar por nombre, email o documento"
-            className="search-input"
-            value={busqueda}
-            onChange={(e) => setBusqueda(e.target.value)}
-          />
-        </Col>
+    <div className="gb-panel">
+      <div className="gb-panel-header">
+        <div>
+          <h1 className="gb-panel-titulo">Gestionar <span>usuarios</span></h1>
+          <p className="gb-panel-subtitulo">Datos, rol y estado de las cuentas de clientes y administradores.</p>
+        </div>
+        <div className="gb-panel-acciones">
+          <input type="search" className="gb-buscador" placeholder="Buscar por nombre, correo o documento"
+            value={busqueda} onChange={(e) => setBusqueda(e.target.value)} aria-label="Buscar usuarios" />
+          <button type="button" className="btn-gb btn-gb-primary btn-gb-sm" onClick={() => navigate("/usuarios-crear")}>
+            <BsPersonPlus /> Agregar usuario
+          </button>
+        </div>
+      </div>
 
-        <Col md="auto">
-          <h1 className="title-users">USUARIOS</h1>
-        </Col>
+      {error && <div className="alert alert-danger">{error}</div>}
 
-        <Col md="auto">
-          <Button
-            variant="success"
-            className="btn-gb btn-gb-primary"
-            onClick={() => navigate("/usuarios-crear")}
-          >
-            Agregar Usuario
-          </Button>
-        </Col>
-      </Row>
-
-      <Table bordered hover responsive className="users-table">
-        <thead>
-          <tr>
-            <th>DOCUMENTO</th>
-            <th>NOMBRE</th>
-            <th>APELLIDO</th>
-            <th>CORREO</th>
-            <th>ROL</th>
-            <th>ESTADO</th>
-            <th>GESTIONAR</th>
-          </tr>
-        </thead>
-        <tbody>
-          {usuariosFiltrados.length === 0 ? (
+      <div className="gb-tabla-contenedor">
+        <table className="gb-tabla">
+          <thead>
             <tr>
-              <td colSpan={7} className="text-center">No hay usuarios registrados</td>
+              <th>Usuario</th>
+              <th>Documento</th>
+              <th>Correo</th>
+              <th>Rol</th>
+              <th>Estado</th>
+              <th>Acciones</th>
             </tr>
-          ) : (
-            usuariosFiltrados.map((u) => (
+          </thead>
+          <tbody>
+            {cargando ? (
+              <tr><td colSpan={6} className="gb-tabla-vacia"><Spinner size="sm" /> Cargando…</td></tr>
+            ) : visibles.length === 0 ? (
+              <tr><td colSpan={6} className="gb-tabla-vacia">{termino ? "Ningún usuario coincide con la búsqueda." : "No hay usuarios registrados."}</td></tr>
+            ) : visibles.map((u) => (
               <tr key={u.id}>
-                <td>{u.documento?.numeroD || u.id?.slice(-6)}</td>
-                <td>{u.nombre}</td>
-                <td>{u.apellido}</td>
+                <td>
+                  <span className="gb-celda-principal">{u.nombre} {u.apellido}</span>
+                  {u.telefono && <span className="gb-celda-secundaria">{u.telefono}</span>}
+                </td>
+                <td>{u.documento?.tipo ? `${u.documento.tipo} ` : ""}{u.documento?.numeroD || "—"}</td>
                 <td>{u.email}</td>
                 <td>{u.roles?.includes("ROL_ADMIN") ? "Administrador" : "Cliente"}</td>
                 <td>
-                  <span className={`user-status ${u.estado?.toLowerCase()}`}>
-                    {u.estado}
+                  <span className={`gb-estado ${u.estado === "INACTIVO" ? "gb-estado-cancelada" : "gb-estado-confirmada"}`}>
+                    {u.estado === "INACTIVO" ? "Inactivo" : "Activo"}
                   </span>
                 </td>
-                <td className="opciones-usuarios">
-                  <button
-                    className="btn-gb btn-gb-secondary btn-gb-sm"
-                    onClick={() => navigate("/usuarios-edit", { state: { usuario: u } })}
-                  >
-                    Editar
-                  </button>
-                  <button
-                    className="btn-gb btn-gb-danger btn-gb-sm"
-                    onClick={() => handleEliminar(u.id, u.nombre, u.apellido)}
-                  >
-                    Eliminar
-                  </button>
+                <td>
+                  <div className="gb-acciones-fila">
+                    <button type="button" className="btn-gb btn-gb-neutral btn-gb-sm"
+                      onClick={() => navigate("/usuarios-edit", { state: { usuario: u } })}>
+                      <BsPencil /> Editar
+                    </button>
+                    <button type="button" className="btn-gb btn-gb-danger btn-gb-sm" onClick={() => eliminar(u)}
+                      aria-label={`Eliminar a ${u.nombre} ${u.apellido}`}>
+                      <BsTrash />
+                    </button>
+                  </div>
                 </td>
               </tr>
-            ))
-          )}
-        </tbody>
-      </Table>
-
-      {/* --- CONTROLES DE PAGINACIÓN INTEGARDOS --- */}
-      {totalPaginas > 1 && (
-        <div className="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-3 px-1">
-          <span style={{ fontSize: "0.85rem", color: "#64748b" }}>
-            Mostrando página {paginaActual + 1} de {totalPaginas} — {totalElementos} usuarios en total
-          </span>
-          <div className="d-flex flex-wrap gap-2">
-            <button
-              className="btn btn-outline-secondary btn-sm"
-              onClick={() => obtenerUsuarios(paginaActual - 1)}
-              disabled={paginaActual === 0}
-            >
-              ← Anterior
-            </button>
-            {/* Botones de páginas numeradas */}
-            {[...Array(totalPaginas)].map((_, i) => (
-              <button
-                key={i}
-                className={`btn btn-sm ${i === paginaActual 
-                  ? 'btn-warning' 
-                  : 'btn-outline-secondary'}`}
-                onClick={() => obtenerUsuarios(i)}
-                style={i === paginaActual 
-                  ? { background: '#f38d1e', border: 'none', color: '#fff' } 
-                  : {}}
-              >
-                {i + 1}
-              </button>
             ))}
-            <button
-              className="btn btn-outline-secondary btn-sm"
-              onClick={() => obtenerUsuarios(paginaActual + 1)}
-              disabled={paginaActual === totalPaginas - 1}
-            >
-              Siguiente →
-            </button>
-          </div>
-        </div>
-      )}
-    </Container>
+          </tbody>
+        </table>
+      </div>
+
+      <Paginador pagina={pagina.actual} totalPaginas={pagina.total} totalElementos={pagina.elementos}
+        etiqueta="usuarios" onCambiar={cargar} />
+    </div>
   );
 }

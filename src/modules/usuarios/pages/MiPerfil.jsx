@@ -1,188 +1,197 @@
-import React, { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Container, Row, Col, Form, Spinner } from "react-bootstrap";
+import { Row, Col, Form, Spinner } from "react-bootstrap";
+import Swal from "sweetalert2";
+import { BsPersonCircle } from "react-icons/bs";
 import { useAuth } from "../../../shared/context/AuthContext";
 import { actualizarMiPerfil } from "../api/UserApi";
-import Swal from "sweetalert2";
-import LoadingSpinner from "../../../shared/components/LoadingSpinner";
-import userImg from "../../../assets/edit-user.png";
-import { authHeaders } from "../../../shared/api/apiUtils";
+import { API_URL, authHeaders, apiFetch, extraerMensajeError } from "../../../shared/api/apiUtils";
+import { aTextoFecha } from "../../../shared/utils/fechas";
+import { fecha } from "../../../shared/utils/formato";
+import "../../../shared/styles/PanelAdmin.css";
+import "../../../shared/styles/BotonesCompartidos.css";
+import "../styles/MiPerfil.css";
 
-const API_URL = import.meta.env.VITE_API_URL;
+const HOY = aTextoFecha(new Date());
+const TIPOS_DOCUMENTO = { CC: "Cédula de ciudadanía", TI: "Tarjeta de identidad", CE: "Cédula de extranjería", PA: "Pasaporte" };
 
+/**
+ * Perfil propio (cliente o admin): contacto, dirección y fecha de nacimiento.
+ * El documento solo se muestra: si hay que corregirlo lo hace un administrador
+ * (las reservas dependen de él).
+ */
 export default function MiPerfil() {
-    const navigate = useNavigate();
-    const { user } = useAuth();
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const [perfil, setPerfil] = useState(null);
+  const [form, setForm] = useState(null);
+  const [error, setError] = useState(null);
+  const [guardando, setGuardando] = useState(false);
 
-    const [loading, setLoading] = useState(true);
-    const [saving, setSaving]   = useState(false);
-
-    const [formData, setFormData] = useState({
-        nombre:   "",
-        apellido: "",
-        telefono: "",
-        correo:   "",
-    });
-
-    // ── Carga datos reales del back al abrir ─────────────
-    useEffect(() => {
-        const cargarPerfil = async () => {
-            try {
-                // FIX: antes leía localStorage.getItem("token") a secas. Si el
-                // usuario no marcó "Recordarme", el token vive en sessionStorage
-                // y esta lectura siempre daba null → el fetch mandaba
-                // "Authorization: Bearer null" y el perfil nunca cargaba (siempre
-                // caía al catch de abajo), aunque guardar cambios sí funcionaba
-                // porque actualizarMiPerfil() (en UserApi.js) ya usa authHeaders()
-                // correctamente. authHeaders() revisa ambos storages.
-                const res = await fetch(`${API_URL}/api/usuarios/perfil/${user.id}`, {
-                    headers: authHeaders()
-                });
-                if (!res.ok) throw new Error("No se pudo cargar el perfil");
-                const data = await res.json();
-                setFormData({
-                    nombre:   data.nombre   || "",
-                    apellido: data.apellido || "",
-                    telefono: data.telefono || "",
-                    correo:   data.email    || "",
-                });
-            } catch {
-                Swal.fire({
-                    title: "Error",
-                    text: "No se pudo cargar tu perfil.",
-                    icon: "error",
-                    confirmButtonColor: "#f38d1e"
-                });
-            } finally {
-                setLoading(false);
-            }
-        };
-        if (user?.id) cargarPerfil();
-    }, [user]);
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        if (!formData.nombre.trim() || !formData.apellido.trim()) {
-            Swal.fire({ title: "Campo requerido", text: "Nombre y apellido son obligatorios.", icon: "warning", confirmButtonColor: "#f38d1e" });
-            return;
-        }
-
-        const confirmacion = await Swal.fire({
-            title: "¿Guardar cambios?",
-            text: "Tu perfil será actualizado.",
-            icon: "question",
-            showCancelButton: true,
-            confirmButtonText: "Sí, guardar",
-            cancelButtonText: "Cancelar",
-            confirmButtonColor: "#f38d1e",
-            cancelButtonColor: "#6c757d",
+  useEffect(() => {
+    if (!user?.id) return;
+    apiFetch(`${API_URL}/api/usuarios/perfil/${user.id}`, { headers: authHeaders() })
+      .then(async (res) => {
+        if (!res.ok) throw new Error(await extraerMensajeError(res, "No se pudo cargar tu perfil."));
+        return res.json();
+      })
+      .then((datos) => {
+        setPerfil(datos);
+        setForm({
+          nombre: datos.nombre || "",
+          apellido: datos.apellido || "",
+          telefono: datos.telefono || "",
+          correo: datos.email || "",
+          fechaNacimiento: datos.fechaNacimiento || "",
+          calle: datos.direccion?.cll || "",
+          carrera: datos.direccion?.crr || "",
+          ciudad: datos.direccion?.cd || "",
+          pais: datos.direccion?.ps || "",
         });
-        if (!confirmacion.isConfirmed) return;
+      })
+      .catch((err) => setError(err.message));
+  }, [user?.id]);
 
-        setSaving(true);
-        try {
-            await actualizarMiPerfil(user.id, formData);
-            await Swal.fire({
-                title: "¡Perfil actualizado!",
-                text: "Tus datos fueron guardados correctamente.",
-                icon: "success",
-                timer: 2000,
-                showConfirmButton: false,
-            });
-            navigate(-1);
-        } catch (err) {
-            Swal.fire({
-                title: "Error",
-                text: err.message || "No se pudo actualizar el perfil.",
-                icon: "error",
-                confirmButtonColor: "#f38d1e",
-            });
-        } finally {
-            setSaving(false);
-        }
-    };
+  const campo = (nombre) => ({
+    id: `mp-${nombre}`,
+    value: form[nombre],
+    onChange: (e) => setForm((f) => ({ ...f, [nombre]: e.target.value })),
+  });
 
-    if (loading) return <LoadingSpinner />;
+  const guardar = async (e) => {
+    e.preventDefault();
+    setError(null);
+    setGuardando(true);
+    try {
+      const actualizado = await actualizarMiPerfil(user.id, {
+        nombre: form.nombre.trim(),
+        apellido: form.apellido.trim(),
+        telefono: form.telefono.trim(),
+        correo: form.correo.trim(),
+        fechaNacimiento: form.fechaNacimiento,
+        calle: form.calle.trim(),
+        carrera: form.carrera.trim(),
+        ciudad: form.ciudad.trim(),
+        pais: form.pais.trim(),
+      });
+      setPerfil(actualizado);
+      Swal.fire({ title: "Perfil actualizado", icon: "success", timer: 1500, showConfirmButton: false });
+    } catch (err) {
+      setError(err.message || "No se pudo actualizar el perfil.");
+    } finally {
+      setGuardando(false);
+    }
+  };
 
+  if (!form) {
     return (
-        <div className="editar-page">
-            <div className="editar-page-header">
-                <h1 className="editar-page-title">MI PERFIL</h1>
-                <span className="editar-page-id">ID: {user?.id?.slice(-6)}</span>
-            </div>
-
-            <div className="editar-page-body">
-                <Row className="align-items-center w-100">
-
-                    {/* Avatar */}
-                    <Col md={3} className="text-center">
-                        <div className="editar-avatar">
-                            <img src={userImg} alt="perfil" className="editar-avatar-img" />
-                        </div>
-                        <p className="editar-avatar-label">{user?.nombreCompleto}</p>
-                        <span style={{
-                            background: "#f38d1e", color: "#fff",
-                            fontSize: "0.75rem", fontWeight: 700,
-                            padding: "3px 12px", borderRadius: "20px"
-                        }}>
-                            {user?.roles?.[0] || "CLIENTE"}
-                        </span>
-                    </Col>
-
-                    {/* Formulario */}
-                    <Col md={9}>
-                        <Form onSubmit={handleSubmit}>
-                            <Row className="mb-3">
-                                <Col md={6}>
-                                    <Form.Label className="editar-label">Nombre</Form.Label>
-                                    <Form.Control
-                                        className="editar-input"
-                                        value={formData.nombre}
-                                        onChange={e => setFormData({ ...formData, nombre: e.target.value })}
-                                    />
-                                </Col>
-                                <Col md={6}>
-                                    <Form.Label className="editar-label">Apellido</Form.Label>
-                                    <Form.Control
-                                        className="editar-input"
-                                        value={formData.apellido}
-                                        onChange={e => setFormData({ ...formData, apellido: e.target.value })}
-                                    />
-                                </Col>
-                            </Row>
-
-                            <Row className="mb-3">
-                                <Col md={6}>
-                                    <Form.Label className="editar-label">Teléfono</Form.Label>
-                                    <Form.Control
-                                        className="editar-input"
-                                        value={formData.telefono}
-                                        onChange={e => setFormData({ ...formData, telefono: e.target.value })}
-                                    />
-                                </Col>
-                                <Col md={6}>
-                                    <Form.Label className="editar-label">Correo electrónico</Form.Label>
-                                    <Form.Control
-                                        type="email"
-                                        className="editar-input"
-                                        value={formData.correo}
-                                        onChange={e => setFormData({ ...formData, correo: e.target.value })}
-                                    />
-                                </Col>
-                            </Row>
-
-                            <div className="editar-botones">
-                                <button type="submit" className="editar-btn-guardar" disabled={saving}>
-                                    {saving ? "Guardando..." : "Guardar Cambios"}
-                                </button>
-                                <button type="button" className="editar-btn-cancelar" onClick={() => navigate(-1)}>
-                                    Cancelar
-                                </button>
-                            </div>
-                        </Form>
-                    </Col>
-                </Row>
-            </div>
-        </div>
+      <div className="gb-panel">
+        {error ? <div className="alert alert-danger">{error}</div>
+          : <div className="text-center py-5"><Spinner style={{ color: "var(--gb-primary)" }} /></div>}
+      </div>
     );
+  }
+
+  const esAdmin = user?.roles?.includes("ROL_ADMIN");
+
+  return (
+    <div className="gb-panel">
+      <div className="gb-panel-header">
+        <div>
+          <h1 className="gb-panel-titulo">Mi <span>perfil</span></h1>
+          <p className="gb-panel-subtitulo">Mantén tus datos al día para recibir la confirmación de tus reservas.</p>
+        </div>
+      </div>
+
+      {error && <div className="alert alert-danger">{error}</div>}
+
+      <Row className="g-4">
+        <Col lg={4}>
+          <div className="gb-tarjeta mp-resumen">
+            <BsPersonCircle className="mp-avatar" aria-hidden="true" />
+            <strong className="mp-nombre">{perfil.nombre} {perfil.apellido}</strong>
+            <span className={`gb-estado ${esAdmin ? "gb-estado-pendiente" : "gb-estado-confirmada"}`}>
+              {esAdmin ? "Administrador" : "Cliente"}
+            </span>
+            <dl className="mp-datos">
+              <dt>Documento</dt>
+              <dd>{TIPOS_DOCUMENTO[perfil.documento?.tipo] || perfil.documento?.tipo || "—"} {perfil.documento?.numeroD || ""}</dd>
+              <dt>Miembro desde</dt>
+              <dd>{fecha(perfil.fechaRegistro)}</dd>
+              {perfil.fechaNacimiento && (
+                <>
+                  <dt>Fecha de nacimiento</dt>
+                  <dd>{fecha(perfil.fechaNacimiento)}</dd>
+                </>
+              )}
+            </dl>
+            <span className="gb-ayuda">¿Tu documento está mal? Escríbenos desde Contáctanos y un administrador lo corrige.</span>
+          </div>
+        </Col>
+
+        <Col lg={8}>
+          <div className="gb-tarjeta">
+            <Form onSubmit={guardar} className="gb-form">
+              <h2 className="gb-seccion-titulo">Datos personales</h2>
+              <Row className="g-3 mb-4">
+                <Col md={6}>
+                  <Form.Label htmlFor="mp-nombre">Nombre *</Form.Label>
+                  <Form.Control required minLength={2} maxLength={60} autoComplete="given-name" {...campo("nombre")} />
+                </Col>
+                <Col md={6}>
+                  <Form.Label htmlFor="mp-apellido">Apellido *</Form.Label>
+                  <Form.Control required minLength={2} maxLength={60} autoComplete="family-name" {...campo("apellido")} />
+                </Col>
+                <Col md={6}>
+                  <Form.Label htmlFor="mp-fechaNacimiento">Fecha de nacimiento</Form.Label>
+                  <Form.Control type="date" max={HOY} min="1900-01-01" {...campo("fechaNacimiento")} />
+                </Col>
+              </Row>
+
+              <h2 className="gb-seccion-titulo">Contacto</h2>
+              <Row className="g-3 mb-4">
+                <Col md={7}>
+                  <Form.Label htmlFor="mp-correo">Correo electrónico *</Form.Label>
+                  <Form.Control type="email" required autoComplete="email" {...campo("correo")} />
+                  <span className="gb-ayuda">Aquí te llegan las confirmaciones y recordatorios.</span>
+                </Col>
+                <Col md={5}>
+                  <Form.Label htmlFor="mp-telefono">Teléfono</Form.Label>
+                  <Form.Control type="tel" inputMode="tel" maxLength={15} pattern="\+?[0-9 ]{7,15}"
+                    title="Entre 7 y 15 dígitos" autoComplete="tel" {...campo("telefono")} />
+                </Col>
+              </Row>
+
+              <h2 className="gb-seccion-titulo">Dirección</h2>
+              <Row className="g-3 mb-2">
+                <Col sm={6} lg={3}>
+                  <Form.Label htmlFor="mp-calle">Calle</Form.Label>
+                  <Form.Control maxLength={40} {...campo("calle")} />
+                </Col>
+                <Col sm={6} lg={3}>
+                  <Form.Label htmlFor="mp-carrera">Carrera</Form.Label>
+                  <Form.Control maxLength={40} {...campo("carrera")} />
+                </Col>
+                <Col sm={6} lg={3}>
+                  <Form.Label htmlFor="mp-ciudad">Ciudad</Form.Label>
+                  <Form.Control maxLength={60} autoComplete="address-level2" {...campo("ciudad")} />
+                </Col>
+                <Col sm={6} lg={3}>
+                  <Form.Label htmlFor="mp-pais">País</Form.Label>
+                  <Form.Control maxLength={60} autoComplete="country-name" {...campo("pais")} />
+                </Col>
+              </Row>
+
+              <div className="gb-form-botones">
+                <button type="button" className="btn-gb btn-gb-secondary" onClick={() => navigate(-1)} disabled={guardando}>Volver</button>
+                <button type="submit" className="btn-gb btn-gb-primary" disabled={guardando}>
+                  {guardando ? <><Spinner size="sm" /> Guardando…</> : "Guardar cambios"}
+                </button>
+              </div>
+            </Form>
+          </div>
+        </Col>
+      </Row>
+    </div>
+  );
 }
