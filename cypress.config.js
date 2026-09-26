@@ -6,8 +6,8 @@ export default defineConfig({
     env: {
       apiUrl: "http://32.194.207.246:8080",
     },
-    setupNodeEvents(on, config) {
-      // implement node event listeners here
+    setupNodeEvents() {
+      // aquí se registrarían eventos de Node si se necesitan
     },
   },
 });

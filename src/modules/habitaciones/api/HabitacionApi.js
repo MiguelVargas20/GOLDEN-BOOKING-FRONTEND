@@ -2,7 +2,7 @@
 // ── Configuración Global y Autenticación ───────────────────
 // (centralizadas en apiUtils.js — ver ese archivo)
 // ═══════════════════════════════════════════════════════════
-import { authHeaders, apiFetch } from "../../../shared/api/apiUtils";
+import { authHeaders, apiFetch, extraerMensajeError } from "../../../shared/api/apiUtils";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -26,9 +26,8 @@ export const listarHabitaciones = async (page = 0, size = 10) => {
   const res = await apiFetch(`${API_URL}/api/habitaciones?page=${page}&size=${size}`, {
     headers: authHeaders(),
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || "Error al cargar habitaciones");
-  return data;
+  if (!res.ok) throw new Error(await extraerMensajeError(res, "Error al cargar habitaciones"));
+  return res.json();
 };
 
 /**
@@ -57,9 +56,8 @@ export const obtenerHabitacionPorId = async (id) => {
   const res = await apiFetch(`${API_URL}/api/habitaciones/${id}`, {
     headers: authHeaders(),
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error("Habitación no encontrada");
-  return data;
+  if (!res.ok) throw new Error(await extraerMensajeError(res, "Habitación no encontrada"));
+  return res.json();
 };
 
 /**
@@ -73,9 +71,8 @@ export const crearHabitacion = async (dto) => {
     headers: authHeaders(),
     body: JSON.stringify(dto),
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || data.message || "Error al crear habitación");
-  return data;
+  if (!res.ok) throw new Error(await extraerMensajeError(res, "Error al crear habitación"));
+  return res.json();
 };
 
 /**
@@ -90,9 +87,8 @@ export const actualizarHabitacion = async (id, dto) => {
     headers: authHeaders(),
     body: JSON.stringify(dto),
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || data.message || "Error al actualizar habitación");
-  return data;
+  if (!res.ok) throw new Error(await extraerMensajeError(res, "Error al actualizar habitación"));
+  return res.json();
 };
 
 /**
@@ -105,7 +101,7 @@ export const eliminarHabitacion = async (id) => {
     method: "DELETE",
     headers: authHeaders(),
   });
-  if (!res.ok) throw new Error("Error al eliminar habitación");
+  if (!res.ok) throw new Error(await extraerMensajeError(res, "Error al eliminar habitación"));
   return true;
 };
 
@@ -121,9 +117,8 @@ export const listarTiposHabitacion = async () => {
   const res = await apiFetch(`${API_URL}/api/tipohabitaciones`, {
     headers: authHeaders(),
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error("Error al cargar tipos de habitación");
-  return data;
+  if (!res.ok) throw new Error(await extraerMensajeError(res, "Error al cargar tipos de habitación"));
+  return res.json();
 };
 
 /**
@@ -137,9 +132,8 @@ export const crearTipoHabitacion = async (dto) => {
     headers: authHeaders(),
     body: JSON.stringify(dto),
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || data.message || "Error al crear tipo de habitación");
-  return data;
+  if (!res.ok) throw new Error(await extraerMensajeError(res, "Error al crear tipo de habitación"));
+  return res.json();
 };
 
 /**
@@ -154,9 +148,8 @@ export const actualizarTipoHabitacion = async (id, dto) => {
     headers: authHeaders(),
     body: JSON.stringify(dto),
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || data.message || "Error al actualizar tipo de habitación");
-  return data;
+  if (!res.ok) throw new Error(await extraerMensajeError(res, "Error al actualizar tipo de habitación"));
+  return res.json();
 };
 
 /**
@@ -169,6 +162,6 @@ export const eliminarTipoHabitacion = async (id) => {
     method: "DELETE",
     headers: authHeaders(),
   });
-  if (!res.ok) throw new Error("Error al eliminar tipo de habitación");
+  if (!res.ok) throw new Error(await extraerMensajeError(res, "Error al eliminar tipo de habitación"));
   return true;
 };

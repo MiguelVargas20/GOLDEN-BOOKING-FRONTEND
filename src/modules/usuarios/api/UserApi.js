@@ -7,9 +7,8 @@ export const listarUsuarios = async (page = 0, size = 10) => {
   const response = await apiFetch(`${API_URL}?page=${page}&size=${size}`, {
     headers: authHeaders()
   });
-  const data = await response.json();
-  if (!response.ok) throw new Error("Error al cargar usuarios");
-  return data;
+  if (!response.ok) throw new Error(await extraerMensajeError(response, "Error al cargar usuarios"));
+  return response.json();
 };
 
 // Buscar un usuario por su número de documento (ADMIN).
@@ -45,7 +44,7 @@ export const eliminarUsuario = async (id) => {
     method: "DELETE",
     headers: authHeaders()
   });
-  if (!response.ok) throw new Error("Error al eliminar usuario");
+  if (!response.ok) throw new Error(await extraerMensajeError(response, "Error al eliminar usuario"));
   return true;
 };                                          // ← cierre correcto aquí
 
@@ -56,7 +55,6 @@ export const actualizarMiPerfil = async (id, datos) => {
     headers: authHeaders(),
     body: JSON.stringify(datos)
   });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.error || data.message || "Error al actualizar perfil");
-  return data;
+  if (!res.ok) throw new Error(await extraerMensajeError(res, "Error al actualizar perfil"));
+  return res.json();
 };

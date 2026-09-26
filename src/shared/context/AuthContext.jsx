@@ -256,4 +256,7 @@ export const AuthProvider = ({ children }) => {
     );
 };
 
+// El hook vive junto a su contexto a propósito (patrón habitual); solo afecta
+// al recargado en caliente de Vite en desarrollo, no a la app.
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => useContext(AuthContext);

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Container, Row, Col, Card, Button, Spinner, Badge, Form } from "react-bootstrap";
 import Swal from "sweetalert2";
 import { listarMensajes, marcarMensajeLeido, responderMensaje } from "../api/ContactoApi";
@@ -20,7 +20,9 @@ export default function AdminMensajes() {
   const [textoRespuesta, setTextoRespuesta] = useState("");
   const [enviandoRespuesta, setEnviandoRespuesta] = useState(false);
 
-  const cargarMensajes = async (paginaSolicitada = 0, terminoBusqueda = busqueda) => {
+  // El término se pasa siempre explícito: así la función no depende del estado
+  // y los efectos no tienen dependencias ocultas.
+  const cargarMensajes = useCallback(async (paginaSolicitada, terminoBusqueda) => {
     setLoading(true);
     setError("");
     try {
@@ -34,18 +36,15 @@ export default function AdminMensajes() {
     } finally {
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    cargarMensajes(0);
   }, []);
 
+  // Una sola carga: al entrar (sin espera) y al escribir en el buscador (con
+  // 400 ms de espera). Antes había dos efectos y al abrir la página se pedían
+  // los mensajes dos veces.
   useEffect(() => {
-    const timer = setTimeout(() => {
-      cargarMensajes(0, busqueda);
-    }, 400);
+    const timer = setTimeout(() => cargarMensajes(0, busqueda), busqueda ? 400 : 0);
     return () => clearTimeout(timer);
-  }, [busqueda]);
+  }, [busqueda, cargarMensajes]);
 
   const handleMarcarLeido = async (id) => {
     try {
@@ -240,7 +239,7 @@ export default function AdminMensajes() {
             variant="outline-secondary"
             size="sm"
             disabled={pagina === 0}
-            onClick={() => cargarMensajes(pagina - 1)}
+            onClick={() => cargarMensajes(pagina - 1, busqueda)}
           >
             ← Anterior
           </Button>
@@ -251,7 +250,7 @@ export default function AdminMensajes() {
             variant="outline-secondary"
             size="sm"
             disabled={pagina + 1 >= totalPaginas}
-            onClick={() => cargarMensajes(pagina + 1)}
+            onClick={() => cargarMensajes(pagina + 1, busqueda)}
           >
             Siguiente →
           </Button>
