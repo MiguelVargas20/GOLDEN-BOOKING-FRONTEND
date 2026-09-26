@@ -28,10 +28,6 @@ export const aFecha = (valor) => {
 export const aTextoFecha = (fecha) =>
   `${fecha.getFullYear()}-${pad(fecha.getMonth() + 1)}-${pad(fecha.getDate())}`;
 
-/** Date → "YYYY-MM-DDTHH:mm:ss" local: el formato LocalDateTime que espera el backend. */
-export const aFechaHoraLocal = (fecha) =>
-  `${aTextoFecha(fecha)}T${pad(fecha.getHours())}:${pad(fecha.getMinutes())}:${pad(fecha.getSeconds())}`;
-
 /** Cualquier fecha → "YYYY-MM-DDT00:00:00" (el día, a medianoche local). */
 export const aInicioDelDiaLocal = (valor) => `${aTextoFecha(aFecha(valor))}T00:00:00`;
 

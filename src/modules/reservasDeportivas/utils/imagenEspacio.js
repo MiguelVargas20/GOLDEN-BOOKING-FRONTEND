@@ -59,4 +59,4 @@ export const usarImagenDeRespaldo = (espacio) => (evento) => {
 };
 
 // Las reglas y la validación de imágenes ahora son compartidas (espacios y habitaciones)
-export { REGLAS_IMAGEN, validarImagen } from "../../../shared/utils/imagenes";
+export { validarImagen } from "../../../shared/utils/imagenes";

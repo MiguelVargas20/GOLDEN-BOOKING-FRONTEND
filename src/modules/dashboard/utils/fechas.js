@@ -5,7 +5,7 @@ const FORMATO_DIA_LARGO = new Intl.DateTimeFormat("es-CO", { weekday: "long", da
  * "2026-09-25" (LocalDate) → Date local. `new Date("2026-09-25")` lo toma
  * como UTC y en Colombia mostraría el día anterior.
  */
-export const fechaLocal = (iso) => {
+const fechaLocal = (iso) => {
   const [a, m, d] = iso.split("-").map(Number);
   return new Date(a, m - 1, d);
 };
