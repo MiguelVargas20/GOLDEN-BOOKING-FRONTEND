@@ -1,94 +1,52 @@
-import logo from "../../../assets/LOGO.png";
-import forgot from "../../../assets/forgot.png";
-import "../styles/Forgot.css";
-import "../../../shared/styles/BotonesCompartidos.css";
-import { FaReply } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 import { useState } from "react";
+import LayoutAuth from "../components/LayoutAuth";
 import { solicitarRecuperacion } from "../api/authService";
 
+/** Pide un enlace para restablecer la contraseña (la respuesta es igual exista o no el correo). */
 export default function Forgot() {
-    const navigate = useNavigate();
-    const [correo, setCorreo] = useState("");
-    const [error, setError] = useState("");
-    const [exito, setExito] = useState(false);
-    const [loading, setLoading] = useState(false);
+  const [correo, setCorreo] = useState("");
+  const [error, setError] = useState("");
+  const [exito, setExito] = useState(false);
+  const [enviando, setEnviando] = useState(false);
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setError("");
+  const enviar = async (e) => {
+    e.preventDefault();
+    setError("");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo.trim())) {
+      setError("Escribe un correo electrónico válido.");
+      return;
+    }
+    setEnviando(true);
+    try {
+      await solicitarRecuperacion(correo.trim());
+      setExito(true);
+    } catch (err) {
+      setError(err.message || "No se pudo solicitar la recuperación.");
+    } finally {
+      setEnviando(false);
+    }
+  };
 
-        if (!correo.trim()) {
-            setError("El correo es obligatorio");
-            return;
-        }
-
-        setLoading(true);
-        try {
-            await solicitarRecuperacion(correo.trim());
-            setExito(true);
-        } catch (err) {
-            setError(err.message || "Error al solicitar la recuperación");
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    return (
-        <div className="container-forgot">
-            {/* PANEL IZQUIERDO */}
-            <div className="left-panel-forgot">
-                <div className="logo-forgot">
-                    <img src={logo} alt="Logo" />
-                </div>
-
-                <h1>¿Olvidaste tu contraseña?</h1>
-                <p className="subtitle-forgot">Ingresa tu correo y te enviaremos un enlace para restablecerla</p>
-
-                {error && <p className="error-msg">{error}</p>}
-                {exito && (
-                    <p className="success-msg">
-                        ✅ Si el correo está registrado, te enviamos un enlace. Revisa tu bandeja (y spam).
-                    </p>
-                )}
-
-                {!exito && (
-                    <form className="form-forgot" onSubmit={handleSubmit}>
-                        <input
-                            type="email"
-                            placeholder="Tu correo electrónico"
-                            value={correo}
-                            onChange={(e) => setCorreo(e.target.value)}
-                            required
-                        />
-
-                        <div className="form-actions">
-                            <button
-                                className="btn-gb btn-gb-primary btn-gb-lg"
-                                type="submit"
-                                disabled={loading}
-                            >
-                                {loading ? "ENVIANDO..." : "ENVIAR ENLACE"}
-                            </button>
-
-                            <button
-                                type="button"
-                                className="back-login-btn"
-                                onClick={() => navigate("/login")}
-                            >
-                                Volver al login <FaReply />
-                            </button>
-                        </div>
-                    </form>
-                )}
-            </div>
-
-            {/* PANEL DERECHO */}
-            <div className="right-panel-forgot">
-                <div className="container-img-forgot">
-                    <img src={forgot} alt="Forgot" className="forgot-img" />
-                </div>
-            </div>
+  return (
+    <LayoutAuth titulo="¿Olvidaste tu contraseña?" subtitulo="Te enviaremos un enlace para crear una nueva."
+      volver={{ a: "/login", texto: "Volver al inicio de sesión" }} ancho="angosto">
+      {error && <div className="rg-error-servidor" role="alert">{error}</div>}
+      {exito ? (
+        <div className="rg-exito" role="status">
+          Si el correo está registrado, te enviamos un enlace. Revisa tu bandeja de entrada (y la de spam).
         </div>
-    );
+      ) : (
+        <form onSubmit={enviar} noValidate className="rg-form">
+          <div className="rg-campo">
+            <label htmlFor="fg-correo">Correo electrónico</label>
+            <input id="fg-correo" type="email" autoComplete="email" placeholder="usuario@correo.com"
+              value={correo} onChange={(e) => setCorreo(e.target.value)} />
+          </div>
+          <button type="submit" className="rg-enviar" disabled={enviando}>
+            {enviando ? "Enviando…" : "Enviar enlace"}
+          </button>
+        </form>
+      )}
+    </LayoutAuth>
+  );
 }

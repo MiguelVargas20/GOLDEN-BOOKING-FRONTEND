@@ -142,3 +142,49 @@
   .rg-form fieldset { padding: 14px 14px 4px; }
   .rg-logo { height: 44px; }
 }
+
+/* ── Pantallas de acceso cortas (login, recuperar, verificar) ── */
+.rg-angosto { max-width: 440px; margin-top: clamp(0px, 6vh, 64px); }
+@media (max-width: 991.98px) { .rg-angosto { margin-top: 0; } }
+
+.rg-exito {
+  background: var(--gb-status-success-bg);
+  color: var(--gb-status-success-text);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}
+
+.rg-opciones {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 2px 0 16px;
+  font-size: 0.88rem;
+}
+.rg-check { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; color: var(--gb-text-primary); }
+.rg-check input { accent-color: var(--gb-primary); width: 16px; height: 16px; }
+.rg-enlace { color: var(--gb-primary); font-weight: 600; text-decoration: none; }
+.rg-enlace:hover { text-decoration: underline; }
+
+.rg-secundario {
+  width: 100%;
+  margin-top: 10px;
+  border: 1px solid var(--gb-border);
+  border-radius: 12px;
+  padding: 12px;
+  font-weight: 700;
+  background: var(--gb-surface);
+  color: var(--gb-text-primary);
+  transition: border-color 0.2s, color 0.2s;
+}
+.rg-secundario:hover { border-color: var(--gb-primary); color: var(--gb-primary); }
+
+.rg-estado { text-align: center; padding: 12px 0; }
+.rg-estado svg { font-size: 3.4rem; margin-bottom: 10px; }
+.rg-estado.ok svg { color: var(--gb-status-success-text); }
+.rg-estado.error svg { color: var(--gb-status-danger-text); }
+.rg-estado p { color: var(--gb-text-muted); }

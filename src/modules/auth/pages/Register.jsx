@@ -2,12 +2,10 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Link, useNavigate } from "react-router-dom";
+import LayoutAuth from "../components/LayoutAuth";
 import Swal from "sweetalert2";
 import { IoEyeSharp } from "react-icons/io5";
 import { FaEyeSlash } from "react-icons/fa";
-import { BsArrowLeft } from "react-icons/bs";
-import logo from "../../../assets/LOGO.png";
-import "../styles/Register.css";
 import { registerSchema } from "../schemas/RegisterSchema";
 import { useAuth } from "../../../shared/context/AuthContext";
 
@@ -71,24 +69,8 @@ export default function Register() {
   };
 
   return (
-    <div className="rg-pagina">
-      <aside className="rg-imagen" aria-hidden="true">
-        <div className="rg-imagen-texto">
-          <h2>Experiencias inolvidables</h2>
-          <p>Reserva canchas y habitaciones en un solo lugar.</p>
-        </div>
-      </aside>
-
-      <main className="rg-lado-form">
-        <div className="rg-contenido">
-          <Link to="/login" className="rg-volver"><BsArrowLeft /> Volver al inicio de sesión</Link>
-
-          <header className="rg-encabezado">
-            <img src={logo} alt="Golden Booking" className="rg-logo" />
-            <h1>Crea tu cuenta</h1>
-            <p>Completa tus datos para empezar a reservar.</p>
-          </header>
-
+    <LayoutAuth titulo="Crea tu cuenta" subtitulo="Completa tus datos para empezar a reservar."
+      volver={{ a: "/login", texto: "Volver al inicio de sesión" }}>
           {errorServidor && <div className="rg-error-servidor" role="alert">{errorServidor}</div>}
 
           <form onSubmit={handleSubmit(onSubmit)} noValidate className="rg-form">
@@ -175,8 +157,6 @@ export default function Register() {
             </button>
             <p className="rg-pie">¿Ya tienes cuenta? <Link to="/login">Inicia sesión</Link></p>
           </form>
-        </div>
-      </main>
-    </div>
+    </LayoutAuth>
   );
 }
