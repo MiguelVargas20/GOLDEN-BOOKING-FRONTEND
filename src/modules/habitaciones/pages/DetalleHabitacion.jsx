@@ -7,6 +7,8 @@ import { crearReservaHotel, obtenerFechasOcupadas } from "../../reservasHotelera
 import { haySolapamiento, toLocalDateString } from "../../reservasHoteleras/utils/fechasHotel";
 import { aFecha, aInicioDelDiaLocal, nochesEntre } from "../../../shared/utils/fechas";
 import { useAuth } from "../../../shared/context/AuthContext";
+import { datosTipo } from "../utils/tipoHabitacion";
+import { imagenHabitacion, usarImagenDeRespaldoHabitacion } from "../utils/imagenHabitacion";
 import Swal from "sweetalert2";
 import DatePicker, { registerLocale } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -17,8 +19,6 @@ import { useRequierePerfilCompleto } from "../../../shared/hooks/useRequirePerfi
 import { escapeHtml } from "../../../shared/utils/escapeHtml";
 
 registerLocale("es", es);
-
-const PLACEHOLDER = "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80";
 
 export default function DetalleHabitacion() {
     const { id } = useParams();
@@ -180,10 +180,10 @@ export default function DetalleHabitacion() {
                 <Row className="g-0">
                     <Col md={6} className="hotel-image-container">
                         <img
-                            src={habitacion.imagenUrl || PLACEHOLDER}
+                            src={imagenHabitacion(habitacion)}
+                            onError={usarImagenDeRespaldoHabitacion}
                             className="hotel-image"
                             alt="Habitación"
-                            onError={(e) => { e.target.src = PLACEHOLDER }}
                         />
                     </Col>
 
@@ -194,12 +194,12 @@ export default function DetalleHabitacion() {
                                 {disponible ? "✓ Disponible" : "✗ No disponible"}
                             </span>
                         </div>
-                        <h4 className="text-muted mb-4">{habitacion.datosTipoHabitacion?.nombreTipoHabitacion}</h4>
+                        <h4 className="text-muted mb-4">{datosTipo(habitacion).nombre}</h4>
 
                         <p className="room-description mb-4">{habitacion.descripcion || "Disfruta de una estancia inolvidable."}</p>
 
                         <div className="details-boxes">
-                            <div className="details-box"><BiGroup /> Capacidad: {habitacion.datosTipoHabitacion?.capacidadMaxima} Pers.</div>
+                            <div className="details-box"><BiGroup /> Capacidad: {datosTipo(habitacion).capacidad ?? "—"} Pers.</div>
                             <div className="details-box"><BiCalendar /> WiFi: Incluido</div>
                         </div>
 

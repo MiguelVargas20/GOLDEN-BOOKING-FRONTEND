@@ -1,0 +1,34 @@
+/* Selector de imagen con vista previa (habitaciones y otros formularios) */
+.gb-selector-imagen { display: flex; flex-direction: column; gap: 8px; }
+
+.gb-selector-imagen-marco {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: 12px;
+  border: 2px dashed var(--gb-border, #e2e8f0);
+  background: var(--gb-surface-hover, #f7fafc);
+  color: var(--gb-text-muted, #718096);
+  overflow: hidden;
+  padding: 0;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.gb-selector-imagen-marco:hover:not(:disabled) { border-color: var(--gb-primary, #f38d1e); }
+.gb-selector-imagen-marco.con-imagen { border-style: solid; }
+.gb-selector-imagen-marco img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.gb-selector-imagen-vacio {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+  height: 100%; font-size: 0.85rem;
+}
+.gb-selector-imagen-vacio svg { font-size: 1.8rem; }
+
+.gb-selector-imagen-acciones { display: flex; flex-wrap: wrap; gap: 8px; }
+.gb-selector-imagen-ayuda { color: var(--gb-text-muted, #718096); font-size: 0.75rem; }
+.gb-selector-imagen-error {
+  font-size: 0.82rem;
+  color: var(--gb-status-danger-text, #c62828);
+  background: var(--gb-status-danger-bg, #fce8e6);
+  border-radius: 8px;
+  padding: 6px 10px;
+}

@@ -210,3 +210,57 @@
   .gb-buscador { min-width: 0; width: 100%; }
   .gb-panel-acciones { width: 100%; }
 }
+
+/* ── Tarjetas y formularios (estilo común de todas las vistas) ──── */
+.gb-tarjeta {
+  background: var(--gb-surface);
+  border: 1px solid var(--gb-border);
+  border-radius: 16px;
+  padding: clamp(16px, 3vw, 28px);
+  box-shadow: 0 1px 2px rgba(26, 32, 44, 0.04), 0 6px 18px rgba(26, 32, 44, 0.05);
+}
+
+.gb-seccion-titulo {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--gb-primary);
+  margin: 0 0 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--gb-border);
+}
+
+.gb-form .form-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--gb-text-primary);
+  margin-bottom: 6px;
+}
+
+.gb-form .form-control,
+.gb-form .form-select {
+  border-radius: 10px;
+  border-color: var(--gb-border);
+  background-color: var(--gb-surface);
+  color: var(--gb-text-primary);
+  padding: 9px 12px;
+}
+
+.gb-form .form-control:focus,
+.gb-form .form-select:focus {
+  border-color: var(--gb-primary);
+  box-shadow: 0 0 0 3px rgba(243, 141, 30, 0.15);
+}
+
+.gb-form-botones {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 8px;
+  padding-top: 16px;
+  border-top: 1px solid var(--gb-border);
+}
+
+.gb-ayuda { display: block; font-size: 0.75rem; color: var(--gb-text-muted); margin-top: 4px; }

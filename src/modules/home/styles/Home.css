@@ -1,7 +1,5 @@
-body {
-    margin: 0;
-    background: #ffffff;
-}
+/* Se quitó "body { background: #fff }": se aplicaba a TODA la app (el CSS se
+   empaqueta junto) y pisaba el fondo del modo oscuro. El fondo lo define index.css. */
 
 /* NOTA: se eliminó un bloque de reglas .navbar / .Header / .logo / .admin .h4
    que no se usaba en ningún JSX de esta página, pero que sí se estaba

@@ -23,6 +23,7 @@ import {
   toLocalISOString, inicioValido, finValido, finSugerido, precioEstimado,
 } from "../../reservasDeportivas/utils/horarioEspacio";
 import { listarTodasLasHabitaciones } from "../../habitaciones/api/HabitacionApi";
+import { datosTipo } from "../../habitaciones/utils/tipoHabitacion";
 import { crearReservaHotel, obtenerFechasOcupadas } from "../../reservasHoteleras/api/ReservaHotelApi";
 import { haySolapamiento } from "../../reservasHoteleras/utils/fechasHotel";
 import { aFecha, aInicioDelDiaLocal } from "../../../shared/utils/fechas";
@@ -346,7 +347,7 @@ export default function NuevaReservaCliente() {
                   <option value="">Selecciona una habitación...</option>
                   {habitaciones.map((h) => (
                     <option key={h.id} value={h.id}>
-                      N.º {h.numeroHabitacion} — {h.datosTipoHabitacion?.nomTipo || "Sin tipo"} · {pesos(h.precioNoche)}/noche
+                      N.º {h.numeroHabitacion} — {datosTipo(h).nombre || "Sin tipo"} · {pesos(h.precioNoche)}/noche
                     </option>
                   ))}
                 </Form.Select>

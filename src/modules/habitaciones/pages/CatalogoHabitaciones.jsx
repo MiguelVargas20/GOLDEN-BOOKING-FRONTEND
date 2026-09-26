@@ -10,6 +10,8 @@ import { crearReservaHotel, obtenerFechasOcupadas } from "../../reservasHotelera
 import { haySolapamiento, toLocalDateString } from "../../reservasHoteleras/utils/fechasHotel";
 import { aFecha, aInicioDelDiaLocal, nochesEntre } from "../../../shared/utils/fechas";
 import { useAuth } from "../../../shared/context/AuthContext";
+import { datosTipo } from "../utils/tipoHabitacion";
+import { imagenHabitacion, usarImagenDeRespaldoHabitacion } from "../utils/imagenHabitacion";
 import { useRequierePerfilCompleto } from "../../../shared/hooks/useRequirePerfilCompleto";
 import LoadingSpinner from "../../../shared/components/LoadingSpinner";
 import Swal from "sweetalert2";
@@ -22,9 +24,6 @@ import "../../../shared/styles/BotonesCompartidos.css";
 import { escapeHtml } from "../../../shared/utils/escapeHtml";
 
 registerLocale("es", es);
-
-const PLACEHOLDER =
-    "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&q=80";
 
 export default function CatalogoHabitaciones() {
     const navigate = useNavigate();
@@ -85,12 +84,17 @@ export default function CatalogoHabitaciones() {
         cargar();
     }, []);
 
+    const tiposDisponibles = useMemo(
+        () => [...new Set(habitaciones.map((h) => datosTipo(h).nombre).filter(Boolean))].sort(),
+        [habitaciones],
+    );
+
     const habitacionesFiltradas = useMemo(() => {
         let lista = [...habitaciones];
 
         if (filterTipo !== "Todos") {
             lista = lista.filter(
-                (h) => h.datosTipoHabitacion?.nombreTipoHabitacion === filterTipo
+                (h) => datosTipo(h).nombre === filterTipo
             );
         }
 
@@ -217,7 +221,7 @@ export default function CatalogoHabitaciones() {
     );
 
     return (
-        <div className="reservas-container container-fluid main-container golden-booking-layout py-3">
+        <div className="container-fluid main-container golden-booking-layout py-3">
 
             <div className="conexion-status-container mx-3 text-end">
                 <span className="conexion-badge en-vivo">🟢 En vivo</span>
@@ -263,9 +267,8 @@ export default function CatalogoHabitaciones() {
                         <Form.Label className="fw-semibold text-muted small mb-1">Filtrar por tipo:</Form.Label>
                         <Form.Select className="filter-select-custom" onChange={(e) => setFilterTipo(e.target.value)}>
                             <option value="Todos">Todos los tipos</option>
-                            <option value="Simple">Simple</option>
-                            <option value="Familiar">Familiar</option>
-                            <option value="Suite">Suite</option>
+                            {/* Los tipos que existen de verdad (antes eran 3 nombres fijos) */}
+                            {tiposDisponibles.map((t) => <option key={t} value={t}>{t}</option>)}
                         </Form.Select>
                     </Col>
                     <Col sm={12} md={6}>
@@ -301,7 +304,8 @@ export default function CatalogoHabitaciones() {
 
                                     <div className="hotel-image-container-v2">
                                         <img
-                                            src={hab.imagenUrl || PLACEHOLDER}
+                                            src={imagenHabitacion(hab)}
+                                            onError={usarImagenDeRespaldoHabitacion}
                                             alt={hab.numeroHabitacion}
                                             className="hotel-image-v2"
                                         />
@@ -311,7 +315,7 @@ export default function CatalogoHabitaciones() {
                                         <div className="hotel-header-v2">
                                             <h5>
                                                 {hab.numeroHabitacion} ·{" "}
-                                                {hab.datosTipoHabitacion?.nombreTipoHabitacion}
+                                                {datosTipo(hab).nombre || "Habitación"}
                                             </h5>
                                             <span className={`status-tag-v2 ${disponible ? "disponible" : "no-disponible"}`}>
                                                 {disponible ? "✓ Disponible" : "✗ Mantenimiento"}
@@ -319,7 +323,7 @@ export default function CatalogoHabitaciones() {
                                         </div>
 
                                         <div className="details-row-v2">
-                                            <span><BiGroup /> {hab.datosTipoHabitacion?.capacidadMaxima || "2"} pers.</span>
+                                            <span><BiGroup /> {datosTipo(hab).capacidad ?? "—"} pers.</span>
                                             <span><BiMoney /> ${hab.precioNoche?.toLocaleString("es-CO")}/noche</span>
                                         </div>
 

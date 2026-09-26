@@ -1,363 +1,201 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { Row, Col, Form, Button, Alert, Spinner } from "react-bootstrap";
-import { crearHabitacion, listarTiposHabitacion } from "../api/HabitacionApi";
+import { Row, Col, Form, Alert, Spinner } from "react-bootstrap";
+import Swal from "sweetalert2";
+import { BsArrowLeft, BsPlusLg } from "react-icons/bs";
+import { crearHabitacion, listarTiposHabitacion, subirImagenHabitacion } from "../api/HabitacionApi";
+import SelectorImagen from "../../../shared/components/SelectorImagen";
+import { pesos } from "../../../shared/utils/formato";
+import { IMAGEN_HABITACION_POR_DEFECTO, usarImagenDeRespaldoHabitacion } from "../utils/imagenHabitacion";
+import "../../../shared/styles/PanelAdmin.css";
+import "../../../shared/styles/BotonesCompartidos.css";
 import "../styles/CrearHabitacion.css";
 
+// "Ocupada" no se elige aquí: la ocupación sale de las reservas de cada día
 const ESTADOS = [
-  { value: "DISPONIBLE", label: "Disponible", color: "var(--gb-status-success-text)" },
-  { value: "OCUPADA", label: "✗ Ocupada", color: "var(--gb-status-danger-text)" },
-  { value: "MANTENIMIENTO", label: "⚙ Mantenimiento", color: "var(--gb-status-warning-text)" },
+  { value: "DISPONIBLE", label: "Disponible" },
+  { value: "MANTENIMIENTO", label: "En mantenimiento (no se puede reservar)" },
 ];
 
+/**
+ * Registro de una habitación (ADMIN): número, tipo, precio, estado,
+ * descripción e imagen. La imagen se sube justo después de crearla.
+ */
 export default function CrearHabitacion() {
   const navigate = useNavigate();
 
-  // ── Tipos de habitación desde el back ────────────────────
   const [tipos, setTipos] = useState([]);
-  const [loadingTipos, setLoadingTipos] = useState(true);
+  const [cargandoTipos, setCargandoTipos] = useState(true);
 
-  // ── Campos del formulario ─────────────────────────────────
   const [numeroHabitacion, setNumeroHabitacion] = useState("");
   const [idTipo, setIdTipo] = useState("");
   const [precioNoche, setPrecioNoche] = useState("");
   const [estadoHabitacion, setEstadoHabitacion] = useState("DISPONIBLE");
   const [descripcion, setDescripcion] = useState("");
+  const [imagen, setImagen] = useState(null);
 
-  // ── Feedback ──────────────────────────────────────────────
-  const [loading, setLoading] = useState(false);
+  const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState("");
-  const [exito, setExito] = useState("");
 
-  /* ── Cargar tipos de habitación al montar ─────────────── */
   useEffect(() => {
-    const cargar = async () => {
-      try {
-        const data = await listarTiposHabitacion();
+    listarTiposHabitacion()
+      .then((data) => {
         setTipos(data);
         if (data.length > 0) setIdTipo(data[0].id);
-      } catch {
-        setError("No se pudieron cargar los tipos de habitación.");
-      } finally {
-        setLoadingTipos(false);
-      }
-    };
-    cargar();
+      })
+      .catch(() => setError("No se pudieron cargar los tipos de habitación."))
+      .finally(() => setCargandoTipos(false));
   }, []);
 
-  const tipoSeleccionado = tipos.find((t) => t.id === idTipo);
+  const tipo = tipos.find((t) => t.id === idTipo);
 
-  /* ── Submit ───────────────────────────────────────────── */
-  const handleGuardar = async (e) => {
+  // URL temporal para la vista previa: una por archivo, liberada al cambiarlo
+  const previa = useMemo(() => (imagen ? URL.createObjectURL(imagen) : null), [imagen]);
+  useEffect(() => () => { if (previa) URL.revokeObjectURL(previa); }, [previa]);
+
+  const guardar = async (e) => {
     e.preventDefault();
     setError("");
-    setExito("");
+    if (!numeroHabitacion.trim()) return setError("El número de habitación es obligatorio.");
+    if (!tipo) return setError("Selecciona un tipo de habitación.");
+    if (!precioNoche || Number(precioNoche) <= 0) return setError("Ingresa un precio por noche mayor a cero.");
 
-    if (!numeroHabitacion.trim())
-      return setError("El número de habitación es requerido.");
-    if (!idTipo) return setError("Selecciona un tipo de habitación.");
-    if (!precioNoche || parseFloat(precioNoche) <= 0)
-      return setError("Ingresa un precio por noche válido.");
-
-    setLoading(true);
+    setGuardando(true);
     try {
-      const body = {
-          numeroHabitacion: numeroHabitacion.trim(),
-          datosTipoHabitacion: {
-              id: tipoSeleccionado.id,
-              nomTipo: tipoSeleccionado.nombreTipoHabitacion,
-              desc: tipoSeleccionado.descripcion,
-              cap: tipoSeleccionado.capacidadMaxima,
-          },
-          precioNoche: parseFloat(precioNoche),
-          estadoHabitacion: estadoHabitacion,
-          descripcion: descripcion.trim() || null,
-      };
+      const creada = await crearHabitacion({
+        numeroHabitacion: numeroHabitacion.trim(),
+        datosTipoHabitacion: { id: tipo.id }, // el backend completa el tipo desde la base de datos
+        precioNoche: Number(precioNoche),
+        estadoHabitacion,
+        descripcion: descripcion.trim() || null,
+      });
 
-      await crearHabitacion(body);
-      setExito("¡Habitación registrada con éxito!");
-      setTimeout(() => navigate("/habitaciones"), 1500);
+      if (imagen) {
+        try {
+          await subirImagenHabitacion(creada.id, imagen);
+        } catch (err) {
+          // La habitación ya quedó creada: se avisa y se puede subir luego desde Gestionar
+          await Swal.fire({
+            icon: "warning",
+            title: "Habitación creada sin imagen",
+            text: `${err.message} Puedes subirla después desde "Gestionar habitaciones".`,
+            confirmButtonColor: "#f38d1e",
+          });
+          navigate("/habitaciones/gestionar");
+          return;
+        }
+      }
+
+      await Swal.fire({ icon: "success", title: "Habitación registrada", timer: 1500, showConfirmButton: false });
+      navigate("/habitaciones/gestionar");
     } catch (err) {
-      setError(err.message || "Error al registrar la habitación.");
+      setError(err.message || "No se pudo registrar la habitación.");
     } finally {
-      setLoading(false);
+      setGuardando(false);
     }
   };
 
   return (
-    <div className="habitacion-container">
-      {/* Se expandió el max-width a 1200px para llenar pantallas grandes */}
-      <div className="container" style={{ maxWidth: "1200px" }}> 
-        <Row className="g-5 align-items-start">
-          
-          {/* ── Columna izquierda: info decorativa ──────── */}
-          <Col lg={4} md={5}>
-            <h2
-              style={{
-                fontFamily: '"Bungee", sans-serif',
-                fontWeight: 400,
-                color: "var(--gb-item-title)",
-                fontSize: "2.2rem",
-                lineHeight: 1.2,
-                marginBottom: "0.5rem",
-              }}
-            >
-              Registro de{" "}
-              <span style={{ color: "var(--gb-primary)" }}>Habitación</span>
-            </h2>
-            <p style={{ color: "var(--gb-text-muted)", fontSize: "0.85rem", letterSpacing: "1px", fontWeight: "600" }}>
-              GESTIÓN EJECUTIVA DE PROPIEDADES
-            </p>
+    <div className="gb-panel">
+      <div className="gb-panel-header">
+        <div>
+          <h1 className="gb-panel-titulo">Crear <span>habitación</span></h1>
+          <p className="gb-panel-subtitulo">Registra una habitación nueva en el catálogo del hotel.</p>
+        </div>
+        <div className="gb-panel-acciones">
+          <button type="button" className="btn-gb btn-gb-neutral btn-gb-sm" onClick={() => navigate("/habitaciones/gestionar")}>
+            <BsArrowLeft /> Volver
+          </button>
+        </div>
+      </div>
 
-            {/* Preview Integrada */}
-            <div className="habitacion-preview-card text-center d-flex flex-column align-items-center justify-content-center">
-              <div className="preview-icon-badge">🏨</div>
-              <span style={{ fontWeight: 700, fontSize: "1.2rem", color: "var(--gb-item-title)" }}>
-                {numeroHabitacion ? `Hab. ${numeroHabitacion}` : "Vista previa"}
-              </span>
-              
-              {tipoSeleccionado && (
-                <span style={{ fontSize: "0.85rem", color: "var(--gb-text-muted)", marginTop: "2px" }}>
-                  {tipoSeleccionado.nombreTipoHabitacion}
-                </span>
-              )}
-              
-              {precioNoche && (
-                <span style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--gb-primary)", marginTop: "6px" }}>
-                  ${parseFloat(precioNoche).toLocaleString("es-CO")} / noche
-                </span>
-              )}
-              
-              <span
-                style={{
-                  fontSize: "0.75rem",
-                  fontWeight: 700,
-                  padding: "5px 16px",
-                  borderRadius: "20px",
-                  marginTop: "10px",
-                  background:
-                    estadoHabitacion === "DISPONIBLE"
-                      ? "#e6f4ea"
-                      : estadoHabitacion === "OCUPADA"
-                        ? "#fce8e6"
-                        : "#fff3e0",
-                color:
-                    estadoHabitacion === "DISPONIBLE"
-                      ? "#2e7d32"
-                      : estadoHabitacion === "OCUPADA"
-                        ? "#c62828"
-                        : "#e65100",
-                }}
-              >
-                {ESTADOS.find((e) => e.value === estadoHabitacion)?.label}
-              </span>
-            </div>
+      <Form onSubmit={guardar} noValidate className="gb-form">
+        <Row className="g-4">
+          <Col lg={8}>
+            <div className="gb-tarjeta">
+              {error && <Alert variant="danger" className="py-2">{error}</Alert>}
 
-            {/* Elemento visual de soporte técnico / estándares */}
-            <div className="amenidades-sidebar">
-              <p style={{ fontSize: "0.7rem", fontWeight: 700, color: "var(--gb-text-muted)", letterSpacing: "1px", textTransform: "uppercase", marginBottom: "0.75rem" }}>
-                Estándares del Sistema
-              </p>
-              <div className="amenidad-item">
-                <i className="bi bi-shield-check"></i>
-                <span>Validación automática de duplicados</span>
-              </div>
-              <div className="amenidad-item">
-                <i className="bi bi-lightning-charge"></i>
-                <span>Sincronización en tiempo real con el PMS</span>
-              </div>
-              <div className="amenidad-item">
-                <i className="bi bi-currency-dollar"></i>
-                <span>Moneda base configurada en COP</span>
+              <h2 className="gb-seccion-titulo">Datos de la habitación</h2>
+              <Row className="g-3 mb-3">
+                <Col md={4}>
+                  <Form.Label htmlFor="hab-numero">Número *</Form.Label>
+                  <Form.Control id="hab-numero" placeholder="Ej.: 402-A" maxLength={10}
+                    value={numeroHabitacion} onChange={(e) => setNumeroHabitacion(e.target.value)} />
+                </Col>
+                <Col md={8}>
+                  <Form.Label htmlFor="hab-tipo">Tipo *</Form.Label>
+                  {cargandoTipos ? (
+                    <div className="d-flex align-items-center gap-2 py-2"><Spinner size="sm" /> Cargando tipos…</div>
+                  ) : (
+                    <div className="d-flex gap-2">
+                      <Form.Select id="hab-tipo" value={idTipo} onChange={(e) => setIdTipo(e.target.value)}>
+                        {tipos.length === 0 && <option value="">No hay tipos: crea uno primero</option>}
+                        {tipos.map((t) => (
+                          <option key={t.id} value={t.id}>{t.nombreTipoHabitacion} — hasta {t.capacidadMaxima} personas</option>
+                        ))}
+                      </Form.Select>
+                      <button type="button" className="btn-gb btn-gb-neutral btn-gb-sm" title="Crear tipo de habitación"
+                        onClick={() => navigate("/habitaciones/tipos")} aria-label="Crear tipo de habitación">
+                        <BsPlusLg />
+                      </button>
+                    </div>
+                  )}
+                  {tipo?.descripcion && <span className="gb-ayuda">{tipo.descripcion}</span>}
+                </Col>
+                <Col md={6}>
+                  <Form.Label htmlFor="hab-precio">Precio por noche (COP) *</Form.Label>
+                  <Form.Control id="hab-precio" type="number" min={1} step={1} inputMode="numeric" placeholder="180000"
+                    value={precioNoche} onChange={(e) => setPrecioNoche(e.target.value)} />
+                </Col>
+                <Col md={6}>
+                  <Form.Label htmlFor="hab-estado">Estado</Form.Label>
+                  <Form.Select id="hab-estado" value={estadoHabitacion} onChange={(e) => setEstadoHabitacion(e.target.value)}>
+                    {ESTADOS.map((e) => <option key={e.value} value={e.value}>{e.label}</option>)}
+                  </Form.Select>
+                </Col>
+              </Row>
+
+              <Form.Group className="mb-3">
+                <Form.Label htmlFor="hab-desc">Descripción</Form.Label>
+                <Form.Control id="hab-desc" as="textarea" rows={4} maxLength={500}
+                  placeholder="Comodidades, vista, tipo de cama…"
+                  value={descripcion} onChange={(e) => setDescripcion(e.target.value)} />
+                <span className="gb-ayuda">{descripcion.length}/500</span>
+              </Form.Group>
+
+              <div className="gb-form-botones">
+                <button type="button" className="btn-gb btn-gb-secondary" onClick={() => navigate("/habitaciones/gestionar")} disabled={guardando}>
+                  Cancelar
+                </button>
+                <button type="submit" className="btn-gb btn-gb-primary" disabled={guardando || cargandoTipos}>
+                  {guardando ? <><Spinner size="sm" /> Guardando…</> : "Registrar habitación"}
+                </button>
               </div>
             </div>
           </Col>
 
-          {/* ── Columna derecha: formulario ──────────────── */}
-          <Col lg={8} md={7}>
-            <div
-              style={{
-                background: "var(--gb-surface)",
-                borderRadius: "20px",
-                padding: "3rem",
-                border: "1px solid #e2e8f0",
-                boxShadow: "0 10px 25px rgba(0,0,0,.03)",
-              }}
-            >
-              <p className="habitacion-datos-label">
-                Datos de la Habitación
-              </p>
-              <hr style={{ borderColor: "var(--gb-border)", marginBottom: "1.75rem" }} />
+          <Col lg={4}>
+            <div className="gb-tarjeta mb-4">
+              <h2 className="gb-seccion-titulo">Imagen</h2>
+              <SelectorImagen onCambio={setImagen} deshabilitado={guardando} />
+            </div>
 
-              {error && (
-                <Alert variant="danger" className="small py-2">
-                  {error}
-                </Alert>
-              )}
-              {exito && (
-                <Alert variant="success" className="small py-2">
-                  {exito}
-                </Alert>
-              )}
-
-              <Form onSubmit={handleGuardar} noValidate>
-                {/* Número + Tipo */}
-                <Row className="mb-4 g-3">
-                  <Col md={4}>
-                    <CampoLabel label="Número de Habitación" />
-                    <Form.Control
-                      placeholder="Ej: 402-A"
-                      value={numeroHabitacion}
-                      onChange={(e) => setNumeroHabitacion(e.target.value)}
-                      className="campo-d"
-                    />
-                  </Col>
-                  <Col md={8}>
-                    <CampoLabel label="Tipo de Habitación" />
-                    {loadingTipos ? (
-                      <div className="d-flex align-items-center gap-2 mt-1">
-                        <Spinner size="sm" />
-                        <span className="text-muted small">
-                          Cargando tipos...
-                        </span>
-                      </div>
-                    ) : (
-                      <div className="d-flex gap-2">
-                        <Form.Select
-                          value={idTipo}
-                          onChange={(e) => setIdTipo(e.target.value)}
-                          className="campo-d flex-grow-1"
-                        >
-                          <option value="">Selecciona un tipo...</option>
-                          {tipos.map((t) => (
-                            <option key={t.id} value={t.id}>
-                              {t.nombreTipoHabitacion} — Cap. {t.capacidadMaxima} personas
-                            </option>
-                          ))}
-                        </Form.Select>
-                        <Button 
-                          type="button" 
-                          className="btn-add-tipo-room"
-                          onClick={() => navigate("/habitaciones/tipos")}
-                          title="Crear nuevo tipo de habitación"
-                        >
-                          +
-                        </Button>
-                      </div>
-                    )}
-                  </Col>
-                </Row>
-
-                {/* Info del tipo seleccionado */}
-                {tipoSeleccionado && (
-                  <div className="habitacion-tipo-info mb-4">
-                    <strong>{tipoSeleccionado.nombreTipoHabitacion}</strong>
-                    {tipoSeleccionado.descripcion && ` — ${tipoSeleccionado.descripcion}`}
-                    {tipoSeleccionado.capacidadMaxima && (
-                      <span> · 👥 Máx. {tipoSeleccionado.capacidadMaxima} personas</span>
-                    )}
-                  </div>
-                )}
-
-                {/* Precio + Estado */}
-                <Row className="mb-4 g-3">
-                  <Col md={6}>
-                    <CampoLabel label="Precio por Noche" />
-                    <div style={{ position: "relative" }}>
-                      <span
-                        style={{
-                          position: "absolute",
-                          left: "0.85rem",
-                          top: "50%",
-                          transform: "translateY(-50%)",
-                          color: "var(--gb-text-muted)",
-                          fontWeight: 700,
-                        }}
-                      >
-                        $
-                      </span>
-                      <Form.Control
-                        type="number"
-                        placeholder="0.00"
-                        min="0"
-                        value={precioNoche}
-                        onChange={(e) => setPrecioNoche(e.target.value)}
-                        className="campo-d"
-                        style={{ paddingLeft: "1.75rem" }}
-                      />
-                    </div>
-                  </Col>
-                  <Col md={6}>
-                    <CampoLabel label="Estado de la Habitación" />
-                    <Form.Select
-                      value={estadoHabitacion}
-                      onChange={(e) => setEstadoHabitacion(e.target.value)}
-                      className="campo-d"
-                    >
-                      {ESTADOS.map((e) => (
-                        <option key={e.value} value={e.value}>
-                          {e.label}
-                        </option>
-                      ))}
-                    </Form.Select>
-                  </Col>
-                </Row>
-
-                {/* Descripción */}
-                <Form.Group className="mb-4">
-                  <CampoLabel label="Descripción" />
-                  <Form.Control
-                    as="textarea"
-                    rows={4}
-                    placeholder="Detalles de la suite, comodidades y vista..."
-                    value={descripcion}
-                    onChange={(e) => setDescripcion(e.target.value)}
-                    className="campo-d"
-                    style={{ resize: "none" }}
-                  />
-                </Form.Group>
-
-                <hr style={{ borderColor: "var(--gb-border)", marginBottom: "1.5rem" }} />
-
-                {/* Botones */}
-                <div className="d-flex justify-content-end gap-2">
-                  <Button
-                    variant="outline-secondary"
-                    className="habitacion-cancel-btn"
-                    onClick={() => navigate("/habitaciones")}
-                    disabled={loading}
-                    style={{ borderRadius: "10px", fontWeight: 600 }}
-                  >
-                    Cancelar
-                  </Button>
-                  <Button
-                    type="submit"
-                    className="habitacion-submit-btn"
-                    disabled={loading}
-                  >
-                    {loading ? (
-                      <>
-                        <span className="spinner-border spinner-border-sm me-2" />
-                        Finalizando Registro...
-                      </>
-                    ) : (
-                      "Finalizar Registro"
-                    )}
-                  </Button>
-                </div>
-              </Form>
+            {/* Así se verá en el catálogo */}
+            <div className="gb-tarjeta ch-vista-previa">
+              <h2 className="gb-seccion-titulo">Vista previa</h2>
+              <div className="ch-previa-imagen">
+                <img src={previa || IMAGEN_HABITACION_POR_DEFECTO} alt="" onError={usarImagenDeRespaldoHabitacion} />
+                <span className={`ch-previa-estado ${estadoHabitacion === "DISPONIBLE" ? "ok" : "mant"}`}>
+                  {estadoHabitacion === "DISPONIBLE" ? "Disponible" : "Mantenimiento"}
+                </span>
+              </div>
+              <strong className="ch-previa-titulo">Habitación {numeroHabitacion || "—"}</strong>
+              <span className="gb-ayuda">{tipo ? `${tipo.nombreTipoHabitacion} · hasta ${tipo.capacidadMaxima} personas` : "Sin tipo"}</span>
+              <span className="ch-previa-precio">{precioNoche ? `${pesos(Number(precioNoche))} / noche` : "Precio por definir"}</span>
             </div>
           </Col>
         </Row>
-      </div>
+      </Form>
     </div>
-  );
-}
-
-function CampoLabel({ label }) {
-  return (
-    <p style={{ fontSize: "0.78rem", fontWeight: 600, color: "var(--gb-text-primary)", marginBottom: "6px" }}>
-      {label}
-    </p>
   );
 }

@@ -355,7 +355,7 @@ export default function GestionEspacios() {
                   <Col sm={6}>
                     <Form.Group className="mb-3">
                       <Form.Label>Tarifa por hora (COP) *</Form.Label>
-                      <Form.Control required type="number" min={1} step={1000} value={form.tarifaHora}
+                      <Form.Control required type="number" min={1} step={1} inputMode="numeric" value={form.tarifaHora}
                         onChange={cambiarCampo("tarifaHora")} placeholder="50000" />
                     </Form.Group>
                   </Col>

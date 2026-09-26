@@ -2,7 +2,7 @@
 // ── Configuración Global y Autenticación ───────────────────
 // (centralizadas en apiUtils.js — ver ese archivo)
 // ═══════════════════════════════════════════════════════════
-import { authHeaders, apiFetch, extraerMensajeError } from "../../../shared/api/apiUtils";
+import { authHeaders, authHeaderToken, apiFetch, extraerMensajeError } from "../../../shared/api/apiUtils";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -164,4 +164,30 @@ export const eliminarTipoHabitacion = async (id) => {
   });
   if (!res.ok) throw new Error(await extraerMensajeError(res, "Error al eliminar tipo de habitación"));
   return true;
+};
+// ═══════════════════════════════════════════════════════════
+// ── Imagen de la habitación (ADMIN) ────────────────────────
+// ═══════════════════════════════════════════════════════════
+
+/** Sube o reemplaza la imagen (JPG, PNG o WEBP, máx. 5 MB). Devuelve la habitación actualizada. */
+export const subirImagenHabitacion = async (id, archivo) => {
+  const datos = new FormData();
+  datos.append("archivo", archivo);
+  const res = await apiFetch(`${API_URL}/api/habitaciones/${id}/imagen`, {
+    method: "POST",
+    headers: authHeaderToken(), // sin Content-Type: el navegador pone el boundary del multipart
+    body: datos,
+  });
+  if (!res.ok) throw new Error(await extraerMensajeError(res, "No se pudo subir la imagen"));
+  return res.json();
+};
+
+/** Quita la imagen subida: la habitación vuelve a la imagen por defecto. */
+export const eliminarImagenHabitacion = async (id) => {
+  const res = await apiFetch(`${API_URL}/api/habitaciones/${id}/imagen`, {
+    method: "DELETE",
+    headers: authHeaders(),
+  });
+  if (!res.ok) throw new Error(await extraerMensajeError(res, "No se pudo quitar la imagen"));
+  return res.json();
 };
