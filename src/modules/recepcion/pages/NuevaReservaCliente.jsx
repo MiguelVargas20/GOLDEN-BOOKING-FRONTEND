@@ -25,6 +25,7 @@ import {
 import { listarTodasLasHabitaciones } from "../../reservasHoteleras/api/HabitacionApi";
 import { crearReservaHotel, obtenerFechasOcupadas } from "../../reservasHoteleras/api/ReservaHotelApi";
 import { haySolapamiento } from "../../reservasHoteleras/utils/fechasHotel";
+import { aFecha, aInicioDelDiaLocal } from "../../../shared/utils/fechas";
 import { pesos, hora, fecha } from "../../../shared/utils/formato";
 import { escapeHtml } from "../../../shared/utils/escapeHtml";
 
@@ -109,8 +110,8 @@ export default function NuevaReservaCliente() {
 
   // Noches ya ocupadas: el día de check-out de otra reserva sí queda libre
   const diasBloqueados = useMemo(() => ocupadasHabitacion.map((r) => ({
-    start: inicioDelDia(new Date(r.checkIn)),
-    end: new Date(inicioDelDia(new Date(r.checkOut)).getTime() - UN_DIA_MS),
+    start: inicioDelDia(aFecha(r.checkIn)),
+    end: new Date(inicioDelDia(aFecha(r.checkOut)).getTime() - UN_DIA_MS),
   })).filter((r) => r.end >= r.start), [ocupadasHabitacion]);
 
   // ── Acciones ────────────────────────────────────────────
@@ -197,8 +198,8 @@ export default function NuevaReservaCliente() {
           idHabitacion: habitacionId,
           docUsuario: cliente.documento.numeroD,
           // Mismo formato que la reserva del cliente (ReservasH / DetalleHabitacion)
-          fCheckIn: checkIn.toISOString(),
-          fCheckOut: checkOut.toISOString(),
+          fCheckIn: aInicioDelDiaLocal(checkIn),
+          fCheckOut: aInicioDelDiaLocal(checkOut),
         }, confirmarYa);
       }
       await Swal.fire({

@@ -4,7 +4,8 @@ import { Spinner, Button, Container, Row, Col, Card } from "react-bootstrap";
 import { BiArrowBack, BiGroup, BiCalendar, BiCalendarAlt } from "react-icons/bi";
 import { obtenerHabitacionPorId } from "../api/HabitacionApi";
 import { crearReservaHotel, obtenerFechasOcupadas } from "../api/ReservaHotelApi"; // 🆕 obtenerFechasOcupadas
-import { haySolapamiento, toLocalDateString } from "../utils/fechasHotel"; // 🆕
+import { haySolapamiento, toLocalDateString } from "../utils/fechasHotel";
+import { aFecha, aInicioDelDiaLocal, nochesEntre } from "../../../shared/utils/fechas";
 import { useAuth } from "../../../shared/context/AuthContext";
 import Swal from "sweetalert2";
 import DatePicker, { registerLocale } from "react-datepicker";
@@ -65,9 +66,7 @@ export default function DetalleHabitacion() {
 
     const calcularNochesYTotal = () => {
         if (!checkIn || !checkOut || !habitacion) return { noches: 0, total: 0 };
-        const inicio = new Date(checkIn);
-        const fin = new Date(checkOut);
-        const noches = Math.round((fin - inicio) / (1000 * 60 * 60 * 24));
+        const noches = nochesEntre(checkIn, checkOut);
         if (noches <= 0) return { noches: 0, total: 0 };
         return { noches, total: noches * (habitacion.precioNoche || 0) };
     };
@@ -77,7 +76,7 @@ export default function DetalleHabitacion() {
             Swal.fire({ title: "Fechas requeridas", text: "Selecciona check-in y check-out.", icon: "warning", confirmButtonColor: "#f38d1e" });
             return;
         }
-        if (new Date(checkIn) >= new Date(checkOut)) {
+        if (aFecha(checkIn) >= aFecha(checkOut)) {
             Swal.fire({ title: "Fechas inválidas", text: "El check-out debe ser posterior al check-in.", icon: "warning", confirmButtonColor: "#f38d1e" });
             return;
         }
@@ -104,8 +103,8 @@ export default function DetalleHabitacion() {
             html: `
                 <div style="text-align:left;padding:0 1rem">
                     <p><strong>Habitación:</strong> ${escapeHtml(habitacion.numeroHabitacion)}</p>
-                    <p><strong>Check-in:</strong> ${new Date(checkIn).toLocaleDateString()}</p>
-                    <p><strong>Check-out:</strong> ${new Date(checkOut).toLocaleDateString()}</p>
+                    <p><strong>Check-in:</strong> ${aFecha(checkIn).toLocaleDateString()}</p>
+                    <p><strong>Check-out:</strong> ${aFecha(checkOut).toLocaleDateString()}</p>
                     <p><strong>Noches:</strong> ${noches}</p>
                     <hr>
                     <p style="font-size:1.2rem;color:#f38d1e"><strong>Total: $${total.toLocaleString("es-CO")}</strong></p>
@@ -125,8 +124,8 @@ export default function DetalleHabitacion() {
             await crearReservaHotel({
                 docUsuario,
                 idHabitacion: habitacion.id,
-                fCheckIn: new Date(checkIn).toISOString(),
-                fCheckOut: new Date(checkOut).toISOString(),
+                fCheckIn: aInicioDelDiaLocal(checkIn),
+                fCheckOut: aInicioDelDiaLocal(checkOut),
             });
             await Swal.fire({
                 // La reserva queda PENDIENTE hasta que el admin la apruebe
@@ -218,7 +217,7 @@ export default function DetalleHabitacion() {
                                 <div className="date-input-wrapper">
                                     <BiCalendarAlt className="calendar-icon" />
                                     <DatePicker
-                                        selected={checkIn ? new Date(checkIn) : null}
+                                        selected={checkIn ? aFecha(checkIn) : null}
                                         onChange={(date) => setCheckIn(date ? toLocalDateString(date) : "")}
                                         dateFormat="dd/MM/yyyy"
                                         locale="es"
@@ -234,13 +233,13 @@ export default function DetalleHabitacion() {
                                 <div className="date-input-wrapper">
                                     <BiCalendarAlt className="calendar-icon" />
                                     <DatePicker
-                                        selected={checkOut ? new Date(checkOut) : null}
+                                        selected={checkOut ? aFecha(checkOut) : null}
                                         onChange={(date) => setCheckOut(date ? toLocalDateString(date) : "")}
                                         dateFormat="dd/MM/yyyy"
                                         locale="es"
                                         className="form-control custom-date-input"
                                         placeholderText="dd/mm/aaaa"
-                                        minDate={checkIn ? new Date(checkIn) : new Date()}
+                                        minDate={checkIn ? aFecha(checkIn) : new Date()}
                                         portalId="datepicker-portal"
                                     />
                                 </div>
