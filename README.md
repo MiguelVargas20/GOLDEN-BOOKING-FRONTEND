@@ -31,16 +31,20 @@ npm run build
 | `/login`, `/register`, `/forgot` | Todos | Acceso, registro y recuperación de contraseña |
 | `/home` | Todos | **Admin:** panel de control (dashboard). **Cliente:** portada |
 | `/reservas-deportivas` | Todos | Catálogo de espacios deportivos y reserva por horas |
-| `/reservas-deportivas/mis-reservas` | Todos | Mis reservas deportivas |
+| `/reservas-deportivas/mis-reservas` | Todos | Mis reservas deportivas: cancelar, cambiar la fecha y calificar las finalizadas |
 | `/habitaciones`, `/habitaciones/:id` | Todos | Catálogo y detalle de habitaciones, reserva por noches |
-| `/reservas-hoteleras/mis-reservas` | Todos | Mis reservas hoteleras |
+| `/reservas-hoteleras/mis-reservas` | Todos | Mis reservas hoteleras: cancelar, cambiar la fecha y calificar las finalizadas |
 | `/mi-perfil`, `/mis-mensajes`, `/contactos` | Todos | Perfil, mensajes y contacto |
-| `/reservas-deportivas/gestionar`, `/reservas-hoteleras/gestionar` | Admin | Aprobar o cancelar solicitudes (con motivo) |
+| `/reservas-deportivas/gestionar`, `/reservas-hoteleras/gestionar` | Admin | Aprobar, cancelar (con motivo) o reprogramar solicitudes y ver el historial de cada reserva |
+| `/calendario` | Admin | Calendario semanal de ocupación por habitación y espacio |
+| `/reportes` | Admin | Reservas e ingresos por rango de fechas, descargables en Excel y PDF |
 | `/recepcion/nueva-reserva` | Admin | Registrar una reserva a nombre de un cliente |
 | `/reservas-deportivas/espacios` | Admin | Administrar espacios deportivos e imágenes |
 | `/habitaciones/gestionar`, `/habitaciones/crear`, `/habitaciones/tipos` | Admin | Administrar habitaciones, imágenes y tipos |
 | `/usuarios`, `/usuarios-crear`, `/usuarios-edit` | Admin | Administrar usuarios y roles |
 | `/mensajes` | Admin | Bandeja de mensajes de contacto |
+
+El cliente tiene una **campana de notificaciones** (reserva aprobada, cancelada, reprogramada, vencida o lista para calificar) y los catálogos muestran el **promedio de estrellas** de cada espacio y habitación.
 
 ## Pruebas de extremo a extremo (Cypress)
 Las pruebas están en `cypress/e2e` y **simulan el backend** con `cy.intercept`, así que no hace falta tener el servidor ni MongoDB: solo el frontend.
@@ -66,6 +70,12 @@ npm run cypress      # o abre Cypress para verlas paso a paso
 | `11-mensajes` | Enviar mensaje, validaciones, ver respuesta, responder y filtrar en la bandeja |
 | `12-dashboard` | Indicadores, periodo, error y reintento, portada del cliente |
 | `13-recepcion` | Buscar cliente, reservar a su nombre confirmada, cliente inactivo |
+| `14-reprogramar` | Cambiar fecha (deporte y hotel), error 409, cancelada sin opción, admin reprograma |
+| `15-notificaciones` | Contador, lista, abrir y marcar leída, marcar todas, vacío, admin sin campana |
+| `16-historial` | Quién creó/aprobó/reprogramó y cuándo; reservas antiguas reconstruidas |
+| `17-calificaciones` | Calificar finalizada, ya calificada, solo finalizadas, promedio en catálogo, opiniones |
+| `18-calendario` | Noches por habitación, horarios por espacio, semana siguiente, cliente sin acceso |
+| `19-reportes` | Mes actual, rango elegido, rangos rápidos, descarga Excel/PDF, error del servidor |
 
 Los datos simulados están en `cypress/support/datos.js` y los comandos propios (`visitarComo`, `simularApiBase`, `confirmarDialogo`) en `cypress/support/commands.js`.
 

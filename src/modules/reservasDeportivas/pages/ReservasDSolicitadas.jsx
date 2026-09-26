@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { BsPlusLg } from "react-icons/bs";
 import ListaMisReservas from "../../../shared/components/reservas/ListaMisReservas";
-import { listarMisReservasDeporte, cancelarReservaDeporte } from "../api/ReservaDeporteApi";
+import { listarMisReservasDeporte, cancelarReservaDeporte, reprogramarReservaDeporte } from "../api/ReservaDeporteApi";
 import { fecha, hora, pesos } from "../../../shared/utils/formato";
 
 /** "Mis reservas" deportivas del cliente. */
@@ -38,8 +38,13 @@ function ReservasDSolicitadas() {
     <ListaMisReservas
       titulo="Mis reservas"
       resaltado="deportivas"
+      categoria="DEPORTE"
       cargar={listarMisReservasDeporte}
       cancelar={cancelarReservaDeporte}
+      reprogramar={reprogramarReservaDeporte}
+      datosReprogramacion={(r) => ({
+        tipo: "DEPORTE", id: r.idD, lugar: r.tCancha, inicio: r.fInicioReserva, fin: r.fFinReserva, espacioId: r.espacioId,
+      })}
       obtenerId={(r) => r.idD}
       columnas={columnas}
       detalles={(r) => ({

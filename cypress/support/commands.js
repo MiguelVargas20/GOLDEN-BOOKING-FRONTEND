@@ -15,6 +15,11 @@ Cypress.Commands.add("simularApiBase", (rol = "cliente") => {
   cy.intercept("GET", "**/api/reservas/deporte/resumen", { body: { PENDIENTE: 0 } });
   cy.intercept("GET", "**/api/reservas/hotel/resumen", { body: { PENDIENTE: 0 } });
   cy.intercept("GET", "**/api/reservas/deporte/ocupadas", { body: [] });
+  cy.intercept("GET", "**/api/notificaciones/no-leidas/count", { body: { noLeidas: 0 } });
+  cy.intercept("GET", "**/api/notificaciones", { body: [] });
+  cy.intercept("GET", "**/api/calificaciones/resumen*", { body: [] });
+  cy.intercept("GET", "**/api/calificaciones/mias", { body: [] });
+  cy.intercept("GET", "**/api/calificaciones?*", { body: [] });
 });
 
 /**

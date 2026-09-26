@@ -1,11 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { BsCheckLg, BsXLg, BsArrowClockwise } from "react-icons/bs";
+import Swal from "sweetalert2";
+import { BsCheckLg, BsXLg, BsArrowClockwise, BsCalendar2Week, BsClockHistory } from "react-icons/bs";
 import ResumenEstados from "./ResumenEstados";
 import EstadoReservaBadge from "./EstadoReservaBadge";
 import Paginador from "./Paginador";
+import ModalReprogramar from "./ModalReprogramar";
 import { aprobarReserva, cancelarReserva } from "./dialogosReserva";
-import { EVENTO_RESERVAS_CAMBIARON } from "../../hooks/eventosReservas";
+import { verHistorial } from "./historialReserva";
+import { EVENTO_RESERVAS_CAMBIARON, avisarReservasCambiaron } from "../../hooks/eventosReservas";
 import "../../styles/PanelAdmin.css";
 import "../../styles/BotonesCompartidos.css";
 
@@ -18,7 +21,8 @@ const ESTADOS_VALIDOS = ["PENDIENTE", "CONFIRMADA", "CANCELADA", "FINALIZADA"];
  * - Indicadores por estado (clic = filtrar). El filtro queda en la URL
  *   (?estado=PENDIENTE) para poder enlazarlo desde el Navbar.
  * - Tabla paginada desde el backend, con búsqueda local en la página actual.
- * - Acciones: aprobar (solo PENDIENTE) y cancelar con motivo (PENDIENTE o CONFIRMADA).
+ * - Acciones: aprobar (solo PENDIENTE), cambiar la fecha y cancelar con motivo
+ *   (PENDIENTE o CONFIRMADA) y ver el historial (quién aprobó o canceló y cuándo).
  *
  * @param {string} titulo / resaltado / subtitulo - textos del encabezado
  * @param {Function} listar(page, size, estado) - API del listado
@@ -29,11 +33,13 @@ const ESTADOS_VALIDOS = ["PENDIENTE", "CONFIRMADA", "CANCELADA", "FINALIZADA"];
  * @param {Array} columnas - [{ titulo, render: (reserva) => JSX }]
  * @param {Function} detalles(reserva) - { etiqueta: valor } para los diálogos
  * @param {Function} textoBusqueda(reserva) - texto sobre el que se busca
+ * @param {Function} reprogramar(id, inicio, fin) - API para cambiar la fecha
+ * @param {Function} datosReprogramacion(reserva) - { tipo, id, lugar, inicio, fin, espacioId?, precioNoche? }
  * @param {ReactNode} accionesExtra - botones adicionales del encabezado
  */
 export default function PanelReservasAdmin({
   titulo, resaltado, subtitulo,
-  listar, resumen, confirmar, cancelar,
+  listar, resumen, confirmar, cancelar, reprogramar, datosReprogramacion,
   obtenerId, columnas, detalles, textoBusqueda,
   accionesExtra,
 }) {
@@ -49,6 +55,7 @@ export default function PanelReservasAdmin({
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
   const [busqueda, setBusqueda] = useState("");
+  const [reprogramando, setReprogramando] = useState(null);
 
   const cargar = useCallback(async (paginaSolicitada = 0) => {
     setCargando(true);
@@ -96,6 +103,14 @@ export default function PanelReservasAdmin({
   const handleCancelar = async (reserva) => {
     const cancelada = await cancelarReserva(detalles(reserva), (motivo) => cancelar(obtenerId(reserva), motivo), true);
     if (cancelada) cargar(pagina);
+  };
+
+  const guardarReprogramacion = async (inicio, fin) => {
+    await reprogramar(reprogramando.id, inicio, fin);
+    setReprogramando(null);
+    avisarReservasCambiaron();
+    await Swal.fire({ title: "Fecha actualizada", text: "Se le avisó al cliente por correo y en su campana.", icon: "success", timer: 2200, showConfirmButton: false });
+    cargar(pagina);
   };
 
   const termino = busqueda.trim().toLowerCase();
@@ -172,14 +187,21 @@ export default function PanelReservasAdmin({
                           <BsCheckLg /> Aprobar
                         </button>
                       )}
+                      {(r.estado === "PENDIENTE" || r.estado === "CONFIRMADA") && reprogramar && (
+                        <button type="button" className="btn-gb btn-gb-neutral btn-gb-sm" title="Cambiar fecha"
+                          aria-label="Cambiar fecha" onClick={() => setReprogramando(datosReprogramacion(r))}>
+                          <BsCalendar2Week />
+                        </button>
+                      )}
                       {(r.estado === "PENDIENTE" || r.estado === "CONFIRMADA") && (
                         <button type="button" className="btn-gb btn-gb-danger btn-gb-sm" onClick={() => handleCancelar(r)}>
                           <BsXLg /> Cancelar
                         </button>
                       )}
-                      {(r.estado === "CANCELADA" || r.estado === "FINALIZADA") && (
-                        <span className="gb-celda-secundaria">Sin acciones</span>
-                      )}
+                      <button type="button" className="btn-gb btn-gb-secondary btn-gb-sm" title="Historial"
+                        aria-label="Ver historial" onClick={() => verHistorial("Historial de la reserva", r)}>
+                        <BsClockHistory />
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -196,6 +218,10 @@ export default function PanelReservasAdmin({
         etiqueta="reservas"
         onCambiar={cargar}
       />
+
+      {reprogramando && (
+        <ModalReprogramar reserva={reprogramando} onCerrar={() => setReprogramando(null)} onGuardar={guardarReprogramacion} />
+      )}
     </div>
   );
 }

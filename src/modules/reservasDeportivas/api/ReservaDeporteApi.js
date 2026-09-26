@@ -90,3 +90,14 @@ export const cancelarReservaDeporte = async (id, motivo = null) => {
   }
   return true;
 };
+
+/** Cambia el horario de la reserva sin cancelarla (fechas "yyyy-MM-ddTHH:mm:ss" locales). */
+export const reprogramarReservaDeporte = async (id, inicio, fin) => {
+  const response = await apiFetch(`${API_URL}/${id}/reprogramar`, {
+    method: "PATCH",
+    headers: authHeaders(),
+    body: JSON.stringify({ inicio, fin }),
+  });
+  if (!response.ok) throw new Error(await extraerMensajeError(response, "No se pudo reprogramar la reserva"));
+  return response.json();
+};

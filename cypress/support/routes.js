@@ -21,4 +21,6 @@ export const ROUTES = {
   misReservasHotel: "/reservas-hoteleras/mis-reservas",
   gestionarReservasHotel: "/reservas-hoteleras/gestionar",
   recepcion: "/recepcion/nueva-reserva",
+  calendario: "/calendario",
+  reportes: "/reportes",
 };

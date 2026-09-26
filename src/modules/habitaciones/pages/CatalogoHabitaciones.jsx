@@ -4,6 +4,8 @@ import { BsCashCoin, BsPeople, BsCalendarCheck, BsClockHistory, BsGear } from "r
 import { Spinner } from "react-bootstrap";
 import { listarTodasLasHabitaciones } from "../api/HabitacionApi";
 import { crearReservaHotel, obtenerFechasOcupadas } from "../../reservasHoteleras/api/ReservaHotelApi";
+import { obtenerResumenCalificaciones } from "../../calificaciones/api/CalificacionApi";
+import { PromedioCalificacion } from "../../calificaciones/components/Estrellas";
 import { haySolapamiento, toLocalDateString } from "../../reservasHoteleras/utils/fechasHotel";
 import { aFecha, aInicioDelDiaLocal, nochesEntre } from "../../../shared/utils/fechas";
 import { useAuth } from "../../../shared/context/AuthContext";
@@ -41,6 +43,12 @@ export default function CatalogoHabitaciones() {
 
     const [filterTipo, setFilterTipo] = useState("Todos");
     const [ordenPrecio, setOrdenPrecio] = useState("normal");
+    const [calificaciones, setCalificaciones] = useState({});
+
+    // Estrellas de cada habitación (extra: si fallan, el catálogo se muestra igual)
+    useEffect(() => {
+        obtenerResumenCalificaciones("HOTEL").then(setCalificaciones).catch(() => {});
+    }, []);
 
     useEffect(() => {
         const cargar = async () => {
@@ -271,6 +279,7 @@ export default function CatalogoHabitaciones() {
                                 <div className="ge-cuerpo">
                                     <span className="ge-deporte">{tipo.nombre || "Habitación"}</span>
                                     <h3 className="ge-nombre">Habitación {hab.numeroHabitacion}</h3>
+                                    <PromedioCalificacion resumen={calificaciones[hab.id]} />
                                     {hab.descripcion && <p className="ge-descripcion">{hab.descripcion}</p>}
                                     <ul className="ge-datos">
                                         <li><BsCashCoin /> {pesos(hab.precioNoche)} / noche</li>

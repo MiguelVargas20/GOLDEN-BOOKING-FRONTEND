@@ -6,6 +6,7 @@ import {
   obtenerResumenDeporte,
   confirmarReservaDeporte,
   cancelarReservaDeporte,
+  reprogramarReservaDeporte,
 } from "../api/ReservaDeporteApi";
 import { fechaHora, fecha, hora, pesos } from "../../../shared/utils/formato";
 
@@ -69,6 +70,11 @@ export default function GestionarReservas() {
       resumen={obtenerResumenDeporte}
       confirmar={confirmarReservaDeporte}
       cancelar={cancelarReservaDeporte}
+      reprogramar={reprogramarReservaDeporte}
+      datosReprogramacion={(r) => ({
+        tipo: "DEPORTE", id: r.idD, lugar: `${r.tCancha} · ${r.nombreCliente || r.docUsuario}`,
+        inicio: r.fInicioReserva, fin: r.fFinReserva, espacioId: r.espacioId,
+      })}
       obtenerId={(r) => r.idD}
       columnas={columnas}
       detalles={(r) => ({

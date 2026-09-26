@@ -6,6 +6,8 @@ import { useAuth } from "../../../shared/context/AuthContext";
 import { listarEspacios } from "../api/EspacioDeportivoApi";
 import { imagenEspacio, usarImagenDeRespaldo } from "../utils/imagenEspacio";
 import { pesos } from "../../../shared/utils/formato";
+import { obtenerResumenCalificaciones } from "../../calificaciones/api/CalificacionApi";
+import { PromedioCalificacion } from "../../calificaciones/components/Estrellas";
 import "../../../shared/styles/PanelAdmin.css";
 import "../styles/GestionEspacios.css";
 
@@ -24,6 +26,7 @@ function ReservasDCatalogo() {
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
   const [deporte, setDeporte] = useState("TODOS");
+  const [calificaciones, setCalificaciones] = useState({});
 
   useEffect(() => {
     listarEspacios()
@@ -31,6 +34,8 @@ function ReservasDCatalogo() {
       .then((lista) => setEspacios(lista.filter((e) => e.estado !== "INACTIVO")))
       .catch((err) => setError(err.message))
       .finally(() => setCargando(false));
+    // Las estrellas son un extra: si fallan, el catálogo se muestra igual
+    obtenerResumenCalificaciones("DEPORTE").then(setCalificaciones).catch(() => {});
   }, []);
 
   const deportes = useMemo(() => [...new Set(espacios.map((e) => e.deporte))].sort(), [espacios]);
@@ -101,6 +106,7 @@ function ReservasDCatalogo() {
                 <div className="ge-cuerpo">
                   <span className="ge-deporte">{e.deporte}</span>
                   <h3 className="ge-nombre">{e.nombre}</h3>
+                  <PromedioCalificacion resumen={calificaciones[e.id]} />
                   {e.descripcion && <p className="ge-descripcion">{e.descripcion}</p>}
                   <ul className="ge-datos">
                     <li><BsCashCoin /> {pesos(e.tarifaHora)} / hora</li>

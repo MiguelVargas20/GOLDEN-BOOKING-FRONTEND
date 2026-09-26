@@ -1,0 +1,37 @@
+/* Campana de notificaciones del cliente (Navbar) */
+.cn-boton {
+  position: relative; display: flex; align-items: center; justify-content: center;
+  background: none; border: 0; padding: 4px; color: var(--gb-text-primary); cursor: pointer;
+}
+.cn-boton::after { display: none !important; } /* sin la flecha del dropdown */
+.cn-contador {
+  position: absolute; top: -2px; right: -6px; min-width: 18px; height: 18px; padding: 0 5px;
+  border-radius: 999px; background: #e53e3e; color: #fff; font-size: 0.62rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+.cn-menu {
+  width: min(360px, calc(100vw - 24px)); max-height: 70vh; overflow-y: auto; padding: 0 !important;
+  border-radius: 14px; border: 1px solid var(--gb-border); background: var(--gb-surface);
+  box-shadow: 0 12px 32px rgba(26, 32, 44, 0.18);
+}
+.cn-cabecera {
+  display: flex; justify-content: space-between; align-items: center; gap: 8px;
+  padding: 12px 14px; border-bottom: 1px solid var(--gb-border); position: sticky; top: 0; background: var(--gb-surface);
+}
+.cn-enlace { background: none; border: 0; padding: 0; color: var(--gb-primary); font-size: 0.8rem; font-weight: 600; }
+.cn-item {
+  width: 100%; display: flex; gap: 10px; align-items: flex-start; text-align: left; padding: 12px 14px;
+  background: none; border: 0; border-bottom: 1px solid var(--gb-border); color: var(--gb-text-primary);
+}
+.cn-item:hover { background: var(--gb-surface-hover); }
+.cn-item.no-leida { background: var(--gb-icon-bg); }
+.cn-texto { display: grid; gap: 2px; min-width: 0; }
+.cn-texto span { font-size: 0.83rem; color: var(--gb-text-muted); }
+.cn-texto small { font-size: 0.72rem; color: var(--gb-text-muted); }
+.cn-icono { flex: 0 0 auto; font-size: 1.2rem; margin-top: 2px; }
+.cn-icono.ok { color: #38a169; }
+.cn-icono.error { color: #e53e3e; }
+.cn-icono.info { color: #3182ce; }
+.cn-icono.gris { color: #718096; }
+.cn-icono.estrella { color: #f6ad1e; }
+.cn-vacio { margin: 0; padding: 20px 14px; text-align: center; color: var(--gb-text-muted); font-size: 0.9rem; }

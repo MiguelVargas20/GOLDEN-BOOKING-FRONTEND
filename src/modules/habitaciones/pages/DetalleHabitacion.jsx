@@ -20,6 +20,7 @@ import "../styles/DetalleHabitacion.css";
 import { useRequierePerfilCompleto } from "../../../shared/hooks/useRequirePerfilCompleto";
 import { escapeHtml } from "../../../shared/utils/escapeHtml";
 import { fecha, pesos } from "../../../shared/utils/formato";
+import Opiniones from "../../calificaciones/components/Opiniones";
 
 registerLocale("es", es);
 
@@ -196,6 +197,7 @@ export default function DetalleHabitacion() {
                             <p className="m-0">{habitacion.descripcion}</p>
                         </div>
                     )}
+                    <Opiniones categoria="HOTEL" idRecurso={habitacion.id} />
                 </Col>
 
                 <Col lg={5}>

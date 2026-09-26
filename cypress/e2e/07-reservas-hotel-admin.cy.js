@@ -18,7 +18,9 @@ describe("Reservas hoteleras (administrador)", () => {
     cy.wait("@listar");
     cy.contains("tr", "Laura Pérez").should("contain", "N.º 101").and("contain", "2 noches").and("contain", "360.000");
     cy.contains("tr", "Pedro Gómez").should("contain", "Vencida: no se aprobó a tiempo")
-      .and("contain", "Registrada en recepción").and("contain", "Sin acciones");
+      .and("contain", "Registrada en recepción");
+    cy.contains("tr", "Pedro Gómez").contains("button", "Aprobar").should("not.exist");
+    cy.contains("tr", "Pedro Gómez").find("button[aria-label='Ver historial']").should("be.visible");
   });
 
   it("aprueba una reserva hotelera", () => {

@@ -28,12 +28,13 @@ describe("Menú de navegación", () => {
     cy.location("pathname").should("eq", ROUTES.misReservasDeporte);
   });
 
-  it("la campana del cliente muestra las respuestas nuevas y abre Mis mensajes", () => {
+  it("la campana del cliente suma las respuestas nuevas y abre Mis mensajes", () => {
     cy.simularApiBase("cliente");
     cy.intercept("GET", "**/api/contacto/mios/no-vistas/count", { body: { noVistas: 3 } });
-    cy.intercept("GET", "**/api/contacto/mios*", { body: { contenido: [], paginaActual: 0, totalPaginas: 0, totalElementos: 0 } });
+    cy.intercept("GET", "**/api/contacto/mios?*", { body: { contenido: [], paginaActual: 0, totalPaginas: 0, totalElementos: 0 } });
     cy.visitarComo("cliente", ROUTES.contactos);
-    cy.get("[title='Mis mensajes']").should("contain", "3").click();
+    cy.get("button[aria-label='Notificaciones']").should("contain", "3").click();
+    cy.contains(".cn-item", "Tienes 3 respuestas nuevas").click();
     cy.location("pathname").should("eq", ROUTES.misMensajes);
   });
 

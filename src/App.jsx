@@ -46,6 +46,10 @@ import UsuariosE from './modules/usuarios/pages/UsuariosE.jsx';
 import UsuariosC from './modules/usuarios/pages/UsuariosC.jsx';
 import MiPerfil from './modules/usuarios/pages/MiPerfil.jsx';
 
+// Módulo: Calendario de ocupación y reportes (Exclusivo ADMIN)
+import CalendarioOcupacion from './modules/calendario/pages/CalendarioOcupacion.jsx';
+import Reportes from './modules/reportes/pages/Reportes.jsx';
+
 // Módulo: Mensajes (Exclusivo ADMIN)
 import  AdminMensajes  from "./modules/mensajes/pages/AdminMensajes.jsx";
 
@@ -214,6 +218,14 @@ export default function App() {
                         {/* --- MÓDULO CONTROL DE MENSAJES --- */}
                         <Route path="/mensajes" element={
                             <RutaProtegida soloAdmin={true}><AdminMensajes /></RutaProtegida>
+                        } />
+
+                        {/* Calendario semanal de ocupación y reportes exportables (Excel / PDF) */}
+                        <Route path="/calendario" element={
+                            <RutaProtegida soloAdmin={true}><CalendarioOcupacion /></RutaProtegida>
+                        } />
+                        <Route path="/reportes" element={
+                            <RutaProtegida soloAdmin={true}><Reportes /></RutaProtegida>
                         } />
 
                     </Route>

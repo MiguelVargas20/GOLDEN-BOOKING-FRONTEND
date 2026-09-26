@@ -1,7 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import { Spinner } from "react-bootstrap";
+import Swal from "sweetalert2";
+import { BsCalendar2Week, BsStar } from "react-icons/bs";
 import EstadoReservaBadge from "./EstadoReservaBadge";
+import ModalReprogramar from "./ModalReprogramar";
 import { cancelarReserva } from "./dialogosReserva";
+import { avisarReservasCambiaron } from "../../hooks/eventosReservas";
+import ModalCalificar from "../../../modules/calificaciones/components/ModalCalificar";
+import { Estrellas } from "../../../modules/calificaciones/components/Estrellas";
+import { calificarReserva, listarMisCalificaciones } from "../../../modules/calificaciones/api/CalificacionApi";
 import "../../styles/PanelAdmin.css";
 import "../../styles/BotonesCompartidos.css";
 
@@ -13,15 +20,25 @@ const MENSAJE_ESTADO = {
 
 /**
  * "Mis reservas" del cliente (hotel y deporte). Muestra el estado de cada
- * reserva, el motivo si la canceló la administración y permite cancelar las
- * que están pendientes o confirmadas (el backend exige 24 h de anticipación).
+ * reserva, el motivo si la canceló la administración y permite:
+ *  - cancelar o cambiar la fecha de las pendientes o confirmadas (el backend
+ *    exige 24 h de anticipación);
+ *  - calificar las finalizadas (una vez).
+ *
+ * @param {"DEPORTE"|"HOTEL"} categoria
+ * @param {Function} reprogramar(id, inicio, fin) - API para cambiar la fecha
+ * @param {Function} datosReprogramacion(reserva) - { tipo, id, lugar, inicio, fin, espacioId?, precioNoche? }
  */
 export default function ListaMisReservas({
-  titulo, resaltado, cargar, cancelar, obtenerId, columnas, detalles, textoVacio, accionesExtra,
+  titulo, resaltado, categoria, cargar, cancelar, reprogramar, datosReprogramacion,
+  obtenerId, columnas, detalles, textoVacio, accionesExtra,
 }) {
   const [reservas, setReservas] = useState([]);
   const [cargando, setCargando] = useState(true);
   const [error, setError] = useState(null);
+  const [calificaciones, setCalificaciones] = useState({});
+  const [reprogramando, setReprogramando] = useState(null);
+  const [calificando, setCalificando] = useState(null);
 
   const obtener = useCallback(async () => {
     setError(null);
@@ -35,6 +52,29 @@ export default function ListaMisReservas({
   }, [cargar]);
 
   useEffect(() => { obtener(); }, [obtener]);
+
+  // Qué reservas ya calificó el cliente (para mostrar sus estrellas en vez del botón)
+  useEffect(() => {
+    listarMisCalificaciones()
+      .then((lista) => setCalificaciones(Object.fromEntries(lista.map((c) => [c.idReserva, c.puntuacion]))))
+      .catch(() => setCalificaciones({}));
+  }, []);
+
+  const guardarReprogramacion = async (inicio, fin) => {
+    await reprogramar(reprogramando.id, inicio, fin);
+    setReprogramando(null);
+    avisarReservasCambiaron();
+    await Swal.fire({ title: "Fecha actualizada", text: "Te enviamos un correo con los nuevos datos.", icon: "success", timer: 2200, showConfirmButton: false });
+    obtener();
+  };
+
+  const guardarCalificacion = async (puntuacion, comentario) => {
+    const id = obtenerId(calificando);
+    await calificarReserva(categoria, id, puntuacion, comentario);
+    setCalificaciones((c) => ({ ...c, [id]: puntuacion }));
+    setCalificando(null);
+    Swal.fire({ title: "¡Gracias por calificar!", icon: "success", timer: 1800, showConfirmButton: false });
+  };
 
   const handleCancelar = async (reserva) => {
     const cancelada = await cancelarReserva(detalles(reserva), (motivo) => cancelar(obtenerId(reserva), motivo), false);
@@ -94,9 +134,25 @@ export default function ListaMisReservas({
                     </td>
                     <td>
                       {cancelable ? (
-                        <button type="button" className="btn-gb btn-gb-danger btn-gb-sm" onClick={() => handleCancelar(r)}>
-                          Cancelar
-                        </button>
+                        <div className="gb-acciones-fila">
+                          {reprogramar && (
+                            <button type="button" className="btn-gb btn-gb-neutral btn-gb-sm"
+                              onClick={() => setReprogramando(datosReprogramacion(r))}>
+                              <BsCalendar2Week /> Cambiar fecha
+                            </button>
+                          )}
+                          <button type="button" className="btn-gb btn-gb-danger btn-gb-sm" onClick={() => handleCancelar(r)}>
+                            Cancelar
+                          </button>
+                        </div>
+                      ) : r.estado === "FINALIZADA" && categoria ? (
+                        calificaciones[obtenerId(r)]
+                          ? <span className="gb-celda-secundaria">Tu calificación <Estrellas valor={calificaciones[obtenerId(r)]} /></span>
+                          : (
+                            <button type="button" className="btn-gb btn-gb-primary btn-gb-sm" onClick={() => setCalificando(r)}>
+                              <BsStar /> Calificar
+                            </button>
+                          )
                       ) : (
                         <span className="gb-celda-secundaria">—</span>
                       )}
@@ -107,6 +163,14 @@ export default function ListaMisReservas({
             </tbody>
           </table>
         </div>
+      )}
+
+      {reprogramando && (
+        <ModalReprogramar reserva={reprogramando} onCerrar={() => setReprogramando(null)} onGuardar={guardarReprogramacion} />
+      )}
+      {calificando && (
+        <ModalCalificar lugar={datosReprogramacion ? datosReprogramacion(calificando).lugar : ""}
+          onCerrar={() => setCalificando(null)} onGuardar={guardarCalificacion} />
       )}
     </div>
   );

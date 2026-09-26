@@ -88,3 +88,17 @@ export const obtenerFechasOcupadas = async (idHabitacion) => {
   if (!res.ok) throw new Error(await extraerMensajeError(res, "Error al consultar disponibilidad"));
   return res.json(); // [{ checkIn: "...", checkOut: "..." }, ...]
 };
+
+/**
+ * Cambia las fechas de la estadía sin cancelarla. Recibe los días "yyyy-MM-dd":
+ * el backend fija el check-in a las 3:00 p. m. y el check-out a las 12:00 m.
+ */
+export const reprogramarReservaHotel = async (id, checkIn, checkOut) => {
+  const res = await apiFetch(`${API_URL}/api/reservas/hotel/${id}/reprogramar`, {
+    method: "PATCH",
+    headers: authHeaders(),
+    body: JSON.stringify({ inicio: `${checkIn}T00:00:00`, fin: `${checkOut}T00:00:00` }),
+  });
+  if (!res.ok) throw new Error(await extraerMensajeError(res, "No se pudo reprogramar la reserva"));
+  return res.json();
+};

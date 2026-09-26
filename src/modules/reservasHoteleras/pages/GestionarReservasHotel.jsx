@@ -6,6 +6,7 @@ import {
   obtenerResumenHotel,
   confirmarReservaHotel,
   cancelarReservaHotel,
+  reprogramarReservaHotel,
 } from "../api/ReservaHotelApi";
 import { fecha, fechaHora, pesos } from "../../../shared/utils/formato";
 
@@ -65,6 +66,11 @@ export default function GestionarReservasHotel() {
       resumen={obtenerResumenHotel}
       confirmar={confirmarReservaHotel}
       cancelar={cancelarReservaHotel}
+      reprogramar={reprogramarReservaHotel}
+      datosReprogramacion={(r) => ({
+        tipo: "HOTEL", id: r.idH, lugar: `Habitación ${r.numeroHabitacion} · ${r.nombreCliente || r.docUsuario}`,
+        inicio: r.fCheckIn, fin: r.fCheckOut, precioNoche: r.pNoche,
+      })}
       obtenerId={(r) => r.idH}
       columnas={columnas}
       detalles={(r) => ({

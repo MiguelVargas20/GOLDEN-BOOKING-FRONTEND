@@ -7,7 +7,7 @@ import styles from '../styles/Navbar.module.css';
 import { useTheme } from '../context/ThemeContext.jsx';
 import { BsSun, BsMoonStarsFill, BsBoxArrowRight, BsPersonCircle } from 'react-icons/bs';
 import { MdSportsTennis, MdKingBed, MdAddBox, MdCategory } from 'react-icons/md';
-import { BsCalendarCheck, BsClockHistory, BsGrid, BsSearch, BsPersonPlus } from 'react-icons/bs';
+import { BsCalendarCheck, BsClockHistory, BsGrid, BsSearch, BsPersonPlus, BsCalendar3Week, BsFileEarmarkBarGraph } from 'react-icons/bs';
 import { useAuth } from '../context/AuthContext.jsx';
 import Swal from 'sweetalert2';
 
@@ -18,6 +18,8 @@ import { useRespuestasNoVistas } from "../../modules/mensajes/hooks/useRespuesta
 import { BiBell } from "react-icons/bi";
 // Reservas pendientes de aprobación (contador para el ADMIN)
 import { useReservasPendientes } from "../hooks/useReservasPendientes";
+// Campana del CLIENTE: avisos de sus reservas y respuestas a sus mensajes
+import CampanaCliente from "../../modules/notificaciones/components/CampanaCliente";
 
 /**
  * Componente ComponentNavbar
@@ -178,6 +180,9 @@ export default function ComponentNavbar() {
                                                 <>
                                                     <ItemMenu to="/reservas-hoteleras/gestionar" icono={<BsCalendarCheck />} titulo="Gestionar reservas" texto="Aprobar o cancelar solicitudes." badge={pendientes.hotel} onElegir={cerrarMenus} />
                                                     <ItemMenu to="/recepcion/nueva-reserva?tipo=hotel" icono={<BsPersonPlus />} titulo="Reservar para un cliente" texto="Registro en recepción." onElegir={cerrarMenus} />
+                                                    <NavDropdown.Header className={styles.megaTitulo}>Administración</NavDropdown.Header>
+                                                    <ItemMenu to="/calendario" icono={<BsCalendar3Week />} titulo="Calendario de ocupación" texto="Semana por espacio y habitación." onElegir={cerrarMenus} />
+                                                    <ItemMenu to="/reportes" icono={<BsFileEarmarkBarGraph />} titulo="Reportes" texto="Reservas e ingresos en Excel o PDF." onElegir={cerrarMenus} />
                                                 </>
                                             )}
                                         </section>
@@ -245,29 +250,13 @@ export default function ComponentNavbar() {
                                     </div>
                                 )}
 
-                                {/* 🆕 NOTIFICACIONES PARA USUARIOS NORMALES (respuestas del admin a sus mensajes) */}
+                                {/* CAMPANA DEL CLIENTE: avisos de sus reservas y respuestas a sus mensajes */}
                                 {!isAdmin() && (
-                                    <div 
-                                        className="position-relative d-flex align-items-center justify-content-center mx-1 mx-md-2" 
-                                        onClick={() => handleNavigate("/mis-mensajes")}
-                                        style={{ 
-                                            cursor: "pointer", 
-                                            color: isDarkMode ? "#f8f9fa" : "#212529",
-                                            transition: "color 0.3s ease"
-                                        }}
-                                        title="Mis mensajes"
-                                    >
-                                        <BiBell size={22} />
-                                        {respuestasNoVistas > 0 && (
-                                            <span 
-                                                className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                                                style={{ fontSize: "0.6rem", padding: "0.3em 0.5em" }}
-                                            >
-                                                {respuestasNoVistas > 9 ? "9+" : respuestasNoVistas}
-                                                <span className="visually-hidden">respuestas nuevas</span>
-                                            </span>
-                                        )}
-                                    </div>
+                                    <CampanaCliente
+                                        respuestasNoVistas={respuestasNoVistas}
+                                        abierto={menuAbierto === "campana"}
+                                        onToggle={(abrir) => setMenuAbierto(abrir ? "campana" : null)}
+                                    />
                                 )}
 
                                 <div

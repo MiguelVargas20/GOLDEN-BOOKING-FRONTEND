@@ -1,0 +1,20 @@
+/* Estrellas y opiniones (catálogos, detalle y "Mis reservas") */
+.cal-estrellas { display: inline-flex; align-items: center; gap: 2px; color: #f6ad1e; font-size: 0.95rem; }
+.cal-total { margin-left: 6px; color: var(--gb-text-muted); font-size: 0.8rem; font-weight: 600; }
+.cal-sin { color: var(--gb-text-muted); font-size: 0.8rem; }
+
+.cal-selector { display: flex; align-items: center; gap: 4px; }
+.cal-selector button {
+  background: none; border: 0; padding: 2px; font-size: 2rem; line-height: 1; cursor: pointer;
+  color: var(--gb-border); transition: transform 0.12s ease, color 0.12s ease;
+}
+.cal-selector button.activa { color: #f6ad1e; }
+.cal-selector button:hover { transform: scale(1.12); }
+.cal-selector button:focus-visible { outline: 2px solid var(--gb-primary); border-radius: 6px; }
+.cal-selector-texto { margin-left: 10px; font-weight: 600; color: var(--gb-text-secondary, var(--gb-text-muted)); }
+
+.cal-opiniones { margin-top: 1.5rem; }
+.cal-promedio { margin-bottom: 12px; }
+.cal-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.cal-lista li { border-top: 1px solid var(--gb-border); padding-top: 12px; }
+.cal-lista-cabecera { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 4px; }

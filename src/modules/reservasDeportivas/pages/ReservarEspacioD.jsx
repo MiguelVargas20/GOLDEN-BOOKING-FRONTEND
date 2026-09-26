@@ -20,6 +20,7 @@ import { imagenEspacio, usarImagenDeRespaldo } from "../utils/imagenEspacio";
 import { pesos, hora } from "../../../shared/utils/formato";
 import { escapeHtml } from "../../../shared/utils/escapeHtml";
 import { toLocalISOString, inicioValido, finValido, finSugerido, precioEstimado as calcularPrecio } from "../utils/horarioEspacio";
+import Opiniones from "../../calificaciones/components/Opiniones";
 
 registerLocale("es", es);
 
@@ -236,6 +237,7 @@ function ReservarEspacioD() {
           <p className="re-nota">La reserva queda pendiente hasta que la administración la apruebe.</p>
         </Form>
       </div>
+      <Opiniones categoria="DEPORTE" idRecurso={espacio.id} />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { BsArrowClockwise, BsCalendarCheck, BsBoxArrowInRight, BsBoxArrowRight, BsCashCoin, BsEnvelope, BsHourglassSplit, BsPersonPlus, BsArrowUpRight, BsArrowDownRight } from "react-icons/bs";
+import { BsArrowClockwise, BsCalendarCheck, BsBoxArrowInRight, BsBoxArrowRight, BsCashCoin, BsEnvelope, BsHourglassSplit, BsPersonPlus, BsArrowUpRight, BsArrowDownRight, BsCalendar3Week, BsFileEarmarkBarGraph } from "react-icons/bs";
 import { MdSportsTennis, MdKingBed } from "react-icons/md";
 import { obtenerDashboard } from "../api/DashboardApi";
 import { confirmarReservaDeporte, cancelarReservaDeporte } from "../../reservasDeportivas/api/ReservaDeporteApi";
@@ -121,6 +121,12 @@ export default function DashboardAdmin() {
           </p>
         </div>
         <div className="gb-panel-acciones">
+          <button type="button" className="btn-gb btn-gb-neutral btn-gb-sm" onClick={() => navigate("/calendario")}>
+            <BsCalendar3Week /> Calendario
+          </button>
+          <button type="button" className="btn-gb btn-gb-neutral btn-gb-sm" onClick={() => navigate("/reportes")}>
+            <BsFileEarmarkBarGraph /> Reportes
+          </button>
           <button type="button" className="btn-gb btn-gb-neutral btn-gb-sm" onClick={() => navigate("/recepcion/nueva-reserva?tipo=deporte")}>
             <BsPersonPlus /> Reservar para un cliente
           </button>

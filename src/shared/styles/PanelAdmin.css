@@ -206,6 +206,29 @@
 .gb-swal-detalle span { color: #718096; }
 .gb-swal-nota { font-size: 0.85rem; color: #718096; margin-top: 10px; }
 
+/* ── Historial de una reserva (línea de tiempo en SweetAlert) ── */
+.gb-historial { list-style: none; margin: 0; padding: 0 0 0 18px; text-align: left; border-left: 2px solid #e2e8f0; }
+.gb-historial li { position: relative; padding: 0 0 14px 14px; display: grid; gap: 2px; }
+.gb-historial li::before {
+  content: ""; position: absolute; left: -25px; top: 3px; width: 12px; height: 12px; border-radius: 50%;
+  background: #a0aec0; border: 2px solid #fff; box-shadow: 0 0 0 2px #e2e8f0;
+}
+.gb-historial span { font-size: 0.82rem; color: #718096; }
+.gb-historial em { font-size: 0.85rem; color: #4a5568; }
+.gb-historial-creada::before { background: #f38d1e !important; }
+.gb-historial-confirmada::before { background: #38a169 !important; }
+.gb-historial-cancelada::before { background: #e53e3e !important; }
+.gb-historial-reprogramada::before { background: #3182ce !important; }
+.gb-historial-finalizada::before { background: #718096 !important; }
+.gb-historial-calificada::before { background: #f6ad1e !important; }
+
+/* Total del diálogo "Cambiar fecha" */
+.rp-total {
+  display: flex; justify-content: space-between; align-items: center; padding: 10px 14px;
+  border-radius: 10px; background: var(--gb-surface-hover); font-weight: 600;
+}
+.rp-total strong { color: var(--gb-primary); font-size: 1.1rem; }
+
 @media (max-width: 576px) {
   .gb-buscador { min-width: 0; width: 100%; }
   .gb-panel-acciones { width: 100%; }

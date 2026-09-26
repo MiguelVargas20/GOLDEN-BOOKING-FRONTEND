@@ -15,13 +15,14 @@ function describir(aviso) {
   const cuando = aviso.categoria === "DEPORTE"
     ? fechaHora(aviso.inicio)
     : `${fecha(aviso.inicio)} → ${fecha(aviso.fin)}`;
-  return aviso.accion === "NUEVA"
-    ? { titulo: "Nueva solicitud de reserva", texto: `${aviso.cliente} · ${aviso.lugar} · ${cuando}`, icono: "info" }
-    : { titulo: "Un cliente canceló su reserva", texto: `${aviso.cliente} · ${aviso.lugar} · ${cuando}`, icono: "warning" };
+  const texto = `${aviso.cliente} · ${aviso.lugar} · ${cuando}`;
+  if (aviso.accion === "NUEVA") return { titulo: "Nueva solicitud de reserva", texto, icono: "info" };
+  if (aviso.accion === "REPROGRAMADA") return { titulo: "Un cliente cambió la fecha de su reserva", texto, icono: "info" };
+  return { titulo: "Un cliente canceló su reserva", texto, icono: "warning" };
 }
 
 /**
- * Avisos en vivo para el ADMIN: cuando un cliente crea o cancela una reserva
+ * Avisos en vivo para el ADMIN: cuando un cliente crea, cancela o reprograma una reserva
  * muestra una notificación (clic → ir a gestionar) y dispara el evento
  * "reservas cambiaron" para que la Navbar y el dashboard se actualicen solos.
  *

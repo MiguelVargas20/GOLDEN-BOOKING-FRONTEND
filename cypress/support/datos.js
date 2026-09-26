@@ -119,3 +119,68 @@ export const dashboard = () => ({
   tendencia: [],
   espaciosTop: [],
 });
+
+// ── Funciones nuevas: historial, notificaciones, calendario, reportes ────
+export const historial = [
+  { accion: "CREADA", fecha: `${enDias(0)}T08:30:00`, usuario: "laura", rol: "CLIENTE" },
+  { accion: "CONFIRMADA", fecha: `${enDias(0)}T09:15:00`, usuario: "admin", rol: "ADMINISTRADOR" },
+  { accion: "REPROGRAMADA", fecha: `${enDias(0)}T10:00:00`, usuario: "admin", rol: "ADMINISTRADOR", detalle: "Horario anterior: 12/10/2026 10:00 a. m." },
+];
+
+export const notificaciones = [
+  { id: "n1", tipo: "RESERVA_APROBADA", categoria: "HOTEL", idReserva: "rh1", titulo: "Reserva aprobada",
+    mensaje: "Tu reserva de la habitación 101 fue aprobada. ¡Te esperamos!", fecha: `${enDias(0)}T09:00:00`, leida: false },
+  { id: "n2", tipo: "RESERVA_CANCELADA", categoria: "DEPORTE", idReserva: "rd1", titulo: "Reserva cancelada",
+    mensaje: "La administración canceló tu reserva de Cancha de Tenis 1. Motivo: Mantenimiento", fecha: `${enDias(0)}T08:00:00`, leida: false },
+  { id: "n3", tipo: "CALIFICAR", categoria: "DEPORTE", idReserva: "rd9", titulo: "¿Cómo te fue?",
+    mensaje: "Califica Cancha de Tenis 1: tu opinión nos ayuda a mejorar.", fecha: `${enDias(-1)}T20:00:00`, leida: true },
+];
+
+/** Lunes de la semana actual como "yyyy-MM-dd" (el calendario empieza en lunes). */
+export const lunesActual = () => {
+  const d = new Date();
+  d.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+  const p = (x) => String(x).padStart(2, "0");
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+};
+
+export const calendario = (desde) => {
+  const p = (x) => String(x).padStart(2, "0");
+  const dia = (n) => {
+    const d = new Date(`${desde}T00:00:00`);
+    d.setDate(d.getDate() + n);
+    return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+  };
+  return {
+    desde, hasta: dia(6),
+    espacios: [
+      { id: "e1", nombre: "Cancha de Tenis 1", detalle: "Tenis", estado: "ACTIVO", horaApertura: "06:00:00", horaCierre: "22:00:00",
+        reservas: [
+          { idReserva: "rd1", cliente: "Laura Pérez", inicio: `${dia(1)}T10:00:00`, fin: `${dia(1)}T11:00:00`, estado: "CONFIRMADA" },
+          { idReserva: "rd2", cliente: "Pedro Gómez", inicio: `${dia(1)}T16:00:00`, fin: `${dia(1)}T17:30:00`, estado: "PENDIENTE" },
+        ] },
+    ],
+    habitaciones: [
+      { id: "h1", nombre: "Habitación 101", detalle: "Suite", estado: "DISPONIBLE",
+        reservas: [{ idReserva: "rh1", cliente: "Laura Pérez", inicio: `${dia(2)}T15:00:00`, fin: `${dia(4)}T12:00:00`, estado: "CONFIRMADA" }] },
+      { id: "h2", nombre: "Habitación 102", detalle: "Suite", estado: "MANTENIMIENTO", reservas: [] },
+    ],
+  };
+};
+
+export const reporte = (desde, hasta) => ({
+  desde, hasta, generadoEn: `${enDias(0)}T09:00:00`,
+  resumen: {
+    totalReservas: 3, reservasDeporte: 2, reservasHotel: 1,
+    porEstado: { PENDIENTE: 1, CONFIRMADA: 1, CANCELADA: 0, FINALIZADA: 1 },
+    ingresos: 400000, ingresosDeporte: 40000, ingresosHotel: 360000,
+  },
+  filas: [
+    { categoria: "HOTEL", idReserva: "rh1", cliente: "Laura Pérez", documento: "52123456", lugar: "Habitación 101",
+      inicio: `${desde}T15:00:00`, fin: `${desde}T12:00:00`, estado: "FINALIZADA", total: 360000, registradaEnRecepcion: false },
+    { categoria: "DEPORTE", idReserva: "rd1", cliente: "Pedro Gómez", documento: "80123456", lugar: "Cancha de Tenis 1",
+      inicio: `${desde}T10:00:00`, fin: `${desde}T11:00:00`, estado: "CONFIRMADA", total: 40000, registradaEnRecepcion: true },
+    { categoria: "DEPORTE", idReserva: "rd2", cliente: "Laura Pérez", documento: "52123456", lugar: "Cancha de Tenis 1",
+      inicio: `${desde}T16:00:00`, fin: `${desde}T17:00:00`, estado: "PENDIENTE", total: 40000, registradaEnRecepcion: false },
+  ],
+});
