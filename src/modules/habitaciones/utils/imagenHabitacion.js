@@ -1,8 +1,8 @@
 import { API_URL } from "../../../shared/api/apiUtils";
+import fotoHabitacion from "../../../assets/aaaa.jpg";
 
-/** Imagen por defecto cuando la habitación no tiene una subida por el admin. */
-export const IMAGEN_HABITACION_POR_DEFECTO =
-  "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80";
+/** Imagen por defecto (local, sin depender de servicios externos) si el admin no subió una. */
+export const IMAGEN_HABITACION_POR_DEFECTO = fotoHabitacion;
 
 /**
  * URL de la imagen de la habitación. El backend devuelve una ruta relativa

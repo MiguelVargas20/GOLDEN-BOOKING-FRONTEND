@@ -1,221 +1,144 @@
-.register-page {
-    display: flex;
-    height: 100vh; /* Obliga a medir exactamente el alto de la pantalla */
-    width: 100%;
-    background-color: #ffffff;
-    overflow: hidden; /* Evita que toda la página haga scroll y rompa el diseño */
+/* ═══════════════════════════════════════════════════════════
+   REGISTRO — responsive y compatible con modo oscuro (--gb-*)
+   Escritorio: imagen a la izquierda, formulario a la derecha.
+   Tablet/móvil: una columna, la imagen pasa a ser una franja.
+   ═══════════════════════════════════════════════════════════ */
+
+.rg-pagina {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  background: var(--bs-body-bg, #fff);
+  color: var(--gb-text-primary);
 }
 
-/* LADO IZQUIERDO: FORMULARIO (50% de la pantalla) */
-.form-side {
-    width: 50%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 40px;
-    box-sizing: border-box; /* Asegura que el padding no haga crecer el contenedor */
-    overflow-y: auto; 
-    
-    /* --- CÓDIGO PARA OCULTAR LA BARRA DE DESPLAZAMIENTO --- */
-    scrollbar-width: none; /* Oculta la barra en Firefox */
-    -ms-overflow-style: none; /* Oculta la barra en IE y Edge */
+/* ── Imagen decorativa ── */
+.rg-imagen {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  background: linear-gradient(180deg, rgba(20, 16, 10, 0.1), rgba(20, 16, 10, 0.75)),
+              url("../../../assets/aaaa.jpg") center / cover no-repeat;
+  display: flex;
+  align-items: flex-end;
+  padding: 48px;
+}
+.rg-imagen-texto { color: #fff; max-width: 420px; }
+.rg-imagen-texto h2 { font-weight: 800; font-size: clamp(1.6rem, 2.6vw, 2.4rem); line-height: 1.15; margin: 0 0 8px; }
+.rg-imagen-texto p { margin: 0; opacity: 0.9; }
+
+/* ── Formulario ── */
+.rg-lado-form { display: flex; justify-content: center; padding: 32px clamp(16px, 4vw, 56px) 48px; }
+.rg-contenido { width: 100%; max-width: 680px; }
+
+.rg-volver {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 0.85rem; font-weight: 600;
+  color: var(--gb-text-muted);
+  text-decoration: none;
+  margin-bottom: 20px;
+}
+.rg-volver:hover { color: var(--gb-primary); }
+
+.rg-encabezado { margin-bottom: 20px; }
+.rg-logo { height: 56px; width: auto; margin-bottom: 12px; }
+.rg-encabezado h1 { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; margin: 0; color: var(--gb-item-title); }
+.rg-encabezado p { margin: 4px 0 0; color: var(--gb-text-muted); }
+
+.rg-error-servidor {
+  background: var(--gb-status-danger-bg);
+  color: var(--gb-status-danger-text);
+  border: 1px solid var(--gb-border-danger);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 0.9rem;
+  margin-bottom: 16px;
 }
 
-/* Oculta la barra en Chrome, Safari y Opera */
-.form-side::-webkit-scrollbar {
-    display: none;
+.rg-form fieldset {
+  border: 1px solid var(--gb-border);
+  border-radius: 14px;
+  padding: 16px 18px 6px;
+  margin: 0 0 16px;
+  background: var(--gb-surface);
+}
+.rg-form legend {
+  float: none;
+  width: auto;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--gb-primary);
+  padding: 0 6px;
+  margin: 0 0 4px -6px;
 }
 
-.form-content {
-    max-width: 600px;
-    width: 100%;
-    padding: 20px 0; /* Un poco de aire arriba y abajo */
+.rg-rejilla { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 14px; }
+.rg-completo { grid-column: 1 / -1; }
+
+.rg-campo { display: flex; flex-direction: column; margin-bottom: 12px; min-width: 0; }
+.rg-campo label { font-size: 0.82rem; font-weight: 600; margin-bottom: 5px; color: var(--gb-text-primary); }
+.rg-opcional { font-weight: 400; color: var(--gb-text-muted); }
+
+.rg-campo input,
+.rg-campo select {
+  width: 100%;
+  border: 1px solid var(--gb-border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  background: var(--gb-surface);
+  color: var(--gb-text-primary);
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
-.register-header {
-    margin-bottom: 40px;
+.rg-campo input:focus,
+.rg-campo select:focus {
+  outline: none;
+  border-color: var(--gb-primary);
+  box-shadow: 0 0 0 3px rgba(243, 141, 30, 0.15);
+}
+.rg-campo .rg-invalido { border-color: var(--gb-danger); }
+.rg-error { font-size: 0.75rem; color: var(--gb-status-danger-text); margin-top: 4px; }
+
+.rg-password { position: relative; }
+.rg-password input { padding-right: 44px; }
+.rg-password button {
+  position: absolute; top: 50%; right: 6px; transform: translateY(-50%);
+  border: none; background: none; color: var(--gb-text-muted);
+  width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center;
 }
 
-.main-logo {
-    height: 60px; /* Ajustado según la imagen */
-    margin-bottom: 25px;
-    display: block;
+.rg-enviar {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 13px;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #fff;
+  background: var(--gb-primary);
+  transition: background 0.2s, transform 0.1s;
+}
+.rg-enviar:hover:not(:disabled) { background: var(--gb-primary-hover); }
+.rg-enviar:active:not(:disabled) { transform: scale(0.99); }
+.rg-enviar:disabled { opacity: 0.7; cursor: progress; }
+
+.rg-pie { text-align: center; margin: 14px 0 0; font-size: 0.9rem; color: var(--gb-text-muted); }
+.rg-pie a { color: var(--gb-primary); font-weight: 700; text-decoration: none; }
+
+/* ── Tablet y móvil: una columna ── */
+@media (max-width: 991.98px) {
+  .rg-pagina { grid-template-columns: 1fr; }
+  .rg-imagen { position: relative; height: 180px; padding: 20px 24px; }
+  .rg-imagen-texto h2 { font-size: 1.4rem; }
+  .rg-lado-form { padding-top: 20px; }
 }
 
-.register-title {
-    font-size: 2.8rem;
-    font-weight: 900; /* Extra bold para igualar tu diseño */
-    color: #17202a; /* Azul/Gris muy oscuro */
-    text-transform: uppercase;
-    margin: 0;
-    letter-spacing: -0.5px;
-}
-
-.register-subtitle {
-    color: #8391a5;
-    font-size: 1.1rem;
-    margin-top: 5px;
-    font-weight: 400;
-}
-
-/* GRID DEL FORMULARIO */
-.input-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 25px 20px; /* Más espacio vertical entre filas */
-    margin-bottom: 25px;
-}
-
-.field-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.field-group.full-width {
-    grid-column: span 2;
-}
-
-.field-group label {
-    font-size: 0.85rem;
-    font-weight: 800; /* Texto muy grueso como en la imagen */
-    color: #17202a;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-/* ESTILO DE LOS INPUTS IGUAL AL MOCKUP */
-.professional-form input, 
-.professional-form select {
-    padding: 14px 18px;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    background: #f4f7f9; /* Gris azulado muy claro */
-    color: #334155;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    outline: none;
-    font-family: inherit;
-}
-
-/* Cuando el usuario escribe o hace focus */
-.professional-form input:focus, 
-.professional-form select:focus {
-    border-color: #cbd5e1;
-    background: #e2e8f0; /* Se oscurece un poco al estilo de tu imagen */
-}
-
-/* PASSWORD FIELD */
-.password-input-container {
-    position: relative;
-    display: flex;
-}
-
-.password-input-container input {
-    width: 100%;
-    padding-right: 45px;
-}
-
-.eye-toggle {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    color: #475569;
-    cursor: pointer;
-    font-size: 1.2rem;
-    display: flex;
-    align-items: center;
-}
-
-/* BOTONES */
-.form-footer {
-    margin-top: 30px;
-    display: flex;
-    flex-direction: row; /* Coloca los elementos uno al lado del otro */
-    justify-content: space-between; /* Uno a la izquierda, otro a la derecha */
-    align-items: center;
-}
-
-.submit-gold-btn {
-    width: 200px; /* Mantiene el tamaño del botón como en tu diseño original */
-    background: linear-gradient(180deg, #ffdb00 0%, #ff8a00 100%);
-    color: #000000;
-    border: none;
-    padding: 16px;
-    border-radius: 8px;
-    font-weight: 900;
-    font-size: 1.1rem;
-    cursor: pointer;
-    text-transform: uppercase;
-    box-shadow: 0 4px 10px rgba(255, 138, 0, 0.2);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.submit-gold-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(255, 138, 0, 0.4);
-}
-
-/* LADO DERECHO: IMAGEN (50% de la pantalla) */
-.image-side {
-    width: 50%;
-    height: 100%;
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    position: relative;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
-    padding: 0;
-}
-
-
-/* CAJA DE TEXTO OSCURA SOBRE LA IMAGEN */
-.image-overlay {
-    background: linear-gradient(to top, #1a202c 0%, rgba(26, 32, 44, 0.9) 70%, transparent 100%);
-    width: 80%;
-    border-radius: 20px 20px 0 0; /* Borde curvo arriba, recto abajo */
-    padding: 40px 30px 20px 30px;
-    color: #fff;
-    text-align: center;
-}
-
-.image-overlay h2 {
-    margin: 0;
-    font-size: 2rem;
-    font-weight: 900;
-    text-transform: uppercase;
-}
-
-/* RESPONSIVE */
-@media (max-width: 1100px) {
-    .image-side {
-        display: none; /* Oculta la imagen en pantallas pequeñas */
-    }
-}
-
-@media (max-width: 600px) {
-    .input-grid {
-        grid-template-columns: 1fr;
-    }
-    .field-group.full-width {
-        grid-column: span 1;
-    }
-}
-.back-link-clean {
-    background: transparent !important; /* Fuerza a quitar el fondo gris oscuro */
-    border: none !important;
-    color: #17202a;
-    font-weight: 800;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-    font-size: 1rem;
-    box-shadow: none !important; /* Quita cualquier sombra por defecto */
-    padding: 0 !important;
+@media (max-width: 575.98px) {
+  .rg-rejilla { grid-template-columns: 1fr; }
+  .rg-imagen { height: 130px; }
+  .rg-imagen-texto p { display: none; }
+  .rg-form fieldset { padding: 14px 14px 4px; }
+  .rg-logo { height: 44px; }
 }

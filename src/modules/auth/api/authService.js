@@ -54,19 +54,24 @@ export async function registrarUsuario(data) {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                nombre: data.nombre,
-                apellido: data.apellido,
+                nombre: data.nombre.trim(),
+                apellido: data.apellido.trim(),
                 documento: {
                     tipo: data.tipoDoc,
-                    numeroD: data.numeroDoc,
+                    numeroD: data.numeroDoc.trim(),
                 },
-
-                // Información de contacto y credenciales
-                email: data.email,
-                username: data.username,
+                fechaNacimiento: data.fechaNacimiento, // "YYYY-MM-DD" (LocalDate)
+                telefono: data.telefono.trim(),
+                direccion: {
+                    cll: data.calle?.trim() || null,
+                    crr: data.carrera?.trim() || null,
+                    cd: data.ciudad.trim(),
+                    ps: data.pais.trim(),
+                },
+                // Credenciales. El estado (ACTIVO) y el rol (CLIENTE) los fija el backend.
+                email: data.email.trim(),
+                username: data.username.trim(),
                 password: data.password,
-                estado: "ACTIVO",
-                roles: ["ROL_CLIENTE"], // Asignación automática del rol por defecto
             }),
         });
 
