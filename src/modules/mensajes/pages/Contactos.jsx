@@ -1,12 +1,13 @@
 import { useState } from "react";
-import { Container, Row, Col, Form, Spinner, Button } from "react-bootstrap";
+import { Row, Col, Form, Spinner } from "react-bootstrap";
+import { BsInbox, BsChatDots, BsGeoAlt, BsEnvelope, BsTelephone } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { enviarMensaje } from "../api/ContactoApi";
 import { useAuth } from "../../../shared/context/AuthContext";
-import '../styles/Contactos.css';
+import '../../../shared/styles/PanelAdmin.css';
 import '../../../shared/styles/BotonesCompartidos.css';
-import mapa from '../../../assets/mapa.png';
+import '../styles/Contactos.css';
 import mapaimg from '../../../assets/mapa-img.png';
 
 export default function Contactos() {
@@ -17,7 +18,7 @@ export default function Contactos() {
 
     const [formData, setFormData] = useState({
         nombre: user?.nombreCompleto || "",
-        correo: "",
+        correo: user?.email || "",
         contenido: "",
     });
     const [enviando, setEnviando] = useState(false);
@@ -53,7 +54,7 @@ export default function Contactos() {
                 timer: 2200,
                 showConfirmButton: false,
             });
-            setFormData({ nombre: user?.nombreCompleto || "", correo: "", contenido: "" });
+            setFormData({ nombre: user?.nombreCompleto || "", correo: user?.email || "", contenido: "" });
         } catch (err) {
             Swal.fire({ title: "Error", text: err.message || "No se pudo enviar el mensaje.", icon: "error", confirmButtonColor: "#f38d1e" });
         } finally {
@@ -62,79 +63,69 @@ export default function Contactos() {
     };
 
     return (
-        <Container className="my-4">
-            {/* Cabecera con Título y Botón Admin alineados */}
-            <Row className="align-items-center mb-4">
-                <Col>
-                    <h1 className="title-contacts m-0">CONTACTANOS</h1>
-                </Col>
-                {esAdmin && (
-                    <Col xs="auto">
-                        <Button 
-                            variant="danger" 
-                            onClick={() => navigate("/mensajes")}
-                            style={{ backgroundColor: "#f38d1e", borderColor: "#f38d1e" }} // O mantén el de bootstrap
-                        >
-                            Ver Mensajes (Admin)
-                        </Button>
-                    </Col>
-                )}
-            </Row>
-
-            {/* Caja contenedora principal del formulario y mapa */}
-            <div className="contact-box p-4">
-                <Form onSubmit={handleSubmit}>
-                    <Row className="g-4"> {/* g-4 añade separación automática entre columnas */}
-                        
-                        {/* COLUMNA IZQUIERDA: FORMULARIO */}
-                        <Col lg={6} md={12}>
-                            <Form.Group className="mb-3">
-                                <Form.Control
-                                    type="text"
-                                    placeholder="Cuéntanos tu nombre"
-                                    className="input-field nombre"
-                                    value={formData.nombre}
-                                    onChange={handleChange("nombre")}
-                                />
-                            </Form.Group>
-
-                            <Form.Group className="mb-3">
-                                <Form.Control
-                                    type="email"
-                                    placeholder="Correo electrónico"
-                                    className="input-field correo"
-                                    value={formData.correo}
-                                    onChange={handleChange("correo")}
-                                />
-                            </Form.Group>
-
-                            <Form.Group className="mb-3">
-                                <Form.Control
-                                    as="textarea"
-                                    rows={4}
-                                    placeholder="Escribe tu mensaje"
-                                    className="textarea-field mensaje"
-                                    value={formData.contenido}
-                                    onChange={handleChange("contenido")}
-                                />
-                            </Form.Group>
-
-                            <button type="submit" className="btn-gb btn-gb-primary btn-gb-lg w-100 mt-2" disabled={enviando}>
-                                {enviando ? <Spinner size="sm" /> : "ENVIAR MENSAJE"}
-                            </button>
-                        </Col>
-
-                        {/* COLUMNA DERECHA: MAPA */}
-                        <Col lg={6} md={12} className="map-section d-flex flex-column justify-content-center align-items-center">
-                            <div className="map-iframe w-100 text-center">
-                                <img src={mapaimg} alt="Mapa" className="img-fluid" style={{ maxHeight: '250px', objectFit: 'cover' }} />
-                            </div>
-                            <img src={mapa} alt="mapa" className="map-marker mt-2" />
-                        </Col>
-
-                    </Row>
-                </Form>
+        <div className="gb-panel">
+            <div className="gb-panel-header">
+                <div>
+                    <h1 className="gb-panel-titulo">Contác<span>tanos</span></h1>
+                    <p className="gb-panel-subtitulo">¿Dudas sobre una reserva o algo que mejorar? Escríbenos y te respondemos por correo.</p>
+                </div>
+                <div className="gb-panel-acciones">
+                    {esAdmin ? (
+                        <button type="button" className="btn-gb btn-gb-neutral btn-gb-sm" onClick={() => navigate("/mensajes")}>
+                            <BsInbox /> Bandeja de mensajes
+                        </button>
+                    ) : (
+                        <button type="button" className="btn-gb btn-gb-neutral btn-gb-sm" onClick={() => navigate("/mis-mensajes")}>
+                            <BsChatDots /> Mis mensajes
+                        </button>
+                    )}
+                </div>
             </div>
-        </Container>
+
+            <Row className="g-4">
+                <Col lg={7}>
+                    <div className="gb-tarjeta">
+                        <Form onSubmit={handleSubmit} noValidate className="gb-form">
+                            <h2 className="gb-seccion-titulo">Envíanos un mensaje</h2>
+                            <Form.Group className="mb-3">
+                                <Form.Label htmlFor="ct-nombre">Nombre</Form.Label>
+                                <Form.Control id="ct-nombre" type="text" maxLength={80} autoComplete="name"
+                                    value={formData.nombre} onChange={handleChange("nombre")} />
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label htmlFor="ct-correo">Correo electrónico</Form.Label>
+                                <Form.Control id="ct-correo" type="email" autoComplete="email" placeholder="usuario@correo.com"
+                                    value={formData.correo} onChange={handleChange("correo")} />
+                                <span className="gb-ayuda">Te responderemos a este correo.</span>
+                            </Form.Group>
+                            <Form.Group className="mb-3">
+                                <Form.Label htmlFor="ct-mensaje">Mensaje</Form.Label>
+                                <Form.Control id="ct-mensaje" as="textarea" rows={6} maxLength={1000}
+                                    placeholder="Cuéntanos en qué te podemos ayudar"
+                                    value={formData.contenido} onChange={handleChange("contenido")} />
+                                <span className="gb-ayuda">{formData.contenido.length}/1000</span>
+                            </Form.Group>
+                            <div className="gb-form-botones">
+                                <button type="submit" className="btn-gb btn-gb-primary" disabled={enviando}>
+                                    {enviando ? <><Spinner size="sm" /> Enviando…</> : "Enviar mensaje"}
+                                </button>
+                            </div>
+                        </Form>
+                    </div>
+                </Col>
+
+                <Col lg={5}>
+                    <div className="gb-tarjeta ct-info">
+                        <h2 className="gb-seccion-titulo">Dónde encontrarnos</h2>
+                        <img src={mapaimg} alt="Mapa de la ubicación del club" className="ct-mapa" />
+                        <ul className="ge-datos ct-datos">
+                            <li><BsGeoAlt /> Club Valle Dorado</li>
+                            <li><BsEnvelope /> contacto@valledorado.com</li>
+                            <li><BsTelephone /> +502 5555-5555</li>
+                        </ul>
+                    </div>
+                </Col>
+            </Row>
+        </div>
     );
 }

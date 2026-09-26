@@ -1,0 +1,107 @@
+/* ═══════════════════════════════════════════════════════════
+   Mensajes: bandeja del admin y "Mis mensajes" del cliente. Encabezado, buscador, paginador y
+   estado vacío vienen de PanelAdmin.css / Catalogo.css.
+   Colores con las variables del tema (modo claro y oscuro).
+   ═══════════════════════════════════════════════════════════ */
+
+.mensajes-page .gb-vacio {
+  text-align: center; padding: 48px 16px; border: 1px dashed var(--gb-border); border-radius: 14px; color: var(--gb-text-muted);
+}
+
+/* Switch "solo no leídos" con el color de la marca */
+.mensajes-page .form-switch .form-check-input:checked {
+  background-color: var(--gb-primary);
+  border-color: var(--gb-primary);
+}
+
+/* ── Tarjeta de mensaje ── */
+.mensaje-card {
+  border: 1px solid var(--gb-border);
+  border-radius: 16px;
+  background-color: var(--gb-surface);
+  color: var(--gb-text-primary);
+  box-shadow: 0 1px 2px rgba(26, 32, 44, 0.04), 0 6px 18px rgba(26, 32, 44, 0.05);
+  transition: box-shadow 0.2s ease;
+}
+.mensaje-card:hover { box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08); }
+.mensaje-card.no-leido { border-left: 5px solid var(--gb-primary); }
+.mensaje-card .border-bottom { border-color: var(--gb-border) !important; }
+
+.mensaje-remitente { font-weight: 700; color: var(--gb-item-title); font-size: 1.05rem; }
+.mensaje-correo { color: var(--gb-text-muted); font-size: 0.85rem; }
+.mensaje-fecha { color: var(--gb-text-muted); font-size: 0.78rem; font-weight: 500; }
+
+.mensajes-page .etiqueta {
+  display: block;
+  font-weight: 700;
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--gb-text-muted);
+  margin-bottom: 0.3rem;
+}
+
+.contenido-texto { font-size: 0.95rem; line-height: 1.5; color: var(--gb-text-primary); margin-bottom: 0.4rem; white-space: pre-wrap; }
+
+.mensaje-contenido-box { background-color: var(--gb-surface-hover); border-radius: 12px; padding: 0.9rem 1.1rem; }
+
+.respuesta-enviada {
+  background-color: var(--gb-icon-bg);
+  border-left: 4px solid var(--gb-primary);
+  border-radius: 10px;
+  padding: 0.9rem 1.1rem;
+  margin-top: 1rem;
+  white-space: pre-wrap;
+}
+.respuesta-enviada .etiqueta { color: var(--gb-primary); }
+
+/* ── Estados (color + texto) ── */
+.badge-nuevo, .badge-respondido, .badge-pendiente {
+  border-radius: 999px; font-weight: 700; font-size: 0.72rem; padding: 0.4em 0.85em;
+}
+.badge-nuevo { background-color: var(--gb-status-danger-bg) !important; color: var(--gb-status-danger-text) !important; }
+.badge-respondido { background-color: var(--gb-status-success-bg) !important; color: var(--gb-status-success-text) !important; }
+.badge-pendiente { background-color: var(--gb-status-warning-bg) !important; color: var(--gb-status-warning-text) !important; }
+
+/* ── Caja de responder ── */
+.caja-responder {
+  background-color: var(--gb-surface-hover);
+  border: 1px solid var(--gb-border);
+  border-radius: 12px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+.caja-responder textarea {
+  border-radius: 10px;
+  border: 1px solid var(--gb-border);
+  background: var(--gb-surface);
+  color: var(--gb-text-primary);
+  resize: vertical;
+}
+.caja-responder textarea:focus { border-color: var(--gb-primary); box-shadow: 0 0 0 3px rgba(243, 141, 30, 0.15); }
+
+/* ── "Mis mensajes" (cliente) ── */
+.mensaje-enviado-card { cursor: pointer; }
+.tu-mensaje { background-color: var(--gb-surface-hover); border-radius: 12px; padding: 0.9rem 1.1rem; }
+.respuesta-admin {
+  background-color: var(--gb-icon-bg);
+  border-left: 4px solid var(--gb-primary);
+  border-radius: 10px;
+  padding: 0.9rem 1.1rem;
+  margin-top: 1rem;
+  white-space: pre-wrap;
+}
+.respuesta-admin .etiqueta { color: var(--gb-primary); }
+.pendiente-respuesta {
+  margin-top: 1rem;
+  font-size: 0.88rem;
+  color: var(--gb-text-muted);
+  border: 1px dashed var(--gb-border);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+}
+.badge-nueva-respuesta {
+  background-color: var(--gb-status-warning-bg) !important;
+  color: var(--gb-status-warning-text) !important;
+  border-radius: 999px; font-weight: 700; font-size: 0.72rem; padding: 0.4em 0.85em;
+}

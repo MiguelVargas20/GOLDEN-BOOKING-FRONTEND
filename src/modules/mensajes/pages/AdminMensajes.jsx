@@ -1,8 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
-import { Container, Row, Col, Card, Button, Spinner, Badge, Form } from "react-bootstrap";
+import { Card, Button, Spinner, Badge, Form } from "react-bootstrap";
 import Swal from "sweetalert2";
 import { listarMensajes, marcarMensajeLeido, responderMensaje } from "../api/ContactoApi";
-import "../styles/AdminMensajes.css";
+import Paginador from "../../../shared/components/reservas/Paginador";
+import { fechaHora } from "../../../shared/utils/formato";
+import "../../../shared/styles/PanelAdmin.css";
+import "../styles/Mensajes.css";
 import "../../../shared/styles/BotonesCompartidos.css";
 
 export default function AdminMensajes() {
@@ -95,47 +98,29 @@ export default function AdminMensajes() {
   const mensajesFiltrados = soloNoLeidos ? mensajes.filter((m) => !m.leido) : mensajes;
 
   if (loading) return (
-    <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "50vh" }}>
-      <Spinner animation="border" style={{ color: "#f38d1e" }} />
-    </div>
+    <div className="gb-panel text-center py-5"><Spinner animation="border" style={{ color: "var(--gb-primary)" }} /></div>
   );
 
   return (
-    <Container className="py-4 mensajes-page">
-      <Row className="align-items-center mb-3">
-        <Col>
-          <h2 className="mensajes-titulo">
-            BANDEJA DE <span className="accent">MENSAJES</span>
-          </h2>
-        </Col>
-      </Row>
+    <div className="gb-panel mensajes-page">
+      <div className="gb-panel-header">
+        <div>
+          <h1 className="gb-panel-titulo">Bandeja de <span>mensajes</span></h1>
+          <p className="gb-panel-subtitulo">Mensajes que llegan desde Contáctanos. Al responder, el usuario recibe un correo.</p>
+        </div>
+        <div className="gb-panel-acciones">
+          <input type="search" className="gb-buscador" placeholder="Buscar por nombre de usuario"
+            value={busqueda} onChange={(e) => setBusqueda(e.target.value)} aria-label="Buscar mensajes" />
+          <Form.Check type="switch" id="filtro-no-leidos" label="Solo no leídos" checked={soloNoLeidos}
+            onChange={(e) => setSoloNoLeidos(e.target.checked)} className="fw-semibold" />
+        </div>
+      </div>
 
-      <Row className="align-items-center mb-4 mensajes-toolbar g-2">
-        <Col xs={12} sm={8} md={6}>
-          <Form.Control
-            className="mensajes-buscador"
-            placeholder="Buscar por nombre de usuario..."
-            value={busqueda}
-            onChange={(e) => setBusqueda(e.target.value)}
-          />
-        </Col>
-        <Col xs={12} sm="auto" className="ms-sm-auto d-flex align-items-center">
-          <Form.Check
-            type="switch"
-            id="filtro-no-leidos"
-            label="Solo no leídos"
-            checked={soloNoLeidos}
-            onChange={(e) => setSoloNoLeidos(e.target.checked)}
-            className="fw-semibold text-muted"
-          />
-        </Col>
-      </Row>
-
-      {error && <p className="text-danger">{error}</p>}
+      {error && <div className="alert alert-danger">{error}</div>}
 
       {mensajesFiltrados.length === 0 ? (
-        <div className="text-center py-5 card-vacia">
-          <p className="text-muted m-0">
+        <div className="gb-vacio">
+          <p className="m-0">
             {busqueda.trim()
               ? "No hay mensajes de ese usuario."
               : soloNoLeidos
@@ -169,7 +154,7 @@ export default function AdminMensajes() {
                   <span className="etiqueta">Mensaje Recibido</span>
                   <p className="contenido-texto">{m.contenido}</p>
                   <span className="mensaje-fecha">
-                    {m.fechaEnvio ? new Date(m.fechaEnvio).toLocaleString("es-CO") : ""}
+                    {fechaHora(m.fechaEnvio)}
                   </span>
                 </div>
 
@@ -219,10 +204,10 @@ export default function AdminMensajes() {
                 {m.respuesta && (
                   <div className="respuesta-enviada">
                     <div className="etiqueta">Tu respuesta</div>
-                    <p className="mb-2 text-dark">{m.respuesta}</p>
+                    <p className="mb-2">{m.respuesta}</p>
                     {m.fechaRespuesta && (
                       <span className="mensaje-fecha">
-                        {new Date(m.fechaRespuesta).toLocaleString("es-CO")}
+                        {fechaHora(m.fechaRespuesta)}
                       </span>
                     )}
                   </div>
@@ -233,29 +218,8 @@ export default function AdminMensajes() {
         </div>
       )}
 
-      {totalPaginas > 1 && (
-        <div className="d-flex justify-content-center gap-2 mt-4 mensajes-paginacion align-items-center">
-          <Button
-            variant="outline-secondary"
-            size="sm"
-            disabled={pagina === 0}
-            onClick={() => cargarMensajes(pagina - 1, busqueda)}
-          >
-            ← Anterior
-          </Button>
-          <span className="small text-muted fw-semibold px-2">
-            Página {pagina + 1} de {totalPaginas}
-          </span>
-          <Button
-            variant="outline-secondary"
-            size="sm"
-            disabled={pagina + 1 >= totalPaginas}
-            onClick={() => cargarMensajes(pagina + 1, busqueda)}
-          >
-            Siguiente →
-          </Button>
-        </div>
-      )}
-    </Container>
+      <Paginador pagina={pagina} totalPaginas={totalPaginas} etiqueta="mensajes"
+        onCambiar={(n) => cargarMensajes(n, busqueda)} />
+    </div>
   );
 }
