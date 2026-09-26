@@ -14,7 +14,7 @@ import Register from './modules/auth/pages/Register.jsx';
 import Forgot from './modules/auth/pages/Forgot.jsx';
 
 // Módulo: General / Dashboard (Privadas)
-import Home from './modules/home/pages/Home.jsx';
+import Inicio from './modules/home/pages/Inicio.jsx';
 import Contactos from './modules/mensajes/pages/Contactos.jsx';
 
 // Módulo: Reservas Deportivas (Clientes / Admin)
@@ -37,8 +37,6 @@ import GestionarReservasHotel from './modules/reservasHoteleras/pages/GestionarR
 // Módulo: Recepción (ADMIN reserva a nombre de un cliente)
 import NuevaReservaCliente from './modules/recepcion/pages/NuevaReservaCliente.jsx';
 
-// Panel de control del administrador
-import DashboardAdmin from './modules/dashboard/pages/DashboardAdmin.jsx';
 
 // Módulo: Gestión de Usuarios (Exclusivo ADMIN)
 import UsuariosH from './modules/usuarios/pages/UsuariosH.jsx';
@@ -96,9 +94,8 @@ export default function App() {
                     <Route path="/" element={<RutaProtegida><Layout /></RutaProtegida>}>
 
                         {/* Vista de Inicio del Sistema */}
-                        <Route path="/home" element={<Home />}>
-                            
-                        </Route>
+                        {/* Admin: panel de control (dashboard). Cliente: portada con los servicios. */}
+                        <Route path="/home" element={<Inicio />} />
 
                         {/* Sección informativa / Formulario de contacto directo */}
                         <Route path="/contactos" element={<Contactos />} />
@@ -181,9 +178,8 @@ export default function App() {
                             ========================================================= */}
                         
                         {/* --- PANEL DE CONTROL (indicadores del día, pendientes, habitaciones) --- */}
-                        <Route path="/dashboard" element={
-                            <RutaProtegida soloAdmin={true}><DashboardAdmin /></RutaProtegida>
-                        } />
+                        {/* El dashboard ahora es el Inicio del admin; la ruta vieja redirige */}
+                        <Route path="/dashboard" element={<Navigate to="/home" replace />} />
 
                         {/* --- MÓDULO CONTROL DE USUARIOS --- */}
                         {/* Tabla principal de control, visualización y auditoría de usuarios */}

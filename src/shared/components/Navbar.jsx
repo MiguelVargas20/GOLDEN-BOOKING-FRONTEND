@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'; 
+import { useState, useEffect, useRef } from 'react';
 import React from 'react';
 import { Navbar, Nav, Container, Button, NavDropdown } from 'react-bootstrap';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from '../../assets/LOGO.png';
 import styles from '../styles/Navbar.module.css';
 import { useTheme } from '../context/ThemeContext.jsx';
@@ -54,8 +54,34 @@ export default function ComponentNavbar() {
         };
     }, []);
 
+    // Móvil: tocar fuera de la barra cierra el menú hamburguesa (antes quedaba
+    // abierto encima de la vista)
+    const barraRef = useRef(null);
+    useEffect(() => {
+        if (!navExpanded) return undefined;
+        const alTocarFuera = (e) => {
+            if (barraRef.current && !barraRef.current.contains(e.target)) {
+                setNavExpanded(false);
+                setMenuAbierto(null);
+            }
+        };
+        document.addEventListener('pointerdown', alTocarFuera);
+        return () => document.removeEventListener('pointerdown', alTocarFuera);
+    }, [navExpanded]);
+
     // Cierra el desplegable y el menú móvil al elegir una opción
     const cerrarMenus = () => { setMenuAbierto(null); setNavExpanded(false); };
+
+    // Bug: si se cambiaba de página SIN hacer clic en el menú (botón atrás del
+    // navegador, "Ver" en un aviso, una redirección...), el desplegable quedaba
+    // abierto tapando la vista hasta recargar. Ahora se cierra en cada cambio
+    // de ruta. (Ajustar el estado al cambiar la ruta es justo lo que se quiere.)
+    const { pathname, search } = useLocation();
+    useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setMenuAbierto(null);
+        setNavExpanded(false);
+    }, [pathname, search]);
 
     // Función auxiliar para navegar y cerrar el menú móvil a la vez de forma limpia
     const handleNavigate = (path) => {
@@ -95,6 +121,7 @@ export default function ComponentNavbar() {
             expand="lg"
             expanded={navExpanded} // Vinculado al estado móvil
             onToggle={(isOpen) => setNavExpanded(isOpen)}
+            ref={barraRef}
             className={`${styles.customNavbar} shadow-sm py-2`}
         >
             <Container fluid className="px-md-5">
@@ -119,12 +146,6 @@ export default function ComponentNavbar() {
                                 <Nav.Link as={Link} to="/home" onClick={() => setNavExpanded(false)} className={styles.navLink}>
                                     Inicio
                                 </Nav.Link>
-
-                                {isAdmin() && (
-                                    <Nav.Link as={Link} to="/dashboard" onClick={() => setNavExpanded(false)} className={styles.navLink}>
-                                        Dashboard
-                                    </Nav.Link>
-                                )}
 
                                 {/* ── Servicios: un solo menú con las secciones de reservas y habitaciones ── */}
                                 <NavDropdown
