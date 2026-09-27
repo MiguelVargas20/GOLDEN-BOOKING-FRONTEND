@@ -5,7 +5,10 @@
 // de error, ahora solo se corrige aquí.
 // ═══════════════════════════════════════════════════════════
 
-export const API_URL = import.meta.env.VITE_API_URL;
+// URL del backend (VITE_API_URL en .env o en Vercel). Se quita la "/" final
+// por si se configuró "https://api.com/": si no, quedaría "https://api.com//api/...".
+export const API_URL = (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "");
+if (!API_URL) console.error("Falta configurar VITE_API_URL (URL del backend).");
 
 // Busca el token en localStorage primero (sesión "recordada"); si no está
 // ahí, en sessionStorage (sesión de esta pestaña/navegador únicamente).

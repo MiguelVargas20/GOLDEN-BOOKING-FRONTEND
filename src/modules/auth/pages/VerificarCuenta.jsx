@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { BsCheckCircleFill, BsXCircleFill } from "react-icons/bs";
 import LayoutAuth from "../components/LayoutAuth";
-import { extraerMensajeError } from "../../../shared/api/apiUtils";
+import { API_URL, extraerMensajeError } from "../../../shared/api/apiUtils";
 
 /** Confirma la cuenta con el enlace del correo (?token=...). */
 export default function VerificarCuenta() {
@@ -23,7 +23,7 @@ export default function VerificarCuenta() {
         return;
       }
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/verificar-cuenta?token=${encodeURIComponent(token)}`);
+        const res = await fetch(`${API_URL}/auth/verificar-cuenta?token=${encodeURIComponent(token)}`);
         if (!res.ok) throw new Error(await extraerMensajeError(res, "No se pudo verificar la cuenta."));
         const datos = await res.json();
         setEstado("exito");

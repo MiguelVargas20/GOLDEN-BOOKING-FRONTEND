@@ -25,6 +25,15 @@ npm run dev
 npm run build
 ```
 
+## Despliegue en Vercel
+- `vercel.json` ya trae todo lo necesario: framework Vite, salida `dist` y la regla que envía
+  cualquier ruta a `index.html` (sin ella, recargar `/habitaciones/123` o abrir el enlace de
+  verificar cuenta / restablecer contraseña del correo da 404).
+- Variable de entorno obligatoria en Vercel: `VITE_API_URL=https://goldenbooking-api.duckdns.org`
+  (la URL HTTPS del backend; la "/" final se ignora). Vite la lee **al compilar**: después de
+  cambiarla hay que volver a desplegar.
+- En el backend, `CORS_ALLOWED_ORIGINS` debe incluir la URL del frontend en Vercel.
+
 ## Rutas principales
 | Ruta | Quién | Qué es |
 |---|---|---|

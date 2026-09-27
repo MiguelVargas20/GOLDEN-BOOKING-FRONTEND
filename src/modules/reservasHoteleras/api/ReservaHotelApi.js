@@ -1,6 +1,5 @@
-import { authHeaders, extraerMensajeError, apiFetch } from "../../../shared/api/apiUtils";
+import { API_URL, authHeaders, extraerMensajeError, apiFetch } from "../../../shared/api/apiUtils";
 
-const API_URL = import.meta.env.VITE_API_URL;
 
 // Extrae el mensaje real que manda el GlobalExceptionHandler del backend.
 // Ahí el body siempre viene como { error: "..." } o, en validaciones,

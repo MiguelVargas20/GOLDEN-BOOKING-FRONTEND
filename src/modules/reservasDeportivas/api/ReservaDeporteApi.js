@@ -1,13 +1,13 @@
-import { authHeaders, extraerMensajeError, apiFetch } from "../../../shared/api/apiUtils";
+import { API_URL, authHeaders, extraerMensajeError, apiFetch } from "../../../shared/api/apiUtils";
 
-const API_URL = `${import.meta.env.VITE_API_URL}/api/reservas/deporte`;
+const RESERVAS_URL = `${API_URL}/api/reservas/deporte`;
 
 /**
  * Crear reserva. Queda PENDIENTE hasta que el admin la apruebe.
  * @param {boolean} confirmar - solo ADMIN (recepción): registrarla ya CONFIRMADA.
  */
 export const crearReservaDeporte = async (data, confirmar = false) => {
-  const response = await apiFetch(confirmar ? `${API_URL}?confirmar=true` : API_URL, {
+  const response = await apiFetch(confirmar ? `${RESERVAS_URL}?confirmar=true` : RESERVAS_URL, {
     method: "POST",
     headers: authHeaders(),
     body: JSON.stringify(data),
@@ -29,21 +29,21 @@ export const crearReservaDeporte = async (data, confirmar = false) => {
 export const listarReservasDeporte = async (page = 0, size = 10, estado = null) => {
   const params = new URLSearchParams({ page, size });
   if (estado) params.append("estado", estado);
-  const response = await apiFetch(`${API_URL}?${params}`, { headers: authHeaders() });
+  const response = await apiFetch(`${RESERVAS_URL}?${params}`, { headers: authHeaders() });
   if (!response.ok) throw new Error(await extraerMensajeError(response, "No se pudieron cargar las reservas"));
   return response.json();
 };
 
 /** Cantidad de reservas por estado (ADMIN): { PENDIENTE, CONFIRMADA, CANCELADA, FINALIZADA }. */
 export const obtenerResumenDeporte = async () => {
-  const response = await apiFetch(`${API_URL}/resumen`, { headers: authHeaders() });
+  const response = await apiFetch(`${RESERVAS_URL}/resumen`, { headers: authHeaders() });
   if (!response.ok) throw new Error(await extraerMensajeError(response, "No se pudo cargar el resumen"));
   return response.json();
 };
 
 /** Aprobar reserva PENDIENTE (ADMIN). El cliente recibe un correo de confirmación. */
 export const confirmarReservaDeporte = async (id) => {
-  const response = await apiFetch(`${API_URL}/${id}/confirmar`, { method: "PATCH", headers: authHeaders() });
+  const response = await apiFetch(`${RESERVAS_URL}/${id}/confirmar`, { method: "PATCH", headers: authHeaders() });
   if (!response.ok) throw new Error(await extraerMensajeError(response, "No se pudo aprobar la reserva"));
   return response.json();
 };
@@ -51,7 +51,7 @@ export const confirmarReservaDeporte = async (id) => {
 // Listar reservas del usuario logueado (GET) — para CLIENTE
 // ANTES: pedía 100 reservas de todos y filtraba en el navegador
 export const listarMisReservasDeporte = async () => {
-  const response = await apiFetch(`${API_URL}/mis-reservas`, {
+  const response = await apiFetch(`${RESERVAS_URL}/mis-reservas`, {
     headers: authHeaders()
   });
   const data = await response.json();
@@ -64,7 +64,7 @@ export const listarMisReservasDeporte = async () => {
 // listarReservasDeporte() (admin-only) y, para un CLIENTE, la llamada
 // fallaba en silencio dejando el calendario siempre "vacío".
 export const obtenerFechasOcupadasDeporte = async () => {
-  const response = await apiFetch(`${API_URL}/ocupadas`, {
+  const response = await apiFetch(`${RESERVAS_URL}/ocupadas`, {
     headers: authHeaders()
   });
   const data = await response.json();
@@ -77,7 +77,7 @@ export const obtenerFechasOcupadasDeporte = async () => {
  * para el cliente es opcional.
  */
 export const cancelarReservaDeporte = async (id, motivo = null) => {
-  const response = await apiFetch(`${API_URL}/${id}/cancelar`, {
+  const response = await apiFetch(`${RESERVAS_URL}/${id}/cancelar`, {
     method: "PATCH",
     headers: authHeaders(),
     body: JSON.stringify({ motivo }),
@@ -93,7 +93,7 @@ export const cancelarReservaDeporte = async (id, motivo = null) => {
 
 /** Cambia el horario de la reserva sin cancelarla (fechas "yyyy-MM-ddTHH:mm:ss" locales). */
 export const reprogramarReservaDeporte = async (id, inicio, fin) => {
-  const response = await apiFetch(`${API_URL}/${id}/reprogramar`, {
+  const response = await apiFetch(`${RESERVAS_URL}/${id}/reprogramar`, {
     method: "PATCH",
     headers: authHeaders(),
     body: JSON.stringify({ inicio, fin }),
@@ -104,7 +104,7 @@ export const reprogramarReservaDeporte = async (id, inicio, fin) => {
 
 /** Reemplaza los acompañantes de la reserva. */
 export const actualizarMiembrosDeporte = async (id, miembros) => {
-  const response = await apiFetch(`${API_URL}/${id}/miembros`, {
+  const response = await apiFetch(`${RESERVAS_URL}/${id}/miembros`, {
     method: "PATCH",
     headers: authHeaders(),
     body: JSON.stringify({ miembros }),

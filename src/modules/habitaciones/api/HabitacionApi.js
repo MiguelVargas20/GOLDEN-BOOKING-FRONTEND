@@ -2,9 +2,8 @@
 // ── Configuración Global y Autenticación ───────────────────
 // (centralizadas en apiUtils.js — ver ese archivo)
 // ═══════════════════════════════════════════════════════════
-import { authHeaders, authHeaderToken, apiFetch, extraerMensajeError } from "../../../shared/api/apiUtils";
+import { API_URL, authHeaders, authHeaderToken, apiFetch, extraerMensajeError } from "../../../shared/api/apiUtils";
 
-const API_URL = import.meta.env.VITE_API_URL;
 
 // ═══════════════════════════════════════════════════════════
 // ── Habitaciones ───────────────────────────────────────────

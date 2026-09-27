@@ -1,10 +1,10 @@
-import { authHeaders, apiFetch, extraerMensajeError } from "../../../shared/api/apiUtils";
+import { API_URL, authHeaders, apiFetch, extraerMensajeError } from "../../../shared/api/apiUtils";
 
-const API_URL = `${import.meta.env.VITE_API_URL}/api/usuarios`;
+const USUARIOS_URL = `${API_URL}/api/usuarios`;
 
 // Listar todos los usuarios (ADMIN)
 export const listarUsuarios = async (page = 0, size = 10) => {
-  const response = await apiFetch(`${API_URL}?page=${page}&size=${size}`, {
+  const response = await apiFetch(`${USUARIOS_URL}?page=${page}&size=${size}`, {
     headers: authHeaders()
   });
   if (!response.ok) throw new Error(await extraerMensajeError(response, "Error al cargar usuarios"));
@@ -14,7 +14,7 @@ export const listarUsuarios = async (page = 0, size = 10) => {
 // Buscar un usuario por su número de documento (ADMIN).
 // Lo usa la pantalla de recepción para reservar a nombre de un cliente.
 export const obtenerUsuarioPorDocumento = async (documento) => {
-  const response = await apiFetch(`${API_URL}/doc/${encodeURIComponent(documento)}`, {
+  const response = await apiFetch(`${USUARIOS_URL}/doc/${encodeURIComponent(documento)}`, {
     headers: authHeaders()
   });
   const data = await response.json().catch(() => ({}));
@@ -28,7 +28,7 @@ export const obtenerUsuarioPorDocumento = async (documento) => {
 
 // Actualizar usuario (ADMIN)
 export const actualizarUsuario = async (id, data) => {
-  const response = await apiFetch(`${API_URL}/${id}`, {
+  const response = await apiFetch(`${USUARIOS_URL}/${id}`, {
     method: "PUT",
     headers: authHeaders(),
     body: JSON.stringify(data)
@@ -40,7 +40,7 @@ export const actualizarUsuario = async (id, data) => {
 
 // Eliminar usuario (ADMIN)
 export const eliminarUsuario = async (id) => {
-  const response = await apiFetch(`${API_URL}/${id}`, {
+  const response = await apiFetch(`${USUARIOS_URL}/${id}`, {
     method: "DELETE",
     headers: authHeaders()
   });
@@ -50,7 +50,7 @@ export const eliminarUsuario = async (id) => {
 
 // Actualizar perfil propio (CLIENTE o ADMIN)
 export const actualizarMiPerfil = async (id, datos) => {
-  const res = await apiFetch(`${API_URL}/perfil/${id}`, {
+  const res = await apiFetch(`${USUARIOS_URL}/perfil/${id}`, {
     method: "PATCH",
     headers: authHeaders(),
     body: JSON.stringify(datos)
@@ -60,7 +60,7 @@ export const actualizarMiPerfil = async (id, datos) => {
 };
 // Crear usuario desde el panel (ADMIN): con el rol elegido y ya verificado
 export const crearUsuarioAdmin = async (datos, rol = "ROL_CLIENTE") => {
-  const response = await apiFetch(`${API_URL}?rol=${encodeURIComponent(rol)}`, {
+  const response = await apiFetch(`${USUARIOS_URL}?rol=${encodeURIComponent(rol)}`, {
     method: "POST",
     headers: authHeaders(),
     body: JSON.stringify(datos),

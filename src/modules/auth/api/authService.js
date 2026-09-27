@@ -1,6 +1,6 @@
-import { extraerMensajeError } from "../../../shared/api/apiUtils";
+import { API_URL, extraerMensajeError } from "../../../shared/api/apiUtils";
 
-const BASE_URL = import.meta.env.VITE_API_URL;
+const BASE_URL = API_URL;
 
 /**
  * Autentica a un usuario en el sistema.

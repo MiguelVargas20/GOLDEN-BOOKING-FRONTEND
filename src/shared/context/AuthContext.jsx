@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useRef, useEffect } from "react";
 import Swal from "sweetalert2";
 import { loginUsuario, registrarUsuario, refrescarToken } from "../../modules/auth/api/authService";
-import { EVENTO_SESION_INVALIDA } from "../api/apiUtils";
+import { API_URL, EVENTO_SESION_INVALIDA } from "../api/apiUtils";
 
 const AuthContext = createContext();
 
@@ -138,7 +138,7 @@ export const AuthProvider = ({ children }) => {
 
         try {
             const perfilRes = await fetch(
-                `${import.meta.env.VITE_API_URL}/api/usuarios/perfil/${response.id}`,
+                `${API_URL}/api/usuarios/perfil/${response.id}`,
                 {
                     headers: { Authorization: `Bearer ${response.token}` }
                 }
@@ -190,7 +190,7 @@ export const AuthProvider = ({ children }) => {
                 const savedToken = token;
 
                 if (savedToken) {
-                    await fetch(`${import.meta.env.VITE_API_URL}/auth/logout`, {
+                    await fetch(`${API_URL}/auth/logout`, {
                         method: "POST",
                         credentials: "include",
                         headers: { Authorization: `Bearer ${savedToken}` }

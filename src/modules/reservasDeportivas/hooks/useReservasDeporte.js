@@ -2,8 +2,9 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 import { obtenerFechasOcupadasDeporte } from "../api/ReservaDeporteApi";
+import { API_URL } from "../../../shared/api/apiUtils";
 
-const WS_URL = import.meta.env.VITE_API_URL;
+const WS_URL = API_URL;
 
 /**
  * Horarios ocupados de los espacios deportivos, en vivo.
