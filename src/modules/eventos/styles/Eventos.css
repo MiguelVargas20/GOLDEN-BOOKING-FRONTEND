@@ -1,0 +1,38 @@
+/* Eventos del club */
+.ev-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+
+.ev-card {
+  display: flex; flex-direction: column; overflow: hidden;
+  background: var(--gb-surface); border: 1px solid var(--gb-border); border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06); transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.ev-card:hover { transform: translateY(-3px); box-shadow: 0 10px 24px rgba(0, 0, 0, 0.1); }
+.ev-card-imagen, .ev-admin-imagen { position: relative; aspect-ratio: 16 / 9; overflow: hidden; background: var(--gb-icon-bg); }
+.ev-card-imagen img, .ev-admin-imagen img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.ev-card-cuerpo { display: flex; flex-direction: column; gap: 6px; padding: 14px 16px 16px; flex: 1; }
+
+.ev-categoria, .ev-nuevo, .ev-borrador {
+  position: absolute; top: 10px; padding: 3px 10px; border-radius: 999px;
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.3px;
+}
+.ev-categoria { left: 10px; background: rgba(0, 0, 0, 0.62); color: #fff; }
+.ev-nuevo { right: 10px; background: var(--gb-primary); color: #fff; box-shadow: 0 2px 8px rgba(243, 141, 30, 0.45); }
+.ev-borrador { right: 10px; background: var(--gb-surface); color: var(--gb-text-muted); border: 1px solid var(--gb-border); }
+
+.ev-titulo { font-size: 1.05rem; font-weight: 700; margin: 0 0 2px; color: var(--gb-text-primary); }
+.ev-dato { display: flex; align-items: center; gap: 6px; margin: 0; font-size: 0.85rem; color: var(--gb-text-muted); }
+.ev-dato svg { color: var(--gb-primary); flex-shrink: 0; }
+.ev-descripcion { margin: 4px 0 0; font-size: 0.88rem; color: var(--gb-text-primary); white-space: pre-line; }
+.ev-pie { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: auto; padding-top: 10px; border-top: 1px dashed var(--gb-border); }
+.ev-precio { font-weight: 700; color: var(--gb-primary); }
+.ev-icono-vacio { color: var(--gb-primary); }
+
+/* Portada del cliente */
+.ev-home { padding: 2.5rem 0 0.5rem; }
+
+/* Panel del admin */
+.ev-admin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
+.ev-admin-card { display: flex; flex-direction: column; padding: 0 !important; overflow: hidden; }
+.ev-admin-cuerpo { display: flex; flex-direction: column; gap: 4px; padding: 12px 14px; flex: 1; }
+.ev-admin-acciones { display: flex; justify-content: flex-end; gap: 8px; padding: 0 14px 14px; }
+.ev-terminado { opacity: 0.6; }

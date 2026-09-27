@@ -1,0 +1,27 @@
+/* Crear habitación: solo lo propio de la vista previa; el resto usa PanelAdmin.css */
+.ch-vista-previa { display: flex; flex-direction: column; gap: 4px; }
+
+.ch-previa-imagen {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 16 / 10;
+  margin-bottom: 8px;
+  background: var(--gb-surface-hover);
+}
+.ch-previa-imagen img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+.ch-previa-estado {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+.ch-previa-estado.ok { background: var(--gb-status-success-bg); color: var(--gb-status-success-text); }
+.ch-previa-estado.mant { background: var(--gb-status-warning-bg); color: var(--gb-status-warning-text); }
+
+.ch-previa-titulo { font-size: 1.05rem; color: var(--gb-item-title); }
+.ch-previa-precio { font-weight: 700; color: var(--gb-primary); margin-top: 4px; }

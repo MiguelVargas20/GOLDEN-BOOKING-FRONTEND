@@ -1,0 +1,64 @@
+/* ════════════════════════════════════════════════════════════
+   CALENDARIO COMPARTIDO (react-datepicker)
+   Un solo estilo para todas las pantallas (componente CampoFecha),
+   en modo claro y oscuro.
+   ════════════════════════════════════════════════════════════ */
+
+/* ── Campo ── */
+.gb-fecha { position: relative; display: flex; align-items: center; }
+.gb-fecha > div { width: 100%; }  /* contenedor que crea react-datepicker */
+.gb-fecha-icono { position: absolute; left: 12px; color: var(--gb-text-muted); pointer-events: none; z-index: 1; }
+.gb-fecha-input {
+  padding-left: 38px !important; height: 44px; border-radius: 10px !important;
+  background: var(--gb-surface) !important; color: var(--gb-text-primary) !important; border-color: var(--gb-border) !important;
+}
+.gb-fecha-input:focus { border-color: var(--gb-primary) !important; box-shadow: 0 0 0 0.2rem rgba(243, 141, 30, 0.2) !important; }
+.gb-fecha.deshabilitado .gb-fecha-input { opacity: 0.6; }
+
+/* Compatibilidad con campos antiguos */
+.date-input-wrapper { position: relative; display: flex; align-items: center; }
+.date-input-wrapper .calendar-icon { position: absolute; left: 10px; color: var(--gb-text-muted); pointer-events: none; z-index: 1; }
+.custom-date-input { padding-left: 35px !important; border-radius: 10px; height: 44px; }
+
+/* ── Calendario desplegable ── */
+.react-datepicker-popper, .gb-calendario-popper { z-index: 2000 !important; }
+.react-datepicker {
+  font-family: inherit; border: 1px solid var(--gb-border) !important; border-radius: 14px !important;
+  background: var(--gb-surface) !important; box-shadow: 0 12px 32px rgba(26, 32, 44, 0.18); overflow: hidden;
+  padding: 6px;
+}
+.react-datepicker__header {
+  background: transparent !important; border-bottom: none !important; padding: 8px 0 4px !important;
+}
+.react-datepicker__current-month {
+  color: var(--gb-text-primary) !important; font-weight: 700; font-size: 0.95rem; text-transform: capitalize; margin-bottom: 6px;
+}
+.react-datepicker__day-names { margin-top: 4px; }
+.react-datepicker__day-name {
+  color: var(--gb-text-muted) !important; font-weight: 600; font-size: 0.72rem; text-transform: uppercase; width: 2.2rem !important;
+}
+.react-datepicker__navigation { top: 12px !important; }
+.react-datepicker__navigation-icon::before { border-color: var(--gb-text-muted) !important; }
+.react-datepicker__navigation:hover .react-datepicker__navigation-icon::before { border-color: var(--gb-primary) !important; }
+
+.react-datepicker__day {
+  width: 2.2rem !important; line-height: 2.2rem !important; margin: 0.12rem !important; border-radius: 50% !important;
+  color: var(--gb-text-primary) !important; font-size: 0.85rem;
+}
+.react-datepicker__day:hover:not(.react-datepicker__day--disabled) { background: var(--gb-icon-bg) !important; color: var(--gb-primary) !important; }
+.react-datepicker__day--today { font-weight: 700; box-shadow: inset 0 0 0 1px var(--gb-primary); }
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+  background: var(--gb-primary) !important; color: #fff !important; font-weight: 700;
+}
+.react-datepicker__day--disabled,
+.react-datepicker__day--excluded { color: var(--gb-text-muted) !important; opacity: 0.35; }
+.react-datepicker__day--excluded { text-decoration: line-through; }
+.react-datepicker__day--outside-month { opacity: 0.35; }
+
+/* Lista de horas (pantallas que aún usan showTimeSelect) */
+.react-datepicker__time-container { border-left: 1px solid var(--gb-border) !important; }
+.react-datepicker__time, .react-datepicker__time-box { background: var(--gb-surface) !important; }
+.react-datepicker__header--time { color: var(--gb-text-primary); }
+.react-datepicker__time-list-item { color: var(--gb-text-primary); }
+.react-datepicker__time-list-item--selected { background: var(--gb-primary) !important; color: #fff !important; }

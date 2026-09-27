@@ -1,0 +1,38 @@
+/* Miembros y socios */
+.so-sufijo { display: flex; align-items: center; gap: 8px; }
+.so-sufijo .form-control { max-width: 120px; }
+.so-sufijo span { color: var(--gb-text-muted); font-size: 0.85rem; font-weight: 600; }
+
+.so-categoria { height: 100%; padding: 14px 16px; border-radius: 12px; border: 1px solid var(--gb-border); background: var(--gb-surface-hover); }
+.so-categoria h3 { display: flex; align-items: center; gap: 8px; font-size: 1rem; font-weight: 700; margin: 0 0 10px; }
+.so-ocasional h3 svg { color: #3182ce; }
+.so-miembro h3 svg { color: var(--gb-primary); }
+
+.so-buscar { position: relative; min-width: 240px; }
+.so-buscar svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--gb-text-muted); }
+.so-buscar .form-control { padding-left: 34px; }
+
+.so-sugerido {
+  display: inline-flex; align-items: center; gap: 4px; margin-left: 8px; padding: 2px 8px; border-radius: 999px;
+  background: var(--gb-status-warning-bg); color: var(--gb-status-warning-text); font-size: 0.72rem; font-weight: 700;
+}
+.so-badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 0.75rem; font-weight: 700; border: 1px solid var(--gb-border); color: var(--gb-text-muted); }
+.so-badge-ocasional { background: rgba(49, 130, 206, 0.12); border-color: rgba(49, 130, 206, 0.4); color: #2b6cb0; }
+.so-badge-miembro { background: var(--gb-icon-bg); border-color: var(--gb-primary); color: var(--gb-primary); }
+[data-bs-theme="dark"] .so-badge-ocasional { color: #90cdf4; }
+
+/* Tarjeta "Mi membresía" (perfil del cliente) */
+.mm-tarjeta { border-radius: 16px; padding: 18px 20px; border: 1px solid var(--gb-border); background: var(--gb-surface); }
+.mm-cabecera { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.mm-icono { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; background: var(--gb-icon-bg); color: var(--gb-primary); font-size: 1.3rem; }
+.mm-cabecera h2 { font-size: 1.1rem; margin: 0; font-weight: 700; }
+.mm-cabecera small { color: var(--gb-text-muted); }
+.mm-beneficios { list-style: none; padding: 0; margin: 0 0 12px; display: grid; gap: 6px; }
+.mm-beneficios li { display: flex; gap: 8px; align-items: flex-start; font-size: 0.9rem; }
+.mm-beneficios svg { color: var(--gb-status-success-text); margin-top: 3px; flex-shrink: 0; }
+.mm-progreso { height: 8px; border-radius: 999px; background: var(--gb-border); overflow: hidden; }
+.mm-progreso > div { height: 100%; background: var(--gb-primary); border-radius: 999px; }
+.mm-ayuda { font-size: 0.82rem; color: var(--gb-text-muted); margin: 6px 0 0; }
+.mm-categorias { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-top: 14px; }
+.mm-categorias > div { padding: 10px 12px; border-radius: 10px; border: 1px dashed var(--gb-border); font-size: 0.82rem; }
+.mm-categorias strong { display: block; margin-bottom: 2px; }

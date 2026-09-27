@@ -1,56 +1,73 @@
 // 1. LIBRERÍAS Y ESTILOS GLOBALES
-import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, Navigate, useParams } from 'react-router-dom';
 
 // 2. CONTEXTOS Y COMPONENTES DE CONTROL
-import { ThemeProvider } from './context/Themecontext';
-import Layout from './layout/layout.jsx';
-import RutaProtegida from './components/RutaProteccion.jsx';
+import { ThemeProvider } from './shared/context/ThemeContext';
+import Layout from './shared/layout/Layout.jsx';
+import RutaProtegida from './shared/components/RutaProteccion.jsx';
 
 // 3. VISTAS / PÁGINAS DEL SISTEMA
 
 // Módulo: Autenticación (Públicas)
-import Login from './pages/Login.jsx';
-import Register from './pages/Register.jsx';
-import Forgot from './pages/Forgot.jsx';
+import Login from './modules/auth/pages/Login.jsx';
+import Register from './modules/auth/pages/Register.jsx';
+import Forgot from './modules/auth/pages/Forgot.jsx';
 
 // Módulo: General / Dashboard (Privadas)
-import Home from './pages/Home.jsx';
-import Contactos from './pages/Contactos.jsx';
+import Inicio from './modules/home/pages/Inicio.jsx';
+import Contactos from './modules/mensajes/pages/Contactos.jsx';
 
 // Módulo: Reservas Deportivas (Clientes / Admin)
-import ReservasD from './pages/ReservasD/ReservasD.jsx';
-import ReservasDCatalogo from './pages/ReservasD/ReservasDCatalogo.jsx';
-import ReservarEspacioD from './pages/ReservasD/ReservarEspacioD.jsx';
-import ReservasDSolicitadas from './pages/ReservasD/ReservasDSolicitadas.jsx';
-import GestionarReservas from './pages/ReservasD/GestionarReservas.jsx';
-import Crear from './components/Crear.jsx';
-import Editar from './components/Editar.jsx';
+import ReservasD from './modules/reservasDeportivas/pages/ReservasD.jsx';
+import ReservasDCatalogo from './modules/reservasDeportivas/pages/ReservasDCatalogo.jsx';
+import ReservarEspacioD from './modules/reservasDeportivas/pages/ReservarEspacioD.jsx';
+import ReservasDSolicitadas from './modules/reservasDeportivas/pages/ReservasDSolicitadas.jsx';
+import GestionarReservas from './modules/reservasDeportivas/pages/GestionarReservas.jsx';
+import GestionEspacios from './modules/reservasDeportivas/pages/GestionEspacios.jsx';
 
-// Módulo: Hospedaje / Habitaciones (Clientes / Admin)
-import ReservasH from './pages/reservasH.jsx';
-import HabitacionD from './pages/HabitacionD.jsx';
-import TipoHabitacionD from './pages/TipoHabitacionD.jsx';
-import GestionHabitacionesD from './pages/GestionHabitacionesD.jsx';
-import DetalleHabitacion from "./pages/DetalleHabitacion";
-import MisReservasHotel from './pages/MisReservasHotel.jsx';
+// Módulo: Habitaciones (catálogo y detalle para todos; gestión, creación y tipos para ADMIN)
+import CatalogoHabitaciones from './modules/habitaciones/pages/CatalogoHabitaciones.jsx';
+import DetalleHabitacion from './modules/habitaciones/pages/DetalleHabitacion.jsx';
+import GestionHabitaciones from './modules/habitaciones/pages/GestionHabitaciones.jsx';
+import CrearHabitacion from './modules/habitaciones/pages/CrearHabitacion.jsx';
+import TiposHabitacion from './modules/habitaciones/pages/TiposHabitacion.jsx';
+
+// Módulo: Reservas Hoteleras (solo reservas: las del cliente y la gestión del ADMIN)
+import MisReservasHotel from './modules/reservasHoteleras/pages/MisReservasHotel.jsx';
+import GestionarReservasHotel from './modules/reservasHoteleras/pages/GestionarReservasHotel.jsx';
+
+// Módulo: Recepción (ADMIN reserva a nombre de un cliente)
+import NuevaReservaCliente from './modules/recepcion/pages/NuevaReservaCliente.jsx';
+
 
 // Módulo: Gestión de Usuarios (Exclusivo ADMIN)
-import UsuariosH from './pages/UsuariosH.jsx';
-import UsuariosE from './pages/UsuariosE.jsx';
-import UsuariosC from './pages/UsuariosC.jsx';
-import MiPerfil from './pages/MiPerfil.jsx';
+import UsuariosH from './modules/usuarios/pages/UsuariosH.jsx';
+import UsuariosE from './modules/usuarios/pages/UsuariosE.jsx';
+import UsuariosC from './modules/usuarios/pages/UsuariosC.jsx';
+import MiPerfil from './modules/usuarios/pages/MiPerfil.jsx';
+
+// Módulo: Calendario de ocupación y reportes (Exclusivo ADMIN)
+import CalendarioOcupacion from './modules/calendario/pages/CalendarioOcupacion.jsx';
+import Reportes from './modules/reportes/pages/Reportes.jsx';
+
+// Módulo: Consumos (cargos a la reserva o a la cuenta de socio), eventos y socios
+import GestionCargos from './modules/cargos/pages/GestionCargos.jsx';
+import MiCuenta from './modules/cargos/pages/MiCuenta.jsx';
+import EventosCliente from './modules/eventos/pages/EventosCliente.jsx';
+import GestionEventos from './modules/eventos/pages/GestionEventos.jsx';
+import PanelSocios from './modules/membresias/pages/PanelSocios.jsx';
 
 // Módulo: Mensajes (Exclusivo ADMIN)
-import  AdminMensajes  from "./components/AdminMensajes.jsx";
+import  AdminMensajes  from "./modules/mensajes/pages/AdminMensajes.jsx";
 
 // Módulo: Mensajes (Usuario normal — ve sus propios mensajes y respuestas del admin)
-import MisMensajes from './pages/MisMensajes.jsx';
+import MisMensajes from './modules/mensajes/pages/MisMensajes.jsx';
 
 // Módulo: Verificación de cuenta (Público)
-import VerificarCuenta from './pages/VerificarCuenta.jsx';
+import VerificarCuenta from './modules/auth/pages/VerificarCuenta.jsx';
 
 // Módulo: Restablecimiento de contraseña (Público)
-import RestablecerPassword from './pages/RestablecerPassword.jsx';
+import RestablecerPassword from './modules/auth/pages/RestablecerPassword.jsx';
 
 
 /**
@@ -58,6 +75,12 @@ import RestablecerPassword from './pages/RestablecerPassword.jsx';
  * Configura el proveedor de tema, el enrutamiento dinámico de React Router Dom v6
  * y la división de accesos según el estado de autenticación y roles de usuario.
  */
+/** /detalle/:id (ruta anterior) → /habitaciones/:id */
+function RedireccionDetalleHabitacion() {
+    const { id } = useParams();
+    return <Navigate to={`/habitaciones/${id}`} replace />;
+}
+
 export default function App() {
     return (
         <ThemeProvider>
@@ -90,9 +113,8 @@ export default function App() {
                     <Route path="/" element={<RutaProtegida><Layout /></RutaProtegida>}>
 
                         {/* Vista de Inicio del Sistema */}
-                        <Route path="/home" element={<Home />}>
-                            
-                        </Route>
+                        {/* Admin: panel de control (dashboard). Cliente: portada con los servicios. */}
+                        <Route path="/home" element={<Inicio />} />
 
                         {/* Sección informativa / Formulario de contacto directo */}
                         <Route path="/contactos" element={<Contactos />} />
@@ -102,6 +124,10 @@ export default function App() {
 
                         {/* Historial de mensajes que el usuario en sesión envió, con respuestas del admin */}
                         <Route path="/mis-mensajes" element={<MisMensajes />} />
+
+                        {/* Eventos publicados del club y consumos del cliente (lo cargado a sus reservas o cuenta de socio) */}
+                        <Route path="/eventos" element={<EventosCliente />} />
+                        <Route path="/mi-cuenta" element={<MiCuenta />} />
 
                         {/* -----------------------------------------------------
                             SUB-SISTEMA: RESERVAS DEPORTIVAS (Pádel, Tenis, etc.)
@@ -124,44 +150,66 @@ export default function App() {
                             <Route path="gestionar" element={
                                 <RutaProtegida soloAdmin={true}><GestionarReservas /></RutaProtegida>
                             } />
-                            
-                            {/* Formulario de creación de nuevos espacios/canchas */}
-                            <Route path="crear" element={
-                                <RutaProtegida soloAdmin={true}><Crear /></RutaProtegida>
+
+                            {/* Administración de espacios deportivos (crear, editar, imagen, estado) */}
+                            <Route path="espacios" element={
+                                <RutaProtegida soloAdmin={true}><GestionEspacios /></RutaProtegida>
                             } />
-                            
-                            {/* Formulario de modificación de parámetros de espacios deportivos */}
-                            <Route path="editar" element={
-                                <RutaProtegida soloAdmin={true}><Editar /></RutaProtegida>
-                            } />
+
+                            {/* Se quitaron las rutas "crear" y "editar": eran formularios de
+                                maqueta sin ninguna lógica (no guardaban nada) y ninguna pantalla
+                                navegaba hacia ellos. */}
                         </Route>
 
                         {/* -----------------------------------------------------
-                            SUB-SISTEMA: HOSPEDAJE Y RESTAURANTE
+                            HABITACIONES — todo lo de las habitaciones
                             ----------------------------------------------------- */}
-                        {/* Panel principal de reservas hoteleras para clientes */}
-                        <Route path="/reservas-hospedaje" element={<ReservasH />} />
-                        
-                        {/* Panel principal de reservas del restaurante de la sede */}
-                        <Route path="/reservas-restaurante" element={<ReservasD />} />
+                        {/* Catálogo: ver disponibilidad y reservar (clientes y admin) */}
+                        <Route path="/habitaciones" element={<CatalogoHabitaciones />} />
+                        {/* Solo ADMIN: administrar, crear y tipos de habitación */}
+                        <Route path="/habitaciones/gestionar" element={
+                            <RutaProtegida soloAdmin={true}><GestionHabitaciones /></RutaProtegida>
+                        } />
+                        <Route path="/habitaciones/crear" element={
+                            <RutaProtegida soloAdmin={true}><CrearHabitacion /></RutaProtegida>
+                        } />
+                        <Route path="/habitaciones/tipos" element={
+                            <RutaProtegida soloAdmin={true}><TiposHabitacion /></RutaProtegida>
+                        } />
+                        {/* Detalle de una habitación (las rutas fijas de arriba tienen prioridad) */}
+                        <Route path="/habitaciones/:id" element={<DetalleHabitacion />} />
 
-                        {/* Vista general o detalle técnico de habitaciones */}
-                        <Route path="/habitacionD" element={<HabitacionD />} />
-                        
-                        {/* Configuración y listado de tipos de habitación (Deluxe, Suite, etc.) */}
-                        <Route path="/tipo-habitacion" element={<TipoHabitacionD />} />
-                        
-                        {/* Panel de administración de habitaciones (Disponibilidad, Precios, Estados) */}
-                        <Route path="/detalle/:id" element={<DetalleHabitacion />} />|
+                        {/* -----------------------------------------------------
+                            RESERVAS HOTELERAS — solo las reservas
+                            ----------------------------------------------------- */}
+                        <Route path="/reservas-hoteleras/mis-reservas" element={<MisReservasHotel />} />
+                        {/* Gestión de reservas hoteleras: aprobar / cancelar con motivo */}
+                        <Route path="/reservas-hoteleras/gestionar" element={
+                            <RutaProtegida soloAdmin={true}><GestionarReservasHotel /></RutaProtegida>
+                        } />
 
-                        {/* Panel de administración de habitaciones (Disponibilidad, Precios, Estados) */}
-                        <Route path="/mis-reservas-hotel" element={<MisReservasHotel />} />
+                        {/* Rutas anteriores: redirigen a las nuevas para no romper enlaces guardados */}
+                        <Route path="/reservas-hospedaje" element={<Navigate to="/habitaciones" replace />} />
+                        <Route path="/tipo-habitacion" element={<Navigate to="/habitaciones/tipos" replace />} />
+                        <Route path="/crear-habitacion" element={<Navigate to="/habitaciones/crear" replace />} />
+                        <Route path="/gestionar-habitaciones" element={<Navigate to="/habitaciones/gestionar" replace />} />
+                        <Route path="/mis-reservas-hotel" element={<Navigate to="/reservas-hoteleras/mis-reservas" replace />} />
+                        <Route path="/detalle/:id" element={<RedireccionDetalleHabitacion />} />
+
+                        {/* Recepción: registrar una reserva (deportiva u hotelera) a nombre de un cliente */}
+                        <Route path="/recepcion/nueva-reserva" element={
+                            <RutaProtegida soloAdmin={true}><NuevaReservaCliente /></RutaProtegida>
+                        } />
 
                         {/* =========================================================
                             RUTAS PROTEGIDAS CON PRIVILEGIOS DE ADMINISTRADOR
                             (Filtro estricto por rol 'ROL_ADMIN')
                             ========================================================= */}
                         
+                        {/* --- PANEL DE CONTROL (indicadores del día, pendientes, habitaciones) --- */}
+                        {/* El dashboard ahora es el Inicio del admin; la ruta vieja redirige */}
+                        <Route path="/dashboard" element={<Navigate to="/home" replace />} />
+
                         {/* --- MÓDULO CONTROL DE USUARIOS --- */}
                         {/* Tabla principal de control, visualización y auditoría de usuarios */}
                         <Route path="/usuarios" element={
@@ -183,15 +231,23 @@ export default function App() {
                             <RutaProtegida soloAdmin={true}><AdminMensajes /></RutaProtegida>
                         } />
 
-                        {/* --- MÓDULO CONTROL DE INFRAESTRUCTURA HOTELERA --- */}
-                        {/* Formulario exclusivo para registrar nuevas habitaciones al catálogo */}
-                        <Route path="/crear-habitacion" element={
-                            <RutaProtegida soloAdmin={true}><HabitacionD /></RutaProtegida>
+                        {/* Calendario semanal de ocupación y reportes exportables (Excel / PDF) */}
+                        <Route path="/calendario" element={
+                            <RutaProtegida soloAdmin={true}><CalendarioOcupacion /></RutaProtegida>
                         } />
-                        
-                        {/* Panel de administración hotelera (Modificar disponibilidad, precios, estados) */}
-                        <Route path="/gestionar-habitaciones" element={
-                            <RutaProtegida soloAdmin={true}><GestionHabitacionesD /></RutaProtegida>
+                        <Route path="/reportes" element={
+                            <RutaProtegida soloAdmin={true}><Reportes /></RutaProtegida>
+                        } />
+
+                        {/* Consumos y cuentas, eventos del club y programa de socios */}
+                        <Route path="/cargos" element={
+                            <RutaProtegida soloAdmin={true}><GestionCargos /></RutaProtegida>
+                        } />
+                        <Route path="/eventos/gestionar" element={
+                            <RutaProtegida soloAdmin={true}><GestionEventos /></RutaProtegida>
+                        } />
+                        <Route path="/socios" element={
+                            <RutaProtegida soloAdmin={true}><PanelSocios /></RutaProtegida>
                         } />
 
                     </Route>

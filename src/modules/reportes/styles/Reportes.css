@@ -1,0 +1,20 @@
+/* Reportes de reservas e ingresos */
+.rp-filtros { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px 16px; margin-bottom: 1.25rem; }
+.rp-campo { min-width: 160px; flex: 0 1 190px; }
+.rp-rapidos { flex-basis: 100%; margin: 0; }
+
+.rp-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 1.25rem; }
+.rp-kpi {
+  display: grid; gap: 2px; padding: 14px 16px; border-radius: 14px;
+  background: var(--gb-surface); border: 1px solid var(--gb-border);
+}
+.rp-kpi span { font-size: 0.78rem; color: var(--gb-text-muted); text-transform: uppercase; letter-spacing: 0.4px; font-weight: 600; }
+.rp-kpi strong { font-size: 1.35rem; color: var(--gb-text-primary); }
+.rp-kpi small { font-size: 0.78rem; color: var(--gb-text-muted); }
+.rp-kpi.destacado { border-color: var(--gb-primary); background: var(--gb-icon-bg); }
+.rp-kpi.destacado strong { color: var(--gb-primary); }
+
+@media (max-width: 576px) {
+  .rp-campo { flex: 1 1 140px; }
+  .rp-filtros .btn-gb { width: 100%; justify-content: center; }
+}

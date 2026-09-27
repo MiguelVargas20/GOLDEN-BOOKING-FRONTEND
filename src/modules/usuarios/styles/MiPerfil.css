@@ -1,0 +1,7 @@
+/* Mi perfil: tarjeta de resumen (el resto usa PanelAdmin.css) */
+.mp-resumen { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; }
+.mp-avatar { font-size: 4.5rem; color: var(--gb-primary); }
+.mp-nombre { font-size: 1.15rem; color: var(--gb-item-title); }
+.mp-datos { width: 100%; margin: 12px 0 4px; text-align: left; display: grid; grid-template-columns: auto 1fr; gap: 6px 12px; font-size: 0.88rem; }
+.mp-datos dt { color: var(--gb-text-muted); font-weight: 600; }
+.mp-datos dd { margin: 0; color: var(--gb-text-primary); text-align: right; }

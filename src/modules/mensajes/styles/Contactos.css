@@ -1,0 +1,6 @@
+/* Contáctanos: mapa y datos de contacto (el resto usa PanelAdmin.css) */
+.ct-info { display: flex; flex-direction: column; }
+.ct-mapa { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 12px; border: 1px solid var(--gb-border); }
+.ct-datos { list-style: none; padding: 0; margin: 14px 0 0; display: grid; gap: 8px; font-size: 0.9rem; color: var(--gb-text-primary); }
+.ct-datos li { display: flex; align-items: center; gap: 8px; }
+.ct-datos svg { color: var(--gb-primary); }

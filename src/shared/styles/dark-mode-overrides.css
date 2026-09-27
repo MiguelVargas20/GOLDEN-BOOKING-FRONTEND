@@ -1,0 +1,25 @@
+/* ============================================================
+   DARK-MODE-OVERRIDES.CSS
+   Parches de modo oscuro para lo que NO usa las variables --gb-*
+   (la portada y el calendario de react-datepicker). El resto de
+   vistas ya se adapta solo con theme.css.
+
+   Depurado: tenía ~370 líneas con reglas para clases de vistas que
+   ya se reescribieron (login, olvidé contraseña, usuarios, mensajes,
+   habitaciones...). Se dejó solo lo que sigue en uso.
+   ============================================================ */
+
+/* ── Portada (secciones fuera del carrusel) ── */
+[data-bs-theme='dark'] body {
+    background: var(--bs-body-bg) !important;
+}
+
+[data-bs-theme='dark'] .why-choose-section {
+    background-color: var(--gb-surface-hover) !important;
+}
+
+[data-bs-theme='dark'] .feature-item {
+    background-color: var(--gb-surface) !important;
+}
+
+/* Los calendarios (react-datepicker) usan los tokens del tema en DatePickerCompartido.css */

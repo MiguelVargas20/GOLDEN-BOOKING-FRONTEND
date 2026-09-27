@@ -1,0 +1,12 @@
+/* Detalle de una reserva */
+.dr-estado { margin-bottom: 10px; }
+.dr-datos { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px 20px; margin: 0 0 16px; }
+.dr-datos div { display: grid; gap: 2px; }
+.dr-datos dt { font-size: 0.75rem; font-weight: 600; color: var(--gb-text-muted); text-transform: uppercase; letter-spacing: 0.4px; }
+.dr-datos dd { margin: 0; font-weight: 600; color: var(--gb-text-primary); }
+.dr-miembros { border-top: 1px solid var(--gb-border); padding-top: 14px; }
+.dr-miembros-cabecera { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.dr-miembros-cabecera h3 { display: inline-flex; align-items: center; gap: 8px; font-size: 1rem; margin: 0; }
+.dr-tabla { width: 100%; border-collapse: collapse; }
+.dr-tabla th { font-size: 0.75rem; color: var(--gb-text-muted); text-transform: uppercase; font-weight: 600; padding: 6px 4px; border-bottom: 1px solid var(--gb-border); text-align: left; }
+.dr-tabla td { padding: 8px 4px; border-bottom: 1px dashed var(--gb-border); }

@@ -1,0 +1,359 @@
+.navbarLogo {
+    height: 55px;
+    width: auto;
+    display: block;
+    margin: 0;
+}
+
+.customNavbar {
+    border-bottom: 1px solid var(--gb-border, #f0f0f0);
+    padding-top: 10px;
+    padding-bottom: 8px;
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+}
+
+.navLink {
+    color: var(--gb-text-primary, #4a5568) !important;
+    font-weight: 600;
+    margin: 0 10px;
+    font-size: 0.85rem !important;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    padding: 0 !important;
+    font-family: 'Poppins', sans-serif !important;
+}
+
+.navLink :global(.dropdown-toggle) {
+    font-size: 0.82rem !important;
+    color: var(--gb-text-primary, #4a5568) !important;
+    font-weight: 600 !important;
+    padding: 0 !important;
+}
+
+.navLink:hover,
+.navLink :global(.dropdown-toggle):hover {
+    color: #f68b1e !important;
+}
+
+.themeBtn {
+    background: none;
+    border: 1px solid var(--gb-border, #e2e8f0);
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gb-text-muted, #718096);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+}
+
+.themeBtn:hover {
+    background-color: var(--gb-surface-hover, #f7fafc);
+    color: #f68b1e;
+    border-color: #f68b1e;
+}
+
+.userInfo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 15px;
+    border-radius: 25px;
+    background-color: var(--gb-user-bg, #fef9f0);
+    border: 1px solid var(--gb-user-border, #fae5d3);
+    line-height: 1;
+    max-width: 220px;
+}
+
+.userIcon {
+    color: #f68b1e;
+    flex-shrink: 0;
+}
+
+.userName {
+    font-weight: 600;
+    font-size: 0.78rem;
+    color: var(--gb-text-primary, #4a5568);
+    font-family: 'Poppins', sans-serif !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1;
+    min-width: 0;
+    display: block;
+}
+
+.adminBadge {
+    background-color: #f68b1e;
+    color: #ffffff;
+    font-size: 0.65rem;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 10px;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+}
+
+.clientBadge {
+    background-color: #0d6efd;
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: bold;
+    padding: 2px 8px;
+    border-radius: 4px;
+    flex-shrink: 0;
+}
+
+.logoutBtn {
+    background: none;
+    border: 1px solid var(--gb-border-danger, #fed7d7);
+    border-radius: 50%;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #e53e3e;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    padding: 0;
+}
+
+.logoutBtn:hover {
+    background-color: var(--gb-danger-hover, rgba(229, 62, 62, 0.1));
+    border-color: #e53e3e;
+}
+
+.adminLoginBtn {
+    background-color: #f68b1e !important;
+    border: none !important;
+    border-radius: 10px !important;
+    padding: 7px 16px !important;
+    font-weight: 700 !important;
+    font-size: 0.78rem !important;
+    font-family: 'Poppins', sans-serif !important;
+}
+
+.adminLoginBtn:hover {
+    background-color: #e67e22 !important;
+}
+
+.servicesDropdown :global(.dropdown-menu) {
+    background-color: var(--gb-surface, #ffffff) !important;
+    border: 1px solid var(--gb-border, transparent) !important;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+    padding: 1rem;
+    min-width: 280px;
+}
+
+/* ── Menú "Servicios": secciones en columnas (escritorio) ── */
+.megaMenu {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(230px, 1fr));
+    gap: 4px 16px;
+}
+
+/* Menú de 2 columnas con 4 secciones (cliente): cuadrícula 2×2 sin líneas de más */
+.megaMenu:not(.megaMenuCuatro) .megaSeccion:nth-child(odd) {
+    border-left: none;
+    padding-left: 0;
+}
+
+.megaMenu:not(.megaMenuCuatro) .megaSeccion:nth-child(n + 3) {
+    border-top: 1px solid var(--gb-border, #e2e8f0);
+    padding-top: 8px;
+    margin-top: 4px;
+}
+
+/* Servicios del admin: 4 columnas en pantallas anchas, 2×2 en portátiles */
+.megaMenuCuatro {
+    grid-template-columns: repeat(4, minmax(210px, 1fr));
+}
+
+@media (min-width: 992px) and (max-width: 1299.98px) {
+    .megaMenuCuatro {
+        grid-template-columns: repeat(2, minmax(240px, 1fr));
+        gap: 12px 16px;
+    }
+    .megaMenuCuatro .megaSeccion:nth-child(odd) {
+        border-left: none;
+        padding-left: 0;
+    }
+    .megaMenuCuatro .megaSeccion:nth-child(n + 3) {
+        border-top: 1px solid var(--gb-border, #e2e8f0);
+        padding-top: 8px;
+    }
+}
+
+/* En escritorio el menú se centra bajo "Servicios" y no se sale de la pantalla */
+@media (min-width: 992px) {
+    .servicesDropdown :global(.dropdown-menu) {
+        left: 50% !important;
+        transform: translateX(-50%);
+        max-width: calc(100vw - 32px);
+    }
+}
+
+.megaSeccion {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.megaSeccion + .megaSeccion {
+    border-left: 1px solid var(--gb-border, #e2e8f0);
+    padding-left: 16px;
+}
+
+.megaTitulo {
+    font-size: 0.7rem !important;
+    font-weight: 700 !important;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--gb-primary, #f38d1e) !important;
+    padding: 4px 12px 8px !important;
+    font-family: 'Poppins', sans-serif !important;
+}
+
+/* Móvil / tablet: el menú fluye dentro de la barra desplegada y las secciones se apilan */
+@media (max-width: 991.98px) {
+    .servicesDropdown {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .servicesDropdown :global(.dropdown-menu) {
+        position: static !important;
+        transform: none !important;
+        width: 100%;
+        min-width: 0;
+        margin-top: 6px;
+        box-shadow: none !important;
+        text-align: left;
+        /* Que no tape toda la pantalla: scroll interno si no cabe */
+        max-height: 60vh;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+    }
+
+    .megaMenu,
+    .megaMenuCuatro {
+        grid-template-columns: 1fr;
+    }
+
+    .megaSeccion + .megaSeccion {
+        border-left: none;
+        padding-left: 0;
+        border-top: 1px solid var(--gb-border, #e2e8f0);
+        padding-top: 8px;
+        margin-top: 4px;
+    }
+}
+
+.dropdownItemCustom {
+    display: flex !important;
+    align-items: center;
+    padding: 10px 12px !important;
+    border-radius: 8px !important;
+    transition: background 0.2s ease;
+    white-space: normal;
+}
+
+.dropdownItemCustom:hover {
+    background-color: var(--gb-item-hover, #fef9f0) !important;
+}
+
+.iconBox {
+    background-color: var(--gb-icon-bg, #fff4e6);
+    color: #f68b1e;
+    width: 38px;
+    height: 38px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.itemTitle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 700;
+    color: var(--gb-item-title, #333333);
+    font-size: 0.82rem;
+    line-height: 1.2;
+    font-family: 'Poppins', sans-serif !important;
+}
+
+.itemText {
+    display: block;
+    color: var(--gb-item-text, #777777);
+    font-size: 0.72rem;
+    font-weight: 400;
+    font-family: 'Poppins', sans-serif !important;
+}
+
+.navLink,
+.userName,
+.adminBadge,
+.itemTitle,
+.itemText,
+.adminLoginBtn {
+    font-family: 'Poppins', sans-serif !important;
+}
+
+/* ── DARK MODE (explícito, no solo variables) ──────────────
+   El resto de la app usa overrides explícitos por atributo en
+   dark-mode-overrides.css, pero ese archivo no puede alcanzar
+   estas clases porque son de un CSS Module (hash único por
+   build). Por eso el fallback a blanco se colaba a veces.
+   Se pone aquí mismo, con :global(), para que sí aplique. */
+:global([data-bs-theme='dark']) .servicesDropdown :global(.dropdown-menu) {
+    background-color: #1a202c !important;
+    border-color: #2d3748 !important;
+}
+
+:global([data-bs-theme='dark']) .dropdownItemCustom:hover {
+    background-color: #2d3748 !important;
+}
+
+:global([data-bs-theme='dark']) .iconBox {
+    background-color: #3a2e1a;
+}
+
+:global([data-bs-theme='dark']) .itemTitle {
+    color: #f7fafc;
+}
+
+:global([data-bs-theme='dark']) .itemText {
+    color: #a0aec0;
+}
+/* Contador de reservas pendientes de aprobación (solo admin) */
+.pendienteBadge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    margin-left: 6px;
+    border-radius: 999px;
+    background: #e53e3e;
+    color: #fff;
+    font-size: 0.65rem;
+    font-weight: 800;
+    line-height: 1;
+    vertical-align: middle;
+}

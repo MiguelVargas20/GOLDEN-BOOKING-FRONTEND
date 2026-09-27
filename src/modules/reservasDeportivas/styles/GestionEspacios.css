@@ -1,0 +1,14 @@
+/* ── Administración de espacios deportivos ──────────────────
+   Tarjetas, chips y estado vacío: shared/styles/Catalogo.css */
+@import "../../../shared/styles/Catalogo.css";
+
+.ge-menu { position: absolute; top: 8px; right: 8px; }
+.ge-menu-boton {
+  display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%;
+  border: none; background: rgba(255, 255, 255, 0.92); color: #1a1a2e; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+.ge-menu-boton::after { display: none; }
+
+.ge-modal-imagen { aspect-ratio: 4 / 3; border-radius: 12px; overflow: hidden; background: var(--gb-surface-hover); border: 1px solid var(--gb-border); }
+.ge-modal-imagen img { width: 100%; height: 100%; object-fit: cover; }
+.ge-subir { cursor: pointer; justify-content: center; }

@@ -1,0 +1,15 @@
+/* Acompañantes de una reserva */
+.em { display: grid; gap: 8px; }
+.em-vacio { margin: 0; font-size: 0.85rem; color: var(--gb-text-muted); }
+.em-fila { display: grid; grid-template-columns: 1.4fr 1fr 1fr auto; gap: 8px; align-items: center; }
+.em-quitar {
+  width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--gb-border); background: var(--gb-surface);
+  color: var(--gb-danger, #e53e3e); display: inline-flex; align-items: center; justify-content: center;
+}
+.em-quitar:hover:not(:disabled) { background: var(--gb-status-danger-bg); }
+.em-agregar { justify-self: start; }
+.em-cupos { font-size: 0.78rem; color: var(--gb-text-muted); }
+@media (max-width: 576px) {
+  .em-fila { grid-template-columns: 1fr 1fr auto; }
+  .em-fila > input:first-child { grid-column: 1 / -1; }
+}

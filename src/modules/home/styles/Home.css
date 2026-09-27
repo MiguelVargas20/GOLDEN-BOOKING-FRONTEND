@@ -1,0 +1,212 @@
+/* Se quitó "body { background: #fff }": se aplicaba a TODA la app (el CSS se
+   empaqueta junto) y pisaba el fondo del modo oscuro. El fondo lo define index.css. */
+
+/* NOTA: se eliminó un bloque de reglas .navbar / .Header / .logo / .admin .h4
+   que no se usaba en ningún JSX de esta página, pero que sí se estaba
+   aplicando por accidente a la Navbar real de toda la app (react-bootstrap
+   le pone la clase "navbar" a cualquier <Navbar>, y este CSS se empaqueta
+   globalmente). El estilo real de la navbar vive en Navbar.module.css. */
+
+/* --- Estilos Globales y Tipografía --- */
+.bungee-regular {
+    font-family: "Bungee", sans-serif;
+    font-weight: 400;
+}
+
+.text-orange {
+    color: #f38d1e !important;
+}
+
+/* --- Hero / Carrusel --- */
+.hero-carousel-wrapper {
+    margin: 20px auto;
+    width: 95%;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+}
+
+.hero-img {
+    height: 500px;
+    object-fit: cover;
+    filter: brightness(0.7);
+}
+
+.hero-caption-custom {
+    text-align: left !important;
+    left: 8% !important;
+    right: auto !important;
+    top: 50% !important;
+    bottom: auto !important;
+    transform: translateY(-50%);
+    padding-bottom: 0 !important;
+}
+
+.premium-tag {
+    background-color: #f38d1e;
+    color: white;
+    padding: 5px 12px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    line-height: 1.1;
+    max-width: 600px;
+    text-align: left;
+}
+
+.orange-text {
+    color: #f38d1e;
+}
+
+.hero-subtitle {
+    font-size: 1.1rem;
+    max-width: 500px;
+    margin: 20px 0;
+    color: white;
+    opacity: 0.9;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+/* --- Botones --- */
+.btn-outline-glass {
+    background-color: rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.5) !important;
+    color: white !important;
+    padding: 12px 30px !important;
+    backdrop-filter: blur(5px);
+    font-weight: 600 !important;
+}
+
+/* --- Secciones e Instalaciones --- */
+.facility-card {
+    border-radius: 20px !important;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.facility-card:hover {
+    transform: translateY(-5px);
+}
+
+.img-container {
+    width: 100%;
+    height: 180px;
+    overflow: hidden;
+}
+
+.facility-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* --- Sección "Por qué elegirnos" --- */
+.why-choose-section {
+    background-color: #fdfaf7;
+    border-radius: 30px; /* Añadido para suavizar la sección */
+}
+
+.feature-item {
+    background-color: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+    transition: transform 0.3s ease;
+    margin-bottom: 50px; /* Ajustado de 50px a 25px para mejor balance */
+}
+
+.feature-item:hover {
+    transform: translateX(10px);
+}
+
+.icon-box {
+    width: 60px;
+    height: 60px;
+    min-width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    font-size: 1.5rem;
+}
+
+.rounded-custom {
+    border-radius: 25px !important;
+    border: 12px solid white;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+.hero-title,
+.premium-tag,
+.hero-subtitle {
+    color: #ffffff !important;
+}
+
+/* --- Responsive: Hero / Carrusel ---
+   Sin esto, el título (3.5rem) + subtítulo + botones se centran
+   verticalmente dentro de una imagen de 500px de alto envuelta en
+   .hero-carousel-wrapper, que tiene overflow: hidden. En pantallas
+   angostas el título envuelve a más líneas de las que caben y el
+   contenido (sobre todo los botones, más abajo) queda cortado. */
+@media (max-width: 768px) {
+    .hero-img {
+        height: 420px;
+    }
+
+    .hero-title {
+        font-size: 2rem;
+        max-width: 90%;
+    }
+
+    .hero-subtitle {
+        font-size: 0.95rem;
+        margin: 12px 0;
+    }
+
+    .hero-buttons {
+        flex-wrap: wrap;
+    }
+
+    .hero-buttons .btn-gb-lg,
+    .hero-buttons .btn-outline-glass {
+        padding: 10px 18px !important;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero-img {
+        height: 380px;
+    }
+
+    .hero-title {
+        font-size: 1.5rem;
+    }
+
+    .hero-caption-custom {
+        left: 6% !important;
+    }
+}
+
+/* --- Responsive: header de "Instalaciones" ---
+   .instalaciones-header pone el título y el link "Ver todos" en la
+   misma fila con justify-content-between. En pantallas angostas
+   (<480px) el título en Bungee + el link no caben en una sola línea
+   y se cortaban contra el borde del contenedor. */
+@media (max-width: 480px) {
+    .instalaciones-header {
+        flex-wrap: wrap;
+        gap: 10px;
+        align-items: flex-start !important;
+    }
+}

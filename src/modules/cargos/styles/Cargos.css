@@ -1,0 +1,17 @@
+/* Consumos y cuentas */
+.cg-buscar { margin-bottom: 1.25rem; max-width: 560px; }
+.cg-cliente { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 12px; }
+.cg-socio { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; background: var(--gb-icon-bg); color: var(--gb-primary); font-weight: 700; font-size: 0.8rem; }
+.cg-pendiente { display: grid; gap: 2px; padding: 14px 16px; border-radius: 12px; background: var(--gb-icon-bg); border: 1px solid var(--gb-primary); }
+.cg-pendiente span { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.4px; color: var(--gb-text-muted); }
+.cg-pendiente strong { font-size: 1.5rem; color: var(--gb-primary); }
+.cg-pendiente small { color: var(--gb-text-muted); }
+.cg-pendiente-grande { max-width: 420px; }
+.cg-total strong { color: var(--gb-primary); font-size: 1.1rem; }
+.cg-enlace { background: none; border: 0; padding: 0; color: var(--gb-primary); font-weight: 600; }
+.cg-lista { list-style: none; margin: 0; padding: 0; }
+.cg-lista li { display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-top: 1px dashed var(--gb-border); }
+.cg-lista li span { display: grid; gap: 2px; }
+.cg-lista small { color: var(--gb-text-muted); font-size: 0.78rem; }
+.cg-pagado { color: var(--gb-status-success-text) !important; font-weight: 600; }
+.cg-por-pagar { color: var(--gb-status-warning-text) !important; font-weight: 600; }

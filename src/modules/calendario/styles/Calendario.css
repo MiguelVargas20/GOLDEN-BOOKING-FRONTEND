@@ -1,0 +1,36 @@
+/* Calendario de ocupación semanal */
+.cal-barra { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 1rem; }
+.cal-leyenda { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.cal-tabla { min-width: 900px; table-layout: fixed; }
+.cal-tabla th:first-child, .cal-tabla td:first-child { width: 190px; }
+.cal-tabla thead th { text-align: center; }
+.cal-tabla thead th:first-child { text-align: left; }
+.cal-dia { display: block; text-transform: capitalize; font-weight: 700; }
+.cal-fecha { display: block; font-weight: 400; font-size: 0.78rem; color: var(--gb-text-muted); }
+.cal-hoy { background: var(--gb-icon-bg) !important; }
+/* Encabezado de cada fila (th dentro de tbody): mismo aspecto que las celdas */
+.cal-tabla tbody th.cal-recurso {
+  font-weight: 400; vertical-align: top; text-align: left; padding: 12px 14px;
+  border-bottom: 1px solid var(--gb-border); color: var(--gb-text-primary);
+}
+.cal-tabla tbody tr:last-child th.cal-recurso { border-bottom: none; }
+.cal-ocupacion { display: block; font-size: 0.72rem; color: var(--gb-text-muted); margin-top: 2px; }
+.cal-celda { vertical-align: top; padding: 6px !important; }
+
+.cal-bloque {
+  display: block; margin-bottom: 4px; padding: 3px 6px; border-radius: 6px; font-size: 0.74rem; line-height: 1.25;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-left: 3px solid transparent;
+}
+.cal-leyenda .cal-bloque { display: inline-block; margin: 0; }
+.cal-bloque strong { display: block; font-size: 0.72rem; }
+.cal-pendiente  { background: var(--gb-status-warning-bg); color: var(--gb-status-warning-text); border-left-color: #f38d1e; }
+.cal-confirmada { background: var(--gb-status-success-bg); color: var(--gb-status-success-text); border-left-color: #38a169; }
+.cal-finalizada { background: var(--gb-surface-hover); color: var(--gb-text-muted); border-left-color: #a0aec0; }
+
+/* En pantallas angostas la tabla se desplaza de lado: el nombre queda fijo a la izquierda */
+.cal-tabla th:first-child { position: sticky; left: 0; z-index: 1; background: var(--gb-surface); }
+.cal-tabla thead th:first-child { background: inherit; }
+@media (max-width: 768px) {
+  .cal-tabla th:first-child, .cal-tabla td:first-child { width: 140px; }
+}
