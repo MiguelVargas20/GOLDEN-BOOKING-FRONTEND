@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { BsArrowLeft } from "react-icons/bs";
 import logo from "../../../assets/LOGO.png";
+import AvisoServidor from "../../../shared/components/AvisoServidor";
 import "../styles/Auth.css";
 
 /**
@@ -26,6 +27,7 @@ export default function LayoutAuth({ titulo, subtitulo, volver, ancho = "normal"
             <h1>{titulo}</h1>
             {subtitulo && <p>{subtitulo}</p>}
           </header>
+          <AvisoServidor />
           {children}
         </div>
       </main>
